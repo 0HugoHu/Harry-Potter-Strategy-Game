@@ -14,5 +14,5 @@ dependencyResolutionManagement {
 }
 rootProject.name = "RISC"
 include ':client'
-include ':shared'
 include ':server'
+include ':shared'
