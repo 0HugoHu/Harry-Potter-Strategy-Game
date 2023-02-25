@@ -13,4 +13,6 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "RISC"
-include ':app'
+include ':client'
+include ':shared'
+include ':server'

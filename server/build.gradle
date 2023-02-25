@@ -1,0 +1,35 @@
+plugins {
+    id 'application'
+    id 'com.bmuschko.clover' version '2.2.3'
+}
+
+dependencies {
+    // Use JUnit Jupiter for testing.
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.4.2'
+
+    clover 'org.openclover:clover:4.3.1'
+}
+
+tasks.named('test') {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform()
+}
+
+test {
+    testLogging {
+        showStandardStreams = true
+        exceptionFormat = 'full'
+    }
+}
+
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_7
+    targetCompatibility = JavaVersion.VERSION_1_7
+}
+
+application {
+    // Define the main class for the application.
+    mainClass = 'edu.duke.server.Server'
+}
+
