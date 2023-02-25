@@ -1,4 +1,4 @@
-# ece651-sp23-group1
+# ece651-risc-group1
 
 
 
