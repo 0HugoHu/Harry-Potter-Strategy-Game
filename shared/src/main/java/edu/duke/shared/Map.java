@@ -127,5 +127,15 @@ public class Map implements Serializable {
         }
         return false;
     }
-
+    /*
+     * Get a territory by the coord it has
+     * @param coord The coordinate
+     * @return Territory object if coord belongs to any of the territories, null otherwise
+     */
+    public Territory getTerritoryByCoord(int[] coord){
+        for (Territory t:territories){
+            if (t.contains(coord)) return t;
+        }
+        return null;
+    }
 }
