@@ -9,11 +9,10 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import edu.duke.shared.Game;
-import edu.duke.shared.Map;
 
 public class ClientIntentService extends IntentService {
 
-
+    // Status codes
     public static final int STATUS_RUNNING = 0;
     public static final int STATUS_FINISHED = 1;
     public static final int STATUS_ERROR = 2;
@@ -24,21 +23,18 @@ public class ClientIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-
         /*
          * Step 1: We pass the ResultReceiver from the activity to the intent service via intent.
-         *  */
+         */
         assert intent != null;
         final ResultReceiver receiver = intent.getParcelableExtra("receiver");
-
 
         //TODO: process background task here!
 
         /*
          * Step 2: Now background service is processed,
          * we can pass the status of the service back to the activity using the resultReceiver
-         *  */
-
+         */
         Game game = new Client().getGame();
         Bundle b = new Bundle();
         b.putSerializable("game", game);
