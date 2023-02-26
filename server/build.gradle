@@ -4,6 +4,7 @@ plugins {
 }
 
 dependencies {
+    implementation project(path: ':shared')
     // Use JUnit Jupiter for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.4.2'
 

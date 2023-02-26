@@ -7,11 +7,6 @@ import org.junit.jupiter.api.Test;
 class ServerTest {
     @Test
     void main() {
-        F();
     }
 
-    @Test
-    void f() {
-        F();
-    }
 }
