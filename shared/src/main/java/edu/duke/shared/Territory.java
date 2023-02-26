@@ -71,7 +71,7 @@ public class Territory implements Serializable {
     public boolean addCoordinateHelper(Territory t, int width, int height, int x, int y) {
         for (int k = 0; k < width; k++) {
             for (int l = 0; l < height; l++) {
-                t.addCoordinate(new int[] {x * width + k, y * height + l});
+                t.addCoordinate(new int[]{y * height + l, x * width + k});
             }
         }
         return true;
@@ -191,6 +191,14 @@ public class Territory implements Serializable {
      */
     public int getNumUnits() {
         return this.units.size();
+    }
+
+    /*
+     * Get all coordinates on this territory
+     * @return all coordinates on this territory
+     */
+    public HashSet<int[]> getCoords() {
+        return this.coords;
     }
 
 }

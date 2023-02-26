@@ -1,12 +1,9 @@
 package edu.duke.shared;
 
-import edu.duke.shared.Map;
-import edu.duke.shared.Territory;
-import edu.duke.shared.Unit;
-
 public class InitMap {
     private final Map map;
     private final int numTerritories;
+
     /*
      * Initialize Map by height and width
      * @param height Map height

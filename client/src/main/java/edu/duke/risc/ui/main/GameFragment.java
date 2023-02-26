@@ -13,15 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import edu.duke.risc.R;
-import edu.duke.risc.client.Client;
-import edu.duke.shared.Game;
 
 public class GameFragment extends Fragment {
 

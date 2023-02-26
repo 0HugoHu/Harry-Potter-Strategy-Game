@@ -3,7 +3,6 @@ package edu.duke.risc.client;
 import android.util.Log;
 
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 import edu.duke.shared.Game;
@@ -11,6 +10,9 @@ import edu.duke.shared.thread.BaseThread;
 
 public class Client {
     // Host name
+    /*
+     * TODO: Change the host name to your computer name
+     */
     private final String HOST = "Hugo-L";
     // Port number
     private final int PORT = 5410;
