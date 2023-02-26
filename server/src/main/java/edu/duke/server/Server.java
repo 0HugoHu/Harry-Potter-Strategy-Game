@@ -3,6 +3,8 @@ package edu.duke.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import edu.duke.shared.Game;
 import edu.duke.shared.thread.BaseThread;
@@ -23,6 +25,18 @@ public class Server {
      * @param args Command line arguments
      */
     public static void main(String[] args) {
+        // Get IP address and hostname
+        InetAddress ip;
+        String hostname;
+        try {
+            ip = InetAddress.getLocalHost();
+            hostname = ip.getHostName();
+            System.out.println("Your current IP address : " + ip);
+            System.out.println("Your current Hostname : " + hostname);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
         final int numOfPlayers = 1;
         Server server = new Server(numOfPlayers);
         System.out.println("Created a new game of " + numOfPlayers + " players.\nWaiting for players to join...\n");

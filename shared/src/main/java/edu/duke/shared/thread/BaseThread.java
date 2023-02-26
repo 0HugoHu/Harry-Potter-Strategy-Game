@@ -28,6 +28,14 @@ public class BaseThread {
     }
 
     /*
+     * Initialize BaseThread by socket
+     * @param socket The client socket
+     */
+    public BaseThread(Socket socket) {
+        this(socket, null);
+    }
+
+    /*
      * Decode the object from the client
      * @return The decoded object from the client
      */

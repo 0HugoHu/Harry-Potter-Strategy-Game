@@ -1,4 +1,4 @@
-package edu.duke.server;
+package edu.duke.shared;
 
 import edu.duke.shared.Map;
 import edu.duke.shared.Territory;
