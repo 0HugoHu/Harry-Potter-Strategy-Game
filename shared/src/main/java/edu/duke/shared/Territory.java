@@ -173,7 +173,10 @@ public class Territory implements Serializable {
      * @return territory contains the coordinate
      */
     public boolean contains(int[] coord) {
-        return this.coords.contains(coord);
+        for (int[] c:coords){
+            if (c[0]==coord[0]&&c[1]==coord[1]) return true;
+        }
+        return false;
     }
 
     /*

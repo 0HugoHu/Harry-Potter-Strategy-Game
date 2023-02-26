@@ -13,7 +13,7 @@ public class Client {
     /*
      * TODO: Change the host name to your computer name
      */
-    private final String HOST = "Hugo-L";
+    private final String HOST = "Assassin";
     // Port number
     private final int PORT = 5410;
     // Player name

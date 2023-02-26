@@ -15,8 +15,8 @@ public class Game implements Serializable {
     public Game(int numPlayers) {
         this.numPlayers = numPlayers;
         // Initialize map
-        InitMap map = new InitMap(18, 30, 18);
-        this.map = map.myTemplateMap();
+        InitMap map = new InitMap(20, 20, 18);
+        this.map = map.myLogic();
     }
 
     /*
