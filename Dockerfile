@@ -33,13 +33,12 @@ COPY --chown=juser scripts/emacs-bare.sh ./
 RUN mkdir -p /home/juser/.emacs.d/dcoverage
 COPY --chown=juser scripts/dcoverage.el /home/juser/.emacs.d/dcoverage/
 RUN chmod u+x emacs-bare.sh && ./emacs-bare.sh
-RUN chmod +x gradlew
 
 # we are going to do a bit of gradle first, just to speed
 # up future builds
 COPY --chown=juser build.gradle gradlew settings.gradle  ./
 COPY --chown=juser gradle/wrapper gradle/wrapper
-
+RUN chmod +x gradlew
 
 # this will fetch gradle 7.3, and the packages we depend on
 RUN ./gradlew resolveDependencies
