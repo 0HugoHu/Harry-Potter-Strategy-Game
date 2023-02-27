@@ -49,6 +49,7 @@ RUN ./gradlew resolveDependencies
 # Docker can resume from this point
 COPY --chown=juser ./ ./
 RUN chmod +x gradlew
+RUN chmod +x scripts/*
 
 # compile the code
 RUN ./gradlew :server:assemble
