@@ -17,5 +17,11 @@ plugins {
 }
 
 
+task resolveDependencies {
+    doLast {
+    }
+}
+
+
 
 
