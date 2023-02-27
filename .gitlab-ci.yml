@@ -10,33 +10,44 @@
 # https://gradle.org/
 # https://github.com/gradle/gradle
 
-image: gradle:alpine
-
 before_script:
-  - GRADLE_USER_HOME="$(pwd)/.gradle"
-  - export GRADLE_USER_HOME
+  - hostname
+  - whoami
+  - pwd
+  - ls -la
+  - docker --version
+
+stages:
+  - build
+  - test
+  - coverage
+
 
 build:
+  tags:
+    - ece651
   stage: build
-  script: gradle --build-cache assemble
-  cache:
-    key: "$CI_COMMIT_REF_NAME"
-    policy: push
-    paths:
-      - build
-      - .gradle
+  script: docker build --build-arg LOCAL_USER_ID=`id -u`  --tag citest .
 
 test:
+  tags:
+    - ece651
   stage: test
-  script: gradle check
-  cache:
-    key: "$CI_COMMIT_REF_NAME"
-    policy: pull
+  script: scripts/run-tests-in-docker.sh
+  artifacts:
     paths:
-      - build
-      - .gradle
+      - coverage
 
-deploy:
-  stage: deploy
-  script: echo "Define your deployment script!"
-  environment: production
+pages:
+  stage: coverage
+  tags:
+    - ece651
+  dependencies:
+    - test
+  script:
+    - mv coverage public/
+  artifacts:
+    paths:
+      - public
+
+

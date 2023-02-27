@@ -36,7 +36,6 @@ public class DisplayMap {
         StringBuilder sb = new StringBuilder();
         for (Territory t : this.map.getTerritories()) {
             for (int[] coord : t.getCoords()) {
-                Log.e("XXX", "coord: " + coord[0] + ", " + coord[1]);
                 this.mapArray[coord[0]][coord[1]] = getTextRep(t.getOwner());
             }
         }

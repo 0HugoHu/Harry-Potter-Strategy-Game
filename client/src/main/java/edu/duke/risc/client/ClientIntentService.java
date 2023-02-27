@@ -8,6 +8,8 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import java.io.IOException;
+
 import edu.duke.shared.Game;
 
 public class ClientIntentService extends IntentService {
@@ -31,11 +33,12 @@ public class ClientIntentService extends IntentService {
 
         //TODO: process background task here!
 
-        /*
-         * Step 2: Now background service is processed,
-         * we can pass the status of the service back to the activity using the resultReceiver
-         */
-        Game game = new Client().getGame();
+        Game game = null;
+        try {
+            game = new Client().getGame();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         Bundle b = new Bundle();
         b.putSerializable("game", game);
         receiver.send(STATUS_FINISHED, b);
