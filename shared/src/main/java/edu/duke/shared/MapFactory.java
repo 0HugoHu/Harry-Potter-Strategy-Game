@@ -3,7 +3,7 @@ package edu.duke.shared;
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class InitMap {
+public class MapFactory {
     private final Map map;
     private final int numTerritories;
 
@@ -13,7 +13,7 @@ public class InitMap {
      * @param width Map width
      * @param numTerritories Number of territories on this map
      */
-    public InitMap(int height, int width, int numTerritories) {
+    public MapFactory(int height, int width, int numTerritories) {
         this.numTerritories = numTerritories;
         this.map = new Map(height, width, numTerritories);
     }

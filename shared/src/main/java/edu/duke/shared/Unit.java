@@ -12,7 +12,7 @@ public class Unit implements Serializable {
     // Unit hit points
     private final int hp;
 
-    /*
+    /**
      * Initialize Unit by name
      * @param name Unit name
      */
@@ -38,7 +38,7 @@ public class Unit implements Serializable {
         }
     }
 
-    /*
+    /**
      * Initialize Unit by name and attack/defense/hit point power
      * @param name Unit name
      * @param attack Unit attack power
@@ -51,7 +51,7 @@ public class Unit implements Serializable {
         this.hp = hp;
     }
 
-    /*
+    /**
      * Get unit name
      * @return unit name
      */
@@ -59,7 +59,7 @@ public class Unit implements Serializable {
         return this.name;
     }
 
-    /*
+    /**
      * Get unit attack power
      * @return unit attack power
      */
@@ -67,11 +67,17 @@ public class Unit implements Serializable {
         return this.attack;
     }
 
-    /*
+    /**
      * Get unit defense power
      * @return unit defense power
      */
     public int getDefense() {
         return this.defense;
     }
+
+    /**
+     * Get unit hp value
+     * @return unit hp value
+     */
+    public int getHp(){return this.hp;}
 }

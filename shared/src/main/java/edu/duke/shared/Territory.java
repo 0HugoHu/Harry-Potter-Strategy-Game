@@ -20,7 +20,7 @@ public class Territory implements Serializable {
     // Adjacent Territory name
     private final HashSet<String> adjs;
 
-    /*
+    /**
      * Initialize Territory by name
      * @param name Territory name
      */
@@ -32,7 +32,7 @@ public class Territory implements Serializable {
         this.adjs = new HashSet<>();
     }
 
-    /*
+    /**
      * Initialize Territory by name, owner, units, coordinates, and adjacent territories
      * @param name Territory name
      * @param owner Territory owner
@@ -48,7 +48,7 @@ public class Territory implements Serializable {
         this.adjs = adjs;
     }
 
-    /*
+    /**
      * Add a coordinate to this territory
      * @param coord Coordinate to be added
      * @return true if successfully added
@@ -60,7 +60,7 @@ public class Territory implements Serializable {
         return true;
     }
 
-    /*
+    /**
      * Set a coordinate, and add all coordinates in the minimal block
      * @param width of the minimal block
      * @param height of the minimal block
@@ -77,7 +77,7 @@ public class Territory implements Serializable {
         return true;
     }
 
-    /*
+    /**
      * Add an adjacent territory to this territory
      * @param adj Adjacent territory to be added
      * @return true if successfully added
@@ -89,7 +89,7 @@ public class Territory implements Serializable {
         return true;
     }
 
-    /*
+    /**
      * Add a unit to this territory
      * @param unit Unit to be added
      * @return true if successfully added
@@ -99,7 +99,7 @@ public class Territory implements Serializable {
         return true;
     }
 
-    /*
+    /**
      * Remove a unit from this territory
      * @param unit Unit to be removed
      * @return true if successfully removed
@@ -109,7 +109,7 @@ public class Territory implements Serializable {
         return true;
     }
 
-    /*
+    /**
      * Get the name of this territory
      * @return name of this territory
      */
@@ -117,7 +117,7 @@ public class Territory implements Serializable {
         return this.name;
     }
 
-    /*
+    /**
      * Get the owner of this territory
      * @return owner of this territory
      */
@@ -125,7 +125,7 @@ public class Territory implements Serializable {
         return this.owner;
     }
 
-    /*
+    /**
      * Change the owner of this territory
      * @return true if successfully changed
      */
@@ -136,7 +136,7 @@ public class Territory implements Serializable {
         return true;
     }
 
-    /*
+    /**
      * Get the units of this territory
      * @return units of this territory
      */
@@ -144,7 +144,7 @@ public class Territory implements Serializable {
         return this.units;
     }
 
-    /*
+    /**
      * Remove all units from this territory
      * @return true if successfully removed
      */
@@ -153,7 +153,7 @@ public class Territory implements Serializable {
         return true;
     }
 
-    /*
+    /**
      * Remove one unit by name from this territory
      * @return true if successfully removed
      */
@@ -167,7 +167,7 @@ public class Territory implements Serializable {
         return false;
     }
 
-    /*
+    /**
      * Test if a coordinate is in this territory
      * @param coord Coordinate to be tested
      * @return territory contains the coordinate
@@ -179,7 +179,7 @@ public class Territory implements Serializable {
         return false;
     }
 
-    /*
+    /**
      * Test if a territory is adjacent to this territory
      * @param adj Territory to be tested
      * @return territory is adjacent to this territory
@@ -188,7 +188,7 @@ public class Territory implements Serializable {
         return this.adjs.contains(adj);
     }
 
-    /*
+    /**
      * Get the number of units on this territory
      * @return number of units on this territory
      */
@@ -196,7 +196,7 @@ public class Territory implements Serializable {
         return this.units.size();
     }
 
-    /*
+    /**
      * Get all coordinates on this territory
      * @return all coordinates on this territory
      */

@@ -13,10 +13,10 @@ public class Map implements Serializable {
     // Map width
     private final int width;
 
-    /*
+    /**
      * Initialize Map by height and width
      * @param height Map height
-     * @param width Map width
+     * @param width Map height
      * @param numTerritories Number of territories on this map
      */
     public Map(int height, int width, int numTerritories) {
@@ -26,7 +26,7 @@ public class Map implements Serializable {
         this.territories = new ArrayList<>();
     }
 
-    /*
+    /**
      * Initialize Map by height, width, and territories
      * @param height Map height
      * @param width Map width
@@ -40,7 +40,7 @@ public class Map implements Serializable {
         this.territories = territories;
     }
 
-    /*
+    /**
      * Get map height
      * @return map height
      */
@@ -48,7 +48,7 @@ public class Map implements Serializable {
         return this.height;
     }
 
-    /*
+    /**
      * Get map width
      * @return map width
      */
@@ -56,7 +56,7 @@ public class Map implements Serializable {
         return this.width;
     }
 
-    /*
+    /**
      * Get number of territories on this map
      * @return number of territories on this map
      */
@@ -64,7 +64,7 @@ public class Map implements Serializable {
         return this.numTerritories;
     }
 
-    /*
+    /**
      * Get territories on this map
      * @return territories on this map
      */
@@ -72,7 +72,7 @@ public class Map implements Serializable {
         return this.territories;
     }
 
-    /*
+    /**
      * Get a territory by name
      * @param name Territory name
      * @return territory with the given name
@@ -85,7 +85,7 @@ public class Map implements Serializable {
         return null;
     }
 
-    /*
+    /**
      * Get a territory by owner name
      * @param name Territory owner name
      * @return territories owned by the given owner
@@ -99,7 +99,7 @@ public class Map implements Serializable {
         return territories;
     }
 
-    /*
+    /**
      * Add a territory to this map
      * @param t Territory to be added
      * @return true if successfully added
@@ -112,7 +112,7 @@ public class Map implements Serializable {
         return true;
     }
 
-    /*
+    /**
      * Remove a territory by name from this map
      * @param name Territory name
      * @return true if successfully removed
@@ -127,7 +127,8 @@ public class Map implements Serializable {
         }
         return false;
     }
-    /*
+
+    /**
      * Get a territory by the coord it has
      * @param coord The coordinate
      * @return Territory object if coord belongs to any of the territories, null otherwise
@@ -138,4 +139,6 @@ public class Map implements Serializable {
         }
         return null;
     }
+
+
 }
