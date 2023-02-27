@@ -33,7 +33,9 @@ test:
   tags:
     - ece651
   stage: test
-  script: chmod +x scripts/run-tests-in-docker.sh
+  script:
+    - chmod +x scripts/run-tests-in-docker.sh
+    - scripts/run-tests-in-docker.sh
   artifacts:
     paths:
       - coverage
