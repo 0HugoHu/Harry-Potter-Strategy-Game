@@ -1,7 +1,5 @@
 package edu.duke.risc.client;
 
-import android.util.Log;
-
 import java.io.IOException;
 import java.net.Socket;
 
@@ -13,7 +11,7 @@ public class Client {
     /*
      * TODO: Change the host name to your computer name
      */
-    private final String HOST = "Hugo-L";
+    private final String HOST = "xueyideAir.lan";
     // Port number
     private final int PORT = 5410;
     // Player name
