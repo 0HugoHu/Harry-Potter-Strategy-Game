@@ -13,7 +13,7 @@ import edu.duke.shared.thread.BaseThread;
 
 public class Client {
     // Host name
-    private String HOST = "";
+    private String HOST = "vcm-30577.vm.duke.edu";
     // Port number
     private final int PORT = 5410;
     // Player name
@@ -40,7 +40,6 @@ public class Client {
         this.game = new Game(1);
         // TODO: Read from local file
 //        this.HOST = readHost();
-        this.HOST = "Hugo-L";
         try {
             this.client = new Socket(HOST, PORT);
         } catch (IOException e) {

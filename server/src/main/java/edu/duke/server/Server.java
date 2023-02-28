@@ -13,7 +13,7 @@ public class Server {
     // Port number
     private final int PORT = 5410;
     // Gameplay controller
-    private final Game game;
+    private Game game;
     // Server socket
     private ServerSocket server;
 
@@ -67,12 +67,15 @@ public class Server {
      * @param numOfPlayers Number of players
      */
     public Server(int numOfPlayers) {
-        this.game = new Game(numOfPlayers);
-        // Listen to the port
-        try {
-            this.server = new ServerSocket(this.PORT);
-        } catch (Exception e) {
-            e.printStackTrace();
+        while (true) {
+            this.game = new Game(numOfPlayers);
+            // Listen to the port
+            try {
+                this.server = new ServerSocket(this.PORT);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println("New Game Created.\n");
         }
     }
 
