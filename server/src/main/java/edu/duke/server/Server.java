@@ -25,40 +25,42 @@ public class Server {
      * @param args Command line arguments
      */
     public static void main(String[] args) {
-        // Get IP address and hostname
-        InetAddress ip;
-        String hostname;
-        try {
-            ip = InetAddress.getLocalHost();
-            hostname = ip.getHostName();
-            System.out.println("Your current IP address : " + ip);
-            System.out.println("Your current Hostname : " + hostname);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+        while (true) {
+            // Get IP address and hostname
+            InetAddress ip;
+            String hostname;
+            try {
+                ip = InetAddress.getLocalHost();
+                hostname = ip.getHostName();
+                System.out.println("Your current IP address : " + ip);
+                System.out.println("Your current Hostname : " + hostname);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
 
-        final int numOfPlayers = 1;
-        Server server = new Server(numOfPlayers);
-        System.out.println("Created a new game of " + numOfPlayers + " players.\nWaiting for players to join...\n");
+            final int numOfPlayers = 1;
+            Server server = new Server(numOfPlayers);
+            System.out.println("Created a new game of " + numOfPlayers + " players.\nWaiting for players to join...\n");
 
-        // Accept connections from players
-        if (!server.acceptConnection()) {
-            System.out.println("Failed to accept connections from players.\n");
-            return;
-        }
+            // Accept connections from players
+            if (!server.acceptConnection()) {
+                System.out.println("Failed to accept connections from players.\n");
+                return;
+            }
 
-        // Send message to all players
-        if (server.sendToAllPlayers()) {
-            System.out.println("Message sent to all players.\n");
-        } else {
-            System.out.println("Failed to send to all players.\n");
-        }
+            // Send message to all players
+            if (server.sendToAllPlayers()) {
+                System.out.println("Message sent to all players.\n");
+            } else {
+                System.out.println("Failed to send to all players.\n");
+            }
 
-        // Close server socket
-        if (server.safeClose()) {
-            System.out.println("Server shut down.\n");
-        } else {
-            System.out.println("Failed to shut down server.\n");
+            // Close server socket
+            if (server.safeClose()) {
+                System.out.println("Server shut down.\n");
+            } else {
+                System.out.println("Failed to shut down server.\n");
+            }
         }
     }
 
@@ -67,16 +69,14 @@ public class Server {
      * @param numOfPlayers Number of players
      */
     public Server(int numOfPlayers) {
-        while (true) {
-            this.game = new Game(numOfPlayers);
-            // Listen to the port
-            try {
-                this.server = new ServerSocket(this.PORT);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            System.out.println("New Game Created.\n");
+        this.game = new Game(numOfPlayers);
+        // Listen to the port
+        try {
+            this.server = new ServerSocket(this.PORT);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        System.out.println("New Game Created.\n");
     }
 
     private boolean acceptConnection() {
