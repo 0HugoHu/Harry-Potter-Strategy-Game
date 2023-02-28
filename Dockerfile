@@ -41,7 +41,7 @@ COPY --chown=juser gradle/wrapper gradle/wrapper
 RUN chmod +x gradlew
 
 # this will fetch gradle 7.3, and the packages we depend on
-RUN ./gradlew resolveDependencies
+
 
 
 # Now we copy all our source files in.  Note that

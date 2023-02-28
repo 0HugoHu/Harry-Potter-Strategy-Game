@@ -1,5 +1,4 @@
 #!/bin/bash
-
 ./gradlew :server:build || exit 1
 ./gradlew :server:cloverGenerateReport || exit 1
 scripts/coverage_summary.sh
