@@ -4,15 +4,11 @@
 
 ## Link to Project Task Lisk
 
-https://prodduke-my.sharepoint.com/:x:/r/personal/yh342_duke_edu/Documents/ECE%20651%20Group%201%20Project%20Task%20List.xlsx?d=w18e83f614ba7499d93c805d3011429e5&csf=1&web=1&e=59rJHC
+**Click [here](https://prodduke-my.sharepoint.com/:x:/r/personal/yh342_duke_edu/Documents/ECE%20651%20Group%201%20Project%20Task%20List.xlsx?d=w18e83f614ba7499d93c805d3011429e5&csf=1&web=1&e=59rJHC) to see our task list Excel.**
 
 
 
-## Authors and acknowledgment
+## Link to UML Graph
 
-
-## License
-
-
-## Project status
+**To be done...**
 
