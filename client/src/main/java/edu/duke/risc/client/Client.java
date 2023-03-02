@@ -82,7 +82,7 @@ public class Client {
      * Close client socket
      * @return true if server socket is closed successfully, false otherwise
      */
-    public boolean safeClose() {
+    private boolean safeClose() {
         try {
             client.close();
         } catch (IOException e) {
