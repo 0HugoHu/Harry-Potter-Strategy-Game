@@ -2,18 +2,17 @@ package edu.duke.risc.client;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
 
-import edu.duke.risc.R;
 import edu.duke.shared.Game;
 import edu.duke.shared.thread.BaseThread;
 
 public class Client {
     // Host name
-    private String HOST = "vcm-30577.vm.duke.edu";
+//    private String HOST = "vcm-30577.vm.duke.edu";
+    private String HOST = "10.198.114.45";
     // Port number
     private final int PORT = 5410;
     // Player name
@@ -31,7 +30,6 @@ public class Client {
         //
         this.name="A";
         System.out.println("User Name"+this.name);
-        this.HOST= "xueyideAir.lan";
         try{
             this.client=new Socket(HOST,PORT);
         }catch (IOException e) {

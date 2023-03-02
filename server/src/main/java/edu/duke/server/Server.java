@@ -23,6 +23,7 @@ public class Server {
 
     /**
      * Main method
+     *
      * @param args Command line arguments
      */
     public static void main(String[] args) {
@@ -39,19 +40,19 @@ public class Server {
                 e.printStackTrace();
             }
 
-        //TODO : user decide how many players
-        //
-        //
-        //change the number of players here
-        final int numOfPlayers = 3;
-        Server server = new Server(numOfPlayers);
-        System.out.println("Created a new game of " + numOfPlayers + " players.\nWaiting for players to join...\n");
+            //TODO : user decide how many players
+            //
+            //
+            //change the number of players here
+            final int numOfPlayers = 3;
+            Server server = new Server(numOfPlayers);
+            System.out.println("Created a new game of " + numOfPlayers + " players.\nWaiting for players to join...\n");
 
-        // Accept connections from players
-        if (!server.acceptConnection(numOfPlayers)) {
-            System.out.println("Failed to accept connections from players.\n");
-            return;
-        }
+            // Accept connections from players
+            if (!server.acceptConnection(numOfPlayers)) {
+                System.out.println("Failed to accept connections from players.\n");
+                return;
+            }
 
             // Send message to all players
             if (server.sendToAllPlayers()) {
@@ -71,6 +72,7 @@ public class Server {
 
     /**
      * Initialize Server by number of players
+     *
      * @param numOfPlayers Number of players
      */
     public Server(int numOfPlayers) {
@@ -86,6 +88,7 @@ public class Server {
 
     /**
      * wait for connection from all users
+     *
      * @param num
      * @return
      */
@@ -96,12 +99,12 @@ public class Server {
                 // Accept connection from client
                 Socket socket = this.server.accept();
                 // Create a new thread for each player with index
-                  PlayerThread newPlayerThread = new PlayerThread(socket, this.game, i);
+                PlayerThread newPlayerThread = new PlayerThread(socket, this.game, i);
                 // Start the thread
-                 Thread thread = new Thread(newPlayerThread);
-                 thread.start();
-                 //thread join in
-                  thread.join();
+                Thread thread = new Thread(newPlayerThread);
+                thread.start();
+                //thread join in
+                thread.join();
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
                 return false;
@@ -113,11 +116,12 @@ public class Server {
 
     /**
      * Send message to all players
+     *
      * @return true if message is sent successfully, false otherwise
      */
     private boolean sendToAllPlayers() {
         for (int i = 0; i < this.getNumOfPlayers(); i++) {
-            Socket player_socket=this.game.getPlayerList().get(i).getSocket();
+            Socket player_socket = this.game.getPlayerList().get(i).getSocket();
             BaseThread thread = new BaseThread(player_socket, this.game);
             thread.encodeObj(this.game);
         }
@@ -126,6 +130,7 @@ public class Server {
 
     /**
      * Close server socket
+     *
      * @return true if server socket is closed successfully, false otherwise
      */
     public boolean safeClose() {
@@ -140,6 +145,7 @@ public class Server {
 
     /**
      * Get number of players
+     *
      * @return Number of players
      */
     public int getNumOfPlayers() {

@@ -34,11 +34,7 @@ public class ClientIntentService extends IntentService {
         //TODO: process background task here!
 
         Game game = null;
-        try {
-            game = new Client().getGame();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        game = new Client().getGame();
         Bundle b = new Bundle();
         b.putSerializable("game", game);
         receiver.send(STATUS_FINISHED, b);

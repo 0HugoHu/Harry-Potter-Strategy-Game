@@ -52,10 +52,10 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-//        return inflater.inflate(R.layout.textmap, container, false);
-        mGameView = new GameView(requireActivity().getApplicationContext());
-        mGameView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-        return mGameView;
+        return inflater.inflate(R.layout.textmap, container, false);
+//        mGameView = new GameView(requireActivity().getApplicationContext());
+//        mGameView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+//        return mGameView;
     }
 
     @Override
@@ -64,17 +64,17 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         registerService();
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        mGameView.pause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mGameView.resume();
-    }
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        mGameView.pause();
+//    }
+//
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        mGameView.resume();
+//    }
 
     /**
      * Handle the results from the intent service here
