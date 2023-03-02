@@ -9,6 +9,7 @@ public class Territory implements Serializable {
     private final String name;
     // Player's name
     private String owner;
+    private Player playerOwner;
     // All types of units on this territory
     /*
         For extendability, as units can have different attack and defense
@@ -27,26 +28,30 @@ public class Territory implements Serializable {
     public Territory(String name) {
         this.name = name;
         this.owner = "";
+        this.playerOwner=null;
         this.units = new ArrayList<>();
         this.coords = new HashSet<>();
         this.adjs = new HashSet<>();
     }
 
     /**
-     * Initialize Territory by name, owner, units, coordinates, and adjacent territories
+     * Initialize Territory by name, owner, playerOwner,units, coordinates, and adjacent territories
      * @param name Territory name
+     * @param playerOwner player
      * @param owner Territory owner
      * @param units Units on this territory
      * @param coords Coordinates inside this territory
      * @param adjs Adjacent territories
      */
-    public Territory(String name, String owner, ArrayList<Unit> units, HashSet<int[]> coords, HashSet<String> adjs) {
+    public Territory(String name, Player playerOwner,String owner, ArrayList<Unit> units, HashSet<int[]> coords, HashSet<String> adjs) {
+        this.playerOwner=playerOwner;
         this.name = name;
         this.owner = owner;
         this.units = units;
         this.coords = coords;
         this.adjs = adjs;
     }
+
 
     /**
      * Add a coordinate to this territory
@@ -134,6 +139,22 @@ public class Territory implements Serializable {
             return false;
         this.owner = owner;
         return true;
+    }
+
+    /**
+     * change the playerowner of this territory
+     * @param player
+     */
+    public void changePlayerOwner(Player player){
+        this.playerOwner=player;
+    }
+
+    /**
+     * return the playerowner of this territory
+     * @return
+     */
+    public Player getPlayerOwner(){
+        return playerOwner;
     }
 
     /**
