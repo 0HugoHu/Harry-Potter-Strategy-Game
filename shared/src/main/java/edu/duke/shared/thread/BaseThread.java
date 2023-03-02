@@ -35,8 +35,8 @@ public class BaseThread {
         this(socket, null);
     }
 
-    /*
-     * Decode the object from the client
+    /**
+     * Decode the object from the client (which is what is received from player)
      * @return The decoded object from the client
      */
     public Object decodeObj() {
@@ -55,8 +55,8 @@ public class BaseThread {
         }
     }
 
-    /*
-     * Encode the object to the client
+    /**
+     * Encode the object to the client(which is what sent out to player)
      * @param obj The object to be encoded
      */
     public void encodeObj(Object obj) {

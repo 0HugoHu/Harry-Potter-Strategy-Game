@@ -1,20 +1,20 @@
 package edu.duke.risc.client;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class ClientTest {
+class ClientTest {
 
     @Test
-    public void getName() {
+    void main() {
     }
 
     @Test
-    public void getGame() {
+    void getName() {
     }
 
     @Test
-    public void safeClose() {
+    void getGame() {
     }
 }

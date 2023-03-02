@@ -2,18 +2,17 @@ package edu.duke.risc.client;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
 
-import edu.duke.risc.R;
 import edu.duke.shared.Game;
 import edu.duke.shared.thread.BaseThread;
 
 public class Client {
     // Host name
-    private String HOST = "";
+//    private String HOST = "vcm-30577.vm.duke.edu";
+    private String HOST = "10.198.114.45";
     // Port number
     private final int PORT = 5410;
     // Player name
@@ -26,27 +25,50 @@ public class Client {
     /*
      * Initialize Client
      */
-    public Client() throws IOException {
-        this("Test Player");
+    public Client()  {
+        //TODO get user name
+        //
+        this.name="A";
+        System.out.println("User Name"+this.name);
+        try{
+            this.client=new Socket(HOST,PORT);
+        }catch (IOException e) {
+            System.out.println("Failed to set up client socket.\n");
+            e.printStackTrace();
+        }
     }
 
     /*
      * Initialize Client by player name
      * @param playerName Player name
      */
-    public Client(String playerName) throws IOException {
+    public Client(String playerName) {
         this.name = playerName;
         System.out.println("Created a player with name: " + this.name);
-        this.game = new Game(1);
+        //this.game = new Game(1);
         // TODO: Read from local file
 //        this.HOST = readHost();
-        this.HOST = "Hugo-L";
         try {
             this.client = new Socket(HOST, PORT);
         } catch (IOException e) {
             System.out.println("Failed to set up client socket.\n");
             e.printStackTrace();
         }
+    }
+
+    /**
+     * main method for the client
+     * @param args
+     */
+    public static void main(String[] args) {
+        //create new client
+        Client client=new Client();
+        System.out.println("Currently waiting for other players.....");
+        //client receive game from the server
+        Game currGame=client.getGame();
+        System.out.println(currGame.GameDetail());
+        System.out.println("End Game");
+        client.safeClose();
     }
 
     private String readHost() throws IOException {
@@ -83,7 +105,7 @@ public class Client {
      * Close client socket
      * @return true if server socket is closed successfully, false otherwise
      */
-    public boolean safeClose() {
+    private boolean safeClose() {
         try {
             client.close();
         } catch (IOException e) {
