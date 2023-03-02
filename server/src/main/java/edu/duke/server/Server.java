@@ -8,19 +8,20 @@ import java.net.UnknownHostException;
 
 import edu.duke.shared.Game;
 import edu.duke.shared.thread.BaseThread;
+import edu.duke.shared.thread.PlayerThread;
 
 public class Server {
     // Port number
     private final int PORT = 5410;
     // Gameplay controller
-    private Game game;
+    private final Game game;
     // Server socket
     private ServerSocket server;
 
     // ONLY For testing
     private Socket socketForTesting;
 
-    /*
+    /**
      * Main method
      * @param args Command line arguments
      */
@@ -38,15 +39,19 @@ public class Server {
                 e.printStackTrace();
             }
 
-            final int numOfPlayers = 1;
-            Server server = new Server(numOfPlayers);
-            System.out.println("Created a new game of " + numOfPlayers + " players.\nWaiting for players to join...\n");
+        //TODO : user decide how many players
+        //
+        //
+        //change the number of players here
+        final int numOfPlayers = 3;
+        Server server = new Server(numOfPlayers);
+        System.out.println("Created a new game of " + numOfPlayers + " players.\nWaiting for players to join...\n");
 
-            // Accept connections from players
-            if (!server.acceptConnection()) {
-                System.out.println("Failed to accept connections from players.\n");
-                return;
-            }
+        // Accept connections from players
+        if (!server.acceptConnection(numOfPlayers)) {
+            System.out.println("Failed to accept connections from players.\n");
+            return;
+        }
 
             // Send message to all players
             if (server.sendToAllPlayers()) {
@@ -64,7 +69,7 @@ public class Server {
         }
     }
 
-    /*
+    /**
      * Initialize Server by number of players
      * @param numOfPlayers Number of players
      */
@@ -79,29 +84,25 @@ public class Server {
         System.out.println("New Game Created.\n");
     }
 
-    private boolean acceptConnection() {
+    /**
+     * wait for connection from all users
+     * @param num
+     * @return
+     */
+    private boolean acceptConnection(int num) {
         // Wait until all players have joined the game
-        for (int i = 0; i < this.getNumOfPlayers(); i++) {
+        for (int i = 0; i < num; i++) {
             try {
                 // Accept connection from client
                 Socket socket = this.server.accept();
-                /*
-                 * TODO: ONLY For testing
-                 */
-                this.socketForTesting = socket;
-
-
-                /*
-                 * TODO: Need Player Class to create thread for each player
-                 */
-//                // Create a new thread for each player with index
-//                PlayerThread newPlayerThread = new PlayerThread(socket, this.game, i);
-//                // Start the thread
-//                Thread thread = new Thread(newPlayerThread);
-//                thread.start();
-//                // Wait for the thread to finish
-//                thread.join();
-            } catch (IOException e) {
+                // Create a new thread for each player with index
+                  PlayerThread newPlayerThread = new PlayerThread(socket, this.game, i);
+                // Start the thread
+                 Thread thread = new Thread(newPlayerThread);
+                 thread.start();
+                 //thread join in
+                  thread.join();
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
                 return false;
             }
@@ -109,19 +110,21 @@ public class Server {
         return true;
     }
 
-    /*
+
+    /**
      * Send message to all players
      * @return true if message is sent successfully, false otherwise
      */
     private boolean sendToAllPlayers() {
         for (int i = 0; i < this.getNumOfPlayers(); i++) {
-            BaseThread thread = new BaseThread(socketForTesting, this.game);
+            Socket player_socket=this.game.getPlayerList().get(i).getSocket();
+            BaseThread thread = new BaseThread(player_socket, this.game);
             thread.encodeObj(this.game);
         }
         return true;
     }
 
-    /*
+    /**
      * Close server socket
      * @return true if server socket is closed successfully, false otherwise
      */
@@ -135,7 +138,7 @@ public class Server {
         return true;
     }
 
-    /*
+    /**
      * Get number of players
      * @return Number of players
      */

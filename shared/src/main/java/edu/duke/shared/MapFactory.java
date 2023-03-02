@@ -6,20 +6,24 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class MapFactory {
     private final Map map;
     private final int numTerritories;
+    private ArrayList<Player> playerList;
 
-    /*
+    /**
      * Initialize Map by height and width
      * @param height Map height
      * @param width Map width
      * @param numTerritories Number of territories on this map
+     * @param playerList the list of players
      */
-    public MapFactory(int height, int width, int numTerritories) {
+    public MapFactory(int height, int width, int numTerritories,ArrayList<Player> playerList) {
         this.numTerritories = numTerritories;
         this.map = new Map(height, width, numTerritories);
+        this.playerList=playerList;
     }
-    /*
+
+    /**
      * Check if all coords in the map are allocated to territories
-     * @param map Map to be checked
+     * @param m map to be checked
      * @return true if map is full-filled, false otherwise
      */
     public boolean isFullFilledMap(Map m) {
@@ -29,7 +33,8 @@ public class MapFactory {
         }
         return num_coords == (m.getHeight() * m.getWidth());
     }
-    /*
+
+    /**
      * Check if the coord does not belong to any of the territories
      * @param coord the Coordinate to be checked
      * @return true if the coord does not belong to any of the territories, false otherwise
@@ -40,7 +45,8 @@ public class MapFactory {
         }
         return true;
     }
-    /*
+
+    /**
      * Check if the coord is within the map
      * @param coord the Coordinate to be checked
      * @return true if the coord is not out of the boundary of map, false otherwise
@@ -48,7 +54,8 @@ public class MapFactory {
     public boolean isValidCoord(int[] coord) {
         return coord[0] >= 0 && coord[1] >= 0 && coord[0] < map.getHeight() && coord[1] < map.getWidth();
     }
-    /*
+
+    /**
      * Get the adjcent coords of current coord
      * @param coord the Coordinate
      * @return ArrayList of coords that are adjcent to coord passed in
@@ -66,7 +73,7 @@ public class MapFactory {
         return adj_coords;
     }
 
-    /*
+    /**
      * Initialize Map by logic
      */
     public Map myLogic() {
@@ -85,7 +92,15 @@ public class MapFactory {
         Territory[] t = new Territory[this.numTerritories];
         for (int i = 0; i < this.numTerritories; i++) {
             t[i] = new Territory("Terr" + i);
+            //create a new player
+            Player player=new Player("Player"+((Integer)(i/6)).toString());
+            //give player the ownership of this land
+            player.expandTerr(t[i]);
+            //add player to playerList
+            playerList.add(player);
             t[i].changeOwner("Player"+ (i/6));
+            //set ownership to this territory
+            t[i].changePlayerOwner(player);
             int coord_1d = map.getHeight() * map.getWidth() / this.numTerritories * i;
             int[] coord = new int[]{coord_1d / map.getWidth(), coord_1d % map.getWidth()};
             q[i].add(coord);
