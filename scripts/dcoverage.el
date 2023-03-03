@@ -257,7 +257,7 @@
   (insert "\n"))
   
 
-(defun dcoverage-map-nested (fn lst)
+(defun dcoverage-gameMap-nested (fn lst)
   "Map FN over a two deep nested LST."
   (mapcar (lambda (x) (mapcar fn x)) lst))
 
@@ -316,7 +316,7 @@
          ;;sort the rows by order of increasing coverage percentage
          (sorted-rows (sort (copy-sequence rows) (lambda (a b) (< (nth 1 a) (nth 1 b)))))
          ;;turn all the row data into strings
-         (str-rows (dcoverage-map-nested (lambda (v) (if (numberp v) (number-to-string v) v)) sorted-rows))
+         (str-rows (dcoverage-gameMap-nested (lambda (v) (if (numberp v) (number-to-string v) v)) sorted-rows))
          ;;rev-row is each row reversed, so that file pathname is first.
          (rev-row (mapcar 'reverse str-rows))
          ;;build  up a list of just the file pathnames (but the list is backwards)
@@ -336,7 +336,7 @@
          (total-denom (+ total-stm total-br))
          (total-pct (if (equal total-denom 0) 100 (/ (* 100 total-cv) total-denom)))
          (total-row (list "Totals" (number-to-string total-pct) (number-to-string total-cv-stm) (number-to-string total-stm) (number-to-string total-cv-br) (number-to-string total-br)))
-         (per-row-widths (dcoverage-map-nested 'length data-rows))
+         (per-row-widths (dcoverage-gameMap-nested 'length data-rows))
          (col-widths (seq-reduce (lambda (currw r)  (seq-mapn 'max currw r)) per-row-widths init-widths))
          (r0 (dcoverage-print-table-row dash-row nop-pfs ?- col-widths "+"))
          (r1 (dcoverage-print-table-row header-row nop-pfs ?\s col-widths "|"))

@@ -23,12 +23,13 @@ public class Territory implements Serializable {
 
     /**
      * Initialize Territory by name
+     *
      * @param name Territory name
      */
     public Territory(String name) {
         this.name = name;
         this.owner = "";
-        this.playerOwner=null;
+        this.playerOwner = null;
         this.units = new ArrayList<>();
         this.coords = new HashSet<>();
         this.adjs = new HashSet<>();
@@ -36,15 +37,16 @@ public class Territory implements Serializable {
 
     /**
      * Initialize Territory by name, owner, playerOwner,units, coordinates, and adjacent territories
-     * @param name Territory name
+     *
+     * @param name        Territory name
      * @param playerOwner player
-     * @param owner Territory owner
-     * @param units Units on this territory
-     * @param coords Coordinates inside this territory
-     * @param adjs Adjacent territories
+     * @param owner       Territory owner
+     * @param units       Units on this territory
+     * @param coords      Coordinates inside this territory
+     * @param adjs        Adjacent territories
      */
-    public Territory(String name, Player playerOwner,String owner, ArrayList<Unit> units, HashSet<int[]> coords, HashSet<String> adjs) {
-        this.playerOwner=playerOwner;
+    public Territory(String name, Player playerOwner, String owner, ArrayList<Unit> units, HashSet<int[]> coords, HashSet<String> adjs) {
+        this.playerOwner = playerOwner;
         this.name = name;
         this.owner = owner;
         this.units = units;
@@ -55,6 +57,7 @@ public class Territory implements Serializable {
 
     /**
      * Add a coordinate to this territory
+     *
      * @param coord Coordinate to be added
      * @return true if successfully added
      */
@@ -67,16 +70,17 @@ public class Territory implements Serializable {
 
     /**
      * Set a coordinate, and add all coordinates in the minimal block
-     * @param width of the minimal block
+     *
+     * @param width  of the minimal block
      * @param height of the minimal block
-     * @param x coordinate of the minimal block
-     * @param y coordinate of the minimal block
+     * @param x      coordinate of the minimal block
+     * @param y      coordinate of the minimal block
      * @return true if successfully added
      */
     public boolean addCoordinateHelper(Territory t, int width, int height, int x, int y) {
         for (int k = 0; k < width; k++) {
             for (int l = 0; l < height; l++) {
-                t.addCoordinate(new int[]{y * height + l, x * width + k});
+                t.addCoordinate(new int[]{ y * height + l, x * width + k});
             }
         }
         return true;
@@ -84,6 +88,7 @@ public class Territory implements Serializable {
 
     /**
      * Add an adjacent territory to this territory
+     *
      * @param adj Adjacent territory to be added
      * @return true if successfully added
      */
@@ -96,6 +101,7 @@ public class Territory implements Serializable {
 
     /**
      * Add a unit to this territory
+     *
      * @param unit Unit to be added
      * @return true if successfully added
      */
@@ -106,6 +112,7 @@ public class Territory implements Serializable {
 
     /**
      * Remove a unit from this territory
+     *
      * @param unit Unit to be removed
      * @return true if successfully removed
      */
@@ -116,6 +123,7 @@ public class Territory implements Serializable {
 
     /**
      * Get the name of this territory
+     *
      * @return name of this territory
      */
     public String getName() {
@@ -124,6 +132,7 @@ public class Territory implements Serializable {
 
     /**
      * Get the owner of this territory
+     *
      * @return owner of this territory
      */
     public String getOwner() {
@@ -132,6 +141,7 @@ public class Territory implements Serializable {
 
     /**
      * Change the owner of this territory
+     *
      * @return true if successfully changed
      */
     public boolean changeOwner(String owner) {
@@ -143,22 +153,25 @@ public class Territory implements Serializable {
 
     /**
      * change the playerowner of this territory
-     * @param player
+     *
+     * @param player player
      */
-    public void changePlayerOwner(Player player){
-        this.playerOwner=player;
+    public void changePlayerOwner(Player player) {
+        this.playerOwner = player;
     }
 
     /**
      * return the playerowner of this territory
-     * @return
+     *
+     * @return player
      */
-    public Player getPlayerOwner(){
+    public Player getPlayerOwner() {
         return playerOwner;
     }
 
     /**
      * Get the units of this territory
+     *
      * @return units of this territory
      */
     public ArrayList<Unit> getUnits() {
@@ -167,6 +180,7 @@ public class Territory implements Serializable {
 
     /**
      * Remove all units from this territory
+     *
      * @return true if successfully removed
      */
     public boolean removeAllUnits() {
@@ -176,6 +190,7 @@ public class Territory implements Serializable {
 
     /**
      * Remove one unit by name from this territory
+     *
      * @return true if successfully removed
      */
     public boolean removeUnitByName(String name) {
@@ -190,18 +205,20 @@ public class Territory implements Serializable {
 
     /**
      * Test if a coordinate is in this territory
+     *
      * @param coord Coordinate to be tested
      * @return territory contains the coordinate
      */
     public boolean contains(int[] coord) {
-        for (int[] c:coords){
-            if (c[0]==coord[0]&&c[1]==coord[1]) return true;
+        for (int[] c : coords) {
+            if (c[0] == coord[0] && c[1] == coord[1]) return true;
         }
         return false;
     }
 
     /**
      * Test if a territory is adjacent to this territory
+     *
      * @param adj Territory to be tested
      * @return territory is adjacent to this territory
      */
@@ -211,6 +228,7 @@ public class Territory implements Serializable {
 
     /**
      * Get the number of units on this territory
+     *
      * @return number of units on this territory
      */
     public int getNumUnits() {
@@ -219,6 +237,7 @@ public class Territory implements Serializable {
 
     /**
      * Get all coordinates on this territory
+     *
      * @return all coordinates on this territory
      */
     public HashSet<int[]> getCoords() {

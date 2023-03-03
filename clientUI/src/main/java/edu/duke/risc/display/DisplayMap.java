@@ -1,17 +1,15 @@
 package edu.duke.risc.display;
 
-import android.util.Log;
+import androidx.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
-import edu.duke.shared.Map;
+import edu.duke.shared.GameMap;
 import edu.duke.shared.Territory;
 
 public class DisplayMap {
     // Map
-    private final Map map;
+    private final GameMap gameMap;
     // Map array
     private final int[][] mapArray;
 
@@ -21,9 +19,9 @@ public class DisplayMap {
      * Initialize DisplayMap by map
      * @param map Map
      */
-    public DisplayMap(Map map) {
-        this.map = map;
-        this.mapArray = new int[this.map.getHeight()][this.map.getWidth()];
+    public DisplayMap(GameMap gameMap) {
+        this.gameMap = gameMap;
+        this.mapArray = new int[this.gameMap.getHeight()][this.gameMap.getWidth()];
         this.ownerNames = new HashMap<>();
     }
 
@@ -31,17 +29,18 @@ public class DisplayMap {
      * Get String representation of map
      * @return String representation of map
      */
+    @NonNull
     public String toString() {
         // Initialize map array
         StringBuilder sb = new StringBuilder();
-        for (Territory t : this.map.getTerritories()) {
+        for (Territory t : this.gameMap.getTerritories()) {
             for (int[] coord : t.getCoords()) {
                 this.mapArray[coord[0]][coord[1]] = getTextRep(t.getOwner());
             }
         }
         // Convert map array to String
-        for (int i = 0; i < this.map.getHeight(); i++) {
-            for (int j = 0; j < this.map.getWidth(); j++) {
+        for (int i = 0; i < this.gameMap.getHeight(); i++) {
+            for (int j = 0; j < this.gameMap.getWidth(); j++) {
                 sb.append((char) this.mapArray[i][j]);
             }
             sb.append("\n");

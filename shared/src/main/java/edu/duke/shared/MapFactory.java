@@ -4,29 +4,31 @@ import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class MapFactory {
-    private final Map map;
+    private final GameMap gameMap;
     private final int numTerritories;
     private ArrayList<Player> playerList;
 
     /**
      * Initialize Map by height and width
-     * @param height Map height
-     * @param width Map width
+     *
+     * @param height         Map height
+     * @param width          Map width
      * @param numTerritories Number of territories on this map
-     * @param playerList the list of players
+     * @param playerList     the list of players
      */
-    public MapFactory(int height, int width, int numTerritories,ArrayList<Player> playerList) {
+    public MapFactory(int height, int width, int numTerritories, ArrayList<Player> playerList) {
         this.numTerritories = numTerritories;
-        this.map = new Map(height, width, numTerritories);
-        this.playerList=playerList;
+        this.gameMap = new GameMap(height, width, numTerritories);
+        this.playerList = playerList;
     }
 
     /**
      * Check if all coords in the map are allocated to territories
+     *
      * @param m map to be checked
      * @return true if map is full-filled, false otherwise
      */
-    public boolean isFullFilledMap(Map m) {
+    public boolean isFullFilledMap(GameMap m) {
         int num_coords = 0;
         for (Territory t : m.getTerritories()) {
             num_coords += t.getCoords().size();
@@ -36,11 +38,12 @@ public class MapFactory {
 
     /**
      * Check if the coord does not belong to any of the territories
+     *
      * @param coord the Coordinate to be checked
      * @return true if the coord does not belong to any of the territories, false otherwise
      */
     public boolean isEmptyCoord(int[] coord) {
-        for (Territory t : map.getTerritories()) {
+        for (Territory t : gameMap.getTerritories()) {
             if (t.contains(coord)) return false;
         }
         return true;
@@ -48,15 +51,17 @@ public class MapFactory {
 
     /**
      * Check if the coord is within the map
+     *
      * @param coord the Coordinate to be checked
      * @return true if the coord is not out of the boundary of map, false otherwise
      */
     public boolean isValidCoord(int[] coord) {
-        return coord[0] >= 0 && coord[1] >= 0 && coord[0] < map.getHeight() && coord[1] < map.getWidth();
+        return coord[0] >= 0 && coord[1] >= 0 && coord[0] < gameMap.getHeight() && coord[1] < gameMap.getWidth();
     }
 
     /**
      * Get the adjcent coords of current coord
+     *
      * @param coord the Coordinate
      * @return ArrayList of coords that are adjcent to coord passed in
      */
@@ -76,39 +81,39 @@ public class MapFactory {
     /**
      * Initialize Map by logic
      */
-    public Map myLogic() {
+    public GameMap myLogic() {
         //Initialize the dice
         Dice dice = new Dice(20);
         //Initialize the array of Queues for each territory
         LinkedBlockingQueue<int[]>[] q = new LinkedBlockingQueue[this.numTerritories];
-        for (int i=0;i<this.numTerritories;i++) q[i]=new LinkedBlockingQueue<>();
+        for (int i = 0; i < this.numTerritories; i++) q[i] = new LinkedBlockingQueue<>();
         //Initialize the visited map with false for conducting BFS with Queue
-        boolean[][][] visited =new boolean[this.numTerritories][map.getHeight()][map.getWidth()];
-        for (int i=0;i<this.numTerritories;i++)
-            for (int j=0;j<map.getHeight();j++)
-                for (int k=0;k<map.getWidth();k++)
-                    visited[i][j][k]=false;
+        boolean[][][] visited = new boolean[this.numTerritories][gameMap.getHeight()][gameMap.getWidth()];
+        for (int i = 0; i < this.numTerritories; i++)
+            for (int j = 0; j < gameMap.getHeight(); j++)
+                for (int k = 0; k < gameMap.getWidth(); k++)
+                    visited[i][j][k] = false;
         //Initialize the array of territories
         Territory[] t = new Territory[this.numTerritories];
         for (int i = 0; i < this.numTerritories; i++) {
             t[i] = new Territory("Terr" + i);
             //create a new player
-            Player player=new Player("Player"+((Integer)(i/6)).toString());
+            Player player = new Player("Player" + ((Integer) (i / 6)));
             //give player the ownership of this land
             player.expandTerr(t[i]);
             //add player to playerList
             playerList.add(player);
-            t[i].changeOwner("Player"+ (i/6));
+            t[i].changeOwner("Player" + (i / 6));
             //set ownership to this territory
             t[i].changePlayerOwner(player);
-            int coord_1d = map.getHeight() * map.getWidth() / this.numTerritories * i;
-            int[] coord = new int[]{coord_1d / map.getWidth(), coord_1d % map.getWidth()};
+            int coord_1d = gameMap.getHeight() * gameMap.getWidth() / this.numTerritories * i;
+            int[] coord = new int[]{coord_1d / gameMap.getWidth(), coord_1d % gameMap.getWidth()};
             q[i].add(coord);
-            visited[i][coord[0]][coord[1]]=true;
-            map.addTerritory(t[i]);
+            visited[i][coord[0]][coord[1]] = true;
+            gameMap.addTerritory(t[i]);
         }
         //Loop through each territory to expand their coords
-        while (!isFullFilledMap(map)) {
+        while (!isFullFilledMap(gameMap)) {
             for (int i = 0; i < this.numTerritories; i++) {
                 if (q[i].isEmpty()) continue;
                 int[] curr_coord = q[i].remove();
@@ -118,12 +123,12 @@ public class MapFactory {
                 if ((q[i].isEmpty()) && (!isEmptyCoord(curr_coord))) {
                     continue;
                 }
-                if (dice.getDice() > (int)(0.8*dice.getMaxPoint())) {
+                if (dice.getDice() > (int) (0.8 * dice.getMaxPoint())) {
                     t[i].addCoordinate(curr_coord);
                     for (int[] new_coord : getAdjcentCoords(curr_coord)) {
                         if (isEmptyCoord(new_coord) && (!visited[i][new_coord[0]][new_coord[1]])) {
                             q[i].add(new_coord);
-                            visited[i][new_coord[0]][new_coord[1]]=true;
+                            visited[i][new_coord[0]][new_coord[1]] = true;
                         }
                     }
                 } else {
@@ -132,26 +137,30 @@ public class MapFactory {
             }
         }
         //Adding the adjcent relationships between territories
-        for (int i=0;i<map.getHeight();i++)
-            for (int j=0;j<map.getWidth();j++){
-                int[] curr_coord=new int[]{i,j};
-                for (int[] new_coord:getAdjcentCoords(curr_coord)){
-                    Territory t1=map.getTerritoryByCoord(curr_coord);
-                    Territory t2=map.getTerritoryByCoord(new_coord);
-                    if (t1!=t2){
+        for (int i = 0; i < gameMap.getHeight(); i++)
+            for (int j = 0; j < gameMap.getWidth(); j++) {
+                int[] curr_coord = new int[]{i, j};
+                for (int[] new_coord : getAdjcentCoords(curr_coord)) {
+                    Territory t1 = gameMap.getTerritoryByCoord(curr_coord);
+                    Territory t2 = gameMap.getTerritoryByCoord(new_coord);
+                    if (t1 != t2) {
                         t1.addAdjacent(t2.getName());
                         t2.addAdjacent(t1.getName());
                     }
                 }
             }
-        return this.map;
+        // Notify the map is generated
+        this.gameMap.completed();
+        return this.gameMap;
     }
 
     /*
      * Initialize Map by template
      * ONLY USED FOR TESTING
      */
-    public Map myTemplateMap() {
+    public GameMap myTemplateMap() {
+        Player player = new Player("Player" + ((Integer) (0)));
+        playerList.add(player);
         for (int i = 0; i < this.numTerritories; i++) {
             // Create a territory
             Territory t;
@@ -344,9 +353,11 @@ public class MapFactory {
                     break;
             }
             // add the territory to the map
-            map.addTerritory(t);
+            gameMap.addTerritory(t);
         }
-        return this.map;
+        // Notify the map is generated
+        this.gameMap.completed();
+        return this.gameMap;
     }
 
 }

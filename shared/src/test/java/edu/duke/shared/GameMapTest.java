@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-public class MapTest {
+public class GameMapTest {
 
     /**
      * test method for basic Map functions
@@ -14,22 +14,22 @@ public class MapTest {
     @Test
     public void getHeight() {
         ArrayList<Territory> terrList = new ArrayList<>();
-        Map map = new Map(15, 10, 2, terrList);
-        assertEquals(15, map.getHeight());
+        GameMap gameMap = new GameMap(15, 10, 2, terrList);
+        assertEquals(15, gameMap.getHeight());
     }
 
     @Test
     public void getWidth() {
         ArrayList<Territory> terrList = new ArrayList<>();
-        Map map = new Map(10, 15, 2, terrList);
-        assertEquals(15, map.getWidth());
+        GameMap gameMap = new GameMap(10, 15, 2, terrList);
+        assertEquals(15, gameMap.getWidth());
     }
 
     @Test
     public void getNumTerritories() {
         ArrayList<Territory> terrList = new ArrayList<>();
-        Map map = new Map(10, 10, 5, terrList);
-        assertEquals(5, map.getNumTerritories());
+        GameMap gameMap = new GameMap(10, 10, 5, terrList);
+        assertEquals(5, gameMap.getNumTerritories());
     }
 
     @Test
@@ -39,8 +39,8 @@ public class MapTest {
         Territory t2 = new Territory("B");
         terrList.add(t1);
         terrList.add(t2);
-        Map map = new Map(10, 10, 2, terrList);
-        assertEquals(terrList, map.getTerritories());
+        GameMap gameMap = new GameMap(10, 10, 2, terrList);
+        assertEquals(terrList, gameMap.getTerritories());
     }
 
     @Test
@@ -50,8 +50,8 @@ public class MapTest {
         Territory t2 = new Territory("B");
         terrList.add(t1);
         terrList.add(t2);
-        Map map = new Map(10, 10, 2, terrList);
-        assertEquals(t1, map.getTerritory("A"));
+        GameMap gameMap = new GameMap(10, 10, 2, terrList);
+        assertEquals(t1, gameMap.getTerritory("A"));
     }
 
     @Test
@@ -63,8 +63,8 @@ public class MapTest {
         t2.changeOwner("C");
         terrList.add(t1);
         terrList.add(t2);
-        Map map = new Map(10, 10, 2, terrList);
-        assertEquals(terrList, map.getTerritoriesByOwner("C"));
+        GameMap gameMap = new GameMap(10, 10, 2, terrList);
+        assertEquals(terrList, gameMap.getTerritoriesByOwner("C"));
     }
 
     @Test

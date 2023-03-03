@@ -15,7 +15,7 @@ public class Player implements Serializable {
      * Initialize the Player by name
      * @param name player name
      */
-    public Player(String name){
+    public Player(String name) {
         this.playerName=name;
         this.playerTerrs=new HashSet<Territory>();
         this.socket=null;
@@ -32,7 +32,7 @@ public class Player implements Serializable {
 
     /**
      * change player name
-     * @param playerName
+     * @param playerName new player name
      */
     public void setPlayerName(String playerName) {
         this.playerName = playerName;
@@ -48,7 +48,7 @@ public class Player implements Serializable {
 
     /**
      * change player id
-     * @param playerId
+     * @param playerId new player id
      */
     public void setPlayerId(int playerId) {
         this.playerId = playerId;
@@ -98,7 +98,7 @@ public class Player implements Serializable {
 
     /**
      * change connection socket of this player
-     * @param socket
+     * @param socket new socket
      */
     public void setSocket(Socket socket) {
         this.socket = socket;
