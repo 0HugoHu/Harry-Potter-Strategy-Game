@@ -44,7 +44,7 @@ public class Server {
             //
             //
             //change the number of players here
-            final int numOfPlayers = 3;
+            final int numOfPlayers = 1;
             Server server = new Server(numOfPlayers);
             System.out.println("Created a new game of " + numOfPlayers + " players.\nWaiting for players to join...\n");
 
@@ -89,8 +89,8 @@ public class Server {
     /**
      * wait for connection from all users
      *
-     * @param num
-     * @return
+     * @param num number of players
+     * @return true if all players have joined the game, false otherwise
      */
     private boolean acceptConnection(int num) {
         // Wait until all players have joined the game

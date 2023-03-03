@@ -21,9 +21,9 @@ public class PlayerThread extends BaseThread implements Runnable {
         // TODO receive orders from player
         //
         //receive the playerList of this game
-        ArrayList<Player> playerList=this.game.getPlayerList();
+        ArrayList<Player> playerList = this.game.getPlayerList();
         //the current player can be traced by the index
-        Player player=playerList.get(index);
+        Player player = playerList.get(index);
         //set playerId by index
         player.setPlayerId(index);
         //set player socket

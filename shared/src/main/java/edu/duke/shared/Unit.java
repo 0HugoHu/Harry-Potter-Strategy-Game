@@ -14,6 +14,7 @@ public class Unit implements Serializable {
 
     /**
      * Initialize Unit by name
+     *
      * @param name Unit name
      */
     public Unit(String name) {
@@ -40,8 +41,9 @@ public class Unit implements Serializable {
 
     /**
      * Initialize Unit by name and attack/defense/hit point power
-     * @param name Unit name
-     * @param attack Unit attack power
+     *
+     * @param name    Unit name
+     * @param attack  Unit attack power
      * @param defense Unit defense power
      */
     public Unit(String name, int attack, int defense, int hp) {
@@ -53,6 +55,7 @@ public class Unit implements Serializable {
 
     /**
      * Get unit name
+     *
      * @return unit name
      */
     public String getName() {
@@ -61,6 +64,7 @@ public class Unit implements Serializable {
 
     /**
      * Get unit attack power
+     *
      * @return unit attack power
      */
     public int getAttack() {
@@ -69,6 +73,7 @@ public class Unit implements Serializable {
 
     /**
      * Get unit defense power
+     *
      * @return unit defense power
      */
     public int getDefense() {
@@ -77,7 +82,10 @@ public class Unit implements Serializable {
 
     /**
      * Get unit hp value
+     *
      * @return unit hp value
      */
-    public int getHp(){return this.hp;}
+    public int getHp() {
+        return this.hp;
+    }
 }

@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class MapFactoryTest {
+public class GameMapFactoryTest {
 
     @Test
     public void isFullFilledMap() {

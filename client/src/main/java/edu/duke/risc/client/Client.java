@@ -12,7 +12,7 @@ import edu.duke.shared.thread.BaseThread;
 public class Client {
     // Host name
 //    private String HOST = "vcm-30577.vm.duke.edu";
-    private String HOST = "10.198.114.45";
+    private String HOST = "192.168.1.100";
     // Port number
     private final int PORT = 5410;
     // Player name
@@ -58,7 +58,7 @@ public class Client {
 
     /**
      * main method for the client
-     * @param args
+     * @param args command line arguments
      */
     public static void main(String[] args) {
         //create new client
