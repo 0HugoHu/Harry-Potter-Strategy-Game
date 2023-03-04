@@ -26,16 +26,7 @@ public class Client {
      * Initialize Client
      */
     public Client()  {
-        //TODO get user name
-        //
-        this.name="A";
-        System.out.println("User Name"+this.name);
-        try{
-            this.client=new Socket(HOST,PORT);
-        }catch (IOException e) {
-            System.out.println("Failed to set up client socket.\n");
-            e.printStackTrace();
-        }
+        this("Player1");
     }
 
     /*
@@ -105,7 +96,7 @@ public class Client {
      * Close client socket
      * @return true if server socket is closed successfully, false otherwise
      */
-    private boolean safeClose() {
+    public boolean safeClose() {
         try {
             client.close();
         } catch (IOException e) {

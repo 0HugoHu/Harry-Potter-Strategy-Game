@@ -15,10 +15,20 @@ public class MapTiles {
     private final int mapViewWidth;
     private final int mapViewHeight;
     // Padding
-    private int paddingTop = 32;
-    private int paddingBottom = 32;
-    private int paddingLeft = 32;
-    private int paddingRight = 32;
+    private int paddingTop = 64;
+    private int paddingBottom = 64;
+    private int paddingLeft = 64;
+    private int paddingRight = 64;
+
+    // Map scale and offset
+    private float scale = 1.0f;
+    private float offsetX = 0.0f;
+    private float offsetY = 0.0f;
+    
+    private int boarderSize = 2;
+
+    private GameMap mGameMap = null;
+    
 
     /**
      * Constructor
@@ -26,10 +36,23 @@ public class MapTiles {
      * @param viewHeight height of the view
      */
     public MapTiles(int viewWidth, int viewHeight) {
-        this.mapViewWidth = viewWidth;
-        this.mapViewHeight = viewHeight;
-        this.paddingLeft = viewWidth / 10;
-        this.paddingTop = viewHeight / 10;
+        this.paddingLeft = Math.max(viewWidth / 10, this.paddingLeft);
+        this.paddingTop = Math.max(viewHeight / 10, this.paddingRight);
+        this.paddingRight = this.paddingLeft;
+        this.paddingBottom = this.paddingTop;
+        this.mapViewWidth = viewWidth - this.paddingLeft - this.paddingRight;
+        this.mapViewHeight = viewHeight - this.paddingTop - this.paddingBottom;
+    }
+
+    public void move(Canvas canvas, Paint mPaint, float dx, float dy) {
+        this.offsetX = dx;
+        this.offsetY = dy;
+        this.update(canvas, mPaint, this.mGameMap);
+    }
+
+    public void zoom(Canvas canvas, Paint mPaint, float scale) {
+        this.scale = scale;
+        this.update(canvas, mPaint, this.mGameMap);
     }
 
     /**
@@ -42,9 +65,8 @@ public class MapTiles {
         if (map == null) {
             return;
         }
+        this.mGameMap = map;
 
-        int size = 40;
-        int borderSize = 2;
         Set<String> owners = new HashSet<>();
         Map<String, Integer> ownerColor = new HashMap<>();
         ownerColor.put("Player0", 0xFF1ABC9C);
@@ -55,6 +77,7 @@ public class MapTiles {
 
         int height = map.getHeight();
         int width = map.getWidth();
+        int size = (int) (Math.min(this.mapViewWidth / width, this.mapViewHeight / height) * scale);
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -62,24 +85,24 @@ public class MapTiles {
                 mPaint.setColor(ownerColor.getOrDefault(owner, 0xFF000000));
                 byte pattern = map.isBorderPoint(y, x);
 
-                canvas.drawRect(paddingLeft + x * size, paddingTop + y * size, paddingLeft + x * size + size, paddingTop + y * size + size, mPaint);
+                canvas.drawRect(this.paddingLeft + offsetX + x * size, this.paddingTop + offsetY + y * size, this.paddingLeft + offsetX + x * size + size, this.paddingTop + offsetY + y * size + size, mPaint);
                 if (pattern != 0) {
                     mPaint.setColor(0xFF000000);
                     // Draw top border
                     if ((pattern & 1) != 0) {
-                        canvas.drawRect(paddingLeft + x * size, paddingTop + y * size, paddingLeft + x * size + size, paddingTop + y * size + borderSize, mPaint);
+                        canvas.drawRect(this.paddingLeft + offsetX + x * size, this.paddingTop + offsetY + y * size, this.paddingLeft + offsetX + x * size + size, this.paddingTop + offsetY + y * size + this.boarderSize, mPaint);
                     }
                     // Draw right border
                     if ((pattern & 2) != 0) {
-                        canvas.drawRect(paddingLeft + x * size + size - borderSize, paddingTop + y * size, paddingLeft + x * size + size, paddingTop + y * size + size, mPaint);
+                        canvas.drawRect(this.paddingLeft + offsetX + x * size + size - this.boarderSize, this.paddingTop + offsetY + y * size, this.paddingLeft + offsetX + x * size + size, this.paddingTop + offsetY + y * size + size, mPaint);
                     }
                     // Draw bottom border
                     if ((pattern & 4) != 0) {
-                        canvas.drawRect(paddingLeft + x * size, paddingTop + y * size + size - borderSize, paddingLeft + x * size + size, paddingTop + y * size + size, mPaint);
+                        canvas.drawRect(this.paddingLeft + offsetX + x * size, this.paddingTop + offsetY + y * size + size - this.boarderSize, this.paddingLeft + offsetX + x * size + size, this.paddingTop + offsetY + y * size + size, mPaint);
                     }
                     // Draw left border
                     if ((pattern & 8) != 0) {
-                        canvas.drawRect(paddingLeft + x * size, paddingTop + y * size, paddingLeft + x * size + borderSize, paddingTop + y * size + size, mPaint);
+                        canvas.drawRect(this.paddingLeft + offsetX + x * size, this.paddingTop + offsetY + y * size, this.paddingLeft + offsetX + x * size + this.boarderSize, this.paddingTop + offsetY + y * size + size, mPaint);
                     }
                 }
             }

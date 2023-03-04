@@ -103,4 +103,9 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         requireActivity().startService(intent);
     }
 
+    private void closeService() {
+        Intent intent = new Intent(requireActivity().getApplicationContext(), ClientIntentService.class);
+        requireActivity().stopService(intent);
+    }
+
 }
