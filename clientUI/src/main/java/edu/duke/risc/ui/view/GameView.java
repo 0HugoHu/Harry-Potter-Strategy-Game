@@ -13,10 +13,14 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Toast;
 
 import androidx.core.view.MotionEventCompat;
 
 import edu.duke.risc.display.draw.MapTiles;
+import edu.duke.risc.ui.action.TouchEventMapping;
+import edu.duke.risc.ui.state.MapAnimationType;
+import edu.duke.risc.ui.state.MapUpdateType;
 import edu.duke.shared.GameMap;
 
 /**
@@ -41,14 +45,8 @@ public class GameView extends SurfaceView implements Runnable {
     private float mPosX;
     private float mPosY;
 
-    private enum MapUpdateType {
-        NONE,
-        REFRESH,
-        MOVE,
-        ZOOM
-    }
-
     private MapUpdateType mUpdateType = MapUpdateType.REFRESH;
+    private MapAnimationType mAnimationType = MapAnimationType.NONE;
     private boolean mRunning;
     private Thread mGameThread = null;
 
@@ -66,9 +64,16 @@ public class GameView extends SurfaceView implements Runnable {
     private int offsetX = 0;
     private int offsetY = 0;
     private float scale = 1.0f;
-    private ScaleGestureDetector mScaleGestureDetector;
-    private Handler mHandler;
+    private final ScaleGestureDetector mScaleGestureDetector;
+    private final Handler mHandler;
     private boolean pinchToZoom;
+
+    private TouchEventMapping touchEventMapping;
+
+    private boolean isClick = true;
+
+    private boolean animationTimer500 = true;
+    private String territorySelected = null;
 
 
     public GameView(Context context) {
@@ -113,34 +118,42 @@ public class GameView extends SurfaceView implements Runnable {
 
         while (mRunning) {
             // If we can obtain a valid drawing surface...
-            if (mSurfaceHolder.getSurface().isValid() && mUpdateType != MapUpdateType.NONE) {
+            if (mSurfaceHolder.getSurface().isValid()) {
+                if (mUpdateType != MapUpdateType.NONE) {
+                    canvas = mSurfaceHolder.lockCanvas();
 
-                // Lock the canvas. Note that in a more complex app, with
-                // more threads, you need to put this into a try/catch block
-                // to make sure only one thread is drawing to the surface.
-                // Starting with O, you can request a hardware surface with
-                //    lockHardwareCanvas().
-                // See https://developer.android.com/reference/android/view/
-                //    SurfaceHolder.html#lockHardwareCanvas()
-                canvas = mSurfaceHolder.lockCanvas();
+                    canvas.drawColor(Color.WHITE);
+                    canvas.scale(scale, scale);
+                    switch (mUpdateType) {
+                        case REFRESH:
+                        case ZOOM:
+                            mMapTiles.update(canvas, this.mPaint, this.mGameMap, this.touchEventMapping);
+                            break;
+                        case MOVE:
+                            mMapTiles.move(canvas, this.mPaint, this.touchEventMapping, this.offsetX, this.offsetY);
+                            break;
+                    }
 
-                canvas.drawColor(Color.WHITE);
-                canvas.scale(scale, scale);
-                switch (mUpdateType) {
-                    case REFRESH:
-                    case ZOOM:
-                        mMapTiles.update(canvas, this.mPaint, this.mGameMap);
-                        break;
-                    case MOVE:
-                        mMapTiles.move(canvas, this.mPaint, this.offsetX, this.offsetY);
-                        break;
+                    mSurfaceHolder.unlockCanvasAndPost(canvas);
+                    mUpdateType = MapUpdateType.NONE;
                 }
-
-                // Restore the previously saved (default) clip and matrix state.
-                // Release the lock on the canvas and show the surface's
-                // contents on the screen.
-                mSurfaceHolder.unlockCanvasAndPost(canvas);
-                mUpdateType = MapUpdateType.NONE;
+                if (mAnimationType != MapAnimationType.NONE) {
+                    canvas = mSurfaceHolder.lockCanvas();
+                    canvas.drawColor(Color.WHITE);
+                    canvas.scale(scale, scale);
+                    if (animationTimer500) {
+                        switch (mAnimationType) {
+                            case TERRITORY_SELECTED:
+                                mMapTiles.selected(canvas, this.mPaint, this.touchEventMapping, this.territorySelected);
+                                break;
+                            default:
+                                break;
+                        }
+//                        this.animationTimer500 = false;
+                        this.mAnimationType = MapAnimationType.NONE;
+                    }
+                    mSurfaceHolder.unlockCanvasAndPost(canvas);
+                }
             }
         }
     }
@@ -153,6 +166,7 @@ public class GameView extends SurfaceView implements Runnable {
      */
     public void updateMap(GameMap gameMap) {
         this.mGameMap = gameMap;
+        this.touchEventMapping = new TouchEventMapping(mGameMap);
         mUpdateType = MapUpdateType.REFRESH;
     }
 
@@ -212,6 +226,8 @@ public class GameView extends SurfaceView implements Runnable {
 
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN: {
+                this.isClick = true;
+
                 final int pointerIndex = MotionEventCompat.getActionIndex(event);
                 final float x = MotionEventCompat.getX(event, pointerIndex);
                 final float y = MotionEventCompat.getY(event, pointerIndex);
@@ -251,9 +267,19 @@ public class GameView extends SurfaceView implements Runnable {
             }
 
             case MotionEvent.ACTION_UP: {
+                if (this.isClick) {
+                    this.isClick = false;
+                    if (this.touchEventMapping != null) {
+                        mAnimationType = MapAnimationType.TERRITORY_SELECTED;
+//                        animationTimer500();
+                        territorySelected = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX());
+                    }
+                }
+
                 mActivePointerId = INVALID_POINTER_ID;
                 mHandler.removeCallbacksAndMessages(null);
                 pinchToZoom = false;
+                testIfClick();
                 break;
             }
 
@@ -301,18 +327,16 @@ public class GameView extends SurfaceView implements Runnable {
 
         @Override
         public void onScaleEnd(ScaleGestureDetector detector) {
-            resetFlag();
             super.onScaleEnd(detector);
         }
     }
 
-    private void resetFlag() {
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+    private void testIfClick() {
+        mHandler.postDelayed(() -> this.isClick = false, 500);
+    }
 
-            }
-        }, 500);
+    private void animationTimer500() {
+        mHandler.postDelayed(() -> this.animationTimer500 = true, 500);
     }
 
 
