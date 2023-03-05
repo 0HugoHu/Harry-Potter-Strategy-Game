@@ -187,6 +187,7 @@ public class GameView extends SurfaceView implements Runnable {
      */
     private void zoomMap(float scale) {
         this.scale = scale;
+        this.touchEventMapping.setScale(scale);
         mUpdateType = MapUpdateType.ZOOM;
     }
 
