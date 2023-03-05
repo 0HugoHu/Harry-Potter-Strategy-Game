@@ -3,8 +3,6 @@ package edu.duke.shared;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Objects;
 
 public class GameMap implements Serializable {
     // All territories on this map
@@ -119,7 +117,7 @@ public class GameMap implements Serializable {
         return null;
     }
 
-    public String getNameByCoord(int y, int x) {
+    public String getTerritoryNameByCoord(int y, int x) {
         for (Territory t : this.territories) {
             if (t.contains(new int[]{y, x}))
                 return t.getName();
@@ -197,13 +195,13 @@ public class GameMap implements Serializable {
                 int y = coord[0];
                 // Pattern code: 0001: top, 0010: right, 0100: bottom, 1000: left
                 byte pattern = 0;
-                if (this.getNameByCoord(y , x - 1) == null || !this.getNameByCoord(y , x - 1).equals(tName))
+                if (this.getTerritoryNameByCoord(y , x - 1) == null || !this.getTerritoryNameByCoord(y , x - 1).equals(tName))
                     pattern += 8;
-                if (this.getNameByCoord(y , x + 1) == null || !this.getNameByCoord(y, x + 1).equals(tName))
+                if (this.getTerritoryNameByCoord(y , x + 1) == null || !this.getTerritoryNameByCoord(y, x + 1).equals(tName))
                     pattern += 2;
-                if (this.getNameByCoord(y - 1, x) == null || !this.getNameByCoord(y - 1, x).equals(tName))
+                if (this.getTerritoryNameByCoord(y - 1, x) == null || !this.getTerritoryNameByCoord(y - 1, x).equals(tName))
                     pattern += 1;
-                if (this.getNameByCoord(y + 1, x) == null || !this.getNameByCoord(y + 1, x).equals(tName))
+                if (this.getTerritoryNameByCoord(y + 1, x) == null || !this.getTerritoryNameByCoord(y + 1, x).equals(tName))
                     pattern += 4;
                 this.borderPoints.put(y * 100000 + x + "", pattern);
             }

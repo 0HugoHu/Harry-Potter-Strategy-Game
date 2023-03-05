@@ -19,7 +19,7 @@ public class Game implements Serializable {
         this.numPlayers = numPlayers;
         this.playerList = new ArrayList<>();
         // Initialize map
-        MapFactory map = new MapFactory(30, 60, 18, playerList);
+        MapFactory map = new MapFactory(25, 40, 18, playerList);
         this.gameMap = map.myLogic();
 //        this.gameMap = map.myTemplateMap();
     }
