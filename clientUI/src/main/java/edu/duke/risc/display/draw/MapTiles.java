@@ -27,17 +27,20 @@ public class MapTiles {
     private float scale = 1.0f;
     private float offsetX = 0.0f;
     private float offsetY = 0.0f;
-    
+
+    // Boarder size
     private int boarderSize = 2;
 
+    // Territory mapping
     private GameMap mGameMap = null;
-
+    // Territory selected
     private String territorySelected = null;
-    
+
 
     /**
      * Constructor
-     * @param viewWidth width of the view
+     *
+     * @param viewWidth  width of the view
      * @param viewHeight height of the view
      */
     public MapTiles(int viewWidth, int viewHeight) {
@@ -49,6 +52,15 @@ public class MapTiles {
         this.mapViewHeight = viewHeight - this.paddingTop - this.paddingBottom;
     }
 
+    /**
+     * Move the map
+     *
+     * @param canvas            canvas
+     * @param mPaint            paint
+     * @param touchEventMapping touch event mapping
+     * @param dx                x offset
+     * @param dy                y offset
+     */
     public void move(Canvas canvas, Paint mPaint, TouchEventMapping touchEventMapping, float dx, float dy) {
         this.offsetX = dx;
         this.offsetY = dy;
@@ -60,6 +72,14 @@ public class MapTiles {
         this.update(canvas, mPaint, this.mGameMap, touchEventMapping);
     }
 
+    /**
+     * Select a territory
+     *
+     * @param canvas            canvas
+     * @param mPaint            paint
+     * @param touchEventMapping touch event mapping
+     * @param territoryName     territory name
+     */
     public void selected(Canvas canvas, Paint mPaint, TouchEventMapping touchEventMapping, String territoryName) {
         this.territorySelected = territoryName;
         this.update(canvas, mPaint, this.mGameMap, touchEventMapping);
@@ -67,9 +87,10 @@ public class MapTiles {
 
     /**
      * Update the map tiles
+     *
      * @param canvas canvas
      * @param mPaint paint
-     * @param map map
+     * @param map    map
      */
     public void update(Canvas canvas, Paint mPaint, GameMap map, TouchEventMapping touchEventMapping) {
         if (map == null) {
@@ -98,9 +119,10 @@ public class MapTiles {
 
                 // Update center point of each territory
                 if (touchEventMapping.isCenterPoint(y, x)) {
-                    if (touchEventMapping.updateTerritoryMapping(map.getTerritoryNameByCoord(y, x), new int[] {(int) (this.paddingTop + offsetY + y * size + size / 2), (int) (this.paddingLeft + offsetX + x * size + size / 2)})) {
-
-                    }
+                    assert (touchEventMapping.updateTerritoryMapping(map.getTerritoryNameByCoord(y, x), new int[]{(int) (this.paddingTop + offsetY + y * size + size / 2), (int) (this.paddingLeft + offsetX + x * size + size / 2)}));
+                    mPaint.setColor(0xFF000000);
+                    mPaint.setTextSize(size);
+                    canvas.drawText(territoryName + ": " + map.getTerritory(territoryName).getNumUnits(), this.paddingLeft + offsetX + (x - 1) * size, this.paddingTop + offsetY + (y - 1) * size, mPaint);
                 }
 
                 // Draw new tile
@@ -134,7 +156,10 @@ public class MapTiles {
                     // Reset border size
                     this.boarderSize = 2;
                 }
+
+
             }
         }
     }
+
 }
