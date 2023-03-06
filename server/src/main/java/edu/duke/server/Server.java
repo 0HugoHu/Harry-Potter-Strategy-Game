@@ -1,12 +1,16 @@
 package edu.duke.server;
-
+import java.util.logging.Logger;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.HashSet;
 
 import edu.duke.shared.Game;
+import edu.duke.shared.Player;
+import edu.duke.shared.Territory;
+import edu.duke.shared.Unit;
 import edu.duke.shared.thread.BaseThread;
 import edu.duke.shared.thread.PlayerThread;
 
@@ -20,6 +24,8 @@ public class Server {
 
     // ONLY For testing
     private Socket socketForTesting;
+
+    private static final Logger logger=Logger.getLogger("serverLog.txt");
 
     /**
      * Main method
@@ -53,12 +59,31 @@ public class Server {
                 System.out.println("Failed to accept connections from players.\n");
                 return;
             }
+            //TODO : add players to game
+            //Add players
+
 
             // Send message to all players
             if (server.sendToAllPlayers()) {
                 System.out.println("Message sent to all players.\n");
             } else {
                 System.out.println("Failed to send to all players.\n");
+            }
+
+            // Receive Units info from all players
+            if (server.receiveUnitsInfo()){
+                System.out.println("Received all units info.\n");
+            }
+            else{
+                System.out.println("Failed to receive units from all players");
+            }
+            // Start Game
+
+            if (server.startPlayingTurn()){
+                System.out.println("Received all units info.\n");
+            }
+            else{
+                System.out.println("Failed to receive units from all players");
             }
 
             // Close server socket
@@ -150,6 +175,36 @@ public class Server {
      */
     public int getNumOfPlayers() {
         return this.game.getNumPlayers();
+    }
+
+
+    /**
+     * Receive units placement from client
+     * @return true if receive info successfully, false otherwise
+     */
+    private boolean receiveUnitsInfo(){
+        for (int i = 0; i < this.getNumOfPlayers(); i++) {
+            Player p = this.game.getPlayerList().get(i);
+            Socket player_socket = p.getSocket();
+            BaseThread thread = new BaseThread(player_socket, this.game);
+            HashSet<Territory> terr_set=p.getPlayerTerrs();
+            for (int j=0;j<terr_set.size();j++) {
+                Territory terr = (Territory) thread.decodeObj();
+                for (Territory t:terr_set){
+                    if (terr.getName().equals(t.getName())){
+                        for (Unit u:terr.getUnits()){
+                            t.addUnit(u);
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean startPlayingTurn(){
+
+        return true;
     }
 
 }
