@@ -25,8 +25,4 @@ public class GameMapFactoryTest {
     @Test
     public void myLogic() {
     }
-
-    @Test
-    public void myTemplateMap() {
-    }
 }

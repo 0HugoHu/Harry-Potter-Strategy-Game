@@ -68,23 +68,6 @@ public class Territory implements Serializable {
         return true;
     }
 
-    /**
-     * Set a coordinate, and add all coordinates in the minimal block
-     *
-     * @param width  of the minimal block
-     * @param height of the minimal block
-     * @param x      coordinate of the minimal block
-     * @param y      coordinate of the minimal block
-     * @return true if successfully added
-     */
-    public boolean addCoordinateHelper(Territory t, int width, int height, int x, int y) {
-        for (int k = 0; k < width; k++) {
-            for (int l = 0; l < height; l++) {
-                t.addCoordinate(new int[]{ y * height + l, x * width + k});
-            }
-        }
-        return true;
-    }
 
     /**
      * Add an adjacent territory to this territory
@@ -156,8 +139,11 @@ public class Territory implements Serializable {
      *
      * @param player player
      */
-    public void changePlayerOwner(Player player) {
+    public boolean changePlayerOwner(Player player) {
+        if (this.playerOwner!=null&&this.playerOwner.equals(player))
+            return false;
         this.playerOwner = player;
+        return true;
     }
 
     /**

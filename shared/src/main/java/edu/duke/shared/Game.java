@@ -9,7 +9,7 @@ import edu.duke.shared.turn.Turn;
 public class Game implements Serializable {
     // Number of players
     private final int numPlayers;
-    ArrayList<Player> playerList;
+    private final ArrayList<Player> playerList;
     // Map
     private final GameMap gameMap;
 
@@ -24,11 +24,9 @@ public class Game implements Serializable {
      */
     public Game(int numPlayers) {
         this.numPlayers = numPlayers;
-        this.playerList = new ArrayList<>();
-        // Initialize map
-        MapFactory map = new MapFactory(25, 40, 18, playerList);
+        MapFactory map = new MapFactory(30, 60, 24);
         this.gameMap = map.myLogic();
-//        this.gameMap = map.myTemplateMap();
+        this.playerList = new ArrayList<>();
     }
 
     /**
@@ -40,6 +38,7 @@ public class Game implements Serializable {
     public Game(int numPlayers, GameMap gameMap) {
         this.numPlayers = numPlayers;
         this.gameMap = gameMap;
+        this.playerList = new ArrayList<>();
     }
 
     /**

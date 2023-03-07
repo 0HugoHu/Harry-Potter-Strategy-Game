@@ -5,8 +5,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.HashSet;
 
 import edu.duke.shared.Game;
+import edu.duke.shared.Player;
+import edu.duke.shared.Territory;
+import edu.duke.shared.Unit;
 import edu.duke.shared.thread.BaseThread;
 
 public class Client {
@@ -58,6 +62,13 @@ public class Client {
         //client receive game from the server
         Game currGame=client.getGame();
         System.out.println(currGame.GameDetail());
+        //Select territory to put units
+
+        //client send units select info to server
+        client.sendUnitsInfo();
+        //End placement, start game
+
+        //End Game
         System.out.println("End Game");
         client.safeClose();
     }
@@ -102,6 +113,15 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        }
+        return true;
+    }
+
+    private boolean sendUnitsInfo(){
+        HashSet<Territory> terrs=game.getPlayer(name).getPlayerTerrs();
+        BaseThread thread = new BaseThread(this.client);
+        for (Territory t:terrs){
+            thread.encodeObj(t);
         }
         return true;
     }

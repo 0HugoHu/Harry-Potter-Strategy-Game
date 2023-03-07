@@ -6,7 +6,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class MapFactory {
     private final GameMap gameMap;
     private final int numTerritories;
-    private ArrayList<Player> playerList;
 
     /**
      * Initialize Map by height and width
@@ -14,12 +13,10 @@ public class MapFactory {
      * @param height         Map height
      * @param width          Map width
      * @param numTerritories Number of territories on this map
-     * @param playerList     the list of players
      */
-    public MapFactory(int height, int width, int numTerritories, ArrayList<Player> playerList) {
+    public MapFactory(int height, int width, int numTerritories) {
         this.numTerritories = numTerritories;
         this.gameMap = new GameMap(height, width, numTerritories);
-        this.playerList = playerList;
     }
 
     /**
@@ -97,15 +94,6 @@ public class MapFactory {
         Territory[] t = new Territory[this.numTerritories];
         for (int i = 0; i < this.numTerritories; i++) {
             t[i] = new Territory("Terr" + i);
-            //create a new player
-            Player player = new Player("Player" + ((Integer) (i / 6)));
-            //give player the ownership of this land
-            player.expandTerr(t[i]);
-            //add player to playerList
-            playerList.add(player);
-            t[i].changeOwner("Player" + (i / 6));
-            //set ownership to this territory
-            t[i].changePlayerOwner(player);
             int coord_1d = gameMap.getHeight() * gameMap.getWidth() / this.numTerritories * i;
             int[] coord = new int[]{coord_1d / gameMap.getWidth(), coord_1d % gameMap.getWidth()};
             q[i].add(coord);
@@ -158,6 +146,7 @@ public class MapFactory {
      * Initialize Map by template
      * ONLY USED FOR TESTING
      */
+    /*
     public GameMap myTemplateMap() {
         Player player = new Player("Player" + ((Integer) (0)));
         playerList.add(player);
@@ -359,5 +348,5 @@ public class MapFactory {
         this.gameMap.completed();
         return this.gameMap;
     }
-
+    */
 }
