@@ -27,6 +27,7 @@ public class Game implements Serializable {
         MapFactory map = new MapFactory(30, 60, 24);
         this.gameMap = map.myLogic();
         this.playerList = new ArrayList<>();
+        for (int i=0;i<numPlayers;i++) addPlayer(new Player("Player"+i));
     }
 
     /**
@@ -39,6 +40,7 @@ public class Game implements Serializable {
         this.numPlayers = numPlayers;
         this.gameMap = gameMap;
         this.playerList = new ArrayList<>();
+        for (int i=0;i<numPlayers;i++) addPlayer(new Player("Player"+i));
     }
 
     /**

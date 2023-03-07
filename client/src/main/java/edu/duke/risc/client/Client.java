@@ -23,6 +23,8 @@ public class Client {
     private Game game;
     // Client socket
     private Socket client;
+    // Player Id on server
+    private int playerID;
 
     /*
      * Initialize Client
@@ -57,9 +59,14 @@ public class Client {
         //create new client
         Client client=new Client();
         System.out.println("Currently waiting for other players.....");
+        //Send player name
+        client.sendPlayerName();
         //client receive game from the server
         Game currGame=client.getGame();
         System.out.println(currGame.GameDetail());
+        int id=client.getInt();
+        System.out.println("ID:"+id);
+
         //Select territory to put units
 
         //client send units select info to server
@@ -98,7 +105,19 @@ public class Client {
         }
         BaseThread thread = new BaseThread(this.client);
         this.game = (Game) thread.decodeObj();
+
         return this.game;
+    }
+
+    public Integer getInt(){
+        if (this.client == null) {
+            System.out.println("Client socket is not set up.\n");
+            return null;
+        }
+        BaseThread thread = new BaseThread(this.client);
+        this.playerID= (Integer)thread.decodeObj();
+
+        return this.playerID;
     }
 
     /*
@@ -119,5 +138,11 @@ public class Client {
         for (Territory t:terrs){
             thread.encodeObj(t);
         }
+    }
+
+    private boolean sendPlayerName(){
+        BaseThread thread = new BaseThread(this.client);
+        thread.encodeObj(this.name);
+        return true;
     }
 }
