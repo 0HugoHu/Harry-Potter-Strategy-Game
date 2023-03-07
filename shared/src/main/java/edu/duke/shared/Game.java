@@ -2,6 +2,9 @@ package edu.duke.shared;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import edu.duke.shared.turn.Turn;
 
 public class Game implements Serializable {
     // Number of players
@@ -9,6 +12,10 @@ public class Game implements Serializable {
     ArrayList<Player> playerList;
     // Map
     private final GameMap gameMap;
+
+    private HashMap<String, ArrayList<Turn>> turnMap;
+
+    private ArrayList<Turn> turnList;
 
     /**
      * Initialize Game by number of players

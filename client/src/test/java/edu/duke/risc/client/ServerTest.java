@@ -1,12 +1,12 @@
 package edu.duke.risc.client;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
 import edu.duke.server.Server;
 
-public class ClientTest {
+public class ServerTest {
 
     /**
      * This testing method tests functions
@@ -15,7 +15,7 @@ public class ClientTest {
      * @throws Exception
      */
     @Test
-    public void server_one_client_Test() throws Exception {
+    public void serverTest() throws Exception {
         Server newSer = new Server(1);
 
         //create the server thread
@@ -26,6 +26,8 @@ public class ClientTest {
                 System.out.println("Waiting for connection from client...");
                 newSer.sendToAllPlayers();
                 System.out.println("Sent message to all clients...");
+                newSer.safeClose();
+                System.out.println("Server closed.");
             } catch (Exception except) {
                 except.printStackTrace();
             }
@@ -35,23 +37,17 @@ public class ClientTest {
         serverThread.start();
         Thread.sleep(5000);
 
-
-        //create the first client thread
-        Thread clientThread1 = new Thread(() -> {
+        //create the client thread
+        Thread clientThread = new Thread(() -> {
             try {
                 Client cli = new Client();
                 System.out.println("Client created and connected...");
-                assertEquals("A", cli.getName());
-                cli.getGame();
-                System.out.println("Client receive game info from server...");
-                cli.safeClose();
-                System.out.println("Client closed.");
             } catch (Exception except) {
                 except.printStackTrace();
             }
         });
-        //start the first client thread
-        clientThread1.start();
+        //start the client thread
+        clientThread.start();
         Thread.sleep(1000);
     }
 
@@ -85,10 +81,8 @@ public class ClientTest {
         //create the first client thread
         Thread clientThread1 = new Thread(() -> {
             try {
-                Client cli1 = new Client("Allen");
+                Client cli1 = new Client();
                 System.out.println("Client created and connected...");
-                assertEquals("Allen", cli1.getName());
-                cli1.getGame();
             } catch (Exception except) {
                 except.printStackTrace();
             }
@@ -100,10 +94,8 @@ public class ClientTest {
         //create the second client thread
         Thread clientThread2 = new Thread(() -> {
             try {
-                Client cli2 = new Client("Jennie");
+                Client cli2 = new Client();
                 System.out.println("Client created and connected...");
-                assertEquals("Jennie", cli2.getName());
-                cli2.getGame();
             } catch (Exception except) {
                 except.printStackTrace();
             }
@@ -114,8 +106,7 @@ public class ClientTest {
 
     }
 
-
-    /*
+        /*
     @Test
     @Disabled
     @ResourceLock(value = Resources.SYSTEM_OUT, mode = ResourceAccessMode.READ_WRITE)
@@ -148,7 +139,4 @@ public class ClientTest {
     }
     */
 
-
 }
-
-

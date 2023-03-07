@@ -92,7 +92,7 @@ public class Server {
      * @param num number of players
      * @return true if all players have joined the game, false otherwise
      */
-    private boolean acceptConnection(int num) {
+    public boolean acceptConnection(int num) {
         // Wait until all players have joined the game
         for (int i = 0; i < num; i++) {
             try {
@@ -119,7 +119,7 @@ public class Server {
      *
      * @return true if message is sent successfully, false otherwise
      */
-    private boolean sendToAllPlayers() {
+    public boolean sendToAllPlayers() {
         for (int i = 0; i < this.getNumOfPlayers(); i++) {
             Socket player_socket = this.game.getPlayerList().get(i).getSocket();
             BaseThread thread = new BaseThread(player_socket, this.game);
