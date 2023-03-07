@@ -10,6 +10,10 @@ application {
     mainClass = 'edu.duke.risc.client.Client'
 }
 
+run {
+    standardInput = System.in
+}
+
 
 dependencies {
     implementation project(path: ':shared')
@@ -17,4 +21,9 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.4.2'
     implementation project(path: ':server')
 
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }

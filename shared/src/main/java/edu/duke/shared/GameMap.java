@@ -135,7 +135,6 @@ public class GameMap implements Serializable {
         if (this.territories.contains(t))
             return false;
         this.territories.add(t);
-        this.numTerritories++;
         return true;
     }
 
@@ -160,7 +159,6 @@ public class GameMap implements Serializable {
         for (Territory t : this.territories) {
             if (t.getName().equals(name)) {
                 this.territories.remove(t);
-                this.numTerritories--;
                 return true;
             }
         }

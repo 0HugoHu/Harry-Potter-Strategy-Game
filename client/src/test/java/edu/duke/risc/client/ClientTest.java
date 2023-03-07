@@ -41,7 +41,7 @@ public class ClientTest {
             try {
                 Client cli = new Client();
                 System.out.println("Client created and connected...");
-                assertEquals("A", cli.getName());
+                assertEquals("A", cli.getPlayerName());
                 cli.getGame();
                 System.out.println("Client receive game info from server...");
                 cli.safeClose();
@@ -87,7 +87,7 @@ public class ClientTest {
             try {
                 Client cli1 = new Client("Allen");
                 System.out.println("Client created and connected...");
-                assertEquals("Allen", cli1.getName());
+                assertEquals("Allen", cli1.getPlayerName());
                 cli1.getGame();
             } catch (Exception except) {
                 except.printStackTrace();
@@ -102,7 +102,7 @@ public class ClientTest {
             try {
                 Client cli2 = new Client("Jennie");
                 System.out.println("Client created and connected...");
-                assertEquals("Jennie", cli2.getName());
+                assertEquals("Jennie", cli2.getPlayerName());
                 cli2.getGame();
             } catch (Exception except) {
                 except.printStackTrace();

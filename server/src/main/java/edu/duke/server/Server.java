@@ -1,4 +1,5 @@
 package edu.duke.server;
+
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import java.io.IOException;
@@ -24,7 +25,7 @@ public class Server {
     // Server socket
     private ServerSocket server;
 
-    private static final Logger logger=Logger.getLogger("serverLog.txt");
+    private static final Logger logger = Logger.getLogger("serverLog.txt");
 
     /**
      * Main method
@@ -49,7 +50,7 @@ public class Server {
             //
             //
             //change the number of players here
-            final int numOfPlayers = 1;
+            final int numOfPlayers = 3;
             Server server = new Server(numOfPlayers);
             System.out.println("Created a new game of " + numOfPlayers + " players.\nWaiting for players to join...\n");
 
@@ -72,18 +73,16 @@ public class Server {
             }
 
             // Receive Units info from all players
-            if (server.receiveUnitsInfo()){
+            if (server.receiveUnitsInfo()) {
                 System.out.println("Received all units info.\n");
-            }
-            else{
+            } else {
                 System.out.println("Failed to receive units from all players");
             }
             // Start Game
 
-            if (server.startPlayingTurn()){
+            if (server.startPlayingTurn()) {
                 System.out.println("Received all units info.\n");
-            }
-            else{
+            } else {
                 System.out.println("Failed to receive units from all players");
             }
 
@@ -135,6 +134,7 @@ public class Server {
                 e.printStackTrace();
                 return false;
             }
+            System.out.println("Player " + i + " has joined the game.\n");
         }
         return true;
     }
@@ -182,19 +182,20 @@ public class Server {
 
     /**
      * Receive units placement from client
+     *
      * @return true if receive info successfully, false otherwise
      */
-    private boolean receiveUnitsInfo(){
+    private boolean receiveUnitsInfo() {
         for (int i = 0; i < this.getNumOfPlayers(); i++) {
             Player p = this.game.getPlayerList().get(i);
             Socket player_socket = p.getSocket();
             BaseThread thread = new BaseThread(player_socket, this.game);
-            HashSet<Territory> terr_set=p.getPlayerTerrs();
-            for (int j=0;j<terr_set.size();j++) {
+            HashSet<Territory> terr_set = p.getPlayerTerrs();
+            for (int j = 0; j < terr_set.size(); j++) {
                 Territory terr = (Territory) thread.decodeObj();
-                for (Territory t:terr_set){
-                    if (terr.getName().equals(t.getName())){
-                        for (Unit u:terr.getUnits()){
+                for (Territory t : terr_set) {
+                    if (terr.getName().equals(t.getName())) {
+                        for (Unit u : terr.getUnits()) {
                             t.addUnit(u);
                         }
                     }
@@ -204,29 +205,30 @@ public class Server {
         return true;
     }
 
-    private boolean startPlayingTurn(){
+    private boolean startPlayingTurn() {
 
         return true;
     }
 
-    public void allocateTerrtories(){
-        GameMap gameMap=this.game.getMap();
-        int numTerrs=gameMap.getNumTerritories();
-        int numPlayers=this.game.getNumPlayers();
-        ArrayList<Territory> terrs=gameMap.getTerritories();
-        ArrayList<Player> players=game.getPlayerList();
-        for (int i=0;i<numTerrs;i++){
-            players.get(i/numPlayers).expandTerr(terrs.get(i));
-            terrs.get(i).changePlayerOwner(players.get(i/numPlayers));
-            terrs.get(i).changeOwner(players.get(i/numPlayers).getPlayerName());
+    public void allocateTerrtories() {
+        GameMap gameMap = this.game.getMap();
+        int numTerrs = gameMap.getNumTerritories();
+        int numPlayers = this.game.getNumPlayers();
+        ArrayList<Territory> terrs = gameMap.getTerritories();
+        ArrayList<Player> players = game.getPlayerList();
+        for (int i = 0; i < numTerrs; i++) {
+            players.get(i / (numTerrs / numPlayers)).expandTerr(terrs.get(i));
+            terrs.get(i).changePlayerOwner(players.get(i / (numTerrs / numPlayers)));
+            terrs.get(i).changeOwner(players.get(i / (numTerrs / numPlayers)).getPlayerName());
         }
     }
 
-    public void receivePlayerName(){
-        for (int i=0;i<getNumOfPlayers();i++){
+    public void receivePlayerName() {
+        for (int i = 0; i < getNumOfPlayers(); i++) {
             Player p = this.game.getPlayerList().get(i);
             BaseThread thread = new BaseThread(p.getSocket());
-            p.setPlayerName((String)thread.decodeObj());
+            p.setPlayerName((String) thread.decodeObj());
+            System.out.println("Received player " + i + "'s name: " + p.getPlayerName());
         }
     }
 

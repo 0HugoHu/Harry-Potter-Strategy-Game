@@ -23,11 +23,7 @@ public class Game implements Serializable {
      * @param numPlayers Number of players
      */
     public Game(int numPlayers) {
-        this.numPlayers = numPlayers;
-        MapFactory map = new MapFactory(30, 60, 24);
-        this.gameMap = map.myLogic();
-        this.playerList = new ArrayList<>();
-        for (int i=0;i<numPlayers;i++) addPlayer(new Player("Player"+i));
+        this(numPlayers, new MapFactory(30, 60, 24).myLogic());
     }
 
     /**
