@@ -1,4 +1,5 @@
 package edu.duke.server;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -8,6 +9,7 @@ import java.net.UnknownHostException;
 import java.util.HashSet;
 
 import edu.duke.shared.Game;
+import edu.duke.shared.GameMap;
 import edu.duke.shared.Player;
 import edu.duke.shared.Territory;
 import edu.duke.shared.Unit;
@@ -59,8 +61,10 @@ public class Server {
                 System.out.println("Failed to accept connections from players.\n");
                 return;
             }
-            //TODO : add players to game
-            //Add players
+            //TODO : Allocate territories
+            //Allocate territories
+            server.receivePlayerName();
+            server.allocateTerrtories();
 
 
             // Send message to all players
@@ -149,6 +153,7 @@ public class Server {
             Socket player_socket = this.game.getPlayerList().get(i).getSocket();
             BaseThread thread = new BaseThread(player_socket, this.game);
             thread.encodeObj(this.game);
+            thread.encodeObj(i);
         }
         return true;
     }
@@ -205,6 +210,27 @@ public class Server {
     private boolean startPlayingTurn(){
 
         return true;
+    }
+
+    public void allocateTerrtories(){
+        GameMap gameMap=this.game.getMap();
+        int numTerrs=gameMap.getNumTerritories();
+        int numPlayers=this.game.getNumPlayers();
+        ArrayList<Territory> terrs=gameMap.getTerritories();
+        ArrayList<Player> players=game.getPlayerList();
+        for (int i=0;i<numTerrs;i++){
+            players.get(i/numPlayers).expandTerr(terrs.get(i));
+            terrs.get(i).changePlayerOwner(players.get(i/numPlayers));
+            terrs.get(i).changeOwner(players.get(i/numPlayers).getPlayerName());
+        }
+    }
+
+    public void receivePlayerName(){
+        for (int i=0;i<getNumOfPlayers();i++){
+            Player p = this.game.getPlayerList().get(i);
+            BaseThread thread = new BaseThread(p.getSocket());
+            p.setPlayerName((String)thread.decodeObj());
+        }
     }
 
 }
