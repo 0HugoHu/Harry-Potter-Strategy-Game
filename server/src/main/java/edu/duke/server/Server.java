@@ -16,14 +16,11 @@ import edu.duke.shared.thread.PlayerThread;
 
 public class Server {
     // Port number
-    private final int PORT = 5410;
+    private final static int PORT = 5410;
     // Gameplay controller
     private final Game game;
     // Server socket
     private ServerSocket server;
-
-    // ONLY For testing
-    private Socket socketForTesting;
 
     private static final Logger logger=Logger.getLogger("serverLog.txt");
 
@@ -104,7 +101,7 @@ public class Server {
         this.game = new Game(numOfPlayers);
         // Listen to the port
         try {
-            this.server = new ServerSocket(this.PORT);
+            this.server = new ServerSocket(PORT);
         } catch (Exception e) {
             e.printStackTrace();
         }

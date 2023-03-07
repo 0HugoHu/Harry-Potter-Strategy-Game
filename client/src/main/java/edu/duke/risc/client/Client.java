@@ -8,17 +8,15 @@ import java.net.Socket;
 import java.util.HashSet;
 
 import edu.duke.shared.Game;
-import edu.duke.shared.Player;
 import edu.duke.shared.Territory;
-import edu.duke.shared.Unit;
 import edu.duke.shared.thread.BaseThread;
 
 public class Client {
     // Host name
 //    private String HOST = "vcm-30577.vm.duke.edu";
-    private String HOST = "192.168.1.100";
+    private final static String HOST = "Hugo-L";
     // Port number
-    private final int PORT = 5410;
+    private final static int PORT = 5410;
     // Player name
     String name;
     // Gameplay controller
@@ -107,22 +105,19 @@ public class Client {
      * Close client socket
      * @return true if server socket is closed successfully, false otherwise
      */
-    public boolean safeClose() {
+    public void safeClose() {
         try {
             client.close();
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
 
-    private boolean sendUnitsInfo(){
+    private void sendUnitsInfo(){
         HashSet<Territory> terrs=game.getPlayer(name).getPlayerTerrs();
         BaseThread thread = new BaseThread(this.client);
         for (Territory t:terrs){
             thread.encodeObj(t);
         }
-        return true;
     }
 }
