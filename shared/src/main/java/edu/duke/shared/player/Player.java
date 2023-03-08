@@ -1,29 +1,49 @@
-package edu.duke.shared;
+package edu.duke.shared.player;
 
+import java.io.Serializable;
 import java.net.Socket;
 import java.util.HashSet;
-import java.io.Serializable;
+
+import edu.duke.shared.map.Territory;
 
 public class Player implements Serializable {
 
     private String playerName;
-    private HashSet<Territory> playerTerrs;
+    private final HashSet<Territory> playerTerrs;
     private int playerId;
     private transient Socket socket;
 
+    private transient final Thread thread;
+
     /**
      * Initialize the Player by name
-     * @param name player name
+     *
+     * @param playerId player id
+     * @param socket   player socket
      */
-    public Player(String name) {
-        this.playerName=name;
-        this.playerTerrs=new HashSet<Territory>();
-        this.socket=null;
+    public Player(int playerId, Socket socket) {
+        this.playerName = null;
+        this.playerId = playerId;
+        this.playerTerrs = new HashSet<>();
+        this.socket = socket;
+        PlayerThread playerThread = new PlayerThread();
+        // Start the thread
+        this.thread = new Thread(playerThread);
+        this.thread.start();
+    }
+
+    public void threadJoin() {
+        try {
+            this.thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 
     /**
      * get player name
+     *
      * @return player name
      */
     public String getPlayerName() {
@@ -32,6 +52,7 @@ public class Player implements Serializable {
 
     /**
      * change player name
+     *
      * @param playerName new player name
      */
     public void setPlayerName(String playerName) {
@@ -40,6 +61,7 @@ public class Player implements Serializable {
 
     /**
      * get player id
+     *
      * @return player id
      */
     public int getPlayerId() {
@@ -48,6 +70,7 @@ public class Player implements Serializable {
 
     /**
      * change player id
+     *
      * @param playerId new player id
      */
     public void setPlayerId(int playerId) {
@@ -56,11 +79,12 @@ public class Player implements Serializable {
 
     /**
      * add Territory to the territory list
+     *
      * @param terr territory to add
      * @return true if success
      */
-    public boolean expandTerr(Territory terr){
-        if(playerTerrs.contains(terr)){
+    public boolean expandTerr(Territory terr) {
+        if (playerTerrs.contains(terr)) {
             return false;
         }
         playerTerrs.add(terr);
@@ -69,11 +93,12 @@ public class Player implements Serializable {
 
     /**
      * remove Territory from the territory list
+     *
      * @param terr territory to remove
      * @return true if success
      */
-    public boolean removeTerr(Territory terr){
-        if(!playerTerrs.contains(terr)){
+    public boolean removeTerr(Territory terr) {
+        if (!playerTerrs.contains(terr)) {
             return false;
         }
         playerTerrs.remove(terr);
@@ -82,14 +107,16 @@ public class Player implements Serializable {
 
     /**
      * return Territory list of this player
+     *
      * @return territory list
      */
-    public HashSet<Territory> getPlayerTerrs(){
+    public HashSet<Territory> getPlayerTerrs() {
         return playerTerrs;
     }
 
     /**
      * return connection socket of this player
+     *
      * @return socket
      */
     public Socket getSocket() {
@@ -98,6 +125,7 @@ public class Player implements Serializable {
 
     /**
      * change connection socket of this player
+     *
      * @param socket new socket
      */
     public void setSocket(Socket socket) {

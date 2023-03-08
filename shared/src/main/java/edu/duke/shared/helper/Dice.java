@@ -1,4 +1,4 @@
-package edu.duke.shared;
+package edu.duke.shared.helper;
 
 import java.util.Random;
 

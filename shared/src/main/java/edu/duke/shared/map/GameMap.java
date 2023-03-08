@@ -1,4 +1,4 @@
-package edu.duke.shared;
+package edu.duke.shared.map;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ public class GameMap implements Serializable {
     // All territories on this map
     private final ArrayList<Territory> territories;
     // Number of territories on this map
-    private int numTerritories;
+    private final int numTerritories;
     // Map height
     private final int height;
     // Map width

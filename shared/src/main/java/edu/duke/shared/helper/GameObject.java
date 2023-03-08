@@ -1,4 +1,4 @@
-package edu.duke.shared.thread;
+package edu.duke.shared.helper;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -9,30 +9,12 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import edu.duke.shared.Game;
-
-public class BaseThread {
-    // The game object
-    protected final Game game;
+public class GameObject {
     // The client socket
-    protected final Socket socket;
+    private final Socket socket;
 
-    /*
-     * Initialize BaseThread by socket and game
-     * @param socket The client socket
-     * @param game The game object
-     */
-    public BaseThread(Socket socket, Game game) {
+    public GameObject(Socket socket) {
         this.socket = socket;
-        this.game = game;
-    }
-
-    /*
-     * Initialize BaseThread by socket
-     * @param socket The client socket
-     */
-    public BaseThread(Socket socket) {
-        this(socket, null);
     }
 
     /**
@@ -61,7 +43,7 @@ public class BaseThread {
      *
      * @param obj The object to be encoded
      */
-    public void encodeObj(Object obj) {
+    public void encodeObj(java.lang.Object obj) {
         try {
             // Get the output stream from the client
             OutputStream socketStream = this.socket.getOutputStream();
@@ -77,5 +59,4 @@ public class BaseThread {
             e.printStackTrace();
         }
     }
-
 }

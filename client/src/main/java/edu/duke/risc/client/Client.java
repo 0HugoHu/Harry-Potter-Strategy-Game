@@ -1,16 +1,15 @@
 package edu.duke.risc.client;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.HashSet;
 import java.util.Scanner;
 
 import edu.duke.shared.Game;
-import edu.duke.shared.Territory;
-import edu.duke.shared.thread.BaseThread;
+import edu.duke.shared.helper.GameObject;
+import edu.duke.shared.helper.State;
+import edu.duke.shared.map.Territory;
+import edu.duke.shared.unit.Unit;
 
 public class Client {
     // Host name
@@ -18,15 +17,17 @@ public class Client {
     private final static String HOST = "Hugo-L";
     // Port number
     private final static int PORT = 5410;
+    // Number of units at the beginning
+    private final static int numUnits = 24;
+    // Player Id on server
+    private int playerID;
     // Player name
     private String playerName;
     // Gameplay controller
     private Game game;
     // Client socket
-    private Socket client;
-    // Player Id on server
-    private int playerID;
-
+    private Socket clientSocket;
+    // Scanner
     Scanner scanner = new Scanner(System.in);
 
     /*
@@ -42,16 +43,14 @@ public class Client {
      */
     public Client(String playerName) {
         this.playerName = playerName;
-        System.out.println("Created a player with name: " + this.playerName);
-        //this.game = new Game(1);
-        // TODO: Read from local file
-//        this.HOST = readHost();
+        System.out.println("Created a player.\n");
         try {
-            this.client = new Socket(HOST, PORT);
+            this.clientSocket = new Socket(HOST, PORT);
         } catch (IOException e) {
             System.out.println("Failed to set up client socket.\n");
             e.printStackTrace();
         }
+        this.game = new Game(0);
     }
 
     /**
@@ -60,39 +59,24 @@ public class Client {
      * @param args command line arguments
      */
     public static void main(String[] args) throws IOException {
-        //create new client
+        // Create new client
         Client client = new Client();
         System.out.println("Currently waiting for other players.....");
 
-        //Read player name
-        client.readPlayerName();
+        // Wait until all players have joined the game
+        client.waitForPlayers();
 
-        //Send player name
-        client.sendPlayerName();
-        //client receive game from the server
-        Game currGame = client.getGame();
-        System.out.println(currGame.GameDetail());
-        int id = client.getInt();
-        System.out.println("ID:" + id);
+        // Initialize game
+        client.initGame();
 
-        //Select territory to put units
+        // Start game
+        client.playOneTurn();
 
-        //client send units select info to server
-        client.sendUnitsInfo();
-        //End placement, start game
-
-        //End Game
+        // End Game
         System.out.println("End Game");
         client.safeClose();
     }
 
-    private String readHost() throws IOException {
-        // Get host name from assets/keys.txt
-        System.out.println("Working Directory = " + System.getProperty("user.dir"));
-        File file = new File("../assets/keys.txt");
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        return br.readLine();
-    }
 
     /*
      * Get player name
@@ -107,26 +91,15 @@ public class Client {
      * @return Game object
      */
     public Game getGame() {
-        if (this.client == null) {
+        if (this.clientSocket == null) {
             System.out.println("Client socket is not set up.\n");
             return null;
         }
-        BaseThread thread = new BaseThread(this.client);
-        this.game = (Game) thread.decodeObj();
-
+        GameObject obj = new GameObject(this.clientSocket);
+        this.game = (Game) obj.decodeObj();
         return this.game;
     }
 
-    public Integer getInt() {
-        if (this.client == null) {
-            System.out.println("Client socket is not set up.\n");
-            return null;
-        }
-        BaseThread thread = new BaseThread(this.client);
-        this.playerID = (Integer) thread.decodeObj();
-
-        return this.playerID;
-    }
 
     /*
      * Close client socket
@@ -134,33 +107,94 @@ public class Client {
      */
     public void safeClose() {
         try {
-            client.close();
+            clientSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void sendUnitsInfo() {
-        HashSet<Territory> terrs = game.getPlayer(playerName).getPlayerTerrs();
-        BaseThread thread = new BaseThread(this.client);
-        for (Territory t : terrs) {
-            thread.encodeObj(t);
+    private void setupUnits() {
+        System.out.println("Please set up your units.\n");
+        int totalUnits = 0;
+        HashSet<Territory> terrs = this.game.getPlayer(playerName).getPlayerTerrs();
+        while (totalUnits != numUnits) {
+            if (totalUnits != 0)
+                System.out.println("Total units placed: " + totalUnits + ". But you must place exactly " + numUnits + " units.");
+            totalUnits = 0;
+            for (Territory t : terrs) {
+                System.out.println("Please enter the number of units you want to place on territory " + t.getName() + ":");
+                int numUnits = scanner.nextInt();
+                this.game.getMap().getTerritory(t.getName()).removeAllUnits();
+                totalUnits += numUnits;
+                for (int i = 0; i < numUnits; i++)
+                    this.game.getMap().getTerritory(t.getName()).addUnit(new Unit("Normal"));
+            }
         }
+        GameObject obj = new GameObject(this.clientSocket);
+        obj.encodeObj(this.game);
     }
 
-    private boolean sendPlayerName() {
-        BaseThread thread = new BaseThread(this.client);
-        thread.encodeObj(this.playerName);
-        return true;
+    private void sendPlayerName() {
+        // Read player name
+        readPlayerName();
+        this.game.setPlayerName(this.playerName);
+        GameObject obj = new GameObject(this.clientSocket);
+        obj.encodeObj(this.game);
     }
 
     // Read from command line
-    private void readPlayerName() throws IOException {
+    private void readPlayerName() {
         // Reading data using readLine
+        System.out.println("Please enter your player name:\n");
         this.playerName = scanner.nextLine();
         while (this.playerName == null || this.playerName.isEmpty()) {
             System.out.println("Player name cannot be empty. Please enter again:");
             this.playerName = scanner.nextLine();
         }
+    }
+
+    private void waitForPlayers() {
+        // Client receive game from the server
+        Game currGame = getGame();
+        if (currGame.getGameState() != State.READY_TO_INIT_NAME) {
+            // TODO: throw exception
+        }
+    }
+
+    private void initGame() {
+        // Send player name
+        sendPlayerName();
+
+        // Client receive game from the server
+        Game currGame = getGame();
+
+        // Read and set Id
+        this.playerID = currGame.getPlayerId();
+        System.out.println("ID: " + this.playerID);
+
+        // Units initialization
+        setupUnits();
+    }
+
+    private void playOneTurn() {
+        // Client receive game from the server
+        Game currGame = getGame();
+        DisplayMap displayMap = new DisplayMap(currGame, this.playerID);
+        System.out.println(displayMap.showMap());
+        System.out.println(displayMap.showUnits());
+        this.game = currGame;
+
+    }
+
+    private void orderMove() {
+
+    }
+
+    private void orderAttack() {
+
+    }
+
+    private void orderDone() {
+
     }
 }

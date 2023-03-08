@@ -1,6 +1,8 @@
 package edu.duke.shared.turn;
 
-public class Move {
+import java.io.Serializable;
+
+public class Move implements Serializable {
     private final String from;
     private final String to;
     private final int numUnits;

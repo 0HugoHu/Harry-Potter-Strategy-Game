@@ -1,11 +1,12 @@
 package edu.duke.shared.turn;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-import edu.duke.shared.GameMap;
-import edu.duke.shared.Territory;
+import edu.duke.shared.map.GameMap;
+import edu.duke.shared.map.Territory;
 
-public abstract class Turn {
+public abstract class Turn implements Serializable {
     protected int index;
     protected String playerName;
     protected boolean isDone = false;
@@ -31,4 +32,5 @@ public abstract class Turn {
     protected boolean checkAdjacency(String territoryName1, String territoryName2) {
         return map.getTerritory(territoryName1).isAdjacent(territoryName2);
     }
+
 }

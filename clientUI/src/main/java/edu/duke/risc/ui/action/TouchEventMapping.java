@@ -1,12 +1,10 @@
 package edu.duke.risc.ui.action;
 
-import android.util.Log;
-
 import java.util.HashMap;
 import java.util.HashSet;
 
-import edu.duke.shared.GameMap;
-import edu.duke.shared.Territory;
+import edu.duke.shared.map.GameMap;
+import edu.duke.shared.map.Territory;
 
 public class TouchEventMapping {
     // Mapping from territory name to center point

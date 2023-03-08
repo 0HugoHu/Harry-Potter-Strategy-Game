@@ -2,8 +2,6 @@ package edu.duke.risc.display.draw;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.text.method.Touch;
-import android.util.Log;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,7 +9,7 @@ import java.util.Set;
 import java.util.Map;
 
 import edu.duke.risc.ui.action.TouchEventMapping;
-import edu.duke.shared.GameMap;
+import edu.duke.shared.map.GameMap;
 
 public class MapTiles {
     // Map view width and height

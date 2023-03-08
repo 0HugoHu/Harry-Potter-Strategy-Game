@@ -1,4 +1,6 @@
 package edu.duke.shared.turn;
 
-public class Attack {
+import java.io.Serializable;
+
+public class Attack implements Serializable {
 }
