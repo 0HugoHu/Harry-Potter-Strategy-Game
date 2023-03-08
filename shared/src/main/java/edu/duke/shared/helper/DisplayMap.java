@@ -1,4 +1,4 @@
-package edu.duke.risc.client;
+package edu.duke.shared.helper;
 
 import java.util.HashMap;
 
@@ -51,7 +51,7 @@ public class DisplayMap {
     public String showUnits() {
         StringBuilder sb = new StringBuilder();
         for (Player p : this.game.getPlayerList()) {
-            sb.append(getColorRep(p.getPlayerId())).append(" player:\n").append("-------------\n");
+            sb.append(getColorRep(p.getPlayerId())).append(" player:\n").append("------------------------------------\n");
             for (Territory t : this.game.getMap().getTerritoriesByOwner(p.getPlayerName())) {
                 sb.append(t.getNumUnits()).append(" units in ").append(t.getName()).append(" (next to: ");
                 for (String adjName : t.getAdjacents()) {

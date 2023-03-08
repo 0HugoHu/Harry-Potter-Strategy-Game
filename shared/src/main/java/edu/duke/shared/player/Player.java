@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.net.Socket;
 import java.util.HashSet;
 
+import edu.duke.shared.helper.State;
 import edu.duke.shared.map.Territory;
 
 public class Player implements Serializable {
@@ -12,8 +13,10 @@ public class Player implements Serializable {
     private final HashSet<Territory> playerTerrs;
     private int playerId;
     private transient Socket socket;
+    private transient PlayerThread playerThread;
 
-    private transient final Thread thread;
+    private transient Thread thread;
+
 
     /**
      * Initialize the Player by name
@@ -26,10 +29,20 @@ public class Player implements Serializable {
         this.playerId = playerId;
         this.playerTerrs = new HashSet<>();
         this.socket = socket;
-        PlayerThread playerThread = new PlayerThread();
         // Start the thread
-        this.thread = new Thread(playerThread);
+        this.playerThread = new PlayerThread(this.socket, this.playerId);
+        this.thread = new Thread(this.playerThread);
         this.thread.start();
+    }
+
+    public void start(State state) {
+        this.playerThread = new PlayerThread(state, this.socket, this.playerId);
+        this.thread = new Thread(this.playerThread);
+        this.thread.start();
+    }
+
+    public PlayerThread getPlayerThread() {
+        return this.playerThread;
     }
 
     public void threadJoin() {
@@ -39,7 +52,6 @@ public class Player implements Serializable {
             e.printStackTrace();
         }
     }
-
 
     /**
      * get player name

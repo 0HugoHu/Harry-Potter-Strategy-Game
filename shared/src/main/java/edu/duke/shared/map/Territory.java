@@ -112,8 +112,13 @@ public class Territory implements Serializable {
      * @return true if successfully removed
      */
     public boolean removeUnit(Unit unit) {
-        this.units.remove(unit);
-        return true;
+        for (Unit u : this.units) {
+            if (u.getName().equals(unit.getName())) {
+                this.units.remove(u);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

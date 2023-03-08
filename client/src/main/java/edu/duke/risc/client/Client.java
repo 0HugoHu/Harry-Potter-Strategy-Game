@@ -6,9 +6,12 @@ import java.util.HashSet;
 import java.util.Scanner;
 
 import edu.duke.shared.Game;
+import edu.duke.shared.helper.DisplayMap;
 import edu.duke.shared.helper.GameObject;
 import edu.duke.shared.helper.State;
 import edu.duke.shared.map.Territory;
+import edu.duke.shared.turn.Move;
+import edu.duke.shared.turn.MoveTurn;
 import edu.duke.shared.unit.Unit;
 
 public class Client {
@@ -72,6 +75,9 @@ public class Client {
         // Start game
         client.playOneTurn();
 
+        // Receive turn result
+        client.receiveTurnResult();
+
         // End Game
         System.out.println("End Game");
         client.safeClose();
@@ -117,6 +123,7 @@ public class Client {
         System.out.println("Please set up your units.\n");
         int totalUnits = 0;
         HashSet<Territory> terrs = this.game.getPlayer(playerName).getPlayerTerrs();
+        // TODO: Replace with UnitCheck
         while (totalUnits != numUnits) {
             if (totalUnits != 0)
                 System.out.println("Total units placed: " + totalUnits + ". But you must place exactly " + numUnits + " units.");
@@ -130,6 +137,7 @@ public class Client {
                     this.game.getMap().getTerritory(t.getName()).addUnit(new Unit("Normal"));
             }
         }
+        System.out.println("Total units placed: " + totalUnits + ". You have placed exactly " + numUnits + " units.");
         GameObject obj = new GameObject(this.clientSocket);
         obj.encodeObj(this.game);
     }
@@ -180,21 +188,61 @@ public class Client {
         // Client receive game from the server
         Game currGame = getGame();
         DisplayMap displayMap = new DisplayMap(currGame, this.playerID);
-        System.out.println(displayMap.showMap());
-        System.out.println(displayMap.showUnits());
         this.game = currGame;
+        System.out.println(displayMap.showMap());
 
+        // Read instructions
+        MoveTurn moveTurn = new MoveTurn(this.game.getMap(), this.game.getTurn(), this.playerName);
+        String order;
+        while (true) {
+            System.out.println(displayMap.showUnits());
+            order = scanner.nextLine();
+            if (order.equals("D"))
+                break;
+            while (!(order.equals("M") || order.equals("A") || order.equals("D"))) {
+                System.out.println("Please enter M to move, A to attack, D to done:\n");
+                order = scanner.nextLine();
+            }
+            if (order.equals("D"))
+                break;
+            switch (order) {
+                case "M":
+                    orderMove(moveTurn);
+                    break;
+                case "A":
+                    orderAttack();
+                    break;
+            }
+        }
+
+        // Done
+        moveTurn.doMovePhrase();
+        GameObject obj = new GameObject(this.clientSocket);
+        obj.encodeObj(this.game);
     }
 
-    private void orderMove() {
+    private void receiveTurnResult() {
+        // Client receive game from the server
+        Game currGame = getGame();
+        DisplayMap displayMap = new DisplayMap(currGame, this.playerID);
+        this.game = currGame;
+        System.out.println(displayMap.showUnits());
+    }
 
+    private void orderMove(MoveTurn moveTurn) {
+        // TODO: Input check
+        System.out.println("Please enter the name of the territory you want to move from:\n");
+        String from = scanner.nextLine();
+        System.out.println("Please enter the name of the territory you want to move to:\n");
+        String to = scanner.nextLine();
+        System.out.println("Please enter the number of units you want to move:\n");
+        int numUnits = scanner.nextInt();
+
+        moveTurn.addMove(new Move(from, to, numUnits));
     }
 
     private void orderAttack() {
 
     }
 
-    private void orderDone() {
-
-    }
 }

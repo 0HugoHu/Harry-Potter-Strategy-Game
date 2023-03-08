@@ -21,7 +21,7 @@ public class Game implements Serializable {
     // Map
     private final GameMap gameMap;
 
-    private HashMap<String, ArrayList<Turn>> turnMap;
+    private HashMap<Integer, ArrayList<Turn>> turnMap;
 
     private ArrayList<Turn> turnList;
 
@@ -149,6 +149,14 @@ public class Game implements Serializable {
 
     public State getGameState() {
         return this.header.getState();
+    }
+
+    public void turnComplete() {
+        this.header.turnComplete();
+    }
+
+    public int getTurn() {
+        return this.header.getTurn();
     }
 
 }

@@ -2,9 +2,6 @@ package edu.duke.risc.display;
 
 import org.junit.Test;
 
-import edu.duke.risc.client.DisplayMap;
-import edu.duke.shared.map.GameMap;
-
 public class DisplayGameMapTest {
 
     @Test

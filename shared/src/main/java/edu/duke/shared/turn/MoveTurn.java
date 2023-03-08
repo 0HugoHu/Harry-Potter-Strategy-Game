@@ -6,7 +6,7 @@ import edu.duke.shared.map.GameMap;
 import edu.duke.shared.unit.Unit;
 
 public class MoveTurn extends Turn{
-    private ArrayList<Move> moves;
+    private final ArrayList<Move> moves = new ArrayList<>();
 
     public MoveTurn(GameMap map, int index, String playerName) {
         super(map, index, playerName);

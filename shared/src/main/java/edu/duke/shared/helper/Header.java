@@ -7,8 +7,11 @@ public class Header implements Serializable {
     private String playerName;
     private State state;
 
+    private int turnIndex;
+
     public Header() {
         this.state = State.WAITING_TO_JOIN;
+        this.turnIndex = 0;
     }
 
     public void setPlayerId(int playerId) {
@@ -33,5 +36,13 @@ public class Header implements Serializable {
 
     public State getState() {
         return this.state;
+    }
+
+    public void turnComplete() {
+        this.turnIndex++;
+    }
+
+    public int getTurn() {
+        return this.turnIndex;
     }
 }
