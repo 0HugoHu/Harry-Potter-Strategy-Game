@@ -60,6 +60,11 @@ public class MoveTurn extends Turn{
         }
     }
 
+    public boolean checkPath() {
+        checkAdjacency("A", "B");
+        return false;
+    }
+
     public GameMap updateMap() {
         return map;
     }
