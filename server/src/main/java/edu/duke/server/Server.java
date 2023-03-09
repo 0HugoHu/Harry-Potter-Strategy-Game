@@ -53,7 +53,7 @@ public class Server {
             server.sendToAllPlayers();
 
             // Receive names from all players
-            server.receivePlayerName();
+            server.waitForThreadJoin();
             System.out.println("Received all names info.\n");
             server.allocateTerritories();
 
@@ -63,7 +63,7 @@ public class Server {
             System.out.println("Message sent to all players.\n");
 
             // Receive Units setup from all players
-            server.receiveUnitsInfo();
+            server.waitForThreadJoin();
             System.out.println("Received all units info.\n");
 
             // Start Game
@@ -72,7 +72,7 @@ public class Server {
             System.out.println("Starts turn.\n");
 
             // Receive action list from all players
-            server.receiveActionList();
+            server.waitForThreadJoin();
             System.out.println("Received all action lists.\n");
             server.game.setGameState(State.TURN_END);
             server.sendToAllPlayers();
@@ -146,12 +146,14 @@ public class Server {
 
     /**
      * Send message to all players
-     *
      */
     public void sendToAllPlayers() {
         for (int i = 0; i < this.getNumOfPlayers(); i++) {
             // Start thread for each player
             this.game.getPlayerList().get(i).start(this.game.getGameState());
+            // Also send server game to player thread
+            this.game.getPlayerList().get(i).getPlayerThread().setServerGame(this.game);
+
             // Send message to client
             Socket clientSocket = this.game.getPlayerList().get(i).getSocket();
             GameObject obj = new GameObject(clientSocket);
@@ -163,7 +165,6 @@ public class Server {
 
     /**
      * Close server socket
-     *
      */
     public void safeClose() {
         try {
@@ -183,30 +184,6 @@ public class Server {
     }
 
 
-    /**
-     * Receive units placement from client
-     *
-     */
-    private void receiveUnitsInfo() {
-        waitForThreadJoin();
-        // TODO: Move this to thread
-        for (int i = 0; i < this.getNumOfPlayers(); i++) {
-            Player p = this.game.getPlayerList().get(i);
-            HashSet<Territory> terr_set = p.getPlayerTerrs();
-            int totalUnits = 0;
-            for (Territory t : terr_set) {
-                this.game.getMap().getTerritory(t.getName()).removeAllUnits();
-                for (int j = 0; j < p.getPlayerThread().getCurrGame().getMap().getTerritory(t.getName()).getNumUnits(); j++)
-                    this.game.getMap().getTerritory(t.getName()).addUnit(new Unit("Normal"));
-                totalUnits += t.getNumUnits();
-            }
-            if (totalUnits != numUnits) {
-                System.out.println("Error: You have placed " + totalUnits + " units, which is not equal to " + numUnits + ".\n");
-                // TODO: Handle error
-            }
-        }
-    }
-
     private void startOneTurn() {
         sendToAllPlayers();
     }
@@ -221,30 +198,6 @@ public class Server {
             players.get(i / (numTerrs / numPlayers)).expandTerr(terrs.get(i));
             terrs.get(i).changePlayerOwner(players.get(i / (numTerrs / numPlayers)));
             terrs.get(i).changeOwner(players.get(i / (numTerrs / numPlayers)).getPlayerName());
-        }
-    }
-
-    public void receivePlayerName() {
-        waitForThreadJoin();
-        for (int i = 0; i < getNumOfPlayers(); i++) {
-            Player p = this.game.getPlayerList().get(i);
-            p.setPlayerName(p.getPlayerThread().getCurrGame().getPlayerName());
-        }
-    }
-
-    public void receiveActionList() {
-        waitForThreadJoin();
-        for (int i = 0; i < getNumOfPlayers(); i++) {
-            Player p = this.game.getPlayerList().get(i);
-//            DisplayMap displayMap = new DisplayMap(p.getPlayerThread().getCurrGame(), p.getPlayerId());
-//            System.out.println(displayMap.showUnits());
-            for (Territory t : this.game.getMap().getTerritories()) {
-                if (t.getOwner().equals(p.getPlayerName())) {
-                    t.removeAllUnits();
-                    for (int j = 0; j < p.getPlayerThread().getCurrGame().getMap().getTerritory(t.getName()).getNumUnits(); j++)
-                        t.addUnit(new Unit("Normal"));
-                }
-            }
         }
     }
 

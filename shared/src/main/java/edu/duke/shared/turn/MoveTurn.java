@@ -61,6 +61,7 @@ public class MoveTurn extends Turn{
     }
 
     public boolean checkPath() {
+        // TODO: Search in BFS or using Union Find for connection
         checkAdjacency("A", "B");
         return false;
     }

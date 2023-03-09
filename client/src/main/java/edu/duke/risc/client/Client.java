@@ -10,6 +10,7 @@ import edu.duke.shared.helper.DisplayMap;
 import edu.duke.shared.helper.GameObject;
 import edu.duke.shared.helper.State;
 import edu.duke.shared.map.Territory;
+import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Move;
 import edu.duke.shared.turn.MoveTurn;
 import edu.duke.shared.unit.Unit;
@@ -193,6 +194,7 @@ public class Client {
 
         // Read instructions
         MoveTurn moveTurn = new MoveTurn(this.game.getMap(), this.game.getTurn(), this.playerName);
+        AttackTurn attackTurn = new AttackTurn(this.game.getMap(), this.game.getTurn(), this.playerName);
         String order;
         while (true) {
             System.out.println(displayMap.showUnits());
@@ -216,7 +218,7 @@ public class Client {
         }
 
         // Done
-        moveTurn.doMovePhrase();
+        this.game.addToTurnMap(this.playerID, moveTurn, attackTurn);
         GameObject obj = new GameObject(this.clientSocket);
         obj.encodeObj(this.game);
     }
