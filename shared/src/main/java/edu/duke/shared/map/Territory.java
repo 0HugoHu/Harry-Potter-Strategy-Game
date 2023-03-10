@@ -1,8 +1,11 @@
-package edu.duke.shared;
+package edu.duke.shared.map;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
+
+import edu.duke.shared.player.Player;
+import edu.duke.shared.unit.Unit;
 
 public class Territory implements Serializable {
     // Territory name
@@ -83,6 +86,15 @@ public class Territory implements Serializable {
     }
 
     /**
+     * Get the adjacent territories of this territory
+     *
+     * @return adjacent territories
+     */
+    public HashSet<String> getAdjacents() {
+        return this.adjs;
+    }
+
+    /**
      * Add a unit to this territory
      *
      * @param unit Unit to be added
@@ -100,8 +112,13 @@ public class Territory implements Serializable {
      * @return true if successfully removed
      */
     public boolean removeUnit(Unit unit) {
-        this.units.remove(unit);
-        return true;
+        for (Unit u : this.units) {
+            if (u.getName().equals(unit.getName())) {
+                this.units.remove(u);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

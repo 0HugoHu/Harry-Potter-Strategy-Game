@@ -1,7 +1,9 @@
-package edu.duke.shared;
+package edu.duke.shared.map;
 
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import edu.duke.shared.helper.Dice;
 
 public class MapFactory {
     private final GameMap gameMap;
@@ -78,7 +80,7 @@ public class MapFactory {
     /**
      * Initialize Map by logic
      */
-    public GameMap myLogic() {
+    public GameMap createRandomMap() {
         //Initialize the dice
         Dice dice = new Dice(20);
         //Initialize the array of Queues for each territory

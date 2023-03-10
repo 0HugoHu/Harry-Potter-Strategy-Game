@@ -1,4 +1,4 @@
-package edu.duke.shared;
+package edu.duke.shared.unit;
 
 import java.io.Serializable;
 

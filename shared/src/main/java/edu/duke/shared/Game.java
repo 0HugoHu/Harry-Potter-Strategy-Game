@@ -3,19 +3,28 @@ package edu.duke.shared;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import edu.duke.shared.helper.Header;
+import edu.duke.shared.helper.State;
+import edu.duke.shared.map.GameMap;
+import edu.duke.shared.map.MapFactory;
+import edu.duke.shared.map.Territory;
+import edu.duke.shared.player.Player;
+import edu.duke.shared.turn.AttackTurn;
+import edu.duke.shared.turn.MoveTurn;
 import edu.duke.shared.turn.Turn;
 
 public class Game implements Serializable {
+    // Game meta data
+    private final Header header;
     // Number of players
     private final int numPlayers;
     private final ArrayList<Player> playerList;
     // Map
     private final GameMap gameMap;
-
-    private HashMap<String, ArrayList<Turn>> turnMap;
-
-    private ArrayList<Turn> turnList;
+    // TurnMap<playerId, ArrayList<Turn>>
+    private ArrayList<HashMap<Integer, ArrayList<Turn>>> turnList;
 
     /**
      * Initialize Game by number of players
@@ -23,7 +32,7 @@ public class Game implements Serializable {
      * @param numPlayers Number of players
      */
     public Game(int numPlayers) {
-        this(numPlayers, new MapFactory(30, 60, 24).myLogic());
+        this(numPlayers, new MapFactory(30, 60, 12).createRandomMap());
     }
 
     /**
@@ -36,7 +45,8 @@ public class Game implements Serializable {
         this.numPlayers = numPlayers;
         this.gameMap = gameMap;
         this.playerList = new ArrayList<>();
-        for (int i=0;i<numPlayers;i++) addPlayer(new Player("Player"+i));
+        this.turnList = new ArrayList<>();
+        this.header = new Header();
     }
 
     /**
@@ -116,4 +126,48 @@ public class Game implements Serializable {
     public GameMap getMap() {
         return this.gameMap;
     }
+
+    public void setPlayerId(int id) {
+        this.header.setPlayerId(id);
+    }
+
+    public int getPlayerId() {
+        return this.header.getPlayerId();
+    }
+
+    public void setPlayerName(String name) {
+        this.header.setPlayerName(name);
+    }
+
+    public String getPlayerName() {
+        return this.header.getPlayerName();
+    }
+
+    public void setGameState(State state) {
+        this.header.setState(state);
+    }
+
+    public State getGameState() {
+        return this.header.getState();
+    }
+
+    public void turnComplete() {
+        this.header.turnComplete();
+    }
+
+    public int getTurn() {
+        return this.header.getTurn();
+    }
+
+    public void addToTurnMap(int playerId, MoveTurn moveTurn, AttackTurn attackTurn) {
+        HashMap<Integer, ArrayList<Turn>> turnMap = new HashMap<>();
+        turnMap.put(playerId, new ArrayList<>(List.of(moveTurn, attackTurn)));
+        this.turnList.add(turnMap);
+    }
+
+
+    public ArrayList<HashMap<Integer, ArrayList<Turn>>> getTurnList() {
+        return this.turnList;
+    }
+
 }

@@ -8,12 +8,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.Toast;
 
 import androidx.core.view.MotionEventCompat;
 
@@ -21,7 +19,7 @@ import edu.duke.risc.display.draw.MapTiles;
 import edu.duke.risc.ui.action.TouchEventMapping;
 import edu.duke.risc.ui.state.MapAnimationType;
 import edu.duke.risc.ui.state.MapUpdateType;
-import edu.duke.shared.GameMap;
+import edu.duke.shared.map.GameMap;
 
 /**
  * This class demonstrates the following interactive game basics:

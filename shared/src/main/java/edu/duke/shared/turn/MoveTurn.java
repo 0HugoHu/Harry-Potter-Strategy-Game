@@ -1,14 +1,12 @@
 package edu.duke.shared.turn;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import edu.duke.shared.Game;
-import edu.duke.shared.GameMap;
-import edu.duke.shared.Unit;
+import edu.duke.shared.map.GameMap;
+import edu.duke.shared.unit.Unit;
 
 public class MoveTurn extends Turn{
-    private ArrayList<Move> moves;
+    private final ArrayList<Move> moves = new ArrayList<>();
 
     public MoveTurn(GameMap map, int index, String playerName) {
         super(map, index, playerName);
@@ -60,6 +58,12 @@ public class MoveTurn extends Turn{
                 map.getTerritory(move.getTo()).addUnit(unit);
             }
         }
+    }
+
+    public boolean checkPath() {
+        // TODO: Search in BFS or using Union Find for connection
+        checkAdjacency("A", "B");
+        return false;
     }
 
     public GameMap updateMap() {

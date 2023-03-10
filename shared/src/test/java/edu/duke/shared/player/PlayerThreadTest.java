@@ -1,6 +1,4 @@
-package edu.duke.shared.thread;
-
-import static org.junit.Assert.*;
+package edu.duke.shared.player;
 
 import org.junit.Test;
 
