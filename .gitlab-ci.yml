@@ -49,7 +49,6 @@ pages:
   script:
     - mv coverage/server public/server/
     - mv coverage/client public/client/
-    - mv coverage/shared public/shared/
   artifacts:
     paths:
       - public
