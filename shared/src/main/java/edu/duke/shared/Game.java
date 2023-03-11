@@ -45,6 +45,8 @@ public class Game implements Serializable {
     //(which are the winning units occupying the new land)
     private HashMap<Territory, Integer> unitAddMap;
 
+    private StringBuilder bf;
+
 
     /**
      * Initialize Game by number of players
@@ -70,6 +72,11 @@ public class Game implements Serializable {
         this.attackList = new HashMap<>();
         this.unitMinusMap = new HashMap<>();
         this.unitAddMap = new HashMap<>();
+        this.bf=new StringBuilder();
+    }
+
+    public String getString(){
+        return bf.toString();
     }
 
     /**
@@ -178,7 +185,7 @@ public class Game implements Serializable {
                     battleStage(att, attackTerr1, j, i);
                 }
                 i++;
-                if (i == att.size()) {
+                if (i >= att.size()) {
                     i = 0;
                 }
             }
@@ -204,7 +211,9 @@ public class Game implements Serializable {
         AttackTurn attackTurn = (AttackTurn) (desTurn.get(1));
         ArrayList<Attack> atts = attackTurn.getAttacks();
         int defenseForce = desTerr.getNumUnits();
-        System.out.println("Defend Territory: " + desTerr.getName());
+        String s="Defend Territory: " + desTerr.getName()+"\n";
+        bf.append(s);
+        System.out.print(s);
         //The defenseForce should deduct all the attacking units coming from the same territory
         if (atts.size() > 0) {
             for (Attack desAtt : atts) {
@@ -241,14 +250,20 @@ public class Game implements Serializable {
         for (int k = 0; k < att.get(j).size(); k++) {
             playerJunits += att.get(j).get(k).getNumUnits();
         }
-        System.out.println("Attack " + att.get(i).get(0).getplayer().getPlayerName() + " still has " + playerIunits + " units!");
-        System.out.println("Attack " + att.get(j).get(0).getplayer().getPlayerName() + " still has " + playerJunits + " units!");
+        String outputUnits1="Attack " + att.get(i).get(0).getplayer().getPlayerName() + " still has " + playerIunits + " units!\n";
+        String outputUnits2="Attack " + att.get(j).get(0).getplayer().getPlayerName() + " still has " + playerJunits + " units!\n";
+        bf.append(outputUnits1);
+        bf.append(outputUnits2);
+        System.out.print(outputUnits1);
+        System.out.print(outputUnits2);
         //If the lost attack still have more than one unit, it will not be deleted from the list,
         //only minus one unit
         if (att.get(j).get(0).getNumUnits() > 1) {
             att.get(j).get(0).removeUnit();
             unitMinusMap.put(attackTerr, unitMinusMap.getOrDefault(attackTerr, 0) + 1);
-            System.out.println("Attacker " + att.get(i).get(0).getplayer().getPlayerName() + " wins in this turn!");
+            String announce1="Attacker " + att.get(i).get(0).getplayer().getPlayerName() + " wins in this turn!\n";
+            bf.append(announce1);
+            System.out.print(announce1);
         }
         //If the lost attack now only have one unit, then it will be deleted after deducting this unit.
         else if (att.get(j).get(0).getNumUnits() == 1) {
@@ -257,11 +272,15 @@ public class Game implements Serializable {
             if (att.get(j).size() == 1) {
                 //If this attack has no other alliance units from other territories,
                 // then it will be deleted and the player ends his/her attack now
-                System.out.println("Attacker " + att.get(j).get(0).getplayer().getPlayerName() + " failed! Deleted from this list.");
+                String announce2="Attacker " + att.get(j).get(0).getplayer().getPlayerName() + " failed! Deleted from this list.\n";
+                bf.append(announce2);
+                System.out.print(announce2);
             } else {
                 //If this attack still has other alliance units from other territories, the player's attack will go on,
                 //so we will not announce he/she being deleted from the list.
-                System.out.println("Attacker " + att.get(i).get(0).getplayer().getPlayerName() + " wins in this turn!");
+                String announce3="Attacker " + att.get(i).get(0).getplayer().getPlayerName() + " wins in this turn!\n";
+                bf.append(announce3);
+                System.out.print(announce3);
             }
             att.get(j).remove(att.get(j).get(0));
             if (att.get(j).size() == 0) {
@@ -278,8 +297,12 @@ public class Game implements Serializable {
      * @param desTerr destination territory
      */
     public void announceWinner(ArrayList<ArrayList<Attack>> att, Territory desTerr) {
-        System.out.println("Attacker " + att.get(0).get(0).getplayer().getPlayerName() + " has won this battle!");
-        System.out.println("----------------------------------------------------------------------------");
+        String s1="Attacker " + att.get(0).get(0).getplayer().getPlayerName() + " has won this battle!\n";
+        String s2="----------------------------------------------------------------------------\n";
+        bf.append(s1);
+        bf.append(s2);
+        System.out.print(s1);
+        System.out.print(s2);
         Territory finalTerr = gameMap.getTerritory(att.get(0).get(0).getTo());
         //record all units that remains after the fight,
         //which are units that will occupy the new land.

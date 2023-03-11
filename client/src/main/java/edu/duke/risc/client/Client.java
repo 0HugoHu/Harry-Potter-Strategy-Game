@@ -229,9 +229,11 @@ public class Client {
     private void receiveTurnResult() {
         // Client receive game from the server
         Game currGame = getGame();
-        DisplayMap displayMap = new DisplayMap(currGame, this.playerID);
+        //DisplayMap displayMap = new DisplayMap(currGame, this.playerID);
         this.game = currGame;
-        System.out.println(displayMap.showUnits());
+        String output=this.game.getString();
+        System.out.println(output);
+        //System.out.println(displayMap.showUnits());
     }
 
     private void orderMove(MoveTurn moveTurn) {
