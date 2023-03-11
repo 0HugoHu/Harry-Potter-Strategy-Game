@@ -25,17 +25,15 @@ stages:
 
 build:
   tags:
-    - ece651
+    - main
   stage: build
   script: docker build --build-arg LOCAL_USER_ID=`id -u`  --tag citest .
 
 test:
   tags:
-    - ece651
+    - main
   stage: test
-  script:
-    - chmod +x scripts/run-tests-in-docker.sh
-    - scripts/run-tests-in-docker.sh
+  script: scripts/run-tests-in-docker.sh
   artifacts:
     paths:
       - coverage
@@ -43,13 +41,16 @@ test:
 pages:
   stage: coverage
   tags:
-    - ece651
+    - main
   dependencies:
     - test
   script:
-    - mv coverage public/
+    - mv coverage/server public/server/
+    - mv coverage/client public/client/
+    - mv coverage/shared public/shared/
   artifacts:
     paths:
       - public
+
 
 

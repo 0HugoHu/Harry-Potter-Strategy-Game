@@ -16,5 +16,5 @@ rootProject.name = "RISC"
 include ':client'
 include ':server'
 include ':shared'
-include ':clientUI'
+
 
