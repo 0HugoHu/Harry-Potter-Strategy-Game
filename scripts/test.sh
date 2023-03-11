@@ -5,8 +5,10 @@ RUN chmod +x gradlew
 ./gradlew :client:build || exit 1
 ./gradlew :client:cloverGenerateReport || exit 1
 scripts/coverage_summary.sh
-mkdir -m 777 coverage-out/client
-mkdir -m 777 coverage-out/server
+# shellcheck disable=SC2174
+mkdir -m -p 777 coverage-out/client
+# shellcheck disable=SC2174
+mkdir -m -p 777 coverage-out/server
 chmod +x coverage-out/client
 chmod +x coverage-out/server
 chmod +x server/build/reports/clover/html/*
