@@ -9,7 +9,7 @@ public class MoveTurn extends Turn{
     private final ArrayList<Move> moves = new ArrayList<>();
 
     public MoveTurn(GameMap map, int index, String playerName) {
-        super(map, index, playerName);
+        super(map, index, playerName,"move");
     }
 
     public boolean checkMove() {

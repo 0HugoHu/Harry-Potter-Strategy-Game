@@ -1,6 +1,8 @@
 package edu.duke.server;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -16,6 +18,8 @@ import edu.duke.shared.helper.State;
 import edu.duke.shared.map.GameMap;
 import edu.duke.shared.player.Player;
 import edu.duke.shared.map.Territory;
+import edu.duke.shared.turn.AttackTurn;
+import edu.duke.shared.turn.Turn;
 import edu.duke.shared.unit.Unit;
 
 public class Server {
@@ -207,6 +211,12 @@ public class Server {
         }
     }
 
+    public void startAttack(){
+        waitForThreadJoin();
+
+    }
+
+
     private void startOneTurn() {
         sendToAllPlayers();
     }
@@ -232,10 +242,24 @@ public class Server {
         }
     }
 
+
     public void receiveActionList() {
         waitForThreadJoin();
+        HashMap<Integer, ArrayList<Turn>> turnMap=this.game.getTurnMap();
         for (int i = 0; i < getNumOfPlayers(); i++) {
             Player p = this.game.getPlayerList().get(i);
+            Game currGame = p.getPlayerThread().getCurrGame();
+            HashMap<Integer, ArrayList<Turn>> playerTurnMap = currGame.getTurnMap();
+            turnMap.putAll(playerTurnMap);
+//            for(Map.Entry<Player, ArrayList<Turn>> entry:playerTurnMap.entrySet()){
+//                System.out.println("Player "+entry.getKey().getPlayerName());
+//                for(Turn t:entry.getValue()){
+//                    System.out.println("Turn "+t.getType());
+//                    AttackTurn att=(AttackTurn)t;
+//                    System.out.println("Attack size "+att.getAttacks().size());
+//                }
+//            }
+
 //            DisplayMap displayMap = new DisplayMap(p.getPlayerThread().getCurrGame(), p.getPlayerId());
 //            System.out.println(displayMap.showUnits());
             for (Territory t : this.game.getMap().getTerritories()) {
@@ -246,6 +270,9 @@ public class Server {
                 }
             }
         }
+        this.game.makeTurns();
+        //this.game.changeUnit();
+        this.game.printUnit();
+        }
     }
 
-}

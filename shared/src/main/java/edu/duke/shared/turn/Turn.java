@@ -11,14 +11,20 @@ public abstract class Turn implements Serializable {
     protected String playerName;
     protected boolean isDone = false;
     protected final GameMap map;
+    protected String type;
     HashMap<String, Integer> unitFromMap = new HashMap<>();
     HashMap<String, Integer> unitToMap = new HashMap<>();
 
-    public Turn(GameMap map, int index, String playerName) {
+    public Turn(GameMap map, int index, String playerName,String type) {
         this.map = map;
         this.index = index;
         this.playerName = playerName;
+        this.type=type;
     }
+    public String getType(){
+        return type;
+    }
+
 
     protected boolean checkTerritory(String territoryName, String playerName) {
         for (Territory t : map.getTerritoriesByOwner(playerName)) {
