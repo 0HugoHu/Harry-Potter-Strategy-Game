@@ -32,7 +32,7 @@ WORKDIR /home/juser
 COPY --chown=juser scripts/emacs-bare.sh ./
 RUN mkdir -p /home/juser/.emacs.d/dcoverage
 COPY --chown=juser scripts/dcoverage.el /home/juser/.emacs.d/dcoverage/
-COPY --chown=juser scripts/dcoverage.el2 /home/juser/.emacs.d/dcoverage/
+COPY --chown=juser scripts/dcoverage2.el /home/juser/.emacs.d/dcoverage/
 RUN chmod u+x emacs-bare.sh && ./emacs-bare.sh
 
 # we are going to do a bit of gradle first, just to speed
