@@ -13,4 +13,4 @@ chmod +x server/build/reports/clover/html/*
 chmod +x client/build/reports/clover/html/*
 cp -r server/build/reports/clover/html/* /coverage-out/server/ || exit 1
 cp -r client/build/reports/clover/html/* /coverage-out/client/ || exit 1
-
+cp index.html /coverage-out/index.html || exit 1

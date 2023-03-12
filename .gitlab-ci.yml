@@ -48,6 +48,7 @@ pages:
   dependencies:
     - test
   script:
+    - cp coverage/index.html public/index.html
     - mv coverage/server public/
     - mv coverage/client public/
   artifacts:
