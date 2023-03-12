@@ -51,6 +51,10 @@ pages:
   artifacts:
     paths:
       - public
-  coverage: '/Total Coverage: \d+\%/'
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: public/shared/index.xml
+
 
 
