@@ -5,10 +5,10 @@ RUN chmod +x gradlew
 ./gradlew :client:build || exit 1
 ./gradlew :client:cloverGenerateReport || exit 1
 scripts/coverage_summary.sh
-mkdir -p -m 777 coverage-out/client
-mkdir -p -m 777 coverage-out/server
-chmod +x coverage-out/client
-chmod +x coverage-out/server
+mkdir -p -m 777 /coverage-out/client
+mkdir -p -m 777 /coverage-out/server
+chmod +x /coverage-out/client
+chmod +x /coverage-out/server
 chmod +x server/build/reports/clover/html/*
 chmod +x client/build/reports/clover/html/*
 cp -r server/build/reports/clover/html/* coverage-out/server/ || exit 1
