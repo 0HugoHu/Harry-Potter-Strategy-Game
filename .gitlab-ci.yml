@@ -51,6 +51,6 @@ pages:
   artifacts:
     paths:
       - public
-    coverage: 'Total Coverage: $COVERAGE_COVERED%'
+  coverage: '/Total Coverage: \d+\%/'
 
 
