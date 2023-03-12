@@ -49,14 +49,10 @@ pages:
   dependencies:
     - test
   script:
-    - mv coverage/index.html public
-    - mv coverage/server public/
-    - mv coverage/client public/
+    - mv coverage/* public/
   artifacts:
     paths:
       - public
-      - public/server
-      - public/client
 
 
 
