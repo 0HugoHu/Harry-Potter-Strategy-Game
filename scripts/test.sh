@@ -11,6 +11,6 @@ chmod +x coverage-out/client
 chmod +x coverage-out/server
 chmod +x server/build/reports/clover/html/*
 chmod +x client/build/reports/clover/html/*
-cp -r server/build/reports/clover/html/* /coverage-out/server/ || exit 1
-cp -r client/build/reports/clover/html/* /coverage-out/client/ || exit 1
+cp -r server/build/reports/clover/html/* coverage-out/server/ || exit 1
+cp -r client/build/reports/clover/html/* coverage-out/client/ || exit 1
 
