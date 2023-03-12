@@ -48,8 +48,8 @@ pages:
   dependencies:
     - test
   script:
-    - mv coverage/server public/server/
-    - mv coverage/client public/client/
+    - mv coverage/server public/
+    - mv coverage/client public/
   artifacts:
     paths:
       - public/server
