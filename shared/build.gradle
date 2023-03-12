@@ -1,6 +1,16 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath 'com.bmuschko:gradle-clover-plugin:3.0.3'
+    }
+}
 
 plugins {
     id 'java-library'
+    id 'com.bmuschko.clover' version '2.2.3'
 }
 
 java {
@@ -13,6 +23,16 @@ java {
 dependencies {
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.junit.jupiter:junit-jupiter'
-    testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.4.2'
+    clover 'org.openclover:clover:4.3.1'
+}
+
+clover{
+    compiler {
+        additionalArgs = "-g:lines,source,vars"
+    }
+    report {
+        xml=true
+        html = true
+    }
 }
