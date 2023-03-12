@@ -39,6 +39,7 @@ test:
   artifacts:
     paths:
       - coverage
+  coverage: '/TOTAL.*\s+(\d+\.\d+)%/'
 
 pages:
   stage: coverage
