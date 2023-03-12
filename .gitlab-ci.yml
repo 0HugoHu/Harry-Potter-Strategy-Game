@@ -39,7 +39,7 @@ test:
   artifacts:
     paths:
       - coverage
-  coverage: '/TOTAL.*\s+(\d+\.\d+)%/'
+  coverage: '/TOTAL COVERAGE: \d+\%/'
 
 pages:
   stage: coverage
@@ -52,10 +52,4 @@ pages:
   artifacts:
     paths:
       - public
-    reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: public/shared/index.xml
-
-
 
