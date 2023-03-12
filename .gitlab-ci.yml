@@ -38,7 +38,6 @@ test:
     - scripts/run-tests-in-docker.sh
   artifacts:
     paths:
-      - coverage
       - coverage/server
       - coverage/client
 
@@ -53,7 +52,6 @@ pages:
     - mv coverage/client public/client/
   artifacts:
     paths:
-      - public
       - public/server
       - public/client
 
