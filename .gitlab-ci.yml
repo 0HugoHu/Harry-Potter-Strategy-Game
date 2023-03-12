@@ -38,9 +38,7 @@ test:
     - scripts/run-tests-in-docker.sh
   artifacts:
     paths:
-      - coverage/index.html
-      - coverage/server
-      - coverage/client
+      - coverage
 
 pages:
   stage: coverage
