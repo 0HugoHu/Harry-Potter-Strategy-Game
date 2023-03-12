@@ -161,7 +161,10 @@ public class Game implements Serializable {
 
     public void addToTurnMap(int playerId, MoveTurn moveTurn, AttackTurn attackTurn) {
         HashMap<Integer, ArrayList<Turn>> turnMap = new HashMap<>();
-        turnMap.put(playerId, new ArrayList<>(List.of(moveTurn, attackTurn)));
+        ArrayList<Turn> newTurn=new ArrayList<>();
+        newTurn.add(moveTurn);
+        newTurn.add(attackTurn);
+        turnMap.put(playerId, newTurn);
         this.turnList.add(turnMap);
     }
 

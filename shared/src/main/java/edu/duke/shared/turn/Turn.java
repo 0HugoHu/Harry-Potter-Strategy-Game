@@ -20,6 +20,18 @@ public abstract class Turn implements Serializable {
         this.playerName = playerName;
     }
 
+    public GameMap getMap() {
+        return map;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
     protected boolean checkTerritory(String territoryName, String playerName) {
         for (Territory t : map.getTerritoriesByOwner(playerName)) {
             if (t.getName().equals(territoryName)) {

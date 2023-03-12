@@ -9,6 +9,7 @@ import edu.duke.shared.Game;
 import edu.duke.shared.helper.DisplayMap;
 import edu.duke.shared.helper.GameObject;
 import edu.duke.shared.helper.State;
+import edu.duke.shared.helper.Validation;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Move;
@@ -18,7 +19,7 @@ import edu.duke.shared.unit.Unit;
 public class Client {
     // Host name
 //    private String HOST = "vcm-30577.vm.duke.edu";
-    private final static String HOST = "Hugo-L";
+    private final static String HOST = "0.0.0.0";
     // Port number
     private final static int PORT = 5410;
     // Number of units at the beginning
@@ -238,9 +239,15 @@ public class Client {
         System.out.println("Please enter the name of the territory you want to move to:\n");
         String to = scanner.nextLine();
         System.out.println("Please enter the number of units you want to move:\n");
-        int numUnits = scanner.nextInt();
-
-        moveTurn.addMove(new Move(from, to, numUnits));
+        try{
+            int numUnits = Integer.parseInt(scanner.nextLine());
+            Validation.checkMove(moveTurn,from,to,numUnits);
+            moveTurn.addMove(new Move(from, to, numUnits));
+        }
+        catch (Exception e){
+            System.out.println("Invalid input: "+e.getMessage());
+            orderMove(moveTurn);
+        }
     }
 
     private void orderAttack() {
