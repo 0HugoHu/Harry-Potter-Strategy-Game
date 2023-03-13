@@ -1,6 +1,8 @@
 package edu.duke.server;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -16,6 +18,8 @@ import edu.duke.shared.helper.State;
 import edu.duke.shared.map.GameMap;
 import edu.duke.shared.player.Player;
 import edu.duke.shared.map.Territory;
+import edu.duke.shared.turn.AttackTurn;
+import edu.duke.shared.turn.Turn;
 import edu.duke.shared.unit.Unit;
 
 public class Server {
@@ -184,6 +188,36 @@ public class Server {
     }
 
 
+    /**
+     * Receive units placement from client
+     *
+     */
+    private void receiveUnitsInfo() {
+        waitForThreadJoin();
+        // TODO: Move this to thread
+        for (int i = 0; i < this.getNumOfPlayers(); i++) {
+            Player p = this.game.getPlayerList().get(i);
+            HashSet<Territory> terr_set = p.getPlayerTerrs();
+            int totalUnits = 0;
+            for (Territory t : terr_set) {
+                this.game.getMap().getTerritory(t.getName()).removeAllUnits();
+                for (int j = 0; j < p.getPlayerThread().getCurrGame().getMap().getTerritory(t.getName()).getNumUnits(); j++)
+                    this.game.getMap().getTerritory(t.getName()).addUnit(new Unit("Normal"));
+                totalUnits += t.getNumUnits();
+            }
+            if (totalUnits != numUnits) {
+                System.out.println("Error: You have placed " + totalUnits + " units, which is not equal to " + numUnits + ".\n");
+                // TODO: Handle error
+            }
+        }
+    }
+
+    public void startAttack(){
+        waitForThreadJoin();
+
+    }
+
+
     private void startOneTurn() {
         sendToAllPlayers();
     }
@@ -201,4 +235,45 @@ public class Server {
         }
     }
 
-}
+    public void receivePlayerName() {
+        waitForThreadJoin();
+        for (int i = 0; i < getNumOfPlayers(); i++) {
+            Player p = this.game.getPlayerList().get(i);
+            p.setPlayerName(p.getPlayerThread().getCurrGame().getPlayerName());
+        }
+    }
+
+
+    public void receiveActionList() {
+        waitForThreadJoin();
+        HashMap<Integer, ArrayList<Turn>> turnMap=this.game.getTurnMap();
+        for (int i = 0; i < getNumOfPlayers(); i++) {
+            Player p = this.game.getPlayerList().get(i);
+            Game currGame = p.getPlayerThread().getCurrGame();
+            HashMap<Integer, ArrayList<Turn>> playerTurnMap = currGame.getTurnMap();
+            turnMap.putAll(playerTurnMap);
+//            for(Map.Entry<Player, ArrayList<Turn>> entry:playerTurnMap.entrySet()){
+//                System.out.println("Player "+entry.getKey().getPlayerName());
+//                for(Turn t:entry.getValue()){
+//                    System.out.println("Turn "+t.getType());
+//                    AttackTurn att=(AttackTurn)t;
+//                    System.out.println("Attack size "+att.getAttacks().size());
+//                }
+//            }
+
+//            DisplayMap displayMap = new DisplayMap(p.getPlayerThread().getCurrGame(), p.getPlayerId());
+//            System.out.println(displayMap.showUnits());
+            for (Territory t : this.game.getMap().getTerritories()) {
+                if (t.getOwner().equals(p.getPlayerName())) {
+                    t.removeAllUnits();
+                    for (int j = 0; j < p.getPlayerThread().getCurrGame().getMap().getTerritory(t.getName()).getNumUnits(); j++)
+                        t.addUnit(new Unit("Normal"));
+                }
+            }
+        }
+        this.game.makeTurns();
+        //this.game.changeUnit();
+        this.game.printUnit();
+        }
+    }
+

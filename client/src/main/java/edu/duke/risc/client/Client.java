@@ -12,6 +12,7 @@ import edu.duke.shared.helper.State;
 import edu.duke.shared.helper.Validation;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.turn.AttackTurn;
+import edu.duke.shared.turn.Attack;
 import edu.duke.shared.turn.Move;
 import edu.duke.shared.turn.MoveTurn;
 import edu.duke.shared.unit.Unit;
@@ -213,7 +214,7 @@ public class Client {
                     orderMove(moveTurn);
                     break;
                 case "A":
-                    orderAttack();
+                    orderAttack(attackTurn);
                     break;
             }
         }
@@ -250,8 +251,15 @@ public class Client {
         }
     }
 
-    private void orderAttack() {
+    private void orderAttack(AttackTurn attackTurn) {
+        System.out.println("Please enter the name of the territory you want to attack from:\n");
+        String from = scanner.nextLine();
+        System.out.println("Please enter the name of the territory you want to attack to:\n");
+        String to = scanner.nextLine();
+        System.out.println("Please enter the number of units you want to use in attack:\n");
+        int numUnits = scanner.nextInt();
 
+        attackTurn.addAttack(new Attack(from, to, numUnits,this.game.getPlayer(this.playerName)));
     }
 
 }
