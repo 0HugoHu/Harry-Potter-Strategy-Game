@@ -31,8 +31,6 @@ public class ClientIntentService extends IntentService {
         assert intent != null;
         final ResultReceiver receiver = intent.getParcelableExtra("receiver");
 
-        //TODO: process background task here!
-
         Game game = null;
         Client client = new Client();
         game = client.getGame();

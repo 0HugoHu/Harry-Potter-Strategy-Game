@@ -45,6 +45,7 @@ public class PlayerThread implements Runnable, Serializable {
     public void run() {
         if (state != State.WAITING_TO_JOIN) {
             GameObject obj = new GameObject(this.socket);
+            // TODO: WUYU Check game object correctness every time, that if (Game) conversion fails, then continue to wait for the next object
             this.currGame = (Game) obj.decodeObj();
         }
 
@@ -70,7 +71,7 @@ public class PlayerThread implements Runnable, Serializable {
                         this.serverGame.getMap().getTerritory(t.getName()).addUnit(new Unit("Normal"));
                     totalUnits += t.getNumUnits();
                 }
-                // TODO: Handle error
+                // TODO: WUYU Check on the server side again for both move and attack
 
                 break;
             }
@@ -91,11 +92,12 @@ public class PlayerThread implements Runnable, Serializable {
                     }
                 }
 
+                // Attack cannot be done here
+
                 break;
             case TURN_END:
                 break;
         }
 
-        // TODO: Check game object correctness every time
     }
 }

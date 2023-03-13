@@ -1,6 +1,16 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath 'com.bmuschko:gradle-clover-plugin:3.0.3'
+    }
+}
 
 plugins {
     id 'application'
+    id 'com.bmuschko.clover' version '2.2.3'
 }
 
 
@@ -17,13 +27,22 @@ run {
 
 dependencies {
     implementation project(path: ':shared')
-    // Use JUnit Jupiter for testing.
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.4.2'
     implementation project(path: ':server')
-
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.4.2'
+    clover 'org.openclover:clover:4.3.1'
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+clover{
+    compiler {
+        additionalArgs = "-g:lines,source,vars"
+    }
+    report {
+        xml=true
+        html = true
+    }
 }
