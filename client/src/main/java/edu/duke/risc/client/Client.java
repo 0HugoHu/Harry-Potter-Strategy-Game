@@ -11,6 +11,7 @@ import edu.duke.shared.helper.GameObject;
 import edu.duke.shared.helper.State;
 import edu.duke.shared.helper.Validation;
 import edu.duke.shared.map.Territory;
+import edu.duke.shared.turn.Attack;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Move;
 import edu.duke.shared.turn.MoveTurn;
@@ -195,7 +196,7 @@ public class Client {
 
         // Read instructions
         MoveTurn moveTurn = new MoveTurn(this.game.getMap(), this.game.getTurn(), this.playerName);
-        AttackTurn attackTurn = new AttackTurn(this.game.getMap(), this.game.getTurn(), this.playerName);
+        AttackTurn attackTurn=new AttackTurn(this.game.getMap(), this.game.getTurn(), this.playerName);
         String order;
         while (true) {
             System.out.println(displayMap.showUnits());
@@ -213,11 +214,13 @@ public class Client {
                     orderMove(moveTurn);
                     break;
                 case "A":
-                    orderAttack();
+                    orderAttack(attackTurn);
                     break;
             }
         }
-
+        this.game.addTurn(this.game.getPlayer(this.playerName).getPlayerId(),moveTurn);
+        this.game.addTurn(this.game.getPlayer(this.playerName).getPlayerId(),attackTurn);
+        //attackTurn.mergeAttacks();
         // Done
         this.game.addToTurnMap(this.playerID, moveTurn, attackTurn);
         GameObject obj = new GameObject(this.clientSocket);
@@ -250,8 +253,15 @@ public class Client {
         }
     }
 
-    private void orderAttack() {
+    private void orderAttack(AttackTurn attackTurn) {
+        System.out.println("Please enter the name of the territory you want to attack from:\n");
+        String from = scanner.nextLine();
+        System.out.println("Please enter the name of the territory you want to attack to:\n");
+        String to = scanner.nextLine();
+        System.out.println("Please enter the number of units you want to use in attack:\n");
+        int numUnits = scanner.nextInt();
 
+        attackTurn.addAttack(new Attack(from, to, numUnits,this.game.getPlayer(this.playerName)));
     }
 
 }

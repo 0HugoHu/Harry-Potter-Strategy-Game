@@ -1,6 +1,8 @@
 package edu.duke.server;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -16,6 +18,8 @@ import edu.duke.shared.helper.State;
 import edu.duke.shared.map.GameMap;
 import edu.duke.shared.player.Player;
 import edu.duke.shared.map.Territory;
+import edu.duke.shared.turn.AttackTurn;
+import edu.duke.shared.turn.Turn;
 import edu.duke.shared.unit.Unit;
 
 public class Server {
@@ -186,6 +190,10 @@ public class Server {
 
     private void startOneTurn() {
         sendToAllPlayers();
+    }
+
+    public void startAttack(){
+        waitForThreadJoin();
     }
 
     public void allocateTerritories() {
