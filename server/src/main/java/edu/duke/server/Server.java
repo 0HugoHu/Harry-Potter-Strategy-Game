@@ -73,15 +73,19 @@ public class Server {
             // Start Game
             server.game.setGameState(State.TURN_BEGIN);
             server.startOneTurn();
+            // TODO: XUEYI move all below into startOneTurn() and continue play one turn until game ends
+            /* **************Move this****************/
             System.out.println("Starts turn.\n");
 
             // Receive action list from all players
             server.waitForThreadJoin();
             System.out.println("Received all action lists.\n");
+            // Do attack
+            server.doAttackPhase();
             server.game.setGameState(State.TURN_END);
             server.sendToAllPlayers();
             server.game.turnComplete();
-
+            /* **************Move this****************/
 
             // Close server socket
             server.safeClose();
@@ -140,6 +144,7 @@ public class Server {
                 // Create an object, and a thread is started
                 this.game.addPlayer(new Player(i, socket));
             } catch (IOException e) {
+                // TODO: WUYU Handle this
                 e.printStackTrace();
             }
             System.out.println("Player " + i + " has joined the game.");
@@ -207,6 +212,18 @@ public class Server {
             terrs.get(i).changePlayerOwner(players.get(i / (numTerrs / numPlayers)));
             terrs.get(i).changeOwner(players.get(i / (numTerrs / numPlayers)).getPlayerName());
         }
+    }
+
+    public void doAttackPhase() {
+        HashMap<Integer, ArrayList<Turn>> turnMap=this.game.getTurnMap();
+        for (int i = 0; i < getNumOfPlayers(); i++) {
+            Player p = this.game.getPlayerList().get(i);
+            Game currGame = p.getPlayerThread().getCurrGame();
+            HashMap<Integer, ArrayList<Turn>> playerTurnMap = currGame.getTurnMap();
+            turnMap.putAll(playerTurnMap);
+        }
+        this.game.makeTurns();
+        this.game.printUnit();
     }
 
 }

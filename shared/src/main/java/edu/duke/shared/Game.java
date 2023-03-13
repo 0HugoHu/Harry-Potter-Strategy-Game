@@ -1,10 +1,8 @@
 package edu.duke.shared;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import edu.duke.shared.helper.Dice;
@@ -29,26 +27,26 @@ public class Game implements Serializable {
     // Map
     private final GameMap gameMap;
     // TurnMap<playerId, ArrayList<Turn>>
-    private ArrayList<HashMap<Integer, ArrayList<Turn>>> turnList;
+    private final ArrayList<HashMap<Integer, ArrayList<Turn>>> turnList;
 
     //Turn Map for recording all players' turns: Integer is the PLayer's id, ArrayList<Turn>
     //has two contents, first being MoveTurn and second being AttackTurn
-    private HashMap<Integer, ArrayList<Turn>> turnMap;
+    private final HashMap<Integer, ArrayList<Turn>> turnMap;
 
     //AttackList for all attackers aiming at the same destination;
     //String is the destination name, ArrayList is the list for all attackers.
     //If attacks come from the same player,then they will be put into the same inner arrayList
-    private HashMap<String, ArrayList<ArrayList<Attack>>> attackList;
+    private final HashMap<String, ArrayList<ArrayList<Attack>>> attackList;
 
     //map for recording all units that should be deducted after the battle
     //(which are units lost in the battle)
-    private HashMap<Territory, Integer> unitMinusMap;
+    private final HashMap<Territory, Integer> unitMinusMap;
 
     //map for recording all units that should be added after the battle
     //(which are the winning units occupying the new land)
-    private HashMap<Territory, Integer> unitAddMap;
+    private final HashMap<Territory, Integer> unitAddMap;
 
-    private StringBuilder bf;
+    private final StringBuilder attackDetailsSB;
 
 
     /**
@@ -70,16 +68,13 @@ public class Game implements Serializable {
         this.numPlayers = numPlayers;
         this.gameMap = gameMap;
         this.playerList = new ArrayList<>();
+        this.turnMap = new HashMap<>();
         this.turnList = new ArrayList<>();
         this.header = new Header();
         this.attackList = new HashMap<>();
         this.unitMinusMap = new HashMap<>();
         this.unitAddMap = new HashMap<>();
-        this.bf=new StringBuilder();
-    }
-
-    public String getString(){
-        return bf.toString();
+        this.attackDetailsSB =new StringBuilder();
     }
 
     /**
@@ -89,6 +84,7 @@ public class Game implements Serializable {
      * @param turn players'turn
      */
     public void addTurn(int id, Turn turn) {
+        // TODO: XUEYI Consider if you can imitate move actions so you won't need to do this
         if (turnMap.containsKey(id)) {
             ArrayList<Turn> list = turnMap.get(id);
             list.add(turn);
@@ -101,11 +97,17 @@ public class Game implements Serializable {
     }
 
 
+    public String getString(){
+        return attackDetailsSB.toString();
+    }
+
+
     /**
      * This is the method for making attackList and do the Attack
      * by calling the function doAttackPhase()
      */
     public void makeTurns() {
+        // TODO: XUEYI Consider if you can imitate move actions so you won't need to do this for loop
         for (Map.Entry<Integer, ArrayList<Turn>> entry : turnMap.entrySet()) {
             for (Turn turn : entry.getValue()) {
                 if (turn.getType().equals("attack")) {
@@ -139,7 +141,7 @@ public class Game implements Serializable {
                     }
                 }
                 //if there's no other attacks from the same player, then we should put it into a new inner list
-                if (flag == false) {
+                if (!flag) {
                     ArrayList<Attack> att2 = new ArrayList<>();
                     att2.add(new Attack(attacks.get(i).getFrom(), attacks.get(i).getTo(), attacks.get(i).getNumUnits(), attacks.get(i).getplayer()));
                     att.add(att2);
@@ -168,7 +170,7 @@ public class Game implements Serializable {
             Territory desTerr = gameMap.getTerritory(destination);
             SetUpDefense(destination, att);
             int i = 0;
-            int j = 0;
+            int j;
             //This is the while loop for all attacks on the attack list to
             //have a unit fight with each other, one by one in sequence
             while (att.size() > 1) {
@@ -215,7 +217,7 @@ public class Game implements Serializable {
         ArrayList<Attack> atts = attackTurn.getAttacks();
         int defenseForce = desTerr.getNumUnits();
         String s="Defend Territory: " + desTerr.getName()+"\n";
-        bf.append(s);
+        attackDetailsSB.append(s);
         System.out.print(s);
         //The defenseForce should deduct all the attacking units coming from the same territory
         if (atts.size() > 0) {
@@ -255,8 +257,8 @@ public class Game implements Serializable {
         }
         String outputUnits1="Attack " + att.get(i).get(0).getplayer().getPlayerName() + " still has " + playerIunits + " units!\n";
         String outputUnits2="Attack " + att.get(j).get(0).getplayer().getPlayerName() + " still has " + playerJunits + " units!\n";
-        bf.append(outputUnits1);
-        bf.append(outputUnits2);
+        attackDetailsSB.append(outputUnits1);
+        attackDetailsSB.append(outputUnits2);
         System.out.print(outputUnits1);
         System.out.print(outputUnits2);
         //If the lost attack still have more than one unit, it will not be deleted from the list,
@@ -265,7 +267,7 @@ public class Game implements Serializable {
             att.get(j).get(0).removeUnit();
             unitMinusMap.put(attackTerr, unitMinusMap.getOrDefault(attackTerr, 0) + 1);
             String announce1="Attacker " + att.get(i).get(0).getplayer().getPlayerName() + " wins in this turn!\n";
-            bf.append(announce1);
+            attackDetailsSB.append(announce1);
             System.out.print(announce1);
         }
         //If the lost attack now only have one unit, then it will be deleted after deducting this unit.
@@ -276,13 +278,13 @@ public class Game implements Serializable {
                 //If this attack has no other alliance units from other territories,
                 // then it will be deleted and the player ends his/her attack now
                 String announce2="Attacker " + att.get(j).get(0).getplayer().getPlayerName() + " failed! Deleted from this list.\n";
-                bf.append(announce2);
+                attackDetailsSB.append(announce2);
                 System.out.print(announce2);
             } else {
                 //If this attack still has other alliance units from other territories, the player's attack will go on,
                 //so we will not announce he/she being deleted from the list.
                 String announce3="Attacker " + att.get(i).get(0).getplayer().getPlayerName() + " wins in this turn!\n";
-                bf.append(announce3);
+                attackDetailsSB.append(announce3);
                 System.out.print(announce3);
             }
             att.get(j).remove(att.get(j).get(0));
@@ -302,8 +304,8 @@ public class Game implements Serializable {
     public void announceWinner(ArrayList<ArrayList<Attack>> att, Territory desTerr) {
         String s1="Attacker " + att.get(0).get(0).getplayer().getPlayerName() + " has won this battle!\n";
         String s2="----------------------------------------------------------------------------\n";
-        bf.append(s1);
-        bf.append(s2);
+        attackDetailsSB.append(s1);
+        attackDetailsSB.append(s2);
         System.out.print(s1);
         System.out.print(s2);
         Territory finalTerr = gameMap.getTerritory(att.get(0).get(0).getTo());
@@ -365,14 +367,12 @@ public class Game implements Serializable {
      * Add New player to the playerList of this game
      *
      * @param p player to add
-     * @return true if success
      */
-    public boolean addPlayer(Player p) {
+    public void addPlayer(Player p) {
         if (playerList.contains(p)) {
-            return false;
+            throw new IllegalArgumentException("Player already exists");
         }
         playerList.add(p);
-        return true;
     }
 
     /**
