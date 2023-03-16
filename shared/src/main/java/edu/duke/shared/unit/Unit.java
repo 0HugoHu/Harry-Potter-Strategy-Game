@@ -96,7 +96,7 @@ public class Unit implements Serializable {
      * @param name Unit name
      * @return UnitType
      */
-    private UnitType convertStringToUnitType(String name) {
+    public static UnitType convertStringToUnitType(String name) {
         switch (name) {
             case "Normal":
                 return UnitType.NORMAL;
