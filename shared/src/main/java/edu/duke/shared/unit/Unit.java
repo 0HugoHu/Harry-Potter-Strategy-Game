@@ -102,6 +102,8 @@ public class Unit implements Serializable {
                 return UnitType.NORMAL;
             case "Defense":
                 return UnitType.DEFENSE;
+            case "Basic":
+                return UnitType.BASIC;
             default:
                 return UnitType.NORMAL;
         }

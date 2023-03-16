@@ -1,9 +1,6 @@
 package edu.duke.shared.helper;
 
-import java.util.HashMap;
-
 import edu.duke.shared.Game;
-import edu.duke.shared.map.GameMap;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.player.Player;
 

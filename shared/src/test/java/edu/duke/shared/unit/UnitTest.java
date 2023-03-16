@@ -1,34 +1,35 @@
-package edu.duke.shared;
+package edu.duke.shared.unit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import edu.duke.shared.unit.Unit;
 
 public class UnitTest {
 
     @Test
-    public void constructorFullProperties(){
-        Unit myunit1=new Unit("Normal",2,3,4);
-        assertEquals("Normal", myunit1.getType());
+    public void constructorFullProperties() {
+        Unit myunit1 = new Unit("Normal", 2, 3, 4);
+        assertEquals(UnitType.NORMAL, myunit1.getType());
         assertEquals(2, myunit1.getAttack());
         assertEquals(3, myunit1.getDefense());
         assertEquals(4, myunit1.getHp());
     }
+
     @Test
     public void getName() {
         String name1 = "Normal";
         String name2 = "Defense";
         String name3 = "Basic";
+        String name4 = "XXx";
         Unit myunit1 = new Unit(name1);
         Unit myunit2 = new Unit(name2);
         Unit myunit3 = new Unit(name3);
-        assertEquals("Normal", myunit1.getType());
-        assertEquals("Defense", myunit2.getType());
-        assertEquals("Basic", myunit3.getType());
-
-
+        Unit myunit4 = new Unit(name4);
+        assertEquals(UnitType.NORMAL, myunit1.getType());
+        assertEquals(UnitType.DEFENSE, myunit2.getType());
+        assertEquals(UnitType.BASIC, myunit3.getType());
+        assertEquals(UnitType.NORMAL, myunit4.getType());
     }
 
     @Test

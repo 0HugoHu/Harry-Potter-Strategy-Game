@@ -51,13 +51,4 @@ public class MoveTurn extends Turn {
         }
     }
 
-    /**
-     * Update map
-     *
-     * @return Game map
-     */
-    public GameMap updateMap() {
-        return map;
-    }
-
 }
