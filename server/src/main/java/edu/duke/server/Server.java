@@ -73,15 +73,19 @@ public class Server {
             // Start Game
             server.game.setGameState(State.TURN_BEGIN);
             server.startOneTurn();
+            // TODO: XUEYI move all below into startOneTurn() and continue play one turn until game ends
+            /* **************Move this****************/
             System.out.println("Starts turn.\n");
 
             // Receive action list from all players
             server.waitForThreadJoin();
             System.out.println("Received all action lists.\n");
+            // Do attack
+            server.doAttackPhase();
             server.game.setGameState(State.TURN_END);
             server.sendToAllPlayers();
             server.game.turnComplete();
-
+            /* **************Move this****************/
 
             // Close server socket
             server.safeClose();
@@ -140,6 +144,7 @@ public class Server {
                 // Create an object, and a thread is started
                 this.game.addPlayer(new Player(i, socket));
             } catch (IOException e) {
+                // TODO: WUYU Handle this
                 e.printStackTrace();
             }
             System.out.println("Player " + i + " has joined the game.");
@@ -188,38 +193,12 @@ public class Server {
     }
 
 
-    /**
-     * Receive units placement from client
-     *
-     */
-    private void receiveUnitsInfo() {
-        waitForThreadJoin();
-        // TODO: Move this to thread
-        for (int i = 0; i < this.getNumOfPlayers(); i++) {
-            Player p = this.game.getPlayerList().get(i);
-            HashSet<Territory> terr_set = p.getPlayerTerrs();
-            int totalUnits = 0;
-            for (Territory t : terr_set) {
-                this.game.getMap().getTerritory(t.getName()).removeAllUnits();
-                for (int j = 0; j < p.getPlayerThread().getCurrGame().getMap().getTerritory(t.getName()).getNumUnits(); j++)
-                    this.game.getMap().getTerritory(t.getName()).addUnit(new Unit("Normal"));
-                totalUnits += t.getNumUnits();
-            }
-            if (totalUnits != numUnits) {
-                System.out.println("Error: You have placed " + totalUnits + " units, which is not equal to " + numUnits + ".\n");
-                // TODO: Handle error
-            }
-        }
+    private void startOneTurn() {
+        sendToAllPlayers();
     }
 
     public void startAttack(){
         waitForThreadJoin();
-
-    }
-
-
-    private void startOneTurn() {
-        sendToAllPlayers();
     }
 
     public void allocateTerritories() {
@@ -235,45 +214,16 @@ public class Server {
         }
     }
 
-    public void receivePlayerName() {
-        waitForThreadJoin();
-        for (int i = 0; i < getNumOfPlayers(); i++) {
-            Player p = this.game.getPlayerList().get(i);
-            p.setPlayerName(p.getPlayerThread().getCurrGame().getPlayerName());
-        }
-    }
-
-
-    public void receiveActionList() {
-        waitForThreadJoin();
+    public void doAttackPhase() {
         HashMap<Integer, ArrayList<Turn>> turnMap=this.game.getTurnMap();
         for (int i = 0; i < getNumOfPlayers(); i++) {
             Player p = this.game.getPlayerList().get(i);
             Game currGame = p.getPlayerThread().getCurrGame();
             HashMap<Integer, ArrayList<Turn>> playerTurnMap = currGame.getTurnMap();
             turnMap.putAll(playerTurnMap);
-//            for(Map.Entry<Player, ArrayList<Turn>> entry:playerTurnMap.entrySet()){
-//                System.out.println("Player "+entry.getKey().getPlayerName());
-//                for(Turn t:entry.getValue()){
-//                    System.out.println("Turn "+t.getType());
-//                    AttackTurn att=(AttackTurn)t;
-//                    System.out.println("Attack size "+att.getAttacks().size());
-//                }
-//            }
-
-//            DisplayMap displayMap = new DisplayMap(p.getPlayerThread().getCurrGame(), p.getPlayerId());
-//            System.out.println(displayMap.showUnits());
-            for (Territory t : this.game.getMap().getTerritories()) {
-                if (t.getOwner().equals(p.getPlayerName())) {
-                    t.removeAllUnits();
-                    for (int j = 0; j < p.getPlayerThread().getCurrGame().getMap().getTerritory(t.getName()).getNumUnits(); j++)
-                        t.addUnit(new Unit("Normal"));
-                }
-            }
         }
         this.game.makeTurns();
-        //this.game.changeUnit();
         this.game.printUnit();
-        }
     }
 
+}

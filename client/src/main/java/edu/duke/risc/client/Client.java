@@ -11,8 +11,8 @@ import edu.duke.shared.helper.GameObject;
 import edu.duke.shared.helper.State;
 import edu.duke.shared.helper.Validation;
 import edu.duke.shared.map.Territory;
-import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Attack;
+import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Move;
 import edu.duke.shared.turn.MoveTurn;
 import edu.duke.shared.unit.Unit;
@@ -126,7 +126,7 @@ public class Client {
         System.out.println("Please set up your units.\n");
         int totalUnits = 0;
         HashSet<Territory> terrs = this.game.getPlayer(playerName).getPlayerTerrs();
-        // TODO: Replace with UnitCheck
+        // TODO: WUYU Replace with UnitCheck or your Validation Class
         while (totalUnits != numUnits) {
             if (totalUnits != 0)
                 System.out.println("Total units placed: " + totalUnits + ". But you must place exactly " + numUnits + " units.");
@@ -168,7 +168,7 @@ public class Client {
         // Client receive game from the server
         Game currGame = getGame();
         if (currGame.getGameState() != State.READY_TO_INIT_NAME) {
-            // TODO: throw exception
+            // TODO: WUYU Throw exception if not receive this state
         }
     }
 
@@ -220,6 +220,11 @@ public class Client {
         }
 
         // Done
+        /* ******************* Add by Xueyi ********************/
+        // TODO: XUEYI Consider if you can imitate move actions
+        this.game.addTurn(this.game.getPlayer(this.playerName).getPlayerId(),moveTurn);
+        this.game.addTurn(this.game.getPlayer(this.playerName).getPlayerId(),attackTurn);
+
         this.game.addToTurnMap(this.playerID, moveTurn, attackTurn);
         GameObject obj = new GameObject(this.clientSocket);
         obj.encodeObj(this.game);
@@ -234,19 +239,18 @@ public class Client {
     }
 
     private void orderMove(MoveTurn moveTurn) {
-        // TODO: Input check
+        // TODO: WUYU Input check should: 1. if mistake made, can press 'x' to return to menu 2. if move number <= 0, should prompt error 3. prompt how many units can be moved
         System.out.println("Please enter the name of the territory you want to move from:\n");
         String from = scanner.nextLine();
         System.out.println("Please enter the name of the territory you want to move to:\n");
         String to = scanner.nextLine();
         System.out.println("Please enter the number of units you want to move:\n");
-        try{
+        try {
             int numUnits = Integer.parseInt(scanner.nextLine());
-            Validation.checkMove(moveTurn,from,to,numUnits);
+            Validation.checkMove(moveTurn, from, to, numUnits);
             moveTurn.addMove(new Move(from, to, numUnits));
-        }
-        catch (Exception e){
-            System.out.println("Invalid input: "+e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Invalid input: " + e.getMessage());
             orderMove(moveTurn);
         }
     }
@@ -259,7 +263,10 @@ public class Client {
         System.out.println("Please enter the number of units you want to use in attack:\n");
         int numUnits = scanner.nextInt();
 
-        attackTurn.addAttack(new Attack(from, to, numUnits,this.game.getPlayer(this.playerName)));
+        // TODO: WUYU Add your Validation here for attack
+
+        // TODO: XUEYI If multiple clients have the same name, this will cause problem
+        attackTurn.addAttack(new Attack(from, to, numUnits, this.game.getPlayer(this.playerName)));
     }
 
 }

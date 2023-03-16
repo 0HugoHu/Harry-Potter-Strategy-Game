@@ -51,7 +51,7 @@ public class DisplayMap {
     public String showUnits() {
         StringBuilder sb = new StringBuilder();
         for (Player p : this.game.getPlayerList()) {
-            sb.append(getColorRep(p.getPlayerId())).append(" player:\n").append("------------------------------------\n");
+            sb.append(p.getPlayerName()).append(":\n").append("------------------------------------\n");
             for (Territory t : this.game.getMap().getTerritoriesByOwner(p.getPlayerName())) {
                 sb.append(t.getNumUnits()).append(" units in ").append(t.getName()).append(" (next to: ");
                 for (String adjName : t.getAdjacents()) {
@@ -63,7 +63,7 @@ public class DisplayMap {
             sb.append("\n\n");
         }
 
-        sb.append("You are the ").append(getColorRep(this.playerId)).append(" player, what would you like to do?\n");
+        sb.append("You: ").append(this.game.getPlayerList().get(this.playerId).getPlayerName()).append(" (").append(getColorRep(this.playerId)).append("), what would you like to do?\n");
         sb.append("(M)ove\n(A)ttack\n(D)one\n\n");
         return sb.toString();
     }
