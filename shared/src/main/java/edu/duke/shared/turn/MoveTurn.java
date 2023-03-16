@@ -12,36 +12,6 @@ public class MoveTurn extends Turn{
         super(map, index, playerName,"move");
     }
 
-    public boolean checkMove() {
-        // Check single move is valid
-        for (Move move : moves) {
-            // Update unit hashmap
-            unitFromMap.put(move.getFrom(), unitFromMap.getOrDefault(move.getFrom(), 0) + move.getNumUnits());
-
-            if (!checkTerritory(move.getFrom(), playerName)) {
-                return false;
-            }
-            if (!checkTerritory(move.getTo(), playerName)) {
-                return false;
-            }
-            if (!checkAdjacency(move.getFrom(), move.getTo())) {
-                return false;
-            }
-            if (map.getTerritory(move.getFrom()).getNumUnits() < move.getNumUnits()) {
-                return false;
-            }
-        }
-
-        // Check units with multiple moves
-        for (String territoryName : unitFromMap.keySet()) {
-            if (map.getTerritory(territoryName).getNumUnits() < unitFromMap.get(territoryName)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     public void addMove(Move move) {
         moves.add(move);
     }
@@ -58,12 +28,6 @@ public class MoveTurn extends Turn{
                 map.getTerritory(move.getTo()).addUnit(unit);
             }
         }
-    }
-
-    public boolean checkPath() {
-        // TODO: Search in BFS or using Union Find for connection
-        checkAdjacency("A", "B");
-        return false;
     }
 
     public GameMap updateMap() {

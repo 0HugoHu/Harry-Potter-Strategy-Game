@@ -8,6 +8,7 @@ import java.util.HashSet;
 import edu.duke.shared.Game;
 import edu.duke.shared.helper.GameObject;
 import edu.duke.shared.helper.State;
+import edu.duke.shared.helper.Validation;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.MoveTurn;
@@ -71,15 +72,19 @@ public class PlayerThread implements Runnable, Serializable {
                         this.serverGame.getMap().getTerritory(t.getName()).addUnit(new Unit("Normal"));
                     totalUnits += t.getNumUnits();
                 }
-                // TODO: WUYU Check on the server side again for both move and attack
+
 
                 break;
             }
             case TURN_BEGIN:
+                // TODO: WUYU Check on the server side again for both move and attack
                 System.out.println("Received player " + this.playerId + "'s action list.");
 
                 int turnIndex = this.currGame.getTurn();
                 MoveTurn moveTurn = (MoveTurn) this.currGame.getTurnList().get(turnIndex).get(this.playerId).get(0);
+                if (!Validation.checkMoves(moveTurn)){
+                    System.out.println("The move turn from player "+this.playerId+" is illegal.");
+                }
                 moveTurn.doMovePhrase();
 
                 // Merge Unit

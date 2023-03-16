@@ -248,10 +248,21 @@ public class Client {
         try {
             int numUnits = Integer.parseInt(scanner.nextLine());
             Validation.checkMove(moveTurn, from, to, numUnits);
-            moveTurn.addMove(new Move(from, to, numUnits));
+            moveTurn.addMove(new Move(from, to, numUnits,this.playerName));
         } catch (Exception e) {
-            System.out.println("Invalid input: " + e.getMessage());
-            orderMove(moveTurn);
+            if (e.getClass().equals(NumberFormatException.class))
+                System.out.println("Invalid input: the units you enter is not a valid number\n");
+            else
+                System.out.println("Invalid input: " + e.getMessage());
+            while (true){
+                System.out.println("Please enter X to return to menu, or enter C to continue\n");
+                String operation=scanner.nextLine();
+                if (operation.equals("X")) return;
+                if (operation.equals("C")){
+                    orderMove(moveTurn);
+                    break;
+                }
+            }
         }
     }
 
@@ -261,12 +272,27 @@ public class Client {
         System.out.println("Please enter the name of the territory you want to attack to:\n");
         String to = scanner.nextLine();
         System.out.println("Please enter the number of units you want to use in attack:\n");
-        int numUnits = scanner.nextInt();
-
-        // TODO: WUYU Add your Validation here for attack
+        try {
+            int numUnits = Integer.parseInt(scanner.nextLine());
+            Validation.checkAttack(attackTurn, from, to, numUnits);
+            attackTurn.addAttack(new Attack(from, to, numUnits,this.playerName));
+        } catch (Exception e) {
+            if (e.getClass().equals(NumberFormatException.class))
+                System.out.println("Invalid input: the units you enter is not a valid number\n");
+            else
+                System.out.println("Invalid input: " + e.getMessage());
+            while (true){
+                System.out.println("Please enter X to return to menu, or enter C to continue\n");
+                String operation=scanner.nextLine();
+                if (operation.equals("X")) return;
+                if (operation.equals("C")){
+                    orderAttack(attackTurn);
+                    break;
+                }
+            }
+        }
 
         // TODO: XUEYI If multiple clients have the same name, this will cause problem
-        attackTurn.addAttack(new Attack(from, to, numUnits, this.game.getPlayer(this.playerName)));
     }
 
 }

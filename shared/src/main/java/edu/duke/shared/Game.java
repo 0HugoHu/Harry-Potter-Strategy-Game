@@ -135,22 +135,22 @@ public class Game implements Serializable {
                 boolean flag = false;
                 for (ArrayList<Attack> attArr : att) {
                     //If the attack come from the same player, then we should put it into the same inner list
-                    if (attArr.get(0).getplayer().getPlayerName().equals(attacks.get(i).getplayer().getPlayerName())) {
-                        attArr.add(new Attack(attacks.get(i).getFrom(), attacks.get(i).getTo(), attacks.get(i).getNumUnits(), attacks.get(i).getplayer()));
+                    if (attArr.get(0).getPlayerName().equals(attacks.get(i).getPlayerName())) {
+                        attArr.add(new Attack(attacks.get(i).getFrom(), attacks.get(i).getTo(), attacks.get(i).getNumUnits(), attacks.get(i).getPlayerName()));
                         flag = true;
                     }
                 }
                 //if there's no other attacks from the same player, then we should put it into a new inner list
                 if (!flag) {
                     ArrayList<Attack> att2 = new ArrayList<>();
-                    att2.add(new Attack(attacks.get(i).getFrom(), attacks.get(i).getTo(), attacks.get(i).getNumUnits(), attacks.get(i).getplayer()));
+                    att2.add(new Attack(attacks.get(i).getFrom(), attacks.get(i).getTo(), attacks.get(i).getNumUnits(), attacks.get(i).getPlayerName()));
                     att.add(att2);
                 }
                 attackList.put(attacks.get(i).getTo(), att);
             } else {
                 //if the attack destination is a new one, put it on the list with different destination key
                 ArrayList<Attack> att = new ArrayList<>();
-                att.add(new Attack(attacks.get(i).getFrom(), attacks.get(i).getTo(), attacks.get(i).getNumUnits(), attacks.get(i).getplayer()));
+                att.add(new Attack(attacks.get(i).getFrom(), attacks.get(i).getTo(), attacks.get(i).getNumUnits(), attacks.get(i).getPlayerName()));
                 ArrayList<ArrayList<Attack>> attArr = new ArrayList<>();
                 attArr.add(att);
                 attackList.put(attacks.get(i).getTo(), attArr);
@@ -229,7 +229,7 @@ public class Game implements Serializable {
         }
         //If defender territory still has units to defend, put it on the attack list
         if (defenseForce > 0) {
-            Attack defenderAtt = new Attack(destination, destination, defenseForce, desTerr.getPlayerOwner());
+            Attack defenderAtt = new Attack(destination, destination, defenseForce, desTerr.getOwner());
             ArrayList<Attack> attTOAdd = new ArrayList<>();
             attTOAdd.add(defenderAtt);
             att.add(attTOAdd);
@@ -255,8 +255,8 @@ public class Game implements Serializable {
         for (int k = 0; k < att.get(j).size(); k++) {
             playerJunits += att.get(j).get(k).getNumUnits();
         }
-        String outputUnits1="Attack " + att.get(i).get(0).getplayer().getPlayerName() + " still has " + playerIunits + " units!\n";
-        String outputUnits2="Attack " + att.get(j).get(0).getplayer().getPlayerName() + " still has " + playerJunits + " units!\n";
+        String outputUnits1="Attack " + att.get(i).get(0).getPlayerName() + " still has " + playerIunits + " units!\n";
+        String outputUnits2="Attack " + att.get(j).get(0).getPlayerName() + " still has " + playerJunits + " units!\n";
         attackDetailsSB.append(outputUnits1);
         attackDetailsSB.append(outputUnits2);
         System.out.print(outputUnits1);
@@ -266,7 +266,7 @@ public class Game implements Serializable {
         if (att.get(j).get(0).getNumUnits() > 1) {
             att.get(j).get(0).removeUnit();
             unitMinusMap.put(attackTerr, unitMinusMap.getOrDefault(attackTerr, 0) + 1);
-            String announce1="Attacker " + att.get(i).get(0).getplayer().getPlayerName() + " wins in this turn!\n";
+            String announce1="Attacker " + att.get(i).get(0).getPlayerName() + " wins in this turn!\n";
             attackDetailsSB.append(announce1);
             System.out.print(announce1);
         }
@@ -277,13 +277,13 @@ public class Game implements Serializable {
             if (att.get(j).size() == 1) {
                 //If this attack has no other alliance units from other territories,
                 // then it will be deleted and the player ends his/her attack now
-                String announce2="Attacker " + att.get(j).get(0).getplayer().getPlayerName() + " failed! Deleted from this list.\n";
+                String announce2="Attacker " + att.get(j).get(0).getPlayerName() + " failed! Deleted from this list.\n";
                 attackDetailsSB.append(announce2);
                 System.out.print(announce2);
             } else {
                 //If this attack still has other alliance units from other territories, the player's attack will go on,
                 //so we will not announce he/she being deleted from the list.
-                String announce3="Attacker " + att.get(i).get(0).getplayer().getPlayerName() + " wins in this turn!\n";
+                String announce3="Attacker " + att.get(i).get(0).getPlayerName() + " wins in this turn!\n";
                 attackDetailsSB.append(announce3);
                 System.out.print(announce3);
             }
@@ -302,7 +302,7 @@ public class Game implements Serializable {
      * @param desTerr destination territory
      */
     public void announceWinner(ArrayList<ArrayList<Attack>> att, Territory desTerr) {
-        String s1="Attacker " + att.get(0).get(0).getplayer().getPlayerName() + " has won this battle!\n";
+        String s1="Attacker " + att.get(0).get(0).getPlayerName() + " has won this battle!\n";
         String s2="----------------------------------------------------------------------------\n";
         attackDetailsSB.append(s1);
         attackDetailsSB.append(s2);
@@ -321,8 +321,8 @@ public class Game implements Serializable {
         }
         unitAddMap.put(finalTerr, remainAtt);
         //change the owner of the territory
-        desTerr.changePlayerOwner(att.get(0).get(0).getplayer());
-        desTerr.changeOwner(att.get(0).get(0).getplayer().getPlayerName());
+        desTerr.changePlayerOwner(getPlayer(att.get(0).get(0).getPlayerName()));
+        desTerr.changeOwner(att.get(0).get(0).getPlayerName());
     }
 
 
