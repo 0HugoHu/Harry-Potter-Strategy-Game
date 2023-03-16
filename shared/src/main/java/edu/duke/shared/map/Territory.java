@@ -6,12 +6,14 @@ import java.util.HashSet;
 
 import edu.duke.shared.player.Player;
 import edu.duke.shared.unit.Unit;
+import edu.duke.shared.unit.UnitType;
 
 public class Territory implements Serializable {
     // Territory name
     private final String name;
     // Player's name
     private String owner;
+    // Player
     private Player playerOwner;
     // All types of units on this territory
     /*
@@ -113,7 +115,38 @@ public class Territory implements Serializable {
      */
     public boolean removeUnit(Unit unit) {
         for (Unit u : this.units) {
-            if (u.getName().equals(unit.getName())) {
+            if (u.getType().equals(unit.getType())) {
+                this.units.remove(u);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Remove a unit from this territory
+     *
+     * @param unitType UnitType to be removed
+     * @return true if successfully removed
+     */
+    public boolean removeUnit(UnitType unitType) {
+        for (Unit u : this.units) {
+            if (u.getType().equals(unitType)) {
+                this.units.remove(u);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Remove a normal unit from this territory
+     *
+     * @return true if successfully removed
+     */
+    public boolean removeUnit() {
+        for (Unit u : this.units) {
+            if (u.getType().equals(UnitType.NORMAL)) {
                 this.units.remove(u);
                 return true;
             }
@@ -131,6 +164,7 @@ public class Territory implements Serializable {
         return this.name;
     }
 
+
     /**
      * Get the owner of this territory
      *
@@ -139,6 +173,7 @@ public class Territory implements Serializable {
     public String getOwner() {
         return this.owner;
     }
+
 
     /**
      * Change the owner of this territory
@@ -158,11 +193,12 @@ public class Territory implements Serializable {
      * @param player player
      */
     public boolean changePlayerOwner(Player player) {
-        if (this.playerOwner!=null&&this.playerOwner.equals(player))
+        if (this.playerOwner != null && this.playerOwner.equals(player))
             return false;
         this.playerOwner = player;
         return true;
     }
+
 
     /**
      * return the playerowner of this territory
@@ -173,6 +209,7 @@ public class Territory implements Serializable {
         return playerOwner;
     }
 
+
     /**
      * Get the units of this territory
      *
@@ -182,15 +219,15 @@ public class Territory implements Serializable {
         return this.units;
     }
 
+
     /**
      * Remove all units from this territory
      *
-     * @return true if successfully removed
      */
-    public boolean removeAllUnits() {
+    public void removeAllUnits() {
         this.units.clear();
-        return true;
     }
+
 
     /**
      * Remove one unit by name from this territory
@@ -199,13 +236,14 @@ public class Territory implements Serializable {
      */
     public boolean removeUnitByName(String name) {
         for (Unit unit : this.units) {
-            if (unit.getName().equals(name)) {
+            if (unit.getType().equals(name)) {
                 this.units.remove(unit);
                 return true;
             }
         }
         return false;
     }
+
 
     /**
      * Test if a coordinate is in this territory
@@ -220,6 +258,7 @@ public class Territory implements Serializable {
         return false;
     }
 
+
     /**
      * Test if a territory is adjacent to this territory
      *
@@ -230,6 +269,7 @@ public class Territory implements Serializable {
         return this.adjs.contains(adj);
     }
 
+
     /**
      * Get the number of units on this territory
      *
@@ -238,6 +278,7 @@ public class Territory implements Serializable {
     public int getNumUnits() {
         return this.units.size();
     }
+
 
     /**
      * Get all coordinates on this territory

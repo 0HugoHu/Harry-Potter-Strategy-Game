@@ -29,10 +29,6 @@ public class Game implements Serializable {
     // TurnMap<playerId, ArrayList<Turn>>
     private final ArrayList<HashMap<Integer, ArrayList<Turn>>> turnList;
 
-    //Turn Map for recording all players' turns: Integer is the PLayer's id, ArrayList<Turn>
-    //has two contents, first being MoveTurn and second being AttackTurn
-    private final HashMap<Integer, ArrayList<Turn>> turnMap;
-
     //AttackList for all attackers aiming at the same destination;
     //String is the destination name, ArrayList is the list for all attackers.
     //If attacks come from the same player,then they will be put into the same inner arrayList
@@ -46,6 +42,7 @@ public class Game implements Serializable {
     //(which are the winning units occupying the new land)
     private final HashMap<Territory, Integer> unitAddMap;
 
+    //StringBuilder for recording the details of the battle
     private final StringBuilder attackDetailsSB;
 
 
@@ -68,56 +65,23 @@ public class Game implements Serializable {
         this.numPlayers = numPlayers;
         this.gameMap = gameMap;
         this.playerList = new ArrayList<>();
-        this.turnMap = new HashMap<>();
         this.turnList = new ArrayList<>();
         this.header = new Header();
         this.attackList = new HashMap<>();
         this.unitMinusMap = new HashMap<>();
         this.unitAddMap = new HashMap<>();
-        this.attackDetailsSB =new StringBuilder();
+        this.attackDetailsSB = new StringBuilder();
     }
 
     /**
-     * This is the method for putting all turns into the turnMap
+     * Return attack details in String
      *
-     * @param id   player ID
-     * @param turn players'turn
+     * @return string of attack details
      */
-    public void addTurn(int id, Turn turn) {
-        // TODO: XUEYI Consider if you can imitate move actions so you won't need to do this
-        if (turnMap.containsKey(id)) {
-            ArrayList<Turn> list = turnMap.get(id);
-            list.add(turn);
-            turnMap.put(id, list);
-        } else {
-            ArrayList<Turn> list = new ArrayList<>();
-            list.add(turn);
-            turnMap.put(id, list);
-        }
-    }
-
-
-    public String getString(){
+    public String getString() {
         return attackDetailsSB.toString();
     }
 
-
-    /**
-     * This is the method for making attackList and do the Attack
-     * by calling the function doAttackPhase()
-     */
-    public void makeTurns() {
-        // TODO: XUEYI Consider if you can imitate move actions so you won't need to do this for loop
-        for (Map.Entry<Integer, ArrayList<Turn>> entry : turnMap.entrySet()) {
-            for (Turn turn : entry.getValue()) {
-                if (turn.getType().equals("attack")) {
-                    makeAttackList((AttackTurn) turn);
-                }
-            }
-        }
-        doAttackPhase();
-        changeUnit();
-    }
 
     /**
      * Build the attackList of the structure HashMap<String, ArrayList<ArrayList<Attack>>>
@@ -135,22 +99,22 @@ public class Game implements Serializable {
                 boolean flag = false;
                 for (ArrayList<Attack> attArr : att) {
                     //If the attack come from the same player, then we should put it into the same inner list
-                    if (attArr.get(0).getplayer().getPlayerName().equals(attacks.get(i).getplayer().getPlayerName())) {
-                        attArr.add(new Attack(attacks.get(i).getFrom(), attacks.get(i).getTo(), attacks.get(i).getNumUnits(), attacks.get(i).getplayer()));
+                    if (attArr.get(0).getPlayerName().equals(attacks.get(i).getPlayerName())) {
+                        attArr.add(new Attack(attacks.get(i).getFrom(), attacks.get(i).getTo(), attacks.get(i).getNumUnits(), attacks.get(i).getPlayerName()));
                         flag = true;
                     }
                 }
                 //if there's no other attacks from the same player, then we should put it into a new inner list
                 if (!flag) {
                     ArrayList<Attack> att2 = new ArrayList<>();
-                    att2.add(new Attack(attacks.get(i).getFrom(), attacks.get(i).getTo(), attacks.get(i).getNumUnits(), attacks.get(i).getplayer()));
+                    att2.add(new Attack(attacks.get(i).getFrom(), attacks.get(i).getTo(), attacks.get(i).getNumUnits(), attacks.get(i).getPlayerName()));
                     att.add(att2);
                 }
                 attackList.put(attacks.get(i).getTo(), att);
             } else {
                 //if the attack destination is a new one, put it on the list with different destination key
                 ArrayList<Attack> att = new ArrayList<>();
-                att.add(new Attack(attacks.get(i).getFrom(), attacks.get(i).getTo(), attacks.get(i).getNumUnits(), attacks.get(i).getplayer()));
+                att.add(new Attack(attacks.get(i).getFrom(), attacks.get(i).getTo(), attacks.get(i).getNumUnits(), attacks.get(i).getPlayerName()));
                 ArrayList<ArrayList<Attack>> attArr = new ArrayList<>();
                 attArr.add(att);
                 attackList.put(attacks.get(i).getTo(), attArr);
@@ -163,12 +127,12 @@ public class Game implements Serializable {
      * If multiple attacks, they will have one unit fight with the next on the list
      * in sequence, from 0 to the last, and last fight with 0 all over again.
      */
-    public void doAttackPhase() {
+    public void doAttack() {
         for (Map.Entry<String, ArrayList<ArrayList<Attack>>> entry : attackList.entrySet()) {
             String destination = entry.getKey();
             ArrayList<ArrayList<Attack>> att = entry.getValue();
             Territory desTerr = gameMap.getTerritory(destination);
-            SetUpDefense(destination, att);
+            setUpDefense(destination, att);
             int i = 0;
             int j;
             //This is the while loop for all attacks on the attack list to
@@ -194,9 +158,15 @@ public class Game implements Serializable {
                     i = 0;
                 }
             }
+
+            // Update the unit
+            changeUnit();
             //After the fighting stage, announce the winner
             announceWinner(att, desTerr);
         }
+        this.attackList.clear();
+        this.unitAddMap.clear();
+        this.unitMinusMap.clear();
     }
 
 
@@ -209,14 +179,14 @@ public class Game implements Serializable {
      * @param destination destination land
      * @param att         attackList
      */
-    public void SetUpDefense(String destination, ArrayList<ArrayList<Attack>> att) {
+    public void setUpDefense(String destination, ArrayList<ArrayList<Attack>> att) {
         Territory desTerr = gameMap.getTerritory(destination);
-        int desPlayer = gameMap.getTerritory(destination).getPlayerOwner().getPlayerId();
-        ArrayList<Turn> desTurn = turnMap.get(desPlayer);
+        int desPlayerId = gameMap.getTerritory(destination).getPlayerOwner().getPlayerId();
+        ArrayList<Turn> desTurn = turnList.get(getTurn()).get(desPlayerId);
         AttackTurn attackTurn = (AttackTurn) (desTurn.get(1));
         ArrayList<Attack> atts = attackTurn.getAttacks();
         int defenseForce = desTerr.getNumUnits();
-        String s="Defend Territory: " + desTerr.getName()+"\n";
+        String s = "Defend Territory: " + desTerr.getName() + "\n";
         attackDetailsSB.append(s);
         System.out.print(s);
         //The defenseForce should deduct all the attacking units coming from the same territory
@@ -229,7 +199,7 @@ public class Game implements Serializable {
         }
         //If defender territory still has units to defend, put it on the attack list
         if (defenseForce > 0) {
-            Attack defenderAtt = new Attack(destination, destination, defenseForce, desTerr.getPlayerOwner());
+            Attack defenderAtt = new Attack(destination, destination, defenseForce, desTerr.getOwner());
             ArrayList<Attack> attTOAdd = new ArrayList<>();
             attTOAdd.add(defenderAtt);
             att.add(attTOAdd);
@@ -255,8 +225,8 @@ public class Game implements Serializable {
         for (int k = 0; k < att.get(j).size(); k++) {
             playerJunits += att.get(j).get(k).getNumUnits();
         }
-        String outputUnits1="Attack " + att.get(i).get(0).getplayer().getPlayerName() + " still has " + playerIunits + " units!\n";
-        String outputUnits2="Attack " + att.get(j).get(0).getplayer().getPlayerName() + " still has " + playerJunits + " units!\n";
+        String outputUnits1 = "Attack| " + att.get(i).get(0).getPlayerName() + " still has " + playerIunits + " units!\n";
+        String outputUnits2 = "Attack| " + att.get(j).get(0).getPlayerName() + " still has " + playerJunits + " units!\n";
         attackDetailsSB.append(outputUnits1);
         attackDetailsSB.append(outputUnits2);
         System.out.print(outputUnits1);
@@ -266,7 +236,7 @@ public class Game implements Serializable {
         if (att.get(j).get(0).getNumUnits() > 1) {
             att.get(j).get(0).removeUnit();
             unitMinusMap.put(attackTerr, unitMinusMap.getOrDefault(attackTerr, 0) + 1);
-            String announce1="Attacker " + att.get(i).get(0).getplayer().getPlayerName() + " wins in this turn!\n";
+            String announce1 = "Attacker " + att.get(i).get(0).getPlayerName() + " wins in this turn!\n";
             attackDetailsSB.append(announce1);
             System.out.print(announce1);
         }
@@ -277,13 +247,13 @@ public class Game implements Serializable {
             if (att.get(j).size() == 1) {
                 //If this attack has no other alliance units from other territories,
                 // then it will be deleted and the player ends his/her attack now
-                String announce2="Attacker " + att.get(j).get(0).getplayer().getPlayerName() + " failed! Deleted from this list.\n";
+                String announce2 = "Attacker " + att.get(j).get(0).getPlayerName() + " failed! Deleted from this list.\n";
                 attackDetailsSB.append(announce2);
                 System.out.print(announce2);
             } else {
                 //If this attack still has other alliance units from other territories, the player's attack will go on,
                 //so we will not announce he/she being deleted from the list.
-                String announce3="Attacker " + att.get(i).get(0).getplayer().getPlayerName() + " wins in this turn!\n";
+                String announce3 = "Attacker " + att.get(i).get(0).getPlayerName() + " wins in this turn!\n";
                 attackDetailsSB.append(announce3);
                 System.out.print(announce3);
             }
@@ -294,6 +264,7 @@ public class Game implements Serializable {
         }
     }
 
+
     /**
      * This method announce the winner of this battle, change the destination owner after fights,
      * and counting the units that should be moving into the new land as winner.
@@ -302,8 +273,8 @@ public class Game implements Serializable {
      * @param desTerr destination territory
      */
     public void announceWinner(ArrayList<ArrayList<Attack>> att, Territory desTerr) {
-        String s1="Attacker " + att.get(0).get(0).getplayer().getPlayerName() + " has won this battle!\n";
-        String s2="----------------------------------------------------------------------------\n";
+        String s1 = "Attacker " + att.get(0).get(0).getPlayerName() + " has won this battle!\n";
+        String s2 = "----------------------------------------------------------------------------\n\n";
         attackDetailsSB.append(s1);
         attackDetailsSB.append(s2);
         System.out.print(s1);
@@ -321,8 +292,8 @@ public class Game implements Serializable {
         }
         unitAddMap.put(finalTerr, remainAtt);
         //change the owner of the territory
-        desTerr.changePlayerOwner(att.get(0).get(0).getplayer());
-        desTerr.changeOwner(att.get(0).get(0).getplayer().getPlayerName());
+        desTerr.changePlayerOwner(getPlayer(att.get(0).get(0).getPlayerName()));
+        desTerr.changeOwner(att.get(0).get(0).getPlayerName());
     }
 
 
@@ -334,7 +305,7 @@ public class Game implements Serializable {
         for (Map.Entry<Territory, Integer> entry : unitMinusMap.entrySet()) {
             Territory currTerr = entry.getKey();
             for (int i = 0; i < entry.getValue(); i++) {
-                currTerr.removeUnit(new Unit("Normal"));
+                currTerr.removeUnit();
             }
         }
         for (Map.Entry<Territory, Integer> entry : unitAddMap.entrySet()) {
@@ -342,10 +313,6 @@ public class Game implements Serializable {
             for (int i = 0; i < entry.getValue(); i++) {
                 currTerr.addUnit(new Unit("Normal"));
             }
-        }
-        //After the battles, all territories should add one new unit
-        for (Territory t : gameMap.getTerritories()) {
-            t.addUnit(new Unit("Normal"));
         }
     }
 
@@ -420,10 +387,6 @@ public class Game implements Serializable {
         return sb.toString();
     }
 
-    public HashMap<Integer, ArrayList<Turn>> getTurnMap() {
-        return this.turnMap;
-    }
-
     /**
      * Get number of players
      *
@@ -442,48 +405,133 @@ public class Game implements Serializable {
         return this.gameMap;
     }
 
+    /**
+     * Set the player id
+     *
+     * @param id player id
+     */
     public void setPlayerId(int id) {
         this.header.setPlayerId(id);
     }
 
+    /**
+     * Get the player id
+     *
+     * @return player id
+     */
     public int getPlayerId() {
         return this.header.getPlayerId();
     }
 
+    /**
+     * Set the player name
+     *
+     * @param name player name
+     */
     public void setPlayerName(String name) {
         this.header.setPlayerName(name);
     }
 
+    /**
+     * Get the player name
+     *
+     * @return player name
+     */
     public String getPlayerName() {
         return this.header.getPlayerName();
     }
 
+    /**
+     * Set the game state
+     *
+     * @param state game state
+     */
     public void setGameState(State state) {
         this.header.setState(state);
     }
 
+    /**
+     * Get the game state
+     *
+     * @return game state
+     */
     public State getGameState() {
         return this.header.getState();
     }
 
+    /**
+     * Increase the turn number by 1
+     */
     public void turnComplete() {
         this.header.turnComplete();
     }
 
+    /**
+     * Set the winner id
+     *
+     * @param playerId winner id
+     */
+    public void setWinnerId(int playerId) {
+        this.header.setWinnerId(playerId);
+    }
+
+    /**
+     * Get the winner id
+     *
+     * @return winner id
+     */
+    public int getWinnerId() {
+        return this.header.getWinnerId();
+    }
+
+    /**
+     * Add the loser id
+     *
+     * @param playerId loser id
+     */
+    public void addLoserId(int playerId) {
+        this.header.addLoserId(playerId);
+    }
+
+    /**
+     * Get the loser id
+     *
+     * @return loser id
+     */
+    public boolean isLoser(int playerId) {
+        return this.header.isLoser(playerId);
+    }
+
+    /**
+     * Get the turn number
+     *
+     * @return turn number
+     */
     public int getTurn() {
         return this.header.getTurn();
     }
 
+    /**
+     * Add the move and attack collections to the turn list
+     *
+     * @param playerId   player id
+     * @param moveTurn   move turn
+     * @param attackTurn attack turn
+     */
     public void addToTurnMap(int playerId, MoveTurn moveTurn, AttackTurn attackTurn) {
         HashMap<Integer, ArrayList<Turn>> turnMap = new HashMap<>();
-        ArrayList<Turn> newTurn=new ArrayList<>();
+        ArrayList<Turn> newTurn = new ArrayList<>();
         newTurn.add(moveTurn);
         newTurn.add(attackTurn);
         turnMap.put(playerId, newTurn);
         this.turnList.add(turnMap);
     }
 
-
+    /**
+     * Get the turn list
+     *
+     * @return turn list
+     */
     public ArrayList<HashMap<Integer, ArrayList<Turn>>> getTurnList() {
         return this.turnList;
     }

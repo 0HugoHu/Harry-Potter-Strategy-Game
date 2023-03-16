@@ -11,7 +11,7 @@ public class UnitTest {
     @Test
     public void constructorFullProperties(){
         Unit myunit1=new Unit("Normal",2,3,4);
-        assertEquals("Normal", myunit1.getName());
+        assertEquals("Normal", myunit1.getType());
         assertEquals(2, myunit1.getAttack());
         assertEquals(3, myunit1.getDefense());
         assertEquals(4, myunit1.getHp());
@@ -24,9 +24,9 @@ public class UnitTest {
         Unit myunit1 = new Unit(name1);
         Unit myunit2 = new Unit(name2);
         Unit myunit3 = new Unit(name3);
-        assertEquals("Normal", myunit1.getName());
-        assertEquals("Defense", myunit2.getName());
-        assertEquals("Basic", myunit3.getName());
+        assertEquals("Normal", myunit1.getType());
+        assertEquals("Defense", myunit2.getType());
+        assertEquals("Basic", myunit3.getType());
 
 
     }

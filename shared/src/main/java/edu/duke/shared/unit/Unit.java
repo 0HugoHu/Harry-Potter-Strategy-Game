@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Unit implements Serializable {
     // Unit name
-    private final String name;
+    private final UnitType type;
     // Unit attack power
     private final int attack;
     // Unit defense power
@@ -18,15 +18,16 @@ public class Unit implements Serializable {
      * @param name Unit name
      */
     public Unit(String name) {
-        this.name = name;
+        UnitType type = convertStringToUnitType(name);
+        this.type = type;
         // Switch case for different types of units
-        switch (name) {
-            case "Normal":
+        switch (type) {
+            case NORMAL:
                 this.attack = 2;
                 this.defense = 1;
                 this.hp = 2;
                 break;
-            case "Defense":
+            case DEFENSE:
                 this.attack = 1;
                 this.defense = 3;
                 this.hp = 3;
@@ -47,7 +48,7 @@ public class Unit implements Serializable {
      * @param defense Unit defense power
      */
     public Unit(String name, int attack, int defense, int hp) {
-        this.name = name;
+        this.type = convertStringToUnitType(name);
         this.attack = attack;
         this.defense = defense;
         this.hp = hp;
@@ -58,8 +59,8 @@ public class Unit implements Serializable {
      *
      * @return unit name
      */
-    public String getName() {
-        return this.name;
+    public UnitType getType() {
+        return this.type;
     }
 
     /**
@@ -87,5 +88,22 @@ public class Unit implements Serializable {
      */
     public int getHp() {
         return this.hp;
+    }
+
+    /**
+     * Convert string to UnitType
+     *
+     * @param name Unit name
+     * @return UnitType
+     */
+    private UnitType convertStringToUnitType(String name) {
+        switch (name) {
+            case "Normal":
+                return UnitType.NORMAL;
+            case "Defense":
+                return UnitType.DEFENSE;
+            default:
+                return UnitType.NORMAL;
+        }
     }
 }

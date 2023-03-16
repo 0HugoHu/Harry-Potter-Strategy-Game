@@ -13,6 +13,11 @@ public class GameObject {
     // The client socket
     private final Socket socket;
 
+    /**
+     * Constructor for the GameObject
+     *
+     * @param socket The client socket
+     */
     public GameObject(Socket socket) {
         this.socket = socket;
     }

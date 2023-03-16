@@ -6,7 +6,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import edu.duke.shared.helper.Dice;
 
 public class MapFactory {
+    // Game map
     private final GameMap gameMap;
+    // Number of territories on this map
     private final int numTerritories;
 
     /**

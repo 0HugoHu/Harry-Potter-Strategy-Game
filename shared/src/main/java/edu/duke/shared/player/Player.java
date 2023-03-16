@@ -8,13 +8,17 @@ import edu.duke.shared.helper.State;
 import edu.duke.shared.map.Territory;
 
 public class Player implements Serializable {
-
+    // Player's name
     private String playerName;
+    // Abandoned!! Territories owned by this player
     private final HashSet<Territory> playerTerrs;
+    // Player's id
     private int playerId;
+    // Player's socket
     private transient Socket socket;
+    // Player's thread
     private transient PlayerThread playerThread;
-
+    // Player's thread
     private transient Thread thread;
 
 
@@ -35,16 +39,29 @@ public class Player implements Serializable {
         this.thread.start();
     }
 
+    /**
+     * Initialize the Player by name
+     *
+     * @param state game state
+     */
     public void start(State state) {
         this.playerThread = new PlayerThread(state, this.socket, this.playerId);
         this.thread = new Thread(this.playerThread);
         this.thread.start();
     }
 
+    /**
+     * get player thread
+     *
+     * @return player thread
+     */
     public PlayerThread getPlayerThread() {
         return this.playerThread;
     }
 
+    /**
+     * Wait for the thread to finish
+     */
     public void threadJoin() {
         try {
             this.thread.join();
