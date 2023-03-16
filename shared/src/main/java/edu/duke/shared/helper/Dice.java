@@ -25,6 +25,10 @@ public class Dice {
         return random.nextInt(this.maxPoint) + 1;
     }
 
+    /*
+     * Get max_point
+     * @return max_point
+     */
     public int getMaxPoint() {
         return maxPoint;
     }

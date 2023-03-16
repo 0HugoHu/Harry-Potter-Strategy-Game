@@ -1,7 +1,6 @@
 package edu.duke.server;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 import java.io.IOException;
@@ -9,10 +8,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.HashSet;
 
 import edu.duke.shared.Game;
-import edu.duke.shared.helper.DisplayMap;
 import edu.duke.shared.helper.GameObject;
 import edu.duke.shared.helper.State;
 import edu.duke.shared.map.GameMap;
@@ -45,47 +42,12 @@ public class Server {
         while (true) {
             // Create a new server
             Server server = new Server(numPlayers);
-            server.printHostInfo();
-            System.out.println("Created a new game of " + numPlayers + " players.\nWaiting for players to join...\n");
-
-            // Accept connections from players
-            server.acceptConnection(numPlayers);
-
-            // Change game state to allow players to send their names
-            System.out.println("All players have joined the game. Now waiting for their names...\n");
-            server.game.setGameState(State.READY_TO_INIT_NAME);
-            server.sendToAllPlayers();
-
-            // Receive names from all players
-            server.waitForThreadJoin();
-            System.out.println("Received all names info.\n");
-            server.allocateTerritories();
-
-            // Send message to all players
-            server.game.setGameState(State.READY_TO_INIT_UNITS);
-            server.sendToAllPlayers();
-            System.out.println("Message sent to all players.\n");
-
-            // Receive Units setup from all players
-            server.waitForThreadJoin();
-            System.out.println("Received all units info.\n");
+            server.initServer();
 
             // Start Game
-            server.game.setGameState(State.TURN_BEGIN);
-            server.startOneTurn();
-            // TODO: XUEYI move all below into startOneTurn() and continue play one turn until game ends
-            /* **************Move this****************/
-            System.out.println("Starts turn.\n");
-
-            // Receive action list from all players
-            server.waitForThreadJoin();
-            System.out.println("Received all action lists.\n");
-            // Do attack
-            server.doAttackPhase();
-            server.game.setGameState(State.TURN_END);
-            server.sendToAllPlayers();
-            server.game.turnComplete();
-            /* **************Move this****************/
+            while (server.game.getGameState() != State.GAME_OVER) {
+                server.startOneTurn();
+            }
 
             // Close server socket
             server.safeClose();
@@ -93,6 +55,9 @@ public class Server {
         }
     }
 
+    /**
+     * Print host info
+     */
     private void printHostInfo() {
         // Get IP address and hostname
         InetAddress ip;
@@ -106,6 +71,37 @@ public class Server {
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Initialize server
+     */
+    private void initServer() {
+        // Create a new server
+        printHostInfo();
+        System.out.println("Created a new game of " + numPlayers + " players.\nWaiting for players to join...\n");
+
+        // Accept connections from players
+        acceptConnection(numPlayers);
+
+        // Change game state to allow players to send their names
+        System.out.println("All players have joined the game. Now waiting for their names...\n");
+        this.game.setGameState(State.READY_TO_INIT_NAME);
+        sendToAllPlayers();
+
+        // Receive names from all players
+        waitForThreadJoin();
+        System.out.println("Received all names info.\n");
+        allocateTerritories();
+
+        // Send message to all players
+        this.game.setGameState(State.READY_TO_INIT_UNITS);
+        sendToAllPlayers();
+        System.out.println("Message sent to all players.\n");
+
+        // Receive Units setup from all players
+        waitForThreadJoin();
+        System.out.println("Received all units info.\n");
     }
 
     /**
@@ -123,6 +119,9 @@ public class Server {
         System.out.println("New Game Created.\n");
     }
 
+    /**
+     * Wait until all threads are finished
+     */
     private void waitForThreadJoin() {
         for (int i = 0; i < this.getNumOfPlayers(); i++) {
             this.game.getPlayerList().get(i).threadJoin();
@@ -130,7 +129,7 @@ public class Server {
     }
 
     /**
-     * wait for connection from all users
+     * Wait for connection from all users
      *
      * @param num number of players
      */
@@ -144,7 +143,7 @@ public class Server {
                 // Create an object, and a thread is started
                 this.game.addPlayer(new Player(i, socket));
             } catch (IOException e) {
-                // TODO: WUYU Handle this
+                // TODO: WUYU Handle this e.g., if connection lost
                 e.printStackTrace();
             }
             System.out.println("Player " + i + " has joined the game.");
@@ -193,14 +192,43 @@ public class Server {
     }
 
 
+    /**
+     * Start one turn
+     */
     private void startOneTurn() {
+        this.game.setGameState(State.TURN_BEGIN);
         sendToAllPlayers();
-    }
+        System.out.println("Start turn " + this.game.getTurn() + ".\n");
 
-    public void startAttack(){
+        // Receive action list from all players
         waitForThreadJoin();
+        System.out.println("Received all action lists.\n");
+
+        // Do attack
+        doAttackPhase();
+        if (this.game.getGameState() == State.GAME_OVER) {
+            return;
+        }
+        growUnits();
+        this.game.setGameState(State.TURN_END);
+        sendToAllPlayers();
+
+        // Turn end
+        waitForThreadJoin();
+        System.out.println("End turn " + this.game.getTurn() + ".\n");
+        this.game.turnComplete();
+
+        // Sleep for a while or two objects will be sent at the same time
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
+    /**
+     * Allocate territories to players
+     */
     public void allocateTerritories() {
         GameMap gameMap = this.game.getMap();
         int numTerrs = gameMap.getNumTerritories();
@@ -214,16 +242,43 @@ public class Server {
         }
     }
 
+    /**
+     * Do attack phase
+     */
     public void doAttackPhase() {
-        HashMap<Integer, ArrayList<Turn>> turnMap=this.game.getTurnMap();
-        for (int i = 0; i < getNumOfPlayers(); i++) {
-            Player p = this.game.getPlayerList().get(i);
-            Game currGame = p.getPlayerThread().getCurrGame();
-            HashMap<Integer, ArrayList<Turn>> playerTurnMap = currGame.getTurnMap();
-            turnMap.putAll(playerTurnMap);
+        // Make Attack List
+        int turnIndex = this.game.getTurn();
+        for (Map.Entry<Integer, ArrayList<Turn>> entry : this.game.getTurnList().get(turnIndex).entrySet()) {
+            this.game.makeAttackList((AttackTurn) entry.getValue().get(1));
         }
-        this.game.makeTurns();
-        this.game.printUnit();
+        this.game.doAttack();
+//        this.game.printUnit();
+
+        // Check if game is over
+        for (Player p : this.game.getPlayerList()) {
+            int numTerrs = this.game.getMap().getTerritoriesByOwner(p.getPlayerName()).size();
+            // If one player has all territories, game over
+            if (numTerrs == this.game.getMap().getNumTerritories()) {
+                this.game.setGameState(State.GAME_OVER);
+                this.game.setWinnerId(p.getPlayerId());
+                System.out.println("Game Over. Player " + p.getPlayerName() + " wins.\n");
+                sendToAllPlayers();
+            }
+            if (numTerrs == 0) {
+                this.game.addLoserId(p.getPlayerId());
+                System.out.println("Player " + p.getPlayerName() + " has lost the game. Game continues.\n");
+            }
+        }
+    }
+
+    /**
+     * Grow unit of each territory by 1
+     */
+    public void growUnits() {
+        //After each turn, all territories should add one new unit
+        for (Territory t : this.game.getMap().getTerritories()) {
+            t.addUnit(new Unit("Normal"));
+        }
     }
 
 }

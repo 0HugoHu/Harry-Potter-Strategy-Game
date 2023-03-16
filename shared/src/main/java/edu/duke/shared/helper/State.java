@@ -6,4 +6,5 @@ public enum State {
     READY_TO_INIT_UNITS,
     TURN_BEGIN,
     TURN_END,
+    GAME_OVER,
 }

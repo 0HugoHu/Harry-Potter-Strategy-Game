@@ -12,13 +12,14 @@ public class DisplayMap {
     private final Game game;
     // Map array
     private final int[][] mapArray;
-
+    // Player id
     private final int playerId;
 
 
     /*
      * Initialize DisplayMap by map
      * @param map Map
+     * @param playerId Player id
      */
     public DisplayMap(Game game, int playerId) {
         this.game = game;
@@ -33,6 +34,7 @@ public class DisplayMap {
     public String showMap() {
         // Initialize map array
         StringBuilder sb = new StringBuilder();
+        sb.append("\n\nGame Map:\n");
         for (Territory t : this.game.getMap().getTerritories()) {
             for (int[] coord : t.getCoords()) {
                 this.mapArray[coord[0]][coord[1]] = getTextRep(t.getOwner());
@@ -48,8 +50,15 @@ public class DisplayMap {
         return sb.toString();
     }
 
-    public String showUnits() {
+    /*
+     * Get String representation of units
+     * @param isSetup Whether it is setup phase
+     * @return String representation of units
+     */
+    public String showUnits(boolean isSetup) {
         StringBuilder sb = new StringBuilder();
+        if (!isSetup)
+            sb.append("Turn ").append(this.game.getTurn()).append(":\n\n");
         for (Player p : this.game.getPlayerList()) {
             sb.append(p.getPlayerName()).append(":\n").append("------------------------------------\n");
             for (Territory t : this.game.getMap().getTerritoriesByOwner(p.getPlayerName())) {
@@ -63,13 +72,19 @@ public class DisplayMap {
             sb.append("\n\n");
         }
 
-        sb.append("You: ").append(this.game.getPlayerList().get(this.playerId).getPlayerName()).append(" (").append(getColorRep(this.playerId)).append("), what would you like to do?\n");
-        sb.append("(M)ove\n(A)ttack\n(D)one\n\n");
+        sb.append("You: ").append(this.game.getPlayerList().get(this.playerId).getPlayerName()).append(" (").append(getColorRep(this.playerId)).append(")");
+        if (!isSetup) {
+            sb.append(", what would you like to do?\n");
+            sb.append("(M)ove\n(A)ttack\n(D)one\n\n");
+        } else {
+            sb.append("\n\n");
+        }
         return sb.toString();
     }
 
     /*
      * Get text representation of owner name
+     * @param ownerName Owner name
      * @return text representation of owner name
      */
     private char getTextRep(String ownerName) {
@@ -88,6 +103,11 @@ public class DisplayMap {
         }
     }
 
+    /*
+     * Get color representation of player id
+     * @param playerId Player id
+     * @return color representation of player id
+     */
     private String getColorRep(int playerId) {
         switch (playerId) {
             case 0:

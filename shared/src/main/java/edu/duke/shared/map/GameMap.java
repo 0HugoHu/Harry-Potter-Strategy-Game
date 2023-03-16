@@ -109,6 +109,13 @@ public class GameMap implements Serializable {
         return territories;
     }
 
+    /**
+     * Get a territory by coordinate
+     *
+     * @param y y coordinate
+     * @param x x coordinate
+     * @return territory with the given coordinate
+     */
     public String getOwnerByCoord(int y, int x) {
         for (Territory t : this.territories) {
             if (t.contains(new int[]{y, x}))
@@ -117,6 +124,13 @@ public class GameMap implements Serializable {
         return null;
     }
 
+    /**
+     * Get a territory by coordinate
+     *
+     * @param y y coordinate
+     * @param x x coordinate
+     * @return territory with the given coordinate
+     */
     public String getTerritoryNameByCoord(int y, int x) {
         for (Territory t : this.territories) {
             if (t.contains(new int[]{y, x}))
@@ -146,7 +160,7 @@ public class GameMap implements Serializable {
      * @return 0 if not a border point, otherwise return the pattern code
      */
     public byte isBorderPoint(int y, int x) {
-        return this.borderPoints.getOrDefault(y * 100000 + x + "", (byte)0b0);
+        return this.borderPoints.getOrDefault(y * 100000 + x + "", (byte) 0b0);
     }
 
     /**
@@ -193,9 +207,9 @@ public class GameMap implements Serializable {
                 int y = coord[0];
                 // Pattern code: 0001: top, 0010: right, 0100: bottom, 1000: left
                 byte pattern = 0;
-                if (this.getTerritoryNameByCoord(y , x - 1) == null || !this.getTerritoryNameByCoord(y , x - 1).equals(tName))
+                if (this.getTerritoryNameByCoord(y, x - 1) == null || !this.getTerritoryNameByCoord(y, x - 1).equals(tName))
                     pattern += 8;
-                if (this.getTerritoryNameByCoord(y , x + 1) == null || !this.getTerritoryNameByCoord(y, x + 1).equals(tName))
+                if (this.getTerritoryNameByCoord(y, x + 1) == null || !this.getTerritoryNameByCoord(y, x + 1).equals(tName))
                     pattern += 2;
                 if (this.getTerritoryNameByCoord(y - 1, x) == null || !this.getTerritoryNameByCoord(y - 1, x).equals(tName))
                     pattern += 1;
@@ -207,6 +221,5 @@ public class GameMap implements Serializable {
 
         return true;
     }
-
 
 }
