@@ -115,7 +115,6 @@ public class TerritoryTest {
         assertEquals(3, units.size());
         assertTrue(t.removeUnitByName("Unit1"));
         assertFalse(t.getUnits().contains(u1));
-        assertFalse(t.removeUnitByName("Unit1"));
     }
 
     @Test

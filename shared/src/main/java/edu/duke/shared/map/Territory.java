@@ -235,8 +235,9 @@ public class Territory implements Serializable {
      * @return true if successfully removed
      */
     public boolean removeUnitByName(String name) {
+        UnitType unitType = Unit.convertStringToUnitType(name);
         for (Unit unit : this.units) {
-            if (unit.getType().equals(name)) {
+            if (unit.getType() == unitType) {
                 this.units.remove(unit);
                 return true;
             }

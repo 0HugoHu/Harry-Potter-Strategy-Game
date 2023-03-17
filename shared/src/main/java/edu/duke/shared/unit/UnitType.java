@@ -6,4 +6,5 @@ package edu.duke.shared.unit;
 public enum UnitType {
     NORMAL,
     DEFENSE,
+    BASIC,
 }
