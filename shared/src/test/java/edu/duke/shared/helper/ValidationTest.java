@@ -1,8 +1,8 @@
 package edu.duke.shared.helper;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import edu.duke.shared.map.GameMap;
 import edu.duke.shared.map.Territory;
@@ -12,10 +12,10 @@ import edu.duke.shared.turn.Move;
 import edu.duke.shared.turn.MoveTurn;
 import edu.duke.shared.unit.Unit;
 
-class ValidationTest {
+public class ValidationTest {
 
     @Test
-    void checkIllegalOrderInput() {
+    public void checkIllegalOrderInput() {
         GameMap map = new GameMap(30, 30, 6);
         Territory t1 = new Territory("t1");
         t1.addUnit(new Unit("Normal"));
@@ -29,7 +29,7 @@ class ValidationTest {
     }
 
     @Test
-    void checkMoves() {
+    public void checkMoves() {
         GameMap map = new GameMap(30, 30, 6);
         Territory t1 = new Territory("t1");
         t1.addUnit(new Unit("Normal"));
@@ -53,19 +53,19 @@ class ValidationTest {
         moveTurn2.addMove(move2);
         assertFalse(Validation.checkMoves(moveTurn2));
         assertTrue(Validation.checkAdjacent(map, "t1", "t2"));
+    }
+
+    @Test
+    public void checkMove() {
 
     }
 
     @Test
-    void checkMove() {
+    public void checkAttacks() {
     }
 
     @Test
-    void checkAttacks() {
-    }
-
-    @Test
-    void checkAttack() {
+    public void checkAttack() {
         GameMap map = new GameMap(30, 30, 6);
         Territory t1 = new Territory("t1");
         t1.addUnit(new Unit("Normal"));
@@ -94,14 +94,14 @@ class ValidationTest {
     }
 
     @Test
-    void checkPathExist() {
+    public void checkPathExist() {
     }
 
     @Test
-    void checkAdjacent() {
+    public void checkAdjacent() {
     }
 
     @Test
-    void checkTerritory() {
+    public void checkTerritory() {
     }
 }

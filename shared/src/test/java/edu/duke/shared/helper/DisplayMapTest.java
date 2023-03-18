@@ -1,8 +1,8 @@
 package edu.duke.shared.helper;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.net.Socket;
 
@@ -11,10 +11,10 @@ import edu.duke.shared.map.GameMap;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.player.Player;
 
-class DisplayMapTest {
+public class DisplayMapTest {
 
     @Test
-    void showMap() {
+    public void showMap() {
         GameMap map = new GameMap(30, 30, 6);
         Territory territory = new Territory("A");
         territory.changeOwner("Player1");
@@ -74,10 +74,9 @@ class DisplayMapTest {
         displayMap2.showUnits(true);
         displayMap3.showUnits(true);
         displayMap4.showUnits(true);
-
     }
 
     @Test
-    void showUnits() {
+    public void showUnits() {
     }
 }

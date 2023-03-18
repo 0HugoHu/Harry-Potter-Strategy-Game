@@ -1,29 +1,24 @@
 package edu.duke.shared.helper;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doThrow;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.net.Socket;
 
 import edu.duke.shared.Game;
 
-class GameObjectTest {
+public class GameObjectTest {
 
     @Test
-    void decodeObj() throws IOException {
+    public void decodeObj() throws IOException {
         GameObject gameObject = new GameObject(mock(Socket.class));
         assertNull(gameObject.decodeObj());
 
@@ -40,7 +35,7 @@ class GameObjectTest {
     }
 
     @Test
-    void encodeObj() throws IOException {
+    public void encodeObj() throws IOException {
         GameObject gameObject = new GameObject(mock(Socket.class));
         gameObject.encodeObj(new Object());
 
@@ -54,6 +49,4 @@ class GameObjectTest {
         when(gameObject.socket.getOutputStream()).thenReturn(baos);
         gameObject.encodeObj(game);
     }
-
-
 }
