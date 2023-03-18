@@ -1,32 +1,40 @@
 package edu.duke.server;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-class ServerTest {
+public class ServerTest {
 
     @Test
-    void main() {
+    public void main() {
     }
 
     @Test
-    void acceptConnection() {
+    public void acceptConnection() {
     }
 
     @Test
-    void sendToAllPlayers() {
+    public void sendToAllPlayers() {
     }
 
     @Test
-    void safeClose() {
+    public void safeClose() {
     }
 
     @Test
-    void getNumOfPlayers() {
+    public void getNumOfPlayers() {
     }
 
     @Test
-    void allocateTerritories() {
+    public void allocateTerritories() {
+    }
+
+    @Test
+    public void doAttackPhase() {
+    }
+
+    @Test
+    public void growUnits() {
     }
 }
