@@ -67,6 +67,7 @@ public class GameMapTest {
         terrList.add(t2);
         GameMap gameMap = new GameMap(10, 10, 2, terrList);
         assertEquals(terrList, gameMap.getTerritoriesByOwner("C"));
+        assertNotEquals(terrList, gameMap.getTerritoriesByOwner("D"));
     }
 
     @Test
