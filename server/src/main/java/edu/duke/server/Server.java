@@ -252,7 +252,7 @@ public class Server {
             this.game.makeAttackList((AttackTurn) entry.getValue().get(1));
         }
         this.game.doAttack();
-//        this.game.printUnit();
+        //this.game.printUnit();
 
         // Check if game is over
         for (Player p : this.game.getPlayerList()) {
