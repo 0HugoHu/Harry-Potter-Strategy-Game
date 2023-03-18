@@ -11,7 +11,7 @@ import java.net.Socket;
 
 public class GameObject {
     // The client socket
-    private final Socket socket;
+    public final Socket socket;
 
     /**
      * Constructor for the GameObject

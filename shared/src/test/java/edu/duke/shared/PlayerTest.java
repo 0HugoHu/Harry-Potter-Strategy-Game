@@ -1,84 +1,115 @@
 package edu.duke.shared;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.net.Socket;
 import java.util.HashSet;
 
+import edu.duke.shared.helper.State;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.player.Player;
+import edu.duke.shared.player.PlayerThread;
 
+@ExtendWith(MockitoExtension.class)
 public class PlayerTest {
 
-//    @Test
-//    public void getPlayerName() {
-//        Player p = new Player("Alice");
-//        assertSame("Alice", p.getPlayerName());
-//    }
-//
-//    @Test
-//    public void setPlayerName() {
-//        Player p = new Player("Alice");
-//        p.setPlayerName("Bob");
-//        assertSame("Bob", p.getPlayerName());
-//    }
-//
-//    @Test
-//    public void getPlayerId() {
-//        Player p = new Player("Alice");
-//        p.setPlayerId(1);
-//        assertEquals(1, p.getPlayerId());
-//    }
-//
-//    @Test
-//    public void setPlayerId() {
-//        Player p = new Player("Alice");
-//        p.setPlayerId(1);
-//        assertEquals(1, p.getPlayerId());
-//    }
-//
-//    @Test
-//    public void expandTerr() {
-//        Player p = new Player("Alice");
-//        Territory t = new Territory("Terr0");
-//        assertTrue(p.expandTerr(t));
-//        assertFalse(p.expandTerr(t));
-//    }
-//
-//    @Test
-//    public void removeTerr() {
-//        Player p = new Player("Alice");
-//        Territory t = new Territory("Terr0");
-//        p.expandTerr(t);
-//        assertTrue(p.removeTerr(t));
-//        assertFalse(p.removeTerr(t));
-//    }
-//
-//    @Test
-//    public void getPlayerTerrs() {
-//        Player p = new Player("Alice");
-//        Territory t = new Territory("Terr0");
-//        p.expandTerr(t);
-//        HashSet<Territory> a = p.getPlayerTerrs();
-//        assertEquals(1, a.size());
-//        assertTrue(a.contains(t));
-//    }
-//
-//    @Test
-//    public void getSocket() {
-//        Player p = new Player("Alice");
-//        Socket socket = new Socket();
-//        p.setSocket(socket);
-//        assertSame(p.getSocket(), socket);
-//    }
-//
-//    @Test
-//    public void setSocket() {
-//        Player p = new Player("Alice");
-//        Socket socket = new Socket();
-//        p.setSocket(socket);
-//        assertSame(p.getSocket(), socket);
-//    }
+    @Test
+    public void getPlayerName() {
+        Player p = new Player(0, new Socket());
+        p.setPlayerName("Alice");
+        assertSame("Alice", p.getPlayerName());
+    }
+
+    @Test
+    public void setPlayerName() {
+        Player p = new Player(0, new Socket());
+        p.setPlayerName("Bob");
+        assertSame("Bob", p.getPlayerName());
+    }
+
+    @Test
+    public void getPlayerId() {
+        Player p = new Player(0, new Socket());
+        p.setPlayerId(1);
+        assertEquals(1, p.getPlayerId());
+    }
+
+    @Test
+    public void setPlayerId() {
+        Player p = new Player(0, new Socket());
+        p.setPlayerId(1);
+        assertEquals(1, p.getPlayerId());
+    }
+
+    @Test
+    public void expandTerr() {
+        Player p = new Player(0, new Socket());
+        Territory t = new Territory("Terr0");
+        assertTrue(p.expandTerr(t));
+        assertFalse(p.expandTerr(t));
+    }
+
+    @Test
+    public void removeTerr() {
+        Player p = new Player(0, new Socket());
+        Territory t = new Territory("Terr0");
+        p.expandTerr(t);
+        assertTrue(p.removeTerr(t));
+        assertFalse(p.removeTerr(t));
+    }
+
+    @Test
+    public void getPlayerTerrs() {
+        Player p = new Player(0, new Socket());
+        Territory t = new Territory("Terr0");
+        p.expandTerr(t);
+        HashSet<Territory> a = p.getPlayerTerrs();
+        assertEquals(1, a.size());
+        assertTrue(a.contains(t));
+    }
+
+    @Test
+    public void getSocket() {
+        Player p = new Player(0, new Socket());
+        Socket socket = new Socket();
+        p.setSocket(socket);
+        assertSame(p.getSocket(), socket);
+    }
+
+    @Test
+    public void setSocket() {
+        Player p = new Player(0, new Socket());
+        Socket socket = new Socket();
+        p.setSocket(socket);
+        assertSame(p.getSocket(), socket);
+    }
+
+
+    @Test
+    public void getPlayerThread() {
+        Player p = new Player(0, new Socket());
+        p.start(State.WAITING_TO_JOIN);
+        assertNotEquals(p.getPlayerThread(), new PlayerThread(State.WAITING_TO_JOIN, p.getSocket(), p.getPlayerId()));
+        p.threadJoin();
+
+        Player player = new Player(0, new Socket());
+        player.thread = mock(Thread.class);
+        try {
+            doThrow(new InterruptedException()).when(player.thread).join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        p.start(State.WAITING_TO_JOIN);
+        player.threadJoin();
+    }
+
 }

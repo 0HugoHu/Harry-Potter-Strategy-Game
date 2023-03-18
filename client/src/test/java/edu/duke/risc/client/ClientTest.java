@@ -12,7 +12,7 @@ public class ClientTest {
      * This testing method tests functions
      * and simulates the process in the main method
      *
-     * @throws Exception
+     * @throws Exception if the server is not created
      */
     @Test
     public void server_one_client_Test() throws Exception {
@@ -33,7 +33,7 @@ public class ClientTest {
 
         //start the server thread
         serverThread.start();
-        Thread.sleep(5000);
+        Thread.sleep(1000);
 
 
         //create the first client thread
@@ -60,7 +60,7 @@ public class ClientTest {
      * This method test the methods
      * and simulates the process of multiple-clients connection
      *
-     * @throws Exception
+     * @throws Exception if the server is not created
      */
     @Test
     public void server_multi_client_Test() throws Exception {
@@ -80,7 +80,7 @@ public class ClientTest {
         });
 
         serverThread.start();
-        Thread.sleep(5000);
+        Thread.sleep(1000);
 
         //create the first client thread
         Thread clientThread1 = new Thread(() -> {
