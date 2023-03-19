@@ -1,6 +1,7 @@
 package edu.duke.risc.client;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -75,13 +76,24 @@ public class Client {
     public Client(String playerName) {
         this.playerName = playerName;
         System.out.println("Created a player.\n");
+        this.clientSocket = connectSocket(HOST, PORT);
+        this.game = new Game(0, 24);
+    }
+
+    public Socket connectSocket(String HOST, int PORT) {
         try {
-            this.clientSocket = new Socket(HOST, PORT);
+            Socket clientSocket = new Socket(HOST, PORT);
+            return clientSocket;
         } catch (IOException e) {
-            System.out.println("Failed to set up client socket.\n");
-            e.printStackTrace();
+            System.out.println("Failed to set up client socket. Retry connecting\n");
+            //e.printStackTrace();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ie) {
+                ie.printStackTrace();
+            }
+            return connectSocket(HOST, PORT);
         }
-        this.game = new Game(0);
     }
 
     /*
@@ -153,24 +165,20 @@ public class Client {
         System.out.println("Please set up your units. You have " + numUnits + " units in total.\n");
         int totalUnits = 0;
         HashSet<Territory> terrs = this.game.getPlayer(playerName).getPlayerTerrs();
-        // TODO: WUYU Replace with UnitCheck or your Validation Class
-        while (totalUnits != numUnits) {
-            if (totalUnits != 0)
-                System.out.println("Total units placed: " + totalUnits + ". But you must place exactly " + numUnits + " units.");
-            totalUnits = 0;
-            for (Territory t : terrs) {
-                System.out.println("Please enter the number of units you want to place on territory " + t.getName() + ":");
-                // TODO: WUYU If input is not an integer, it will crash
-                int numUnits = scanner.nextInt();
-                while (numUnits < 0 || numUnits > Client.numUnits) {
-                    System.out.println("Invalid number of units. Please enter again:");
-                    // TODO: WUYU If input is not an integer, it will crash
-                    numUnits = scanner.nextInt();
-                }
-                this.game.getMap().getTerritory(t.getName()).removeAllUnits();
+        for (Territory t : terrs) this.game.getMap().getTerritory(t.getName()).removeAllUnits();
+        while (totalUnits < numUnits) {
+            int numRemainingUnits = Client.numUnits - totalUnits;
+            System.out.println("Please enter the name of the territory you want to add units to:\n");
+            String source = scanner.nextLine();
+            System.out.println("Please enter the number of units you want to add(" + numRemainingUnits + " Remaining):\n");
+            int numUnits = Validation.getValidNumber(scanner);
+            try {
+                Validation.checkUnit(this.game.getMap(), source, numUnits, Client.numUnits - totalUnits, this.playerName);
                 totalUnits += numUnits;
                 for (int i = 0; i < numUnits; i++)
-                    this.game.getMap().getTerritory(t.getName()).addUnit(new Unit("Normal"));
+                    this.game.getMap().getTerritory(source).addUnit(new Unit("Normal"));
+            } catch (Exception e) {
+                System.out.println("Invalid input: " + e.getMessage());
             }
         }
         System.out.println("Total units placed: " + totalUnits + ". You have placed exactly " + numUnits + " units.");
@@ -285,15 +293,12 @@ public class Client {
         System.out.println("Please enter the name of the territory you want to move to:\n");
         String to = scanner.nextLine();
         System.out.println("Please enter the number of units you want to move:\n");
+        int numUnits = Validation.getValidNumber(scanner);
         try {
-            int numUnits = Integer.parseInt(scanner.nextLine());
             Validation.checkMove(moveTurn, from, to, numUnits);
             moveTurn.addMove(new Move(from, to, numUnits, this.playerName));
         } catch (Exception e) {
-            if (e.getClass().equals(NumberFormatException.class))
-                System.out.println("Invalid input: the units you enter is not a valid number\n");
-            else
-                System.out.println("Invalid input: " + e.getMessage());
+            System.out.println("Invalid input: " + e.getMessage());
             while (true) {
                 System.out.println("Please enter X to return to menu, or enter C to continue\n");
                 String operation = scanner.nextLine();
@@ -315,15 +320,12 @@ public class Client {
         System.out.println("Please enter the name of the territory you want to attack to:\n");
         String to = scanner.nextLine();
         System.out.println("Please enter the number of units you want to use in attack:\n");
+        int numUnits = Validation.getValidNumber(scanner);
         try {
-            int numUnits = Integer.parseInt(scanner.nextLine());
             Validation.checkAttack(attackTurn, from, to, numUnits);
             attackTurn.addAttack(new Attack(from, to, numUnits, this.playerName));
         } catch (Exception e) {
-            if (e.getClass().equals(NumberFormatException.class))
-                System.out.println("Invalid input: the units you enter is not a valid number\n");
-            else
-                System.out.println("Invalid input: " + e.getMessage());
+            System.out.println("Invalid input: " + e.getMessage());
             while (true) {
                 System.out.println("Please enter X to return to menu, or enter C to continue\n");
                 String operation = scanner.nextLine();

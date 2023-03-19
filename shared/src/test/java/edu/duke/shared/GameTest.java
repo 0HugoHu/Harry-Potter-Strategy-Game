@@ -18,7 +18,7 @@ public class GameTest {
      */
     @Test
     public void getNumPlayers() {
-        Game newGame = new Game(3);
+        Game newGame = new Game(3,24);
         assertEquals(3, newGame.getNumPlayers());
     }
 
@@ -27,7 +27,7 @@ public class GameTest {
      */
     @Test
     public void getMap() {
-        Game newGame = new Game(3);
+        Game newGame = new Game(3,24);
         GameMap m =newGame.getMap();
         assertEquals(30, m.getHeight());
         assertEquals(60,m.getWidth());
@@ -35,7 +35,7 @@ public class GameTest {
 
     @Test
     public void addPlayer() {
-        Game newGame = new Game(3);
+        Game newGame = new Game(3,24);
 //        Player p = new Player("Alice");
 //        assertTrue(newGame.addPlayer(p));
 //        assertFalse(newGame.addPlayer(p));
@@ -44,7 +44,7 @@ public class GameTest {
     @Test
     public void getPlayerList() {
         MapFactory map = new MapFactory(30, 60, 24);
-        Game newGame = new Game(3,map.createRandomMap());
+        Game newGame = new Game(3,24, map.createRandomMap());
 //        Player p1 = new Player("A");
 //        Player p2 = new Player("B");
 //        newGame.addPlayer(p1);
@@ -58,7 +58,7 @@ public class GameTest {
     @Test
     public void getPlayer() {
         MapFactory map = new MapFactory(30, 60, 24);
-        Game newGame = new Game(3,map.createRandomMap());
+        Game newGame = new Game(3,24, map.createRandomMap());
 //        Player p1 = new Player("A");
 //        Player p2 = new Player("B");
 //        newGame.addPlayer(p1);

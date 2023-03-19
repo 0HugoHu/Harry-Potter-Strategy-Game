@@ -41,7 +41,7 @@ public class Server {
     public static void main(String[] args) {
         while (true) {
             // Create a new server
-            Server server = new Server(numPlayers);
+            Server server = new Server(numPlayers,numUnits);
             server.initServer();
 
             // Start Game
@@ -108,9 +108,10 @@ public class Server {
      * Initialize Server by number of players
      *
      * @param numOfPlayers Number of players
+     * @param numUnits Number of units for each player
      */
-    public Server(int numOfPlayers) {
-        this.game = new Game(numOfPlayers);
+    public Server(int numOfPlayers,int numUnits) {
+        this.game = new Game(numOfPlayers,numUnits);
         try {
             this.serverSocket = new ServerSocket(PORT);
         } catch (Exception e) {
@@ -142,11 +143,11 @@ public class Server {
                 // Add player to the game, i means player_id
                 // Create an object, and a thread is started
                 this.game.addPlayer(new Player(i, socket));
+                System.out.println("Player " + i + " has joined the game.");
             } catch (IOException e) {
-                // TODO: WUYU Handle this e.g., if connection lost
                 e.printStackTrace();
+                i--;
             }
-            System.out.println("Player " + i + " has joined the game.");
         }
         waitForThreadJoin();
     }
@@ -230,6 +231,8 @@ public class Server {
      * Allocate territories to players
      */
     public void allocateTerritories() {
+        this.game.allocateTerritories();
+        /*
         GameMap gameMap = this.game.getMap();
         int numTerrs = gameMap.getNumTerritories();
         int numPlayers = this.game.getNumPlayers();
@@ -240,6 +243,7 @@ public class Server {
             terrs.get(i).changePlayerOwner(players.get(i / (numTerrs / numPlayers)));
             terrs.get(i).changeOwner(players.get(i / (numTerrs / numPlayers)).getPlayerName());
         }
+        */
     }
 
     /**

@@ -1,6 +1,7 @@
 package edu.duke.shared.helper;
 
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import edu.duke.shared.Game;
@@ -24,12 +25,12 @@ public class Validation {
      * @throws IllegalArgumentException if the order is invalid
      */
     public static void checkIllegalOrderInput(GameMap map, String territoryName1, String territoryName2, int numUnits, String playerName) throws IllegalArgumentException {
-        if (map.getTerritory(territoryName1) == null)
+        if (territoryName1!=null && map.getTerritory(territoryName1) == null)
             throw new IllegalArgumentException("The source territory does not exist\n");
-        if (map.getTerritory(territoryName2) == null)
+        if (territoryName2!=null && map.getTerritory(territoryName2) == null)
             throw new IllegalArgumentException("The destination territory does not exist\n");
-        if (numUnits <= 0)
-            throw new IllegalArgumentException("The number of units you want to use must be greater than or equal to 0\n");
+        if (numUnits < 0)
+            throw new IllegalArgumentException("The number must be greater than or equal to 0\n");
         if (!checkTerritory(map, territoryName1, playerName))
             throw new IllegalArgumentException("The source territory does not belong to you\n");
     }
@@ -151,7 +152,7 @@ public class Validation {
      * @param map            GameMap
      * @param territoryName1 Source territory name
      * @param territoryName2 Destination territory name
-     * @return true if the territory belongs to the player
+     * @return true if the territories are adjacent
      */
     public static boolean checkAdjacent(GameMap map, String territoryName1, String territoryName2) {
         return map.getTerritory(territoryName1).isAdjacent(territoryName2);
@@ -167,5 +168,34 @@ public class Validation {
      */
     public static boolean checkTerritory(GameMap map, String territoryName, String playerName) {
         return map.getTerritory(territoryName).getOwner().equals(playerName);
+    }
+    /**
+     * Check if the territory belongs to the player
+     *
+     * @param map           GameMap
+     * @param territoryName Territory name
+     * @param playerName    Player name
+     * @param numUnits      Number of units
+     * @param totalUnits    Total number of usable units
+     */
+    public static void checkUnit(GameMap map,String territoryName,int numUnits,int totalUnits,String playerName) throws IllegalArgumentException{
+        checkIllegalOrderInput(map,territoryName,null,numUnits,playerName);
+        if (numUnits>totalUnits) throw new IllegalArgumentException("You only have "+totalUnits+" units remaining\n");
+    }
+    /**
+     * Check if the territory belongs to the player
+     *
+     * @param scanner       Scanner to read
+     * @return an integer read from scanner
+     */
+    public static int getValidNumber(Scanner scanner){
+        int numUnits;
+        try {
+            numUnits = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input: Please enter a valid number\n");
+            return getValidNumber(scanner);
+        }
+        return numUnits;
     }
 }

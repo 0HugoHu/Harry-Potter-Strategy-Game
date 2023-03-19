@@ -23,6 +23,8 @@ public class Game implements Serializable {
     private final Header header;
     // Number of players
     private final int numPlayers;
+    // Number of Units for each player
+    private final int numUnits;
     private final ArrayList<Player> playerList;
     // Map
     private final GameMap gameMap;
@@ -51,8 +53,8 @@ public class Game implements Serializable {
      *
      * @param numPlayers Number of players
      */
-    public Game(int numPlayers) {
-        this(numPlayers, new MapFactory(30, 60, 12).createRandomMap());
+    public Game(int numPlayers,int numUnits) {
+        this(numPlayers, numUnits,new MapFactory(30, 60, 12).createRandomMap());
     }
 
     /**
@@ -61,8 +63,9 @@ public class Game implements Serializable {
      * @param numPlayers num of players
      * @param gameMap    Map
      */
-    public Game(int numPlayers, GameMap gameMap) {
+    public Game(int numPlayers, int numUnits, GameMap gameMap) {
         this.numPlayers = numPlayers;
+        this.numUnits=numUnits;
         this.gameMap = gameMap;
         this.playerList = new ArrayList<>();
         this.turnList = new ArrayList<>();
@@ -534,6 +537,22 @@ public class Game implements Serializable {
      */
     public ArrayList<HashMap<Integer, ArrayList<Turn>>> getTurnList() {
         return this.turnList;
+    }
+
+    /**
+     * Allocate territories to players
+     */
+    public void allocateTerritories() {
+        GameMap gameMap = this.getMap();
+        int numTerrs = gameMap.getNumTerritories();
+        int numPlayers = this.getNumPlayers();
+        ArrayList<Territory> terrs = gameMap.getTerritories();
+        ArrayList<Player> players = this.getPlayerList();
+        for (int i = 0; i < numTerrs; i++) {
+            players.get(i / (numTerrs / numPlayers)).expandTerr(terrs.get(i));
+            terrs.get(i).changePlayerOwner(players.get(i / (numTerrs / numPlayers)));
+            terrs.get(i).changeOwner(players.get(i / (numTerrs / numPlayers)).getPlayerName());
+        }
     }
 
 }
