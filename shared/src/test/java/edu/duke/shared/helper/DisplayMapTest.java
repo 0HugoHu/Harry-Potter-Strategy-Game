@@ -39,7 +39,7 @@ public class DisplayMapTest {
 
         territory.addAdjacent("E");
 
-        Game game = new Game(5, map);
+        Game game = new Game(5, 24, map);
         Player player = new Player(0, new Socket());
         player.setPlayerName("Player1");
         Player player1 = new Player(1, new Socket());

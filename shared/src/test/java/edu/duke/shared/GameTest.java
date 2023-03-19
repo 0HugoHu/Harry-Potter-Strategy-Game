@@ -26,7 +26,7 @@ public class GameTest {
      */
     @Test
     public void testGetNumPlayers() {
-        Game newGame = new Game(3);
+        Game newGame = new Game(3,24);
         assertEquals(3, newGame.getNumPlayers());
     }
 
@@ -35,7 +35,7 @@ public class GameTest {
      */
     @Test
     public void testGetMap() {
-        Game newGame = new Game(3);
+        Game newGame = new Game(3,24);
         GameMap m =newGame.getMap();
         assertEquals(30, m.getHeight());
         assertEquals(60,m.getWidth());
@@ -43,42 +43,42 @@ public class GameTest {
 
     @Test
     public void testPlayerId(){
-        Game newGame=new Game(2);
+        Game newGame=new Game(2,24);
         newGame.setPlayerId(1);
         assertEquals(1,newGame.getPlayerId());
     }
 
     @Test
     public void testPlayerName(){
-        Game newGame=new Game(2);
+        Game newGame=new Game(2,24);
         newGame.setPlayerName("A");
         assertEquals("A",newGame.getPlayerName());
     }
 
     @Test
     public void testGamestate(){
-        Game newGame=new Game(2);
+        Game newGame=new Game(2,24);
         newGame.setGameState(State.TURN_BEGIN);
         assertEquals(State.TURN_BEGIN,newGame.getGameState());
     }
 
     @Test
     public void testTurnComplete(){
-        Game newGame=new Game(2);
+        Game newGame=new Game(2,24);
         newGame.turnComplete();
         assertEquals(1,newGame.getTurn());
     }
 
     @Test
     public void testWinner(){
-        Game newGame=new Game(2);
+        Game newGame=new Game(2,24);
         newGame.setWinnerId(1);
         assertEquals(1,newGame.getWinnerId());
     }
 
     @Test
     public void testLoser(){
-        Game newGame=new Game(2);
+        Game newGame=new Game(2,24);
         newGame.addLoserId(0);
         assertTrue(newGame.isLoser(0));
     }
@@ -87,7 +87,7 @@ public class GameTest {
 
     @Test
     public void doAttack(){
-        Game newGame=new Game(3);
+        Game newGame=new Game(3,24);
         GameMap m=newGame.getMap();
         Player p1 = new Player(0, new Socket());
         p1.setPlayerName("A");
@@ -116,7 +116,7 @@ public class GameTest {
 
         AttackTurn attTurn1=new AttackTurn(m,0,"A");
         MoveTurn moveTurn1=new MoveTurn(m,0,"A");
-        Attack attack3=new Attack("Terr1","Terr6",2,"A");
+        Attack attack3=new Attack("B","G",2,"A");
         attTurn1.addAttack(attack3);
         ArrayList<Turn> newTurn1 = new ArrayList<>();
         newTurn1.add(moveTurn1);
@@ -124,7 +124,7 @@ public class GameTest {
 
         AttackTurn attTurn2=new AttackTurn(m,0,"B");
         MoveTurn moveTurn2=new MoveTurn(m,0,"B");
-        Attack attack4=new Attack("Terr6","Terr2",2,"B");
+        Attack attack4=new Attack("G","C",2,"B");
         attTurn2.addAttack(attack4);
         ArrayList<Turn> newTurn2 = new ArrayList<>();
         newTurn2.add(moveTurn2);
@@ -132,8 +132,8 @@ public class GameTest {
 
         AttackTurn attTurn3=new AttackTurn(m,0,"C");
         MoveTurn moveTurn3=new MoveTurn(m,0,"C");
-        Attack attack1=new Attack("Terr8","Terr6",2,"C");
-        Attack attack2=new Attack("Terr9","Terr6",1,"C");
+        Attack attack1=new Attack("I","G",2,"C");
+        Attack attack2=new Attack("J","G",1,"C");
         attTurn3.addAttack(attack1);
         attTurn3.addAttack(attack2);
         ArrayList<Turn> newTurn3 = new ArrayList<>();
@@ -159,7 +159,7 @@ public class GameTest {
 
     @Test
     public void TestAddToTurnMap(){
-        Game newGame=new Game(3);
+        Game newGame=new Game(3,24);
         GameMap m=newGame.getMap();
         Player p1 = new Player(0, new Socket());
         p1.setPlayerName("A");
@@ -173,7 +173,7 @@ public class GameTest {
 
         AttackTurn attTurn1=new AttackTurn(m,0,"A");
         MoveTurn moveTurn1=new MoveTurn(m,0,"A");
-        Attack attack3=new Attack("Terr1","Terr6",2,"A");
+        Attack attack3=new Attack("B","G",2,"A");
         attTurn1.addAttack(attack3);
         ArrayList<Turn> newTurn1 = new ArrayList<>();
         newTurn1.add(moveTurn1);
@@ -186,7 +186,7 @@ public class GameTest {
 
     @Test
     public void getPlayer() {
-        Game newGame = new Game(3);
+        Game newGame = new Game(3,24);
         Player p1 = new Player(0,new Socket());
         p1.setPlayerName("A");
         Player p2 = new Player(1,new Socket());

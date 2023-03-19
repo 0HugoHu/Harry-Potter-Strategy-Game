@@ -5,6 +5,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="RISC.client.test" options="--add-modules java.base" />
       <module name="RISC.server.main" options="--add-modules java.base,java.logging" />
       <module name="RISC.shared.main" options="--add-modules java.base" />
       <module name="RISC.shared.test" options="--add-modules java.base" />

@@ -74,8 +74,15 @@ public class PlayerThread implements Runnable, Serializable {
     public void run() {
         if (state != State.WAITING_TO_JOIN && state != State.TURN_END && state != State.GAME_OVER) {
             GameObject obj = new GameObject(this.socket);
-            // TODO: WUYU Check game object correctness every time, that if (Game) conversion fails, then continue to wait for the next object
             this.currGame = (Game) obj.decodeObj();
+            while (this.currGame==null){
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                this.currGame = (Game) obj.decodeObj();
+            }
         }
 
         switch (state) {
@@ -103,14 +110,19 @@ public class PlayerThread implements Runnable, Serializable {
                 break;
             }
             case TURN_BEGIN:
-                // TODO: WUYU Check on the server side again for both move and attack
                 System.out.println("Received player " + this.playerId + "'s action list.");
 
                 int turnIndex = this.currGame.getTurn();
                 MoveTurn moveTurn = (MoveTurn) this.currGame.getTurnList().get(turnIndex).get(this.playerId).get(0);
+                AttackTurn attackTurn=(AttackTurn) this.currGame.getTurnList().get(turnIndex).get(this.playerId).get(1);
                 if (!Validation.checkMoves(moveTurn)) {
                     System.out.println("The move turn from player " + this.playerId + " is illegal.");
                 }
+                if (!Validation.checkAttacks(attackTurn)) {
+                    System.out.println("The attack turn from player " + this.playerId + " is illegal.");
+                }
+                //TODO: actions if move or attack validation on server fail
+
                 moveTurn.doMovePhrase();
 
                 // Merge Unit
