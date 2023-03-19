@@ -20,8 +20,9 @@ import edu.duke.shared.unit.Unit;
 
 public class Client {
     // Host name
-//    private String HOST = "vcm-30577.vm.duke.edu";
-    private final static String HOST = "0.0.0.0";
+    //private String HOST = "vcm-30577.vm.duke.edu";
+    //
+     private final static String HOST = "0.0.0.0";
     // Port number
     private final static int PORT = 5410;
     // Number of units at the beginning
