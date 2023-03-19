@@ -163,9 +163,9 @@ public class Game implements Serializable {
             }
             //After the fighting stage, announce the winner
             announceWinner(att, desTerr);
-            // Update the unit
-            changeUnit();
         }
+        // Update the unit
+        changeUnit();
         this.attackList.clear();
         this.unitAddMap.clear();
         this.unitMinusMap.clear();
