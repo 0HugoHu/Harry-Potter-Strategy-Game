@@ -137,19 +137,30 @@ public class ValidationTest {
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> Validation.checkAttack(at, map.getTerritoriesByOwner(p2.getPlayerName()).get(0).getName(),
                 map.getTerritoriesByOwner(p2.getPlayerName()).get(1).getName(), 2));
         assertEquals("You should not attack your territory\n", thrown.getMessage());
-        String from = null;
-        String to = null;
+        String from1 = null;
+        String to1 = null;
+        String from2=null;
+        String to2=null;
+        boolean first=true;
         for (Territory t : map.getTerritoriesByOwner(p2.getPlayerName())) {
             for (String t2 : t.getAdjacents()) {
                 if (!Validation.checkTerritory(map, t2, p2.getPlayerName())) {
-                    from = t.getName();
-                    to = t2;
+                    if (first) {
+                        from1 = t.getName();
+                        to1 = t2;
+                        first=false;
+                    }
+                    else{
+                        from2 = t.getName();
+                        to2 = t2;
+                    }
                 }
             }
         }
-        at.addAttack(new Attack(from, to, 2, p2.getPlayerName()));
+        at.addAttack(new Attack(from1, to1, 2, p2.getPlayerName()));
+        at.addAttack(new Attack(from2, to2, 2, p2.getPlayerName()));
         assertTrue(Validation.checkAttacks(at));
-        at.addAttack(new Attack(from, to, 3, p2.getPlayerName()));
+        at.addAttack(new Attack(from1, to1, 3, p2.getPlayerName()));
         assertFalse(Validation.checkAttacks(at));
     }
 
@@ -233,6 +244,7 @@ public class ValidationTest {
         game.allocateTerritories();
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> Validation.checkUnit(map,map.getTerritoriesByOwner(p1.getPlayerName()).get(0).getName(),3,2,p1.getPlayerName()));
         assertEquals("You only have 2 units remaining\n", thrown.getMessage());
+        Validation.checkUnit(map,map.getTerritoriesByOwner(p1.getPlayerName()).get(0).getName(),2,3,p1.getPlayerName());
 
     }
 
