@@ -1,26 +1,27 @@
 package edu.duke.shared.unit;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 
-class UnitCheckTest {
+public class UnitCheckTest {
 
     @Test
-    void checkUnitNumInput() {
+    public void checkUnitNumInput() {
         UnitCheck uc = new UnitCheck();
-        assertTrue(uc.checkUnitNumInput(0));
-        assertTrue(uc.checkUnitNumInput(24));
-        assertFalse(uc.checkUnitNumInput(-1));
-        assertFalse(uc.checkUnitNumInput(25));
+        Assertions.assertTrue(uc.checkUnitNumInput(0));
+        Assertions.assertTrue(uc.checkUnitNumInput(24));
+        Assertions.assertFalse(uc.checkUnitNumInput(-1));
+        Assertions.assertFalse(uc.checkUnitNumInput(25));
     }
 
     @Test
-    void checkTotalUnitNum() {
+    public void checkTotalUnitNum() {
         UnitCheck uc = new UnitCheck();
-        assertTrue(uc.checkTotalUnitNum(0));
-        assertTrue(uc.checkTotalUnitNum(24));
-        assertFalse(uc.checkTotalUnitNum(-1));
-        assertFalse(uc.checkTotalUnitNum(25));
+        Assertions.assertTrue(uc.checkTotalUnitNum(0));
+        Assertions.assertTrue(uc.checkTotalUnitNum(24));
+        Assertions.assertFalse(uc.checkTotalUnitNum(-1));
+        Assertions.assertFalse(uc.checkTotalUnitNum(25));
     }
 }

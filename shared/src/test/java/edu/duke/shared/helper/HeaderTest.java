@@ -1,24 +1,24 @@
 package edu.duke.shared.helper;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-class HeaderTest {
+public class HeaderTest {
 
     @Test
-    void setWinnerId() {
+    public void setWinnerId() {
         Header header = new Header();
         header.setWinnerId(1);
         assertEquals(1, header.getWinnerId());
     }
 
     @Test
-    void getWinnerId() {
+    public void getWinnerId() {
     }
 
     @Test
-    void addLoserId() {
+    public void addLoserId() {
         Header header = new Header();
         header.addLoserId(1);
         assertTrue(header.isLoser(1));
@@ -26,50 +26,50 @@ class HeaderTest {
     }
 
     @Test
-    void isLoser() {
+    public void isLoser() {
     }
 
     @Test
-    void setPlayerId() {
+    public void setPlayerId() {
         Header header = new Header();
         header.setPlayerId(1);
         assertEquals(1, header.getPlayerId());
     }
 
     @Test
-    void getPlayerId() {
+    public void getPlayerId() {
     }
 
     @Test
-    void setPlayerName() {
+    public void setPlayerName() {
         Header header = new Header();
         header.setPlayerName("test");
         assertEquals("test", header.getPlayerName());
     }
 
     @Test
-    void getPlayerName() {
+    public void getPlayerName() {
     }
 
     @Test
-    void setState() {
+    public void setState() {
         Header header = new Header();
         header.setState(State.WAITING_TO_JOIN);
         assertEquals(State.WAITING_TO_JOIN, header.getState());
     }
 
     @Test
-    void getState() {
+    public void getState() {
     }
 
     @Test
-    void turnComplete() {
+    public void turnComplete() {
         Header header = new Header();
         header.turnComplete();
         assertEquals(1, header.getTurn());
     }
 
     @Test
-    void getTurn() {
+    public void getTurn() {
     }
 }

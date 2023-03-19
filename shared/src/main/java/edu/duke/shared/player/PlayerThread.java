@@ -20,7 +20,7 @@ public class PlayerThread implements Runnable, Serializable {
     // Global game state of the game
     private final State state;
     // Player's socket
-    private final Socket socket;
+    public Socket socket;
     // Player's game
     private Game currGame;
     // Server's game
@@ -97,7 +97,6 @@ public class PlayerThread implements Runnable, Serializable {
             }
             case READY_TO_INIT_UNITS: {
                 System.out.println("Received player " + this.playerId + "'s unit init info.");
-
                 Player p = this.serverGame.getPlayerList().get(this.playerId);
                 HashSet<Territory> terr_set = p.getPlayerTerrs();
                 int totalUnits = 0;

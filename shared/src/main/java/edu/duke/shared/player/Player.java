@@ -19,7 +19,7 @@ public class Player implements Serializable {
     // Player's thread
     private transient PlayerThread playerThread;
     // Player's thread
-    private transient Thread thread;
+    public transient Thread thread;
 
 
     /**
@@ -62,13 +62,15 @@ public class Player implements Serializable {
     /**
      * Wait for the thread to finish
      */
-    public void threadJoin() {
+    public void threadJoin(){
         try {
             this.thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
+
+
 
     /**
      * get player name

@@ -161,11 +161,10 @@ public class Game implements Serializable {
                     i = 0;
                 }
             }
-
-            // Update the unit
-            changeUnit();
             //After the fighting stage, announce the winner
             announceWinner(att, desTerr);
+            // Update the unit
+            changeUnit();
         }
         this.attackList.clear();
         this.unitAddMap.clear();
@@ -228,8 +227,8 @@ public class Game implements Serializable {
         for (int k = 0; k < att.get(j).size(); k++) {
             playerJunits += att.get(j).get(k).getNumUnits();
         }
-        String outputUnits1 = "Attack| " + att.get(i).get(0).getPlayerName() + " still has " + playerIunits + " units!\n";
-        String outputUnits2 = "Attack| " + att.get(j).get(0).getPlayerName() + " still has " + playerJunits + " units!\n";
+        String outputUnits1 = "Attack from " + att.get(i).get(0).getPlayerName() + " still has " + playerIunits + " units!\n";
+        String outputUnits2 = "Attack from " + att.get(j).get(0).getPlayerName() + " still has " + playerJunits + " units!\n";
         attackDetailsSB.append(outputUnits1);
         attackDetailsSB.append(outputUnits2);
         System.out.print(outputUnits1);
@@ -339,9 +338,6 @@ public class Game implements Serializable {
      * @param p player to add
      */
     public void addPlayer(Player p) {
-        if (playerList.contains(p)) {
-            throw new IllegalArgumentException("Player already exists");
-        }
         playerList.add(p);
     }
 
@@ -370,25 +366,6 @@ public class Game implements Serializable {
     }
 
 
-    /**
-     * Print some details of this Game Basic Info,
-     * including player Name and Territory Name
-     *
-     * @return string of info
-     */
-    public String GameDetail() {
-        StringBuilder sb = new StringBuilder();
-        for (Player p : playerList) {
-            sb.append("--------------------\n");
-            sb.append(p.getPlayerName()).append("\n");
-            for (Territory t : p.getPlayerTerrs()) {
-                sb.append(t.getName());
-                sb.append("\n");
-            }
-            sb.append("--------------------\n");
-        }
-        return sb.toString();
-    }
 
     /**
      * Get number of players
@@ -516,7 +493,7 @@ public class Game implements Serializable {
 
     /**
      * Add the move and attack collections to the turn list
-     *
+     * private final ArrayList<HashMap<Integer, ArrayList<Turn>>> turnList;
      * @param playerId   player id
      * @param moveTurn   move turn
      * @param attackTurn attack turn

@@ -1,16 +1,13 @@
 package edu.duke.shared.helper;
 
+import static org.junit.Assert.*;
 
+import org.junit.Test;
 
-
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.Test;
-
-class StateTest {
+public class StateTest {
 
     @Test
-    void values() {
+    public void values() {
         assertEquals(State.WAITING_TO_JOIN, State.valueOf("WAITING_TO_JOIN"));
         assertEquals(State.READY_TO_INIT_NAME, State.valueOf("READY_TO_INIT_NAME"));
         assertEquals(State.READY_TO_INIT_UNITS, State.valueOf("READY_TO_INIT_UNITS"));
@@ -20,6 +17,6 @@ class StateTest {
     }
 
     @Test
-    void valueOf() {
+    public void valueOf() {
     }
 }
