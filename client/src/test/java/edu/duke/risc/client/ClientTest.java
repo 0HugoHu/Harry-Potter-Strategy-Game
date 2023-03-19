@@ -58,7 +58,7 @@ public class ClientTest {
      */
     @Test
     public void getGame() throws InterruptedException {
-        Server newSer = new Server(1);
+        Server newSer = new Server(1,24);
 
         //create the server thread
         Thread serverThread = new Thread(() -> {
@@ -105,7 +105,7 @@ public class ClientTest {
      */
     @Test
     public void safeClose() throws InterruptedException {
-        Server newSer = new Server(2);
+        Server newSer = new Server(2,24);
         Thread serverThread = new Thread(() -> {
             try {
                 newSer.acceptConnection(2);
