@@ -1,5 +1,13 @@
 # ece651-risc-group1
 
+- Xueyi Cheng
+- Yadong Hu
+- Yu Wu
+
+# Play The Game
+
+1. Start the Server
+
 
 
 ## Project Task Lisk
