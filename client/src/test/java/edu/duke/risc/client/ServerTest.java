@@ -40,7 +40,7 @@ public class ServerTest {
         //create the client thread
         Thread clientThread = new Thread(() -> {
             try {
-                Client cli = new Client();
+                Client cli = new Client("0.0.0.0");
                 System.out.println("Client created and connected...");
             } catch (Exception except) {
                 except.printStackTrace();
@@ -81,7 +81,7 @@ public class ServerTest {
         //create the first client thread
         Thread clientThread1 = new Thread(() -> {
             try {
-                Client cli1 = new Client();
+                Client cli1 = new Client("0.0.0.0");
                 System.out.println("Client created and connected...");
             } catch (Exception except) {
                 except.printStackTrace();
@@ -94,7 +94,7 @@ public class ServerTest {
         //create the second client thread
         Thread clientThread2 = new Thread(() -> {
             try {
-                Client cli2 = new Client();
+                Client cli2 = new Client("0.0.0.0");
                 System.out.println("Client created and connected...");
             } catch (Exception except) {
                 except.printStackTrace();

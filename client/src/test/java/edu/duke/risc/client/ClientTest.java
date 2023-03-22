@@ -81,7 +81,7 @@ public class ClientTest {
         //create the first client thread
         Thread clientThread1 = new Thread(() -> {
             try {
-                Client cli = new Client();
+                Client cli = new Client("0.0.0.0");
                 System.out.println("Client created and connected...");
                 assertEquals("A", cli.getPlayerName());
                 cli.getGame();

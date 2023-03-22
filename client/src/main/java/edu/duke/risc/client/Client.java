@@ -22,7 +22,7 @@ public class Client {
     // Host name
     //private String HOST = "vcm-30577.vm.duke.edu";
     //
-     private final static String HOST = "0.0.0.0";
+     private final String HOST;
     // Port number
     private final static int PORT = 5410;
     // Number of units at the beginning
@@ -48,7 +48,7 @@ public class Client {
      */
     public static void main(String[] args) {
         // Create new client
-        Client client = new Client();
+        Client client = new Client(args[0]);
 
         // Init client
         client.initClient();
@@ -66,15 +66,16 @@ public class Client {
     /*
      * Initialize Client
      */
-    public Client() {
-        this(null);
+    public Client(String HOST) {
+        this(HOST,null);
     }
 
     /*
      * Initialize Client by player name
      * @param playerName Player name
      */
-    public Client(String playerName) {
+    public Client(String HOST,String playerName) {
+        this.HOST=HOST;
         this.playerName = playerName;
         System.out.println("Created a player.\n");
         this.clientSocket = connectSocket(HOST, PORT);
