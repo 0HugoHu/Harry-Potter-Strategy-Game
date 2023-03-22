@@ -118,12 +118,12 @@ public class PlayerThread implements Runnable, Serializable {
                 if (!Validation.checkMoves(moveTurn)) {
                     System.out.println("The move turn from player " + this.playerId + " is illegal.");
                 }
+                moveTurn.doMovePhrase();
                 if (!Validation.checkAttacks(attackTurn)) {
                     System.out.println("The attack turn from player " + this.playerId + " is illegal.");
                 }
                 //TODO: actions if move or attack validation on server fail
 
-                moveTurn.doMovePhrase();
 
                 // Merge Unit
                 Player p = this.serverGame.getPlayerList().get(this.playerId);
