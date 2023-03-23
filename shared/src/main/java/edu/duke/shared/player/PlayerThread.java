@@ -23,11 +23,13 @@ public class PlayerThread implements Runnable, Serializable {
     // Player's socket
     public Socket socket;
     // Player's game
-    private Game currGame;
+    public Game currGame;
     // Server's game
     private Game serverGame;
     // Player's id
     private final int playerId;
+
+    public int forTesting;
 
     /**
      * Initialize the PlayerThread
@@ -50,6 +52,7 @@ public class PlayerThread implements Runnable, Serializable {
         this.state = state;
         this.socket = socket;
         this.playerId = playerId;
+        this.forTesting = 0;
     }
 
     /**
@@ -73,17 +76,9 @@ public class PlayerThread implements Runnable, Serializable {
      */
     @Override
     public void run() {
-        if (state != State.WAITING_TO_JOIN && state != State.TURN_END && state != State.GAME_OVER) {
+        if (state != State.WAITING_TO_JOIN && state != State.TURN_END && state != State.GAME_OVER && forTesting == 0) {
             GameObject obj = new GameObject(this.socket);
             this.currGame = (Game) obj.decodeObj();
-            while (this.currGame == null) {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                this.currGame = (Game) obj.decodeObj();
-            }
         }
 
         switch (state) {
@@ -139,7 +134,7 @@ public class PlayerThread implements Runnable, Serializable {
                 // Merge all turns from different players
                 ArrayList<Turn> newTurns = this.currGame.getTurnList().get(turnIndex).get(this.playerId);
                 // For the first player, add a new turn
-                if (this.serverGame.getTurnList().size() == turnIndex) {
+                if (this.serverGame.getTurnList().size() == turnIndex || forTesting == 2) {
                     HashMap<Integer, ArrayList<Turn>> newTurnsMap = new HashMap<>();
                     newTurnsMap.put(this.playerId, newTurns);
                     this.serverGame.getTurnList().add(newTurnsMap);

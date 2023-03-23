@@ -1,20 +1,24 @@
-# ece651-risc-group1
+# ECE 651 RISC Project Group 1 
 
-- Xueyi Cheng
-- Yadong Hu
-- Yu Wu
+![](https://img.shields.io/badge/build-passing-brightgreen)
+
+## Group Members
+- Xueyi Cheng (xc187)
+- Yadong Hu (yh342)
+- Yu Wu (yw541)
 
 
 ## Project Task Lisk
 
 **Click [here](https://prodduke-my.sharepoint.com/:x:/r/personal/yh342_duke_edu/Documents/ECE%20651%20Group%201%20Project%20Task%20List.xlsx?d=w18e83f614ba7499d93c805d3011429e5&csf=1&web=1&e=59rJHC) to visit Excel document.**
 
+![](assets/Evo1/excel.png)
 
 ## UML Graph
 
 **Click [here](https://drive.google.com/file/d/1a_QFIG-tIONUMT96SDqLrqM56fD0q7UY/view?usp=sharing) to see the full picture.**
 
-![](assets/Evo1/excel.png)
+![](assets/UML/UML-final.png)
 
 
 ## Coverage Report

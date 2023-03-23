@@ -17,7 +17,7 @@ public class Player implements Serializable {
     // Player's socket
     private transient Socket socket;
     // Player's thread
-    private transient PlayerThread playerThread;
+    public transient PlayerThread playerThread;
     // Player's thread
     public transient Thread thread;
 
