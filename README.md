@@ -48,8 +48,8 @@
 
 4.1  The server sends maps to all the players and the game begins! All players can see the current turn number, as well as each player's unit allocation in this turn. 
 
-4.2  There will be prompt "You: X, what would you like to do? (M)ove (A)ttack (D)one
-Ech player can choose to Attack or Move or Finish Order, and they can do as many orders as they want in one turn as long as they have enough units. 
+4.2  There will be prompt "You: X(your use name), what would you like to do? (M)ove (A)ttack (D)one“
+Each player can choose to Attack or Move or Finish Order, and they can do as many orders as they want in one turn as long as they have enough units. 
 ![](assets/images/5.png)
 
 4.3  If the player choose Move, then he/she should type in "M"; then the player should enter the name of territory he/she wants to move from, the name of territory he/she wants to move to, and the number of units he/she wants to move. After all the inputs and press Enter Key, the move order will be executed automatically and the user can see the unit change.
