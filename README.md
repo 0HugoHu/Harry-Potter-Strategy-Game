@@ -25,15 +25,18 @@
 ### 1. Start the Server
 
 1.1. Run the server by command ./gradlew :server:run
-![pic](https://gitlab.oit.duke.edu/hugo/ece651-sp23-group1/-/blob/main/assets/images/1.png)
+
+![](assets/images/1.png)
 
 1.2  Wait for players to connect the srever
 
 ### 2. Players Input Names
 
 2.1  Run the client by command line. You need to input your HOST NAME as an argument in the command. For example, if your  host name is "0.0.0.0", you should ues this command:   ./gradlew :client:run --args="0.0.0.0"
+![](assets/images/2.jpeg)
 
 2.2  There should be prompt "Please enter your player name:". Type in your user name (Note: each player should have thier unique name)
+![](assets/images/3.png)
 
 2.3  Wait for other clients to finish inputing their names. You will then automatically assigned your game ID.
 
