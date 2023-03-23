@@ -62,14 +62,13 @@ public class Player implements Serializable {
     /**
      * Wait for the thread to finish
      */
-    public void threadJoin(){
+    public void threadJoin() {
         try {
             this.thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
-
 
 
     /**

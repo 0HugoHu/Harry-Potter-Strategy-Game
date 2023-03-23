@@ -222,7 +222,6 @@ public class Territory implements Serializable {
 
     /**
      * Remove all units from this territory
-     *
      */
     public void removeAllUnits() {
         this.units.clear();

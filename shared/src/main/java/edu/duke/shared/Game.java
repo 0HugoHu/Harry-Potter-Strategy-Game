@@ -23,8 +23,6 @@ public class Game implements Serializable {
     private final Header header;
     // Number of players
     private final int numPlayers;
-    // Number of Units for each player
-    private final int numUnits;
     private final ArrayList<Player> playerList;
     // Map
     private final GameMap gameMap;
@@ -53,8 +51,8 @@ public class Game implements Serializable {
      *
      * @param numPlayers Number of players
      */
-    public Game(int numPlayers,int numUnits) {
-        this(numPlayers, numUnits,new MapFactory(30, 60, 12).createRandomMap());
+    public Game(int numPlayers, int numUnits) {
+        this(numPlayers, numUnits, new MapFactory(30, 60, 12).createRandomMap());
     }
 
     /**
@@ -65,7 +63,7 @@ public class Game implements Serializable {
      */
     public Game(int numPlayers, int numUnits, GameMap gameMap) {
         this.numPlayers = numPlayers;
-        this.numUnits=numUnits;
+        // Number of Units for each player
         this.gameMap = gameMap;
         this.playerList = new ArrayList<>();
         this.turnList = new ArrayList<>();
@@ -100,6 +98,7 @@ public class Game implements Serializable {
             if (attackList.containsKey(attacks.get(i).getTo())) {
                 ArrayList<ArrayList<Attack>> att = attackList.get(attacks.get(i).getTo());
                 boolean flag = false;
+                assert att != null;
                 for (ArrayList<Attack> attArr : att) {
                     //If the attack come from the same player, then we should put it into the same inner list
                     if (attArr.get(0).getPlayerName().equals(attacks.get(i).getPlayerName())) {
@@ -182,9 +181,11 @@ public class Game implements Serializable {
      * @param att         attackList
      */
     public void setUpDefense(String destination, ArrayList<ArrayList<Attack>> att) {
+
         Territory desTerr = gameMap.getTerritory(destination);
         int desPlayerId = gameMap.getTerritory(destination).getPlayerOwner().getPlayerId();
         ArrayList<Turn> desTurn = turnList.get(getTurn()).get(desPlayerId);
+        assert desTurn != null;
         AttackTurn attackTurn = (AttackTurn) (desTurn.get(1));
         ArrayList<Attack> atts = attackTurn.getAttacks();
         int defenseForce = desTerr.getNumUnits();
@@ -366,7 +367,6 @@ public class Game implements Serializable {
     }
 
 
-
     /**
      * Get number of players
      *
@@ -494,6 +494,7 @@ public class Game implements Serializable {
     /**
      * Add the move and attack collections to the turn list
      * private final ArrayList<HashMap<Integer, ArrayList<Turn>>> turnList;
+     *
      * @param playerId   player id
      * @param moveTurn   move turn
      * @param attackTurn attack turn

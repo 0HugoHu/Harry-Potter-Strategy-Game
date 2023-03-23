@@ -20,9 +20,8 @@ import edu.duke.shared.unit.Unit;
 
 public class Client {
     // Host name
-    //private String HOST = "vcm-30577.vm.duke.edu";
-    //
-     private final static String HOST = "0.0.0.0";
+    private final static String HOST = "vcm-30577.vm.duke.edu";
+//    private final static String HOST = "0.0.0.0";
     // Port number
     private final static int PORT = 5410;
     // Number of units at the beginning
@@ -34,7 +33,7 @@ public class Client {
     // Gameplay controller
     private Game game;
     // Client socket
-    private Socket clientSocket;
+    private final Socket clientSocket;
     // Scanner
     Scanner scanner = new Scanner(System.in);
 
@@ -83,8 +82,7 @@ public class Client {
 
     public Socket connectSocket(String HOST, int PORT) {
         try {
-            Socket clientSocket = new Socket(HOST, PORT);
-            return clientSocket;
+            return new Socket(HOST, PORT);
         } catch (IOException e) {
             System.out.println("Failed to set up client socket. Retry connecting\n");
             //e.printStackTrace();

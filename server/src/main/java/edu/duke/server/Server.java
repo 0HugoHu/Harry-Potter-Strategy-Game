@@ -41,7 +41,7 @@ public class Server {
     public static void main(String[] args) {
         while (true) {
             // Create a new server
-            Server server = new Server(numPlayers,numUnits);
+            Server server = new Server(numPlayers, numUnits);
             server.initServer();
 
             // Start Game
@@ -108,10 +108,10 @@ public class Server {
      * Initialize Server by number of players
      *
      * @param numOfPlayers Number of players
-     * @param numUnits Number of units for each player
+     * @param numUnits     Number of units for each player
      */
-    public Server(int numOfPlayers,int numUnits) {
-        this.game = new Game(numOfPlayers,numUnits);
+    public Server(int numOfPlayers, int numUnits) {
+        this.game = new Game(numOfPlayers, numUnits);
         try {
             this.serverSocket = new ServerSocket(PORT);
         } catch (Exception e) {

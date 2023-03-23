@@ -42,7 +42,7 @@ public class MoveTurn extends Turn {
     /**
      * Merge move orders
      */
-    public void doMovePhrase() {
+    public void doMovePhase() {
         for (Move move : moves) {
             for (int i = 0; i < move.getNumUnits(); i++) {
                 map.getTerritory(move.getFrom()).removeUnit();

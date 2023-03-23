@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Objects;
 
 import edu.duke.shared.Game;
 import edu.duke.shared.helper.GameObject;
@@ -75,7 +76,7 @@ public class PlayerThread implements Runnable, Serializable {
         if (state != State.WAITING_TO_JOIN && state != State.TURN_END && state != State.GAME_OVER) {
             GameObject obj = new GameObject(this.socket);
             this.currGame = (Game) obj.decodeObj();
-            while (this.currGame==null){
+            while (this.currGame == null) {
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
@@ -113,8 +114,8 @@ public class PlayerThread implements Runnable, Serializable {
                 System.out.println("Received player " + this.playerId + "'s action list.");
 
                 int turnIndex = this.currGame.getTurn();
-                MoveTurn moveTurn = (MoveTurn) this.currGame.getTurnList().get(turnIndex).get(this.playerId).get(0);
-                AttackTurn attackTurn=(AttackTurn) this.currGame.getTurnList().get(turnIndex).get(this.playerId).get(1);
+                MoveTurn moveTurn = (MoveTurn) Objects.requireNonNull(this.currGame.getTurnList().get(turnIndex).get(this.playerId)).get(0);
+                AttackTurn attackTurn = (AttackTurn) Objects.requireNonNull(this.currGame.getTurnList().get(turnIndex).get(this.playerId)).get(1);
                 if (!Validation.checkMoves(moveTurn)) {
                     System.out.println("The move turn from player " + this.playerId + " is illegal.");
                 }
@@ -123,7 +124,7 @@ public class PlayerThread implements Runnable, Serializable {
                 }
                 //TODO: actions if move or attack validation on server fail
 
-                moveTurn.doMovePhrase();
+                moveTurn.doMovePhase();
 
                 // Merge Unit
                 Player p = this.serverGame.getPlayerList().get(this.playerId);

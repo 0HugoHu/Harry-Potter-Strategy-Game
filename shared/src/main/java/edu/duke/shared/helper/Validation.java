@@ -25,9 +25,9 @@ public class Validation {
      * @throws IllegalArgumentException if the order is invalid
      */
     public static void checkIllegalOrderInput(GameMap map, String territoryName1, String territoryName2, int numUnits, String playerName) throws IllegalArgumentException {
-        if (territoryName1!=null && map.getTerritory(territoryName1) == null)
+        if (territoryName1 != null && map.getTerritory(territoryName1) == null)
             throw new IllegalArgumentException("The source territory does not exist\n");
-        if (territoryName2!=null && map.getTerritory(territoryName2) == null)
+        if (territoryName2 != null && map.getTerritory(territoryName2) == null)
             throw new IllegalArgumentException("The destination territory does not exist\n");
         if (numUnits < 0)
             throw new IllegalArgumentException("The number must be greater than or equal to 0\n");
@@ -169,6 +169,7 @@ public class Validation {
     public static boolean checkTerritory(GameMap map, String territoryName, String playerName) {
         return map.getTerritory(territoryName).getOwner().equals(playerName);
     }
+
     /**
      * Check if the territory belongs to the player
      *
@@ -178,17 +179,19 @@ public class Validation {
      * @param numUnits      Number of units
      * @param totalUnits    Total number of usable units
      */
-    public static void checkUnit(GameMap map,String territoryName,int numUnits,int totalUnits,String playerName) throws IllegalArgumentException{
-        checkIllegalOrderInput(map,territoryName,null,numUnits,playerName);
-        if (numUnits>totalUnits) throw new IllegalArgumentException("You only have "+totalUnits+" units remaining\n");
+    public static void checkUnit(GameMap map, String territoryName, int numUnits, int totalUnits, String playerName) throws IllegalArgumentException {
+        checkIllegalOrderInput(map, territoryName, null, numUnits, playerName);
+        if (numUnits > totalUnits)
+            throw new IllegalArgumentException("You only have " + totalUnits + " units remaining\n");
     }
+
     /**
      * Check if the territory belongs to the player
      *
-     * @param scanner       Scanner to read
+     * @param scanner Scanner to read
      * @return an integer read from scanner
      */
-    public static int getValidNumber(Scanner scanner){
+    public static int getValidNumber(Scanner scanner) {
         int numUnits;
         try {
             numUnits = Integer.parseInt(scanner.nextLine());
