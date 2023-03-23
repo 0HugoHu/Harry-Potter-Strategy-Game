@@ -26,8 +26,6 @@
 
 1.1. Run the server by command **./gradlew :server:run**
 
-![](assets/images/1.png)
-
 1.2  Wait for players to connect the srever
 
 ### 2. Players Input Names
