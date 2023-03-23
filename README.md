@@ -61,7 +61,7 @@ Ech player can choose to Attack or Move or Finish Order, and they can do as many
 4.5  If the player thinks he/she can finish placs orders in this turn, then he/she should type "D".  There be a prompt "Waiting for other players..." indicating the player is in the waiting stage.
 
 4.6  After all players have finished ordering, the server will show "Received all action lists.", and start the battling stage. It will print each battle info, demonstrating who is the winner of this battle. Then, a new turn begins.
-![](assets/images/6.png)
+![](assets/images/7.png)
 
 4.7   If one player has lost all his/her territories, then he/she lost. There will be prompt "Player X has lost the game. Game continues." If there is only one player left, then he/she is the winner, showing " Game Over. Player X wins!"
 
