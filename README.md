@@ -25,6 +25,7 @@
 ### 1. Start the Server
 
 1.1. Run the server by command ./gradlew :server:run
+![image](https://sm.ms/image/5r1jlvBeVbExypn)
 
 1.2  Wait for players to connect the srever
 
