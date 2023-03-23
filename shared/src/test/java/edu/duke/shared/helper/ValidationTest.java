@@ -107,10 +107,10 @@ public class ValidationTest {
         from = map.getTerritoriesByOwner(p1.getPlayerName()).get(1).getName();
         to = map.getTerritoriesByOwner(p1.getPlayerName()).get(2).getName();
         mt.addMove(new Move(from, to, 2, p1.getPlayerName()));
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> Validation.checkMove(mt, map.getTerritoriesByOwner(p1.getPlayerName()).get(1).getName(), map.getTerritoriesByOwner(p1.getPlayerName()).get(3).getName(), 5));
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> Validation.checkMove(mt, null, map.getTerritoriesByOwner(p1.getPlayerName()).get(1).getName(), map.getTerritoriesByOwner(p1.getPlayerName()).get(3).getName(), 5));
         assertEquals("The usable units in source are only 4 units\n", thrown.getMessage());
 
-        thrown = assertThrows(IllegalArgumentException.class, () -> Validation.checkMove(mt, map.getTerritoriesByOwner(p1.getPlayerName()).get(1).getName(), map.getTerritoriesByOwner(p2.getPlayerName()).get(0).getName(), 3));
+        thrown = assertThrows(IllegalArgumentException.class, () -> Validation.checkMove(mt, null, map.getTerritoriesByOwner(p1.getPlayerName()).get(1).getName(), map.getTerritoriesByOwner(p2.getPlayerName()).get(0).getName(), 3));
         assertEquals("There is no path from source to destination\n", thrown.getMessage());
 
     }
@@ -134,7 +134,7 @@ public class ValidationTest {
                 t.addUnit(new Unit("Normal"));
         }
         AttackTurn at = new AttackTurn(map, 0, p2.getPlayerName());
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> Validation.checkAttack(at, map.getTerritoriesByOwner(p2.getPlayerName()).get(0).getName(),
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> Validation.checkAttack(at, null, map.getTerritoriesByOwner(p2.getPlayerName()).get(0).getName(),
                 map.getTerritoriesByOwner(p2.getPlayerName()).get(1).getName(), 2));
         assertEquals("You should not attack your territory\n", thrown.getMessage());
         String from1 = null;
@@ -183,7 +183,7 @@ public class ValidationTest {
                 t.addUnit(new Unit("Normal"));
         }
         AttackTurn at = new AttackTurn(map, 0, p2.getPlayerName());
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> Validation.checkAttack(at, map.getTerritoriesByOwner(p2.getPlayerName()).get(0).getName(),
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> Validation.checkAttack(at, null, map.getTerritoriesByOwner(p2.getPlayerName()).get(0).getName(),
                 map.getTerritoriesByOwner(p2.getPlayerName()).get(1).getName(), 2));
         assertEquals("You should not attack your territory\n", thrown.getMessage());
         String from = null;
@@ -198,12 +198,12 @@ public class ValidationTest {
         }
         at.addAttack(new Attack(from, to, 2, p2.getPlayerName()));
         try {
-            Validation.checkAttack(at, from, to, 3);
+            Validation.checkAttack(at, null, from, to, 3);
         } catch (IllegalArgumentException e) {
             assertEquals("The usable units in source are only 2 units\n", e.getMessage());
         }
         try {
-            Validation.checkAttack(at, from, map.getTerritoriesByOwner(p1.getPlayerName()).get(0).getName(), 1);
+            Validation.checkAttack(at, null, from, map.getTerritoriesByOwner(p1.getPlayerName()).get(0).getName(), 1);
         } catch (IllegalArgumentException e) {
             assertEquals("The source and destination is not adjacent\n", e.getMessage());
         }

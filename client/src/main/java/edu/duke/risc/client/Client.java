@@ -20,8 +20,9 @@ import edu.duke.shared.unit.Unit;
 
 public class Client {
     // Host name
-    private final static String HOST = "vcm-30577.vm.duke.edu";
-//    private final static String HOST = "0.0.0.0";
+    //private String HOST = "vcm-30577.vm.duke.edu";
+    //
+     private final String HOST;
     // Port number
     private final static int PORT = 5410;
     // Number of units at the beginning
@@ -47,7 +48,7 @@ public class Client {
      */
     public static void main(String[] args) {
         // Create new client
-        Client client = new Client();
+        Client client = new Client(args[0]);
 
         // Init client
         client.initClient();
@@ -65,15 +66,16 @@ public class Client {
     /*
      * Initialize Client
      */
-    public Client() {
-        this(null);
+    public Client(String HOST) {
+        this(HOST,null);
     }
 
     /*
      * Initialize Client by player name
      * @param playerName Player name
      */
-    public Client(String playerName) {
+    public Client(String HOST,String playerName) {
+        this.HOST=HOST;
         this.playerName = playerName;
         System.out.println("Created a player.\n");
         this.clientSocket = connectSocket(HOST, PORT);
@@ -159,7 +161,7 @@ public class Client {
     private void setupUnits() {
         DisplayMap displayMap = new DisplayMap(this.game, this.playerID);
         System.out.println(displayMap.showMap());
-        System.out.println(displayMap.showUnits(true));
+        System.out.println(displayMap.showUnits(true,null,null));
 
         System.out.println("Please set up your units. You have " + numUnits + " units in total.\n");
         int totalUnits = 0;
@@ -236,7 +238,7 @@ public class Client {
         if (!this.isLoser) {
             String order;
             while (true) {
-                System.out.println(displayMap.showUnits(false));
+                System.out.println(displayMap.showUnits(false,moveTurn,attackTurn));
                 order = scanner.nextLine();
                 if (order.equals("D"))
                     break;
@@ -248,10 +250,10 @@ public class Client {
                     break;
                 switch (order) {
                     case "M":
-                        orderMove(moveTurn);
+                        orderMove(moveTurn,attackTurn);
                         break;
                     case "A":
-                        orderAttack(attackTurn);
+                        orderAttack(attackTurn,moveTurn);
                         break;
                 }
             }
@@ -286,7 +288,7 @@ public class Client {
     /*
      * Order move from player's console
      */
-    private void orderMove(MoveTurn moveTurn) {
+    private void orderMove(MoveTurn moveTurn,AttackTurn attackTurn) {
         System.out.println("Please enter the name of the territory you want to move from:\n");
         String from = scanner.nextLine();
         System.out.println("Please enter the name of the territory you want to move to:\n");
@@ -294,7 +296,7 @@ public class Client {
         System.out.println("Please enter the number of units you want to move:\n");
         int numUnits = Validation.getValidNumber(scanner);
         try {
-            Validation.checkMove(moveTurn, from, to, numUnits);
+            Validation.checkMove(moveTurn, attackTurn, from, to, numUnits);
             moveTurn.addMove(new Move(from, to, numUnits, this.playerName));
         } catch (Exception e) {
             System.out.println("Invalid input: " + e.getMessage());
@@ -303,7 +305,7 @@ public class Client {
                 String operation = scanner.nextLine();
                 if (operation.equals("X")) return;
                 if (operation.equals("C")) {
-                    orderMove(moveTurn);
+                    orderMove(moveTurn,attackTurn);
                     break;
                 }
             }
@@ -313,7 +315,7 @@ public class Client {
     /*
      * Order attack from player's console
      */
-    private void orderAttack(AttackTurn attackTurn) {
+    private void orderAttack(AttackTurn attackTurn,MoveTurn moveTurn) {
         System.out.println("Please enter the name of the territory you want to attack from:\n");
         String from = scanner.nextLine();
         System.out.println("Please enter the name of the territory you want to attack to:\n");
@@ -321,7 +323,7 @@ public class Client {
         System.out.println("Please enter the number of units you want to use in attack:\n");
         int numUnits = Validation.getValidNumber(scanner);
         try {
-            Validation.checkAttack(attackTurn, from, to, numUnits);
+            Validation.checkAttack(attackTurn, moveTurn, from, to, numUnits);
             attackTurn.addAttack(new Attack(from, to, numUnits, this.playerName));
         } catch (Exception e) {
             System.out.println("Invalid input: " + e.getMessage());
@@ -330,7 +332,7 @@ public class Client {
                 String operation = scanner.nextLine();
                 if (operation.equals("X")) return;
                 if (operation.equals("C")) {
-                    orderAttack(attackTurn);
+                    orderAttack(attackTurn,moveTurn);
                     break;
                 }
             }

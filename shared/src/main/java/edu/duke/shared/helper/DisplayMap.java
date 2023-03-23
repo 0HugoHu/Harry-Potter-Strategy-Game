@@ -3,6 +3,9 @@ package edu.duke.shared.helper;
 import edu.duke.shared.Game;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.player.Player;
+import edu.duke.shared.turn.AttackTurn;
+import edu.duke.shared.turn.Move;
+import edu.duke.shared.turn.MoveTurn;
 
 public class DisplayMap {
     // Map
@@ -52,14 +55,15 @@ public class DisplayMap {
      * @param isSetup Whether it is setup phase
      * @return String representation of units
      */
-    public String showUnits(boolean isSetup) {
+    public String showUnits(boolean isSetup, MoveTurn moveTurn, AttackTurn attackTurn) {
         StringBuilder sb = new StringBuilder();
         if (!isSetup)
             sb.append("Turn ").append(this.game.getTurn()).append(":\n\n");
         for (Player p : this.game.getPlayerList()) {
             sb.append(p.getPlayerName()).append(":\n").append("------------------------------------\n");
             for (Territory t : this.game.getMap().getTerritoriesByOwner(p.getPlayerName())) {
-                sb.append(t.getNumUnits()).append(" units in ").append(t.getName()).append(" (next to: ");
+                int numUnits=Validation.numOfChangeUnits(moveTurn,attackTurn,t.getName());
+                sb.append(t.getNumUnits()+numUnits).append(" units in ").append(t.getName()).append(" (next to: ");
                 for (String adjName : t.getAdjacents()) {
                     sb.append(adjName).append(", ");
                 }

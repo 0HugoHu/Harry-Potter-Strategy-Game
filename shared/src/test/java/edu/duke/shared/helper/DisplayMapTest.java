@@ -68,12 +68,12 @@ public class DisplayMapTest {
         displayMap2.showMap();
         displayMap3.showMap();
         displayMap4.showMap();
-        displayMap.showUnits(false);
-        displayMap.showUnits(true);
-        displayMap1.showUnits(true);
-        displayMap2.showUnits(true);
-        displayMap3.showUnits(true);
-        displayMap4.showUnits(true);
+        displayMap.showUnits(false,null,null);
+        displayMap.showUnits(true,null,null);
+        displayMap1.showUnits(true,null,null);
+        displayMap2.showUnits(true,null,null);
+        displayMap3.showUnits(true,null,null);
+        displayMap4.showUnits(true,null,null);
     }
 
     @Test
