@@ -33,7 +33,6 @@
 ### 2. Players Input Names
 
 2.1  Run the client by command line. You need to input your HOST NAME as an argument in the command. For example, if your  host name is "0.0.0.0", you should ues this command:   ./gradlew :client:run --args="0.0.0.0"
-![](assets/images/2.jpeg)
 
 2.2  There should be prompt "Please enter your player name:". Type in your user name (Note: each player should have thier unique name)
 ![](assets/images/3.png)
@@ -43,6 +42,7 @@
 ### 3. Players Input Unit Allocations
 
 3.1  After all players input their names, there will be a display of gamemap as well as the text descriptions. There will be a prompt of "Please enter the name of the territory you want to add units to:", and you should enter the alphabet representing the land you want to add units to; After that, there be a prompt of "Please enter the number of units you want to add(24 Remaining):", and you should just input a number for it. If you don't use up all 24 units, this prompt loop will keep going on until you do.
+![](assets/images/4.png)
 
 3.2  After you finish unit allocation, you will see the prompt"Total units placed: 24. You have placed exactly 24 units." You should just wait for other clients to finish inputing their units allocations.
 
@@ -52,6 +52,7 @@
 
 4.2  There will be prompt "You: X, what would you like to do? (M)ove (A)ttack (D)one
 Ech player can choose to Attack or Move or Finish Order, and they can do as many orders as they want in one turn as long as they have enough units. 
+![](assets/images/5.png)
 
 4.3  If the player choose Move, then he/she should type in "M"; then the player should enter the name of territory he/she wants to move from, the name of territory he/she wants to move to, and the number of units he/she wants to move. After all the inputs and press Enter Key, the move order will be executed automatically and the user can see the unit change.
 
@@ -60,6 +61,7 @@ Ech player can choose to Attack or Move or Finish Order, and they can do as many
 4.5  If the player thinks he/she can finish placs orders in this turn, then he/she should type "D".  There be a prompt "Waiting for other players..." indicating the player is in the waiting stage.
 
 4.6  After all players have finished ordering, the server will show "Received all action lists.", and start the battling stage. It will print each battle info, demonstrating who is the winner of this battle. Then, a new turn begins.
+![](assets/images/6.png)
 
 4.7   If one player has lost all his/her territories, then he/she lost. There will be prompt "Player X has lost the game. Game continues." If there is only one player left, then he/she is the winner, showing " Game Over. Player X wins!"
 
