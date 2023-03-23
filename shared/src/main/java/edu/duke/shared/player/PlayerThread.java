@@ -119,7 +119,7 @@ public class PlayerThread implements Runnable, Serializable {
                 if (!Validation.checkMoves(moveTurn)) {
                     System.out.println("The move turn from player " + this.playerId + " is illegal.");
                 }
-                moveTurn.doMovePhrase();
+                moveTurn.doMovePhase();
                 if (!Validation.checkAttacks(attackTurn)) {
                     System.out.println("The attack turn from player " + this.playerId + " is illegal.");
                 }
