@@ -7,29 +7,29 @@
 ![](https://img.shields.io/badge/milestones-6-red)
 
 ## 0. Group Members
-- 👧 Xueyi Cheng (xc187)
-- 👦 Yadong Hu (yh342)
-- 👦 Yu Wu (yw541)
+- 👧 **Xueyi Cheng** (xc187)
+- 👦 **Yadong Hu** (yh342)
+- 👦 **Yu Wu** (yw541)
 
 
 ## 1. Project Task List
 
 📜 **Click [here](https://prodduke-my.sharepoint.com/:x:/r/personal/yh342_duke_edu/Documents/ECE%20651%20Group%201%20Project%20Task%20List.xlsx?d=w18e83f614ba7499d93c805d3011429e5&csf=1&web=1&e=59rJHC) to visit Excel document.**
 
-<img src="assets/Evo1/excel.png" alt="tasklist" style="width:75%;" />
+<img src="assets/Evo1/excel.png" alt="tasklist" width="75%" />
 
 ## 2. UML Graph
 
 🔎 **Click [here](https://drive.google.com/file/d/1a_QFIG-tIONUMT96SDqLrqM56fD0q7UY/view?usp=sharing) to see the full picture.**
 
-<img src="assets/UML/UML-final.png" alt="umlgraph" style="width:75%;" />
+<img src="assets/UML/UML-final.png" alt="umlgraph" width="75%" />
 
 
 ## 3. Coverage Report
 
 📃 **Click [here](https://hugo.pages.oit.duke.edu/ece651-sp23-group1) for three submodules coverage reports.**
 
-<img src="assets/Evo1/pages.png" alt="coverage" style="width:75%;" />
+<img src="assets/Evo1/pages.png" alt="coverage" width="75%" />
 
 
 ## 4. Tutorials
@@ -45,7 +45,7 @@
 
 Wait for players to connect to the server. You will see the prompt: **"Waiting for players to join..."**.
 
-<img src="assets/Evo1/1.png" style="width:400px;" />
+<img src="assets/Evo1/1.png" width="400" />
 
 ### 4.2. Start the Clients
 
@@ -57,7 +57,7 @@ Wait for players to connect to the server. You will see the prompt: **"Waiting f
 
 You then should see the prompt: **"Currently waiting for other players..."**.
 
-<img src="assets/Evo1/2.png" style="width:350px;" />
+<img src="assets/Evo1/2.png" width="350" />
 
 ### 4.3. Players' Input Names
 
@@ -65,7 +65,7 @@ You then should see the prompt: **"Currently waiting for other players..."**.
 
 🔷 Note: we suggest each player has a unique name, but it is not required.
 
-<img src="assets/Evo1/3.png" style="width:350px;" />
+<img src="assets/Evo1/3.png" width="350" />
 
 
 🔱 4.3.2.  Wait for other clients to finish input their names. You will then automatically be assigned your game ID.
@@ -76,7 +76,7 @@ You then should see the prompt: **"Currently waiting for other players..."**.
 
 🔱 4.4.2. After that, there be a prompt of: **"Please enter the number of units you want to add(24 Remaining):"**, and you should just input a number for it. If you don't use up all 24 units, this prompt loop will keep going until you enter correctly.
 
-<img src="assets/Evo1/4.png" style="width:550px;" />
+<img src="assets/Evo1/4.png" width="550" />
 
 🔱 4.4.3. After you finish all your territories' unit allocation, you will see the prompt: **"Total units placed: 24. You have placed exactly 24 units."** You should just wait for other clients to finish inputing their units.
 
@@ -86,7 +86,7 @@ You then should see the prompt: **"Currently waiting for other players..."**.
 
 🔱 4.5.2. There will be prompt: **"You: X(Your User Name), what would you like to do? (M)ove (A)ttack (D)one“**.
 
-<img src="assets/Evo1/5.png" style="width:450px;" />
+<img src="assets/Evo1/5.png" width="450" />
 
 Each player can choose to attack or move or commit orders, and they can do as many orders as they want in one turn as long as they have enough units.
 
@@ -100,7 +100,7 @@ Each player can choose to attack or move or commit orders, and they can do as ma
 
 🔱 4.5.6. After all players have finished, the server will show: **"Received all action lists."**, and start the battling stage. It will print each battle info, demonstrating who is the winner of this battle. Then, a new turn begins.
 
-<img src="assets/Evo1/7.png" style="width:450px;" />
+<img src="assets/Evo1/7.png" width="450" />
 
 ### 4.6. Game Over
 
