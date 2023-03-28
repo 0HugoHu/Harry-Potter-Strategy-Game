@@ -1,4 +1,4 @@
-package edu.duke.risc.client;
+package edu.duke.risc.clientui;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -40,28 +40,6 @@ public class Client {
     // Flag for client who lost the game
     private boolean isLoser = false;
 
-    /**
-     * main method for the client
-     *
-     * @param args command line arguments
-     */
-    public static void main(String[] args) {
-        // Create new client
-        Client client = new Client(args[0]);
-
-        // Init client
-        client.initClient();
-
-        // Start game
-        while (client.game.getGameState() != State.GAME_OVER) {
-            client.playOneTurn();
-        }
-
-        // End Game
-        System.out.println("Game End.\n");
-        client.safeClose();
-    }
-
     /*
      * Initialize Client
      */
@@ -86,7 +64,6 @@ public class Client {
             return new Socket(HOST, PORT);
         } catch (IOException e) {
             System.out.println("Failed to set up client socket. Retry connecting\n");
-            //e.printStackTrace();
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ie) {
@@ -173,21 +150,24 @@ public class Client {
         int totalUnits = 0;
         HashSet<Territory> terrs = this.game.getPlayer(playerName).getPlayerTerrs();
         for (Territory t : terrs) this.game.getMap().getTerritory(t.getName()).removeAllUnits();
-        while (totalUnits < numUnits) {
-            int numRemainingUnits = Client.numUnits - totalUnits;
-            System.out.println("Please enter the name of the territory you want to add units to:\n");
-            String source = scanner.nextLine();
-            System.out.println("Please enter the number of units you want to add(" + numRemainingUnits + " Remaining):\n");
-            int numUnits = Validation.getValidNumber(scanner);
-            try {
-                Validation.checkUnit(this.game.getMap(), source, numUnits, Client.numUnits - totalUnits, this.playerName);
-                totalUnits += numUnits;
-                for (int i = 0; i < numUnits; i++)
-                    this.game.getMap().getTerritory(source).addUnit(new Unit("Normal"));
-            } catch (Exception e) {
-                System.out.println("Invalid input: " + e.getMessage());
-            }
-        }
+//        while (totalUnits < numUnits) {
+//            int numRemainingUnits = Client.numUnits - totalUnits;
+//            System.out.println("Please enter the name of the territory you want to add units to:\n");
+//            String source = scanner.nextLine();
+//            System.out.println("Please enter the number of units you want to add(" + numRemainingUnits + " Remaining):\n");
+//            int numUnits = Validation.getValidNumber(scanner);
+//            try {
+//                Validation.checkUnit(this.game.getMap(), source, numUnits, Client.numUnits - totalUnits, this.playerName);
+//                totalUnits += numUnits;
+//                for (int i = 0; i < numUnits; i++)
+//                    this.game.getMap().getTerritory(source).addUnit(new Unit("Normal"));
+//            } catch (Exception e) {
+//                System.out.println("Invalid input: " + e.getMessage());
+//            }
+//        }
+
+        for (int i = 0; i < numUnits; i++)
+            this.game.getMap().getTerritory("A").addUnit(new Unit("Normal"));
         System.out.println("Total units placed: " + totalUnits + ". You have placed exactly " + numUnits + " units.");
         GameObject obj = new GameObject(this.clientSocket);
         obj.encodeObj(this.game);
@@ -209,12 +189,13 @@ public class Client {
      */
     private void readPlayerName() {
         // Reading data using readLine
-        System.out.println("Please enter your player name:\n");
-        this.playerName = scanner.nextLine();
-        while (this.playerName == null || this.playerName.isEmpty()) {
-            System.out.println("Player name cannot be empty. Please enter again:");
-            this.playerName = scanner.nextLine();
-        }
+//        System.out.println("Please enter your player name:\n");
+//        this.playerName = scanner.nextLine();
+//        while (this.playerName == null || this.playerName.isEmpty()) {
+//            System.out.println("Player name cannot be empty. Please enter again:");
+//            this.playerName = scanner.nextLine();
+//        }
+        this.playerName = "Player0";
         System.out.println("Set player name to " + this.playerName + ".\nWaiting for other players...\n");
     }
 
@@ -224,7 +205,8 @@ public class Client {
     private void waitForPlayers() {
         // Client receive game from the server
         Game currGame = getGame();
-        assert (currGame.getGameState() != State.READY_TO_INIT_NAME);
+        System.out.println("Current game state: " + currGame.getGameState());
+//        assert (currGame.getGameState() != State.READY_TO_INIT_NAME);
     }
 
     /*

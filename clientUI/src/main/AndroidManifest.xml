@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".client.ClientIntentService"
+            android:name=".clientui.ClientIntentService"
             android:enabled="true"
             android:exported="false" />
     </application>

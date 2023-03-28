@@ -16,8 +16,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import edu.duke.risc.R;
-import edu.duke.risc.client.ClientIntentService;
-import edu.duke.risc.client.ClientResultReceiver;
+import edu.duke.risc.clientui.ClientIntentService;
+import edu.duke.risc.clientui.ClientResultReceiver;
 import edu.duke.risc.ui.view.GameView;
 import edu.duke.shared.Game;
 

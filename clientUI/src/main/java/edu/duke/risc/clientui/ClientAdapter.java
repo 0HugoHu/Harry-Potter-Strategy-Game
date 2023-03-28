@@ -1,7 +1,6 @@
-package edu.duke.risc.client;
+package edu.duke.risc.clientui;
 
 import edu.duke.shared.Game;
-import edu.duke.shared.helper.State;
 
 public class ClientAdapter {
     private static final String HOST = "vcm-30577.vm.duke.edu";
@@ -19,9 +18,10 @@ public class ClientAdapter {
         this.client.initClient();
 
         // Start game
-        while (this.client.accessGame().getGameState() != State.GAME_OVER) {
-            this.client.playOneTurn();
-        }
+//        while (this.client.accessGame().getGameState() != State.GAME_OVER) {
+//            this.client.playOneTurn();
+//        }
+//        this.client.playOneTurn();
 
         // End Game
         System.out.println("Game End.\n");
@@ -35,4 +35,5 @@ public class ClientAdapter {
     public void close() {
         this.client.safeClose();
     }
+
 }
