@@ -8,6 +8,7 @@ import android.os.ResultReceiver;
 import androidx.annotation.Nullable;
 
 import edu.duke.shared.Game;
+import edu.duke.shared.helper.State;
 
 public class ClientIntentService extends IntentService {
 
@@ -22,19 +23,36 @@ public class ClientIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        /*
-         * Step 1: We pass the ResultReceiver from the activity to the intent service via intent.
-         */
         assert intent != null;
         final ResultReceiver receiver = intent.getParcelableExtra("receiver");
-        
-        ClientAdapter client = new ClientAdapter();
-        Game game = client.getGame();
 
-        Bundle b = new Bundle();
-        System.out.println("Game received");
-        b.putSerializable("game", game);
-        receiver.send(STATUS_FINISHED, b);
-        client.close();
+        ClientAdapter client1 = new ClientAdapter();
+        client1.init(true);
+
+        // Mock other 2 players
+        ClientAdapter client2 = new ClientAdapter();
+        ClientAdapter client3 = new ClientAdapter();
+        client2.init(true);
+        client3.init(true);
+
+        while (client1.getGame().getGameState() != State.GAME_OVER) {
+            client1.playOneTurn(false);
+
+            // Mock other players
+            client2.playOneTurn(true);
+            client3.playOneTurn(true);
+
+            Game game = client1.getGame();
+            Bundle b = new Bundle();
+            System.out.println("Game received");
+            b.putSerializable("game", game);
+            receiver.send(STATUS_FINISHED, b);
+        }
+
+        // End Game
+        System.out.println("Game End.\n");
+        client1.close();
+        client2.close();
+        client3.close();
     }
 }

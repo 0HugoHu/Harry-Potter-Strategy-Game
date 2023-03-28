@@ -7,25 +7,16 @@ public class ClientAdapter {
 
     private Client client;
     public ClientAdapter() {
-        init();
-    }
-
-    private void init() {
         // Create new client
         this.client = new Client(HOST);
+    }
 
-        // Init client
-        this.client.initClient();
-
-        // Start game
-//        while (this.client.accessGame().getGameState() != State.GAME_OVER) {
-//            this.client.playOneTurn();
-//        }
-//        this.client.playOneTurn();
-
-        // End Game
-        System.out.println("Game End.\n");
-        this.client.safeClose();
+    public void init(boolean isMock) {
+        if (isMock) {
+            this.client.initClient(true);
+        } else {
+            this.client.initClient(false);
+        }
     }
 
     public Game getGame() {
@@ -34,6 +25,14 @@ public class ClientAdapter {
 
     public void close() {
         this.client.safeClose();
+    }
+
+    public void playOneTurn(boolean isMock) {
+        if (isMock) {
+            this.client.playOneTurnMock();
+        } else {
+            this.client.playOneTurn();
+        }
     }
 
 }

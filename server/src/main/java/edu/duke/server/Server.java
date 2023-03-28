@@ -23,7 +23,7 @@ public class Server {
     // Port number
     private final static int PORT = 5410;
     // Number of players
-    private final static int numPlayers = 1;
+    private final static int numPlayers = 3;
     // Number of units at the beginning
     private final static int numUnits = 24;
     // Gameplay controller
