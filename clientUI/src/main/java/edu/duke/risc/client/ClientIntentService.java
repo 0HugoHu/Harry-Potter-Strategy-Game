@@ -32,11 +32,12 @@ public class ClientIntentService extends IntentService {
         final ResultReceiver receiver = intent.getParcelableExtra("receiver");
 
         Game game = null;
-        Client client = new Client();
+        ClientAdapter client = new ClientAdapter();
         game = client.getGame();
+
         Bundle b = new Bundle();
         b.putSerializable("game", game);
         receiver.send(STATUS_FINISHED, b);
-        client.safeClose();
+        client.close();
     }
 }
