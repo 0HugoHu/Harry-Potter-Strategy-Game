@@ -4,6 +4,8 @@ import static android.view.MotionEvent.INVALID_POINTER_ID;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -18,7 +20,9 @@ import androidx.core.view.MotionEventCompat;
 
 import java.util.ArrayList;
 
+import edu.duke.risc.R;
 import edu.duke.risc.display.draw.MapTiles;
+import edu.duke.risc.display.draw.MapUI;
 import edu.duke.risc.ui.action.TouchEventMapping;
 import edu.duke.risc.ui.state.MapAnimationType;
 import edu.duke.risc.ui.state.MapUpdateType;
@@ -52,9 +56,11 @@ public class GameView extends SurfaceView implements Runnable {
     private boolean mRunning;
     private Thread mGameThread = null;
 
-    private Context mContext;
 
+    // Map tiles Component
     private MapTiles mMapTiles;
+    // Map UI Component
+    private MapUI mMapUI;
 
     private Paint mPaint;
 
@@ -79,6 +85,8 @@ public class GameView extends SurfaceView implements Runnable {
     private String territorySelected = null;
     // Second time territory selected
     private String territorySelectedDouble = null;
+    // Selection bubble bitmap
+    private Bitmap selectionBubbleBitmap;
 
 
     public GameView(Context context) {
@@ -87,13 +95,13 @@ public class GameView extends SurfaceView implements Runnable {
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mContext = context;
         mSurfaceHolder = getHolder();
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setFilterBitmap(true);
         mPaint.setStrokeWidth(1);
         mHandler = new Handler();
         mScaleGestureDetector = new ScaleGestureDetector(context, new ScaleListener());
+        selectionBubbleBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.selection_bubble);
     }
 
     /**
@@ -111,6 +119,7 @@ public class GameView extends SurfaceView implements Runnable {
         mViewWidth = w;
         mViewHeight = h;
         mMapTiles = new MapTiles(mViewWidth, mViewHeight);
+        mMapUI = new MapUI(mViewWidth, mViewHeight, selectionBubbleBitmap);
     }
 
     /**
@@ -133,9 +142,11 @@ public class GameView extends SurfaceView implements Runnable {
                         case REFRESH:
                         case ZOOM:
                             mMapTiles.update(canvas, this.mPaint, this.mGameMap, this.touchEventMapping);
+                            mMapUI.update(canvas, this.mPaint, this.mGameMap, this.touchEventMapping);
                             break;
                         case MOVE:
                             mMapTiles.move(canvas, this.mPaint, this.touchEventMapping, this.offsetX, this.offsetY);
+                            mMapUI.move(canvas, this.mPaint, this.touchEventMapping, this.offsetX, this.offsetY);
                             break;
                     }
 
@@ -150,6 +161,7 @@ public class GameView extends SurfaceView implements Runnable {
                         switch (mAnimationType) {
                             case TERRITORY_SELECTED:
                                 mMapTiles.selected(canvas, this.mPaint, this.touchEventMapping, this.territorySelected, this.territorySelectedDouble);
+                                mMapUI.selected(canvas, this.mPaint, this.touchEventMapping, this.territorySelected, this.territorySelectedDouble);
                                 break;
                             default:
                                 break;

@@ -24,8 +24,7 @@ public class MapTiles {
     private int paddingLeft = 64;
     private int paddingRight = 64;
 
-    // Map scale and offset
-    private float scale = 1.0f;
+    // Map movement offset
     private float offsetX = 0.0f;
     private float offsetY = 0.0f;
 
@@ -59,7 +58,7 @@ public class MapTiles {
     }
 
     public void initColorMapping(ArrayList<Player> players) {
-        int[] colors = new int[]{0xFFDCEDC8, 0xFFCFD8DC, 0xFFD7CCC8, 0xFFC5CAE9};
+        int[] colors = new int[]{0xFFB2DFDB, 0xFFC5CAE9, 0xFFD7CCC8, 0xFFC5CAE9};
         for (Player player : players) {
             this.ownerColor.put(player.getPlayerName(), colors[player.getPlayerId()]);
         }
@@ -77,11 +76,6 @@ public class MapTiles {
     public void move(Canvas canvas, Paint mPaint, TouchEventMapping touchEventMapping, float dx, float dy) {
         this.offsetX = dx;
         this.offsetY = dy;
-        this.update(canvas, mPaint, this.mGameMap, touchEventMapping);
-    }
-
-    public void zoom(Canvas canvas, Paint mPaint, TouchEventMapping touchEventMapping, float scale) {
-        this.scale = scale;
         this.update(canvas, mPaint, this.mGameMap, touchEventMapping);
     }
 
@@ -115,7 +109,7 @@ public class MapTiles {
 
         int height = map.getHeight();
         int width = map.getWidth();
-        int size = (int) (Math.min(this.mapViewWidth / width, this.mapViewHeight / height) * scale);
+        int size = (int) (Math.min(this.mapViewWidth / width, this.mapViewHeight / height));
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -126,17 +120,8 @@ public class MapTiles {
                 mPaint.setColor(ownerColor.getOrDefault(owner, 0xFF000000));
                 byte pattern = map.isBorderPoint(y, x);
 
-                // Update center point of each territory
-                if (touchEventMapping.isCenterPoint(y, x)) {
-                    assert (touchEventMapping.updateTerritoryMapping(map.getTerritoryNameByCoord(y, x), new int[]{(int) (this.paddingTop + offsetY + y * size + size / 2), (int) (this.paddingLeft + offsetX + x * size + size / 2)}));
-                    mPaint.setColor(0xFF000000);
-                    mPaint.setTextSize(size);
-                    canvas.drawText(territoryName + ": " + map.getTerritory(territoryName).getNumUnits(), this.paddingLeft + offsetX + (int) ((x - 0.5) * size), this.paddingTop + offsetY + (int) ((y - 0.5) * size), mPaint);
-                }
-
                 // Draw new tile
                 canvas.drawRect(this.paddingLeft + offsetX + x * size, this.paddingTop + offsetY + y * size, this.paddingLeft + offsetX + x * size + size, this.paddingTop + offsetY + y * size + size, mPaint);
-
 
                 if (pattern != 0) {
                     /* *****************
@@ -144,7 +129,7 @@ public class MapTiles {
                     ****************** */
                     mPaint.setColor(0xFF000000);
                     // If this border is selected
-                    if (territoryName.equals(this.territorySelected)) {
+                    if (territoryName.equals(this.territorySelectedDouble) || territorySelectedDouble == null && territoryName.equals(this.territorySelected)) {
                         this.boarderSize = 6;
                         mPaint.setColor(0xFFFFFFFF);
                     }
@@ -152,8 +137,7 @@ public class MapTiles {
                     /* *****************
                      Draw border of adjacent territory if "move" is selected
                     ****************** */
-
-                    if (this.territorySelected.equals(this.territorySelectedDouble)) {
+                    if (territorySelected != null && this.territorySelected.equals(this.territorySelectedDouble)) {
 
                         if (t.isAdjacent(territorySelectedDouble)) {
                             this.boarderSize = 6;
@@ -167,9 +151,21 @@ public class MapTiles {
                             }
                         }
                     }
-
                     drawBorders(pattern, y, x, size, canvas, mPaint);
-
+                }
+            }
+            // Traversal the line to find the center point, and draw the text
+            // otherwise, the text will be covered by the adjacent tiles
+            for (int x = 0; x < width; x++) {
+                String owner = map.getOwnerByCoord(y, x);
+                String territoryName = map.getTerritoryNameByCoord(y, x);
+                mPaint.setColor(ownerColor.getOrDefault(owner, 0xFF000000));
+                // Update center point of each territory
+                if (touchEventMapping.isCenterPoint(y, x)) {
+                    // show center point
+                    mPaint.setColor(0xFF000000);
+                    mPaint.setTextSize(size);
+                    canvas.drawText(territoryName + ": " + map.getTerritory(territoryName).getNumUnits(), this.paddingLeft + offsetX + (int) ((x - 0.5) * size), this.paddingTop + offsetY + (int) ((y + 0.5) * size), mPaint);
                 }
             }
         }
