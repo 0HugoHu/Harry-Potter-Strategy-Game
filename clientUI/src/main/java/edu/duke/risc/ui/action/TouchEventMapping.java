@@ -33,24 +33,45 @@ public class TouchEventMapping {
      * @return int[] center point
      */
     public int[] getCenterPoint(Territory t) {
-        int top = Integer.MAX_VALUE, bottom = Integer.MIN_VALUE, left = Integer.MAX_VALUE, right = Integer.MIN_VALUE;
+//        int top = Integer.MAX_VALUE, bottom = Integer.MIN_VALUE, left = Integer.MAX_VALUE, right = Integer.MIN_VALUE;
+//        for (int[] coord : t.getCoords()) {
+//            if (coord[0] < top) {
+//                top = coord[0];
+//            }
+//            if (coord[0] > bottom) {
+//                bottom = coord[0];
+//            }
+//            if (coord[1] < left) {
+//                left = coord[1];
+//            }
+//            if (coord[1] > right) {
+//                right = coord[1];
+//            }
+//        }
+//        int[] centerPoint = new int[] {(top + bottom) / 2, (left + right) / 2};
+        int numTerritory = t.getCoords().size();
+        int sumX = 0;
+        int sumY = 0;
         for (int[] coord : t.getCoords()) {
-            if (coord[0] < top) {
-                top = coord[0];
-            }
-            if (coord[0] > bottom) {
-                bottom = coord[0];
-            }
-            if (coord[1] < left) {
-                left = coord[1];
-            }
-            if (coord[1] > right) {
-                right = coord[1];
-            }
+            sumY += coord[0];
+            sumX += coord[1];
         }
-        int[] centerPoint = new int[] {(top + bottom) / 2, (left + right) / 2};
+        int[] centerPoint = new int[] {sumY / numTerritory, sumX / numTerritory};
+        // Check if the center point is inside the territory
+        checkCenterPointInsideTerritory(centerPoint[0], centerPoint[1], t);
         this.centerPoints.add(centerPoint[0] * 100000 + centerPoint[1] + "");
         return centerPoint;
+    }
+
+    private int[] checkCenterPointInsideTerritory(int y, int x, Territory t) {
+        if (t.checkInsideBorders(y, x)) return null;
+        if (t.contains(y, x)) return new int[] {y, x};
+        int[][] offset = new int[][] {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        for (int[] o : offset) {
+            int[] res = checkCenterPointInsideTerritory(y + o[0], x + o[1], t);
+            if (res != null) return res;
+        }
+        return null;
     }
 
     /**

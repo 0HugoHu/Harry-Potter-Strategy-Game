@@ -124,7 +124,7 @@ public class MapTiles {
                     assert (touchEventMapping.updateTerritoryMapping(map.getTerritoryNameByCoord(y, x), new int[]{(int) (this.paddingTop + offsetY + y * size + size / 2), (int) (this.paddingLeft + offsetX + x * size + size / 2)}));
                     mPaint.setColor(0xFF000000);
                     mPaint.setTextSize(size);
-                    canvas.drawText(territoryName + ": " + map.getTerritory(territoryName).getNumUnits(), this.paddingLeft + offsetX + (x - 1) * size, this.paddingTop + offsetY + (y - 1) * size, mPaint);
+                    canvas.drawText(territoryName + ": " + map.getTerritory(territoryName).getNumUnits(), this.paddingLeft + offsetX + (int)((x - 0.5) * size), this.paddingTop + offsetY + (int)((y - 0.5) * size), mPaint);
                 }
 
                 // Draw new tile

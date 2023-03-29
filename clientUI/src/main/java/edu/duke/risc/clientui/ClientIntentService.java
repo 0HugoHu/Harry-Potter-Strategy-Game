@@ -31,17 +31,18 @@ public class ClientIntentService extends IntentService {
 
 
 //        while (client1.getGame().getGameState() != State.GAME_OVER) {
-            Game game = client1.getGame();
-            Bundle b = new Bundle();
-            System.out.println("Game received");
-            b.putSerializable("game", game);
-            receiver.send(STATUS_FINISHED, b);
+
 
             client1.playOneTurn(true);
 //        }
 
+        Game game = client1.getGame();
+        Bundle b = new Bundle();
+        System.out.println("Game received");
+        b.putSerializable("game", game);
+        receiver.send(STATUS_FINISHED, b);
         // End Game
         System.out.println("Game End.\n");
-        client1.close();
+//        client1.close();
     }
 }

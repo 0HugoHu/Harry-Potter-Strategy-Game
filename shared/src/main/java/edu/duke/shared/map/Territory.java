@@ -25,6 +25,8 @@ public class Territory implements Serializable {
     private final HashSet<int[]> coords;
     // Adjacent Territory name
     private final HashSet<String> adjs;
+    // Territory borders, up, down, right, left
+    private int[] borders;
 
     /**
      * Initialize Territory by name
@@ -32,12 +34,7 @@ public class Territory implements Serializable {
      * @param name Territory name
      */
     public Territory(String name) {
-        this.name = name;
-        this.owner = "";
-        this.playerOwner = null;
-        this.units = new ArrayList<>();
-        this.coords = new HashSet<>();
-        this.adjs = new HashSet<>();
+        this(name, null, "", new ArrayList<>(), new HashSet<>(), new HashSet<>());
     }
 
     /**
@@ -57,7 +54,35 @@ public class Territory implements Serializable {
         this.units = units;
         this.coords = coords;
         this.adjs = adjs;
+        // Initialize borders
+        // This is not the actual borders, but the borders of the rectangle that contains all the coordinates
+        this.borders = new int[] {Integer.MAX_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE};
+        for (int[] coord : this.coords) {
+            if (coord[0] < this.borders[0]) {
+                this.borders[0] = coord[0];
+            }
+            if (coord[0] > this.borders[1]) {
+                this.borders[1] = coord[0];
+            }
+            if (coord[1] > this.borders[2]) {
+                this.borders[2] = coord[1];
+            }
+            if (coord[1] < this.borders[3]) {
+                this.borders[3] = coord[1];
+            }
+        }
     }
+
+    /**
+     * Check if a coordinate is inside this territory rectangle block
+     * @param y y coordinate to be checked
+     * @param x x coordinate to be checked
+     * @return true if inside
+     */
+    public boolean checkInsideBorders(int y, int x) {
+        return y < this.borders[0] || y > this.borders[1] || x > this.borders[2] || x < this.borders[3];
+    }
+
 
 
     /**
@@ -254,6 +279,20 @@ public class Territory implements Serializable {
     public boolean contains(int[] coord) {
         for (int[] c : coords) {
             if (c[0] == coord[0] && c[1] == coord[1]) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Test if a coordinate is in this territory
+     *
+     * @param y y coordinate
+     * @param x x coordinate
+     * @return territory contains the coordinate
+     */
+    public boolean contains(int y, int x) {
+        for (int[] c : coords) {
+            if (c[0] == y && c[1] == x) return true;
         }
         return false;
     }
