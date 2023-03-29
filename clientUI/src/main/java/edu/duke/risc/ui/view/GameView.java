@@ -2,6 +2,7 @@ package edu.duke.risc.ui.view;
 
 import static android.view.MotionEvent.INVALID_POINTER_ID;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -15,11 +16,14 @@ import android.view.SurfaceView;
 
 import androidx.core.view.MotionEventCompat;
 
+import java.util.ArrayList;
+
 import edu.duke.risc.display.draw.MapTiles;
 import edu.duke.risc.ui.action.TouchEventMapping;
 import edu.duke.risc.ui.state.MapAnimationType;
 import edu.duke.risc.ui.state.MapUpdateType;
 import edu.duke.shared.map.GameMap;
+import edu.duke.shared.player.Player;
 
 /**
  * This class demonstrates the following interactive game basics:
@@ -168,6 +172,10 @@ public class GameView extends SurfaceView implements Runnable {
         mUpdateType = MapUpdateType.REFRESH;
     }
 
+    public void initColorMapping(ArrayList<Player> players) {
+        mMapTiles.initColorMapping(players);
+    }
+
     /**
      * Move the map to a new position.
      * @param x offset in x direction
@@ -217,6 +225,7 @@ public class GameView extends SurfaceView implements Runnable {
      * @param event The MotionEvent object.
      * @return True if the event was handled, false otherwise.
      */
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Let the ScaleGestureDetector read possible gestures and

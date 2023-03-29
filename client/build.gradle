@@ -1,3 +1,4 @@
+//file:noinspection GrDeprecatedAPIUsage
 buildscript {
     repositories {
         mavenCentral()
@@ -48,4 +49,9 @@ clover{
         xml=true
         html = true
     }
+}
+
+task('runClient', type: JavaExec) {
+    main = 'edu.duke.risc.client.Client'
+    classpath = sourceSets.main.runtimeClasspath
 }

@@ -29,30 +29,19 @@ public class ClientIntentService extends IntentService {
         ClientAdapter client1 = new ClientAdapter();
         client1.init(true);
 
-        // Mock other 2 players
-        ClientAdapter client2 = new ClientAdapter();
-        ClientAdapter client3 = new ClientAdapter();
-        client2.init(true);
-        client3.init(true);
 
-        while (client1.getGame().getGameState() != State.GAME_OVER) {
-            client1.playOneTurn(false);
-
-            // Mock other players
-            client2.playOneTurn(true);
-            client3.playOneTurn(true);
-
+//        while (client1.getGame().getGameState() != State.GAME_OVER) {
             Game game = client1.getGame();
             Bundle b = new Bundle();
             System.out.println("Game received");
             b.putSerializable("game", game);
             receiver.send(STATUS_FINISHED, b);
-        }
+
+            client1.playOneTurn(true);
+//        }
 
         // End Game
         System.out.println("Game End.\n");
         client1.close();
-        client2.close();
-        client3.close();
     }
 }

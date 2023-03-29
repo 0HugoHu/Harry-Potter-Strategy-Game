@@ -19,6 +19,12 @@ import edu.duke.shared.turn.Turn;
 import edu.duke.shared.unit.Unit;
 
 public class Game implements Serializable {
+    // Number of units at the beginning
+    private final static int numTerritories = 24;
+    // Map width and height
+    private final static int mapWidth = 60;
+    private final static int mapHeight = 30;
+
     // Game meta data
     private final Header header;
     // Number of players
@@ -52,7 +58,7 @@ public class Game implements Serializable {
      * @param numPlayers Number of players
      */
     public Game(int numPlayers, int numUnits) {
-        this(numPlayers, numUnits, new MapFactory(30, 60, 12).createRandomMap());
+        this(numPlayers, numUnits, new MapFactory(Game.mapHeight, Game.mapWidth, Game.numTerritories).createRandomMap());
     }
 
     /**

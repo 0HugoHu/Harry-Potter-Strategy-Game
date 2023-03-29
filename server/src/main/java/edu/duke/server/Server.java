@@ -232,18 +232,6 @@ public class Server {
      */
     public void allocateTerritories() {
         this.game.allocateTerritories();
-        /*
-        GameMap gameMap = this.game.getMap();
-        int numTerrs = gameMap.getNumTerritories();
-        int numPlayers = this.game.getNumPlayers();
-        ArrayList<Territory> terrs = gameMap.getTerritories();
-        ArrayList<Player> players = game.getPlayerList();
-        for (int i = 0; i < numTerrs; i++) {
-            players.get(i / (numTerrs / numPlayers)).expandTerr(terrs.get(i));
-            terrs.get(i).changePlayerOwner(players.get(i / (numTerrs / numPlayers)));
-            terrs.get(i).changeOwner(players.get(i / (numTerrs / numPlayers)).getPlayerName());
-        }
-        */
     }
 
     /**

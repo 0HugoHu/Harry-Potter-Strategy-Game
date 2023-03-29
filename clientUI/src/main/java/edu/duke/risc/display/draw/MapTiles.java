@@ -3,6 +3,7 @@ package edu.duke.risc.display.draw;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,6 +11,7 @@ import java.util.Map;
 
 import edu.duke.risc.ui.action.TouchEventMapping;
 import edu.duke.shared.map.GameMap;
+import edu.duke.shared.player.Player;
 
 public class MapTiles {
     // Map view width and height
@@ -34,6 +36,9 @@ public class MapTiles {
     // Territory selected
     private String territorySelected = null;
 
+    // Territory color mapping
+    Map<String, Integer> ownerColor = new HashMap<>();
+
 
     /**
      * Constructor
@@ -48,6 +53,13 @@ public class MapTiles {
         this.paddingBottom = this.paddingTop;
         this.mapViewWidth = viewWidth - this.paddingLeft - this.paddingRight;
         this.mapViewHeight = viewHeight - this.paddingTop - this.paddingBottom;
+    }
+
+    public void initColorMapping(ArrayList<Player> players) {
+        int[] colors = new int[]{0xFF1ABC9C, 0xFF3498DB, 0xFFE74C3C, 0xFFF1C40F};
+        for (Player player : players) {
+            this.ownerColor.put(player.getPlayerName(), colors[player.getPlayerId()]);
+        }
     }
 
     /**
@@ -95,14 +107,6 @@ public class MapTiles {
             return;
         }
         this.mGameMap = map;
-
-        Set<String> owners = new HashSet<>();
-        Map<String, Integer> ownerColor = new HashMap<>();
-        ownerColor.put("Player0", 0xFF1ABC9C);
-        ownerColor.put("Player1", 0xFF3498DB);
-        ownerColor.put("Player2", 0xFFE74C3C);
-        ownerColor.put("Player3", 0xFFF1C40F);
-
 
         int height = map.getHeight();
         int width = map.getWidth();

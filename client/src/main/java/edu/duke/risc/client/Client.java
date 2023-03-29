@@ -37,6 +37,8 @@ public class Client {
     private final Socket clientSocket;
     // Scanner
     Scanner scanner = new Scanner(System.in);
+    // Flag for mock client
+    private boolean isMock = false;
 
     // Flag for client who lost the game
     private boolean isLoser = false;
@@ -49,13 +51,18 @@ public class Client {
     public static void main(String[] args) {
         // Create new client
         Client client = new Client(args[0]);
+        client.isMock = args[1].equals("mock");
 
         // Init client
-        client.initClient();
+        client.initClient(client.isMock);
 
         // Start game
         while (client.game.getGameState() != State.GAME_OVER) {
-            client.playOneTurn();
+            if (client.isMock) {
+                client.playOneTurnMock();
+            } else {
+                client.playOneTurn();
+            }
         }
 
         // End Game
@@ -135,13 +142,13 @@ public class Client {
     /*
      * Initialize client
      */
-    private void initClient() {
+    private void initClient(boolean isMock) {
         System.out.println("Currently waiting for other players...");
         // Wait until all players have joined the game
         waitForPlayers();
 
         // Send player name
-        sendPlayerName();
+        sendPlayerName(isMock);
 
         // Client receive game from the server
         Game currGame = getGame();
@@ -152,7 +159,11 @@ public class Client {
         System.out.println("Your game ID is: " + this.playerID + "\n");
 
         // Units initialization
-        setupUnits();
+        if (isMock) {
+            setupUnitsMock();
+        } else {
+            setupUnits();
+        }
     }
 
     /*
@@ -187,12 +198,23 @@ public class Client {
         obj.encodeObj(this.game);
     }
 
+    private void setupUnitsMock() {
+        for (int i = 0; i < numUnits; i++)
+            this.game.getMap().getTerritoriesByOwner(this.playerName).get(0).addUnit(new Unit("Normal"));
+        GameObject obj = new GameObject(this.clientSocket);
+        obj.encodeObj(this.game);
+    }
+
     /*
      * Send player name to server
      */
-    private void sendPlayerName() {
+    private void sendPlayerName(boolean isMock) {
         // Read player name
-        readPlayerName();
+        if (isMock) {
+            readPlayerNameMock();
+        } else {
+            readPlayerName();
+        }
         this.game.setPlayerName(this.playerName);
         GameObject obj = new GameObject(this.clientSocket);
         obj.encodeObj(this.game);
@@ -210,6 +232,10 @@ public class Client {
             this.playerName = scanner.nextLine();
         }
         System.out.println("Set player name to " + this.playerName + ".\nWaiting for other players...\n");
+    }
+
+    private void readPlayerNameMock() {
+        this.playerName = "Player" + (int) (Math.random() * 10000);
     }
 
     /*
@@ -268,6 +294,20 @@ public class Client {
 
         // Receive turn result
         receiveTurnResult();
+    }
+
+    public void playOneTurnMock() {
+        // Client receive game from the server
+        this.game = getGame();
+
+        // Read instructions
+        MoveTurn moveTurn = new MoveTurn(this.game.getMap(), this.game.getTurn(), this.playerName);
+        AttackTurn attackTurn = new AttackTurn(this.game.getMap(), this.game.getTurn(), this.playerName);
+
+        // Done
+        this.game.addToTurnMap(this.playerID, moveTurn, attackTurn);
+        GameObject obj = new GameObject(this.clientSocket);
+        obj.encodeObj(this.game);
     }
 
     /*

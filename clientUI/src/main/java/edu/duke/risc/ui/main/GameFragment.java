@@ -23,11 +23,10 @@ import edu.duke.shared.Game;
 
 public class GameFragment extends Fragment implements ClientResultReceiver.AppReceiver {
 
-    private GameViewModel mViewModel;
-
-    private TextView myTextView;
-
     private GameView mGameView;
+
+    // if setup color mapping
+    private boolean isColorMapping = false;
 
     public static GameFragment newInstance() {
         return new GameFragment();
@@ -36,7 +35,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(GameViewModel.class);
+        GameViewModel mViewModel = new ViewModelProvider(this).get(GameViewModel.class);
 
     }
 
@@ -52,7 +51,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        myTextView = requireView().findViewById(R.id.message);
         registerService();
     }
 
@@ -77,10 +75,16 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     @Override
     public void onReceiveResult(int resultCode, Bundle resultData) {
         Game game = (Game) resultData.getSerializable("game");
+        if (!isColorMapping) {
+            mGameView.initColorMapping(game.getPlayerList());
+            isColorMapping = true;
+        }
 //        String message = new DisplayMap(game.getMap()).toString();
 //        Log.v("XXX", message);
-        if (game != null)
+        if (game != null) {
             mGameView.updateMap(game.getMap());
+        }
+
         // Text view
 //        myTextView.setText(message);
     }

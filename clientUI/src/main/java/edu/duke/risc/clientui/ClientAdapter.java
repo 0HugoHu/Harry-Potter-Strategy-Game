@@ -5,18 +5,14 @@ import edu.duke.shared.Game;
 public class ClientAdapter {
     private static final String HOST = "vcm-30577.vm.duke.edu";
 
-    private Client client;
+    private final Client client;
     public ClientAdapter() {
         // Create new client
         this.client = new Client(HOST);
     }
 
     public void init(boolean isMock) {
-        if (isMock) {
-            this.client.initClient(true);
-        } else {
-            this.client.initClient(false);
-        }
+        this.client.initClient(isMock);
     }
 
     public Game getGame() {
