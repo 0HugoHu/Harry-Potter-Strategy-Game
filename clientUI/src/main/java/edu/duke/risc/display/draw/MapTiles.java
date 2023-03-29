@@ -162,6 +162,7 @@ public class MapTiles {
                 mPaint.setColor(ownerColor.getOrDefault(owner, 0xFF000000));
                 // Update center point of each territory
                 if (touchEventMapping.isCenterPoint(y, x)) {
+                    assert (touchEventMapping.updateTerritoryMapping(map.getTerritoryNameByCoord(y, x), new int[]{(int) (this.paddingTop + offsetY + y * size + size / 2), (int) (this.paddingLeft + offsetX + x * size + size / 2)}));
                     // show center point
                     mPaint.setColor(0xFF000000);
                     mPaint.setTextSize(size);

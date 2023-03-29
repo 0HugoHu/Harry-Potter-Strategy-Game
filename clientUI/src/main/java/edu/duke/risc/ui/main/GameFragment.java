@@ -74,15 +74,17 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
      */
     @Override
     public void onReceiveResult(int resultCode, Bundle resultData) {
-        Game game = (Game) resultData.getSerializable("game");
-        if (!isColorMapping) {
-            mGameView.initColorMapping(game.getPlayerList());
-            isColorMapping = true;
-        }
+        if (resultCode == ClientIntentService.STATUS_FINISHED) {
+            Game game = (Game) resultData.getSerializable("game");
+            if (!isColorMapping) {
+                mGameView.initColorMapping(game.getPlayerList());
+                isColorMapping = true;
+            }
 //        String message = new DisplayMap(game.getMap()).toString();
 //        Log.v("XXX", message);
-        if (game != null) {
-            mGameView.updateMap(game.getMap());
+            if (game != null) {
+                mGameView.updateMap(game.getMap());
+            }
         }
 
         // Text view

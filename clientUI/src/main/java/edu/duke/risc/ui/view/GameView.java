@@ -101,7 +101,7 @@ public class GameView extends SurfaceView implements Runnable {
         mPaint.setStrokeWidth(1);
         mHandler = new Handler();
         mScaleGestureDetector = new ScaleGestureDetector(context, new ScaleListener());
-        selectionBubbleBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.selection_bubble);
+        selectionBubbleBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.selection_bubble_bold);
     }
 
     /**
