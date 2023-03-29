@@ -221,7 +221,7 @@ public class Client {
     private void waitForPlayers() {
         // Client receive game from the server
         Game currGame = getGame();
-        assert (currGame.getGameState() != State.READY_TO_INIT_NAME);
+        assert (currGame.getGameState().equals(State.READY_TO_INIT_NAME));
     }
 
     /*

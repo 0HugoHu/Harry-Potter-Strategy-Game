@@ -124,6 +124,14 @@ public class GameMap implements Serializable {
         return null;
     }
 
+    public String getOwnerByTerrName(String name) {
+        for (Territory t : this.territories) {
+            if (t.getName().equals(name))
+                return t.getOwner();
+        }
+        return null;
+    }
+
     /**
      * Get a territory by coordinate
      *

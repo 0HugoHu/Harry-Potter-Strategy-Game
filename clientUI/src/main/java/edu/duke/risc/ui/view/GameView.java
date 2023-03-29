@@ -75,7 +75,10 @@ public class GameView extends SurfaceView implements Runnable {
     private boolean isClick = true;
 
     private boolean animationTimer500 = true;
+    // Territory selected
     private String territorySelected = null;
+    // Second time territory selected
+    private String territorySelectedDouble = null;
 
 
     public GameView(Context context) {
@@ -146,7 +149,7 @@ public class GameView extends SurfaceView implements Runnable {
                     if (animationTimer500) {
                         switch (mAnimationType) {
                             case TERRITORY_SELECTED:
-                                mMapTiles.selected(canvas, this.mPaint, this.touchEventMapping, this.territorySelected);
+                                mMapTiles.selected(canvas, this.mPaint, this.touchEventMapping, this.territorySelected, this.territorySelectedDouble);
                                 break;
                             default:
                                 break;
@@ -178,6 +181,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     /**
      * Move the map to a new position.
+     *
      * @param x offset in x direction
      * @param y offset in y direction
      */
@@ -189,6 +193,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     /**
      * Zoom the map to a new scale.
+     *
      * @param scale the canvas
      */
     private void zoomMap(float scale) {
@@ -280,7 +285,15 @@ public class GameView extends SurfaceView implements Runnable {
                     if (this.touchEventMapping != null) {
                         mAnimationType = MapAnimationType.TERRITORY_SELECTED;
 //                        animationTimer500();
-                        territorySelected = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX());
+                        // Record the last touch territory
+                        if (territorySelected == null) {
+                            territorySelected = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX());
+                        } else if (territorySelectedDouble == null) {
+                            territorySelectedDouble = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX());
+                        } else {
+                            territorySelected = territorySelectedDouble;
+                            territorySelectedDouble = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX());
+                        }
                     }
                 }
 

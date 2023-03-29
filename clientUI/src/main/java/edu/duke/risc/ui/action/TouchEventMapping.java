@@ -33,6 +33,7 @@ public class TouchEventMapping {
      * @return int[] center point
      */
     public int[] getCenterPoint(Territory t) {
+        // Abandoned method
 //        int top = Integer.MAX_VALUE, bottom = Integer.MIN_VALUE, left = Integer.MAX_VALUE, right = Integer.MIN_VALUE;
 //        for (int[] coord : t.getCoords()) {
 //            if (coord[0] < top) {
@@ -49,16 +50,30 @@ public class TouchEventMapping {
 //            }
 //        }
 //        int[] centerPoint = new int[] {(top + bottom) / 2, (left + right) / 2};
-        int numTerritory = t.getCoords().size();
-        int sumX = 0;
-        int sumY = 0;
+        // Abandoned method
+//        int numTerritory = t.getCoords().size();
+//        int sumX = 0;
+//        int sumY = 0;
+//        for (int[] coord : t.getCoords()) {
+//            sumY += coord[0];
+//            sumX += coord[1];
+//        }
+//        // Check if the center point is inside the territory
+//        centerPoint = checkCenterPointInsideTerritory(centerPoint[0], centerPoint[1], t);
+
+        float minDistance = Float.MAX_VALUE;
+        int[] centerPoint = new int[2];
         for (int[] coord : t.getCoords()) {
-            sumY += coord[0];
-            sumX += coord[1];
+            float distance = 0.0f;
+            for (int[] coord2 : t.getCoords()) {
+                distance += Math.sqrt(Math.pow(coord[0] - coord2[0], 2) + Math.pow(coord[1] - coord2[1], 2));
+            }
+            if (distance < minDistance) {
+                minDistance = distance;
+                centerPoint = new int[] {coord[0], coord[1]};
+            }
         }
-        int[] centerPoint = new int[] {sumY / numTerritory, sumX / numTerritory};
-        // Check if the center point is inside the territory
-        checkCenterPointInsideTerritory(centerPoint[0], centerPoint[1], t);
+
         this.centerPoints.add(centerPoint[0] * 100000 + centerPoint[1] + "");
         return centerPoint;
     }
