@@ -64,7 +64,7 @@ public class MapTiles {
     }
 
     public void initColorMapping(ArrayList<Player> players) {
-        int[] colors = new int[]{0x40B2DFDB, 0x60C5CAE9, 0x20D7CCC8, 0x20C5CAE9};
+        int[] colors = new int[]{0x44003366, 0x44660000, 0x44003300, 0x44CC9900};
         for (Player player : players) {
             this.ownerColor.put(player.getPlayerName(), colors[player.getPlayerId()]);
         }
@@ -133,7 +133,7 @@ public class MapTiles {
                 byte pattern = map.isBorderPoint(y, x);
 
                 // Draw new tile
-                //canvas.drawRect(this.paddingLeft + offsetX + x * size, this.paddingTop + offsetY + y * size, this.paddingLeft + offsetX + x * size + size, this.paddingTop + offsetY + y * size + size, mPaint);
+                canvas.drawRect(this.paddingLeft + offsetX + x * size, this.paddingTop + offsetY + y * size, this.paddingLeft + offsetX + x * size + size, this.paddingTop + offsetY + y * size + size, mPaint);
 
                 if (pattern != 0) {
                     /* *****************
