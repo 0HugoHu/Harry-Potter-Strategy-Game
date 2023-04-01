@@ -1,4 +1,4 @@
-package edu.duke.risc.display.draw;
+package edu.duke.risc.ui.draw;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -105,17 +105,21 @@ public class MapUI {
             Territory t;
             if (territorySelectedDouble == null) {
                 t = map.getTerritory(territorySelected);
+            } else if (territorySelectedDouble.equals("Outside")){
+                return;
             } else {
                 t = map.getTerritory(territorySelectedDouble);
             }
-            String territoryName = t.getName();
+            if (t != null) {
+                String territoryName = t.getName();
 
-            if (territoryName.equals(this.territorySelectedDouble) || territoryName.equals(this.territorySelected)) {
-                int[] centerPoint = touchEventMapping.getCenterPoint(t);
-                int baseX = (int) (centerPoint[1] * size + offsetX + paddingLeft);
-                int baseY = (int) (centerPoint[0] * size + offsetY + paddingTop);
-                Rect rectangle = new Rect(baseX - 150, baseY - 350, baseX + 150, baseY);
-                canvas.drawBitmap(this.selectionBubbleBitmap, null, rectangle, null);
+                if (territoryName.equals(this.territorySelectedDouble) || territoryName.equals(this.territorySelected)) {
+                    int[] centerPoint = touchEventMapping.getCenterPoint(t);
+                    int baseX = (int) (centerPoint[1] * size + offsetX + paddingLeft);
+                    int baseY = (int) (centerPoint[0] * size + offsetY + paddingTop);
+                    Rect rectangle = new Rect(baseX - 150, baseY - 350, baseX + 150, baseY);
+                    canvas.drawBitmap(this.selectionBubbleBitmap, null, rectangle, null);
+                }
             }
 
         }

@@ -1,4 +1,4 @@
-package edu.duke.risc.clientui;
+package edu.duke.risc.client;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -8,7 +8,6 @@ import android.os.ResultReceiver;
 import androidx.annotation.Nullable;
 
 import edu.duke.shared.Game;
-import edu.duke.shared.helper.State;
 
 public class ClientIntentService extends IntentService {
 

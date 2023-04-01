@@ -21,8 +21,8 @@ import androidx.core.view.MotionEventCompat;
 import java.util.ArrayList;
 
 import edu.duke.risc.R;
-import edu.duke.risc.display.draw.MapTiles;
-import edu.duke.risc.display.draw.MapUI;
+import edu.duke.risc.ui.draw.MapTiles;
+import edu.duke.risc.ui.draw.MapUI;
 import edu.duke.risc.ui.action.TouchEventMapping;
 import edu.duke.risc.ui.state.MapAnimationType;
 import edu.duke.risc.ui.state.MapUpdateType;
@@ -87,6 +87,8 @@ public class GameView extends SurfaceView implements Runnable {
     private String territorySelectedDouble = null;
     // Selection bubble bitmap
     private Bitmap selectionBubbleBitmap;
+    // Background image
+    private final Bitmap backgroundImageBitmap;
 
 
     public GameView(Context context) {
@@ -95,13 +97,14 @@ public class GameView extends SurfaceView implements Runnable {
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mSurfaceHolder = getHolder();
-        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaint.setFilterBitmap(true);
-        mPaint.setStrokeWidth(1);
-        mHandler = new Handler();
-        mScaleGestureDetector = new ScaleGestureDetector(context, new ScaleListener());
-        selectionBubbleBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.selection_bubble_bold);
+        this.mSurfaceHolder = getHolder();
+        this.mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        this.mPaint.setFilterBitmap(true);
+        this.mPaint.setStrokeWidth(1);
+        this.mHandler = new Handler();
+        this.mScaleGestureDetector = new ScaleGestureDetector(context, new ScaleListener());
+        this.selectionBubbleBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.selection_bubble_bold);
+        this.backgroundImageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.backgroud_map);
     }
 
     /**
@@ -118,7 +121,7 @@ public class GameView extends SurfaceView implements Runnable {
         super.onSizeChanged(w, h, oldw, oldh);
         mViewWidth = w;
         mViewHeight = h;
-        mMapTiles = new MapTiles(mViewWidth, mViewHeight);
+        mMapTiles = new MapTiles(mViewWidth, mViewHeight, backgroundImageBitmap);
         mMapUI = new MapUI(mViewWidth, mViewHeight, selectionBubbleBitmap);
     }
 

@@ -1,4 +1,4 @@
-package edu.duke.risc.clientui;
+package edu.duke.risc.client;
 
 import edu.duke.shared.Game;
 

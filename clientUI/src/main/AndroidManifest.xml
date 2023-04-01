@@ -19,7 +19,8 @@
             android:name=".MainActivity"
             android:screenOrientation="sensorLandscape"
             android:keepScreenOn="true"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.RISC.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,7 +28,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".clientui.ClientIntentService"
+            android:name=".client.ClientIntentService"
             android:enabled="true"
             android:exported="false" />
     </application>

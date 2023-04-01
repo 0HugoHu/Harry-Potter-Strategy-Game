@@ -11,6 +11,8 @@ public class TouchEventMapping {
     private final HashMap<String, int[]> territoryMapping = new HashMap<>();
     // Center points of territories
     private final HashSet<String> centerPoints = new HashSet<>();
+    // Map border for up, right, down, left
+    private int[] mapBorder = new int[4];
     // Map view width and height
     private float scale = 1.0f;
 
@@ -20,10 +22,7 @@ public class TouchEventMapping {
      */
     public TouchEventMapping(GameMap gameMap) {
         for (Territory t : gameMap.getTerritories()) {
-            int[] coord = new int[2];
-            coord[0] = this.getCenterPoint(t)[0];
-            coord[1] = this.getCenterPoint(t)[1];
-            territoryMapping.put(t.getName(), coord);
+            territoryMapping.put(t.getName(), new int[] {this.getCenterPoint(t)[0], this.getCenterPoint(t)[1]});
         }
     }
 
@@ -33,34 +32,6 @@ public class TouchEventMapping {
      * @return int[] center point
      */
     public int[] getCenterPoint(Territory t) {
-        // Abandoned method
-//        int top = Integer.MAX_VALUE, bottom = Integer.MIN_VALUE, left = Integer.MAX_VALUE, right = Integer.MIN_VALUE;
-//        for (int[] coord : t.getCoords()) {
-//            if (coord[0] < top) {
-//                top = coord[0];
-//            }
-//            if (coord[0] > bottom) {
-//                bottom = coord[0];
-//            }
-//            if (coord[1] < left) {
-//                left = coord[1];
-//            }
-//            if (coord[1] > right) {
-//                right = coord[1];
-//            }
-//        }
-//        int[] centerPoint = new int[] {(top + bottom) / 2, (left + right) / 2};
-        // Abandoned method
-//        int numTerritory = t.getCoords().size();
-//        int sumX = 0;
-//        int sumY = 0;
-//        for (int[] coord : t.getCoords()) {
-//            sumY += coord[0];
-//            sumX += coord[1];
-//        }
-//        // Check if the center point is inside the territory
-//        centerPoint = checkCenterPointInsideTerritory(centerPoint[0], centerPoint[1], t);
-
         float minDistance = Float.MAX_VALUE;
         int[] centerPoint = new int[2];
         for (int[] coord : t.getCoords()) {
@@ -73,20 +44,8 @@ public class TouchEventMapping {
                 centerPoint = new int[] {coord[0], coord[1]};
             }
         }
-
         this.centerPoints.add(centerPoint[0] * 100000 + centerPoint[1] + "");
         return centerPoint;
-    }
-
-    private int[] checkCenterPointInsideTerritory(int y, int x, Territory t) {
-        if (t.checkInsideBorders(y, x)) return null;
-        if (t.contains(y, x)) return new int[] {y, x};
-        int[][] offset = new int[][] {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
-        for (int[] o : offset) {
-            int[] res = checkCenterPointInsideTerritory(y + o[0], x + o[1], t);
-            if (res != null) return res;
-        }
-        return null;
     }
 
     /**
@@ -114,6 +73,15 @@ public class TouchEventMapping {
     }
 
     /**
+     * Update the map border
+     * @param boundary map border
+     */
+    public void updateBoundary(int[] boundary) {
+        System.out.println("Update boundary: " + boundary[0] + " " + boundary[1] + " " + boundary[2] + " " + boundary[3]);
+        this.mapBorder = boundary;
+    }
+
+    /**
      * Set the scale of the map
      * @param scale scale of the map
      */
@@ -128,6 +96,8 @@ public class TouchEventMapping {
      * @return the territory name that is closest to the touch point
      */
     public String getOnTouchObject(int y, int x) {
+        // Check if the touch point is inside a territory
+        if (isNotInsideMap(y, x)) return "Outside";
         // Convert to original coordinate
         y = (int) (y / this.scale);
         x = (int) (x / this.scale);
@@ -144,5 +114,15 @@ public class TouchEventMapping {
             }
         }
         return closestTerritory;
+    }
+
+    /**
+     * Check if the coordinate is not inside the map
+     * @param y y coordinate
+     * @param x x coordinate
+     * @return true if the coordinate is not inside the map, false otherwise
+     */
+    private boolean isNotInsideMap(int y, int x) {
+        return y < this.mapBorder[0] || y > this.mapBorder[2] || x < this.mapBorder[3] || x > this.mapBorder[1];
     }
 }

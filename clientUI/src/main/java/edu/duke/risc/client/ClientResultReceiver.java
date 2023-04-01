@@ -1,4 +1,4 @@
-package edu.duke.risc.clientui;
+package edu.duke.risc.client;
 
 import android.os.Bundle;
 import android.os.Handler;

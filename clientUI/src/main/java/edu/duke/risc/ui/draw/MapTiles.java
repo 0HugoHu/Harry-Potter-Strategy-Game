@@ -1,7 +1,9 @@
-package edu.duke.risc.display.draw;
+package edu.duke.risc.ui.draw;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +12,7 @@ import java.util.Set;
 import java.util.Map;
 
 import edu.duke.risc.ui.action.TouchEventMapping;
+import edu.duke.shared.helper.Validation;
 import edu.duke.shared.map.GameMap;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.player.Player;
@@ -40,6 +43,8 @@ public class MapTiles {
 
     // Territory color mapping
     Map<String, Integer> ownerColor = new HashMap<>();
+    // Background image
+    private final Bitmap backgroundImageBitmap;
 
 
     /**
@@ -48,17 +53,18 @@ public class MapTiles {
      * @param viewWidth  width of the view
      * @param viewHeight height of the view
      */
-    public MapTiles(int viewWidth, int viewHeight) {
+    public MapTiles(int viewWidth, int viewHeight, Bitmap backgroundImageBitmap) {
         this.paddingLeft = Math.max(viewWidth / 10, this.paddingLeft);
         this.paddingTop = Math.max(viewHeight / 10, this.paddingRight);
         this.paddingRight = this.paddingLeft;
         this.paddingBottom = this.paddingTop;
         this.mapViewWidth = viewWidth - this.paddingLeft - this.paddingRight;
         this.mapViewHeight = viewHeight - this.paddingTop - this.paddingBottom;
+        this.backgroundImageBitmap = backgroundImageBitmap;
     }
 
     public void initColorMapping(ArrayList<Player> players) {
-        int[] colors = new int[]{0xFFB2DFDB, 0xFFC5CAE9, 0xFFD7CCC8, 0xFFC5CAE9};
+        int[] colors = new int[]{0x40B2DFDB, 0x60C5CAE9, 0x20D7CCC8, 0x20C5CAE9};
         for (Player player : players) {
             this.ownerColor.put(player.getPlayerName(), colors[player.getPlayerId()]);
         }
@@ -111,6 +117,12 @@ public class MapTiles {
         int width = map.getWidth();
         int size = (int) (Math.min(this.mapViewWidth / width, this.mapViewHeight / height));
 
+        // Draw background image
+        Rect src = new Rect((int)(this.paddingLeft + offsetX), (int)(this.paddingTop + offsetY), (int)(this.paddingLeft + offsetX) + width * size, (int)(this.paddingTop + offsetY) + height * size);
+        canvas.drawBitmap(this.backgroundImageBitmap, null, src, null);
+
+        System.out.println(territorySelected + " " + territorySelectedDouble);
+
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 String owner = map.getOwnerByCoord(y, x);
@@ -121,7 +133,7 @@ public class MapTiles {
                 byte pattern = map.isBorderPoint(y, x);
 
                 // Draw new tile
-                canvas.drawRect(this.paddingLeft + offsetX + x * size, this.paddingTop + offsetY + y * size, this.paddingLeft + offsetX + x * size + size, this.paddingTop + offsetY + y * size + size, mPaint);
+                //canvas.drawRect(this.paddingLeft + offsetX + x * size, this.paddingTop + offsetY + y * size, this.paddingLeft + offsetX + x * size + size, this.paddingTop + offsetY + y * size + size, mPaint);
 
                 if (pattern != 0) {
                     /* *****************
@@ -138,7 +150,6 @@ public class MapTiles {
                      Draw border of adjacent territory if "move" is selected
                     ****************** */
                     if (territorySelected != null && this.territorySelected.equals(this.territorySelectedDouble)) {
-
                         if (t.isAdjacent(territorySelectedDouble)) {
                             this.boarderSize = 6;
                             // Self territory
@@ -149,6 +160,11 @@ public class MapTiles {
                             else {
                                 mPaint.setColor(0xFFEF5350);
                             }
+                        }
+                        // Also add border of the territory that can be visited by path
+                        if (!territorySelected.equals("Outside") && Validation.checkPathExist(map, territorySelected, territoryName)) {
+                            this.boarderSize = 6;
+                            mPaint.setColor(0xFF29B6F6);
                         }
                     }
                     drawBorders(pattern, y, x, size, canvas, mPaint);
@@ -170,6 +186,7 @@ public class MapTiles {
                 }
             }
         }
+        touchEventMapping.updateBoundary(new int[] {(int)(this.paddingTop + offsetY), (int)(this.paddingLeft + offsetX + width * size), (int)(this.paddingTop + offsetY + height * size), (int)(this.paddingLeft + offsetX)});
     }
 
     private void drawBorders(byte pattern, int y, int x, int size, Canvas canvas, Paint mPaint) {
