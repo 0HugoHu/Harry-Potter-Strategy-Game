@@ -9,4 +9,15 @@
     <string name="action_settings">Settings</string>
 
     <string name="background_map">Backgroud Map</string>
+
+    <string name="cost">Cost:</string>
+    <string name="zero">0</string>
+    <string name="cost_fault">Your food is not enough! Consider switching a destination or reducing the number of units!</string>
+    <string name="attack">Attack</string>
+    <string name="move">Move</string>
+    <string name="back">Back</string>
+    <string name="example_unit">Boggarts</string>
+    <string name="example_unit2">Dementors</string>
+    <string name="example_unit3">Goblins</string>
+    <string name="example_unit4">Werewolves</string>
 </resources>

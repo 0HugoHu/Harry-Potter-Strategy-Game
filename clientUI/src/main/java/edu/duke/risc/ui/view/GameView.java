@@ -10,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Handler;
+import android.text.method.Touch;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -26,6 +27,7 @@ import edu.duke.risc.ui.draw.MapUI;
 import edu.duke.risc.ui.action.TouchEventMapping;
 import edu.duke.risc.ui.state.MapAnimationType;
 import edu.duke.risc.ui.state.MapUpdateType;
+import edu.duke.risc.ui.state.TouchEvent;
 import edu.duke.shared.map.GameMap;
 import edu.duke.shared.player.Player;
 
@@ -62,7 +64,7 @@ public class GameView extends SurfaceView implements Runnable {
     // Map UI Component
     private MapUI mMapUI;
 
-    private Paint mPaint;
+    private final Paint mPaint;
 
     private int mViewWidth;
     private int mViewHeight;
@@ -85,10 +87,13 @@ public class GameView extends SurfaceView implements Runnable {
     private String territorySelected = null;
     // Second time territory selected
     private String territorySelectedDouble = null;
+    // Store the previous clicked territory
+    private String territorySelectedPrevious = null;
     // Selection bubble bitmap
-    private Bitmap selectionBubbleBitmap;
+    private final Bitmap selectionBubbleBitmap;
     // Background image
     private final Bitmap backgroundImageBitmap;
+    private EventListener eventListener;
 
 
     public GameView(Context context) {
@@ -302,12 +307,22 @@ public class GameView extends SurfaceView implements Runnable {
 //                        animationTimer500();
                         // Record the last touch territory
                         if (territorySelected == null) {
-                            territorySelected = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX());
+                            territorySelected = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX(), territorySelected);
                         } else if (territorySelectedDouble == null) {
-                            territorySelectedDouble = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX());
+                            territorySelectedDouble = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX(), territorySelected);
+                            // When the first touch is a territory, and the second touch is an
+                            // action, the first territory will be recorded.
+                            if (!TouchEventMapping.checkIsAction(territorySelected) && territorySelectedDouble.equals(TouchEvent.ORDER.name())) {
+                                territorySelectedPrevious = territorySelected;
+                            }
+                            actionCallback();
                         } else {
+                            if (!TouchEventMapping.checkIsAction(territorySelected) && territorySelectedDouble.equals(TouchEvent.ORDER.name())) {
+                                territorySelectedPrevious = territorySelected;
+                            }
                             territorySelected = territorySelectedDouble;
-                            territorySelectedDouble = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX());
+                            territorySelectedDouble = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX(), territorySelected);
+                            actionCallback();
                         }
                     }
                 }
@@ -343,6 +358,36 @@ public class GameView extends SurfaceView implements Runnable {
         return true;
     }
 
+    public void setEventListener(GameView.EventListener eventListener) {
+        this.eventListener = eventListener;
+    }
+
+    private void actionCallback() {
+        // Callback function in GameFragment
+        TouchEvent touchEvent = TouchEventMapping.getAction(territorySelected, territorySelectedDouble, territorySelectedPrevious, mGameMap);
+        if (touchEvent != null) {
+            switch (touchEvent) {
+                case UNIT:
+                    System.out.println("UNIT ORDER");
+                    eventListener.onUnitOrder(territorySelected);
+                    break;
+                case PROP:
+                    System.out.println("PROP ORDER");
+                    eventListener.onPropOrder(territorySelected);
+                    break;
+                case ATTACK:
+                    System.out.println("ATTACK ORDER");
+                    eventListener.onAttackOrder(territorySelectedPrevious, territorySelectedDouble);
+                    break;
+                case MOVE:
+                    System.out.println("MOVE ORDER");
+                    eventListener.onMoveOrder(territorySelectedPrevious, territorySelectedDouble);
+                default:
+                    break;
+            }
+        }
+    }
+
     /**
      * ScaleListener is used to detect pinch to zoom gestures.
      */
@@ -376,4 +421,14 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
 
+    public abstract static class EventListener {
+
+        public abstract void onMoveOrder(String terrFrom, String terrTo);
+
+        public abstract void onAttackOrder(String terrFrom, String terrTo);
+
+        public abstract void onPropOrder(String territoryName);
+
+        public abstract void onUnitOrder(String territoryName);
+    }
 }

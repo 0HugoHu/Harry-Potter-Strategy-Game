@@ -5,12 +5,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.text.method.Touch;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import edu.duke.risc.ui.action.TouchEventMapping;
+import edu.duke.risc.ui.state.TouchEvent;
 import edu.duke.shared.map.GameMap;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.player.Player;
@@ -20,8 +22,8 @@ public class MapUI {
     private final int mapViewWidth;
     private final int mapViewHeight;
     // Padding
-    private int paddingTop = 64;
-    private int paddingBottom = 64;
+    private int paddingTop;
+    private int paddingBottom;
     private int paddingLeft = 64;
     private int paddingRight = 64;
 
@@ -99,13 +101,13 @@ public class MapUI {
 
         int height = map.getHeight();
         int width = map.getWidth();
-        int size = (int) (Math.min(this.mapViewWidth / width, this.mapViewHeight / height));
+        int size = Math.min(this.mapViewWidth / width, this.mapViewHeight / height);
 
         if (territorySelected != null) {
             Territory t;
             if (territorySelectedDouble == null) {
                 t = map.getTerritory(territorySelected);
-            } else if (territorySelectedDouble.equals("Outside")){
+            } else if (territorySelectedDouble.equals(TouchEvent.OUTSIDE.name())){
                 return;
             } else {
                 t = map.getTerritory(territorySelectedDouble);
@@ -117,7 +119,11 @@ public class MapUI {
                     int[] centerPoint = touchEventMapping.getCenterPoint(t);
                     int baseX = (int) (centerPoint[1] * size + offsetX + paddingLeft);
                     int baseY = (int) (centerPoint[0] * size + offsetY + paddingTop);
-                    Rect rectangle = new Rect(baseX - 150, baseY - 350, baseX + 150, baseY);
+                    Rect rectangle = new Rect(baseX - 4 * size, baseY - 9 * size, baseX + 4 * size, baseY);
+                    // Update the selection panel center point with its radius
+                    assert(touchEventMapping.updateSelectionPanelMapping(TouchEvent.ORDER.name(), new int[] {baseY - 5 * size, baseX + 2 * size}, 2 * size));
+                    assert(touchEventMapping.updateSelectionPanelMapping(TouchEvent.UNIT.name(), new int[] {baseY - 5 * size, baseX - 2 * size}, 2 * size));
+                    assert(touchEventMapping.updateSelectionPanelMapping(TouchEvent.PROP.name(), new int[] {baseY - 2 * size, baseX}, 2 * size));
                     canvas.drawBitmap(this.selectionBubbleBitmap, null, rectangle, null);
                 }
             }
