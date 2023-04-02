@@ -55,7 +55,6 @@
     <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
     <method v="2">
       <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="ClientMock" run_configuration_type="ShConfigurationType" />
     </method>
   </configuration>
 </component>

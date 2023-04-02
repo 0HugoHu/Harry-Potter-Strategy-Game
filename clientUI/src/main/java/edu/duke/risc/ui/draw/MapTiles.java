@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.Map;
 
 import edu.duke.risc.ui.action.TouchEventMapping;
+import edu.duke.risc.ui.state.TouchEvent;
 import edu.duke.shared.helper.Validation;
 import edu.duke.shared.map.GameMap;
 import edu.duke.shared.map.Territory;
@@ -22,8 +23,8 @@ public class MapTiles {
     private final int mapViewWidth;
     private final int mapViewHeight;
     // Padding
-    private int paddingTop = 64;
-    private int paddingBottom = 64;
+    private int paddingTop;
+    private int paddingBottom;
     private int paddingLeft = 64;
     private int paddingRight = 64;
 
@@ -115,7 +116,7 @@ public class MapTiles {
 
         int height = map.getHeight();
         int width = map.getWidth();
-        int size = (int) (Math.min(this.mapViewWidth / width, this.mapViewHeight / height));
+        int size = Math.min(this.mapViewWidth / width, this.mapViewHeight / height);
 
         // Draw background image
         Rect src = new Rect((int)(this.paddingLeft + offsetX), (int)(this.paddingTop + offsetY), (int)(this.paddingLeft + offsetX) + width * size, (int)(this.paddingTop + offsetY) + height * size);
@@ -141,16 +142,16 @@ public class MapTiles {
                     ****************** */
                     mPaint.setColor(0xFF000000);
                     // If this border is selected
-                    if (territoryName.equals(this.territorySelectedDouble) || territorySelectedDouble == null && territoryName.equals(this.territorySelected)) {
+                    if (showCurrentTerr(territoryName, territorySelected, territorySelectedDouble)) {
                         this.boarderSize = 6;
                         mPaint.setColor(0xFFFFFFFF);
                     }
 
                     /* *****************
-                     Draw border of adjacent territory if "move" is selected
+                     Draw border of adjacent territory if "order" button is clicked
                     ****************** */
-                    if (territorySelected != null && this.territorySelected.equals(this.territorySelectedDouble)) {
-                        if (t.isAdjacent(territorySelectedDouble)) {
+                    if (showAdjacentTerr(territorySelected, territorySelectedDouble)) {
+                        if (t.isAdjacent(territorySelected)) {
                             this.boarderSize = 6;
                             // Self territory
                             if (owner.equals(selectedOwner)) {
@@ -162,7 +163,7 @@ public class MapTiles {
                             }
                         }
                         // Also add border of the territory that can be visited by path
-                        if (!territorySelected.equals("Outside") && Validation.checkPathExist(map, territorySelected, territoryName)) {
+                        if (showSelfTerr(territoryName, territorySelected)) {
                             this.boarderSize = 6;
                             mPaint.setColor(0xFF29B6F6);
                         }
@@ -210,4 +211,29 @@ public class MapTiles {
         this.boarderSize = 2;
     }
 
+    /**
+     * Check if the territory been selected should display its border
+     * @param territoryName the territory name been checked
+     * @param selected1 the first selected event
+     * @param selected2 the second selected event
+     * @return true if the territory should display its border
+     */
+    private boolean showCurrentTerr(String territoryName, String selected1, String selected2) {
+        // If the territory is selected
+        if (territoryName.equals(selected2)) return true;
+        // If the territory is selected from the first time
+        if (selected2 == null && territoryName.equals(selected1)) return true;
+        // If "order" action is selected
+        return !TouchEventMapping.checkIsAction(selected1) && territoryName.equals(selected1) && selected2 != null && selected2.equals(TouchEvent.ORDER.name());
+    }
+
+    private boolean showAdjacentTerr(String selected1, String selected2) {
+        // If "order" action is selected
+        return selected1 != null && selected2 != null && selected2.equals(TouchEvent.ORDER.name());
+    }
+
+    private boolean showSelfTerr(String territoryName,String selected1) {
+        // If "order" action is selected
+        return !TouchEventMapping.checkIsAction(selected1) && !selected1.equals(territoryName) && Validation.checkPathExist(this.mGameMap, selected1, territoryName);
+    }
 }

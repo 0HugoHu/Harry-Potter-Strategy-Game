@@ -1,14 +1,20 @@
 package edu.duke.risc.ui.action;
 
+import android.text.method.Touch;
+
 import java.util.HashMap;
 import java.util.HashSet;
 
+import edu.duke.risc.ui.state.TouchEvent;
+import edu.duke.shared.helper.Validation;
 import edu.duke.shared.map.GameMap;
 import edu.duke.shared.map.Territory;
 
 public class TouchEventMapping {
     // Mapping from territory name to center point
     private final HashMap<String, int[]> territoryMapping = new HashMap<>();
+    // Mapping from action name to selection panel center point and radius
+    private final HashMap<String, int[]> selectionPanelMapping = new HashMap<>();
     // Center points of territories
     private final HashSet<String> centerPoints = new HashSet<>();
     // Map border for up, right, down, left
@@ -18,16 +24,21 @@ public class TouchEventMapping {
 
     /**
      * Constructor
+     *
      * @param gameMap GameMap
      */
     public TouchEventMapping(GameMap gameMap) {
         for (Territory t : gameMap.getTerritories()) {
-            territoryMapping.put(t.getName(), new int[] {this.getCenterPoint(t)[0], this.getCenterPoint(t)[1]});
+            territoryMapping.put(t.getName(), new int[]{this.getCenterPoint(t)[0], this.getCenterPoint(t)[1]});
+        }
+        for (String action : new String[]{TouchEvent.PROP.name(), TouchEvent.ORDER.name(), TouchEvent.UNIT.name()}) {
+            selectionPanelMapping.put(action, new int[]{0, 0, 0});
         }
     }
 
     /**
      * Get the center point of a territory
+     *
      * @param t Territory
      * @return int[] center point
      */
@@ -41,7 +52,7 @@ public class TouchEventMapping {
             }
             if (distance < minDistance) {
                 minDistance = distance;
-                centerPoint = new int[] {coord[0], coord[1]};
+                centerPoint = new int[]{coord[0], coord[1]};
             }
         }
         this.centerPoints.add(centerPoint[0] * 100000 + centerPoint[1] + "");
@@ -50,6 +61,7 @@ public class TouchEventMapping {
 
     /**
      * Check if the coordinate is a center point of a territory
+     *
      * @param y y coordinate
      * @param x x coordinate
      * @return true if the coordinate is a center point of a territory, false otherwise
@@ -60,8 +72,9 @@ public class TouchEventMapping {
 
     /**
      * Update the territory mapping
+     *
      * @param territoryName territory name
-     * @param coord coordinate of the territory
+     * @param coord         coordinate of the territory
      * @return true if the territory mapping is updated successfully, false otherwise
      */
     public boolean updateTerritoryMapping(String territoryName, int[] coord) {
@@ -73,16 +86,33 @@ public class TouchEventMapping {
     }
 
     /**
+     * Update the selection panel mapping
+     *
+     * @param actionName action name
+     * @param coord      coordinate of the selection panel
+     * @param radius     radius of the selection panel
+     * @return true if the selection panel mapping is updated successfully, false otherwise
+     */
+    public boolean updateSelectionPanelMapping(String actionName, int[] coord, int radius) {
+        if (selectionPanelMapping.containsKey(actionName)) {
+            selectionPanelMapping.put(actionName, new int[]{coord[0], coord[1], radius});
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Update the map border
+     *
      * @param boundary map border
      */
     public void updateBoundary(int[] boundary) {
-        System.out.println("Update boundary: " + boundary[0] + " " + boundary[1] + " " + boundary[2] + " " + boundary[3]);
         this.mapBorder = boundary;
     }
 
     /**
      * Set the scale of the map
+     *
      * @param scale scale of the map
      */
     public void setScale(float scale) {
@@ -91,13 +121,25 @@ public class TouchEventMapping {
 
     /**
      * Get the territory name that is closest to the touch point
+     *
      * @param y y coordinate of the touch point
      * @param x x coordinate of the touch point
      * @return the territory name that is closest to the touch point
      */
-    public String getOnTouchObject(int y, int x) {
+    public String getOnTouchObject(int y, int x, String selected2) {
+        // First check if it is on the selection panel
+        if (selected2 == null || !TouchEventMapping.checkIsAction(selected2)) {
+            for (String actionName : selectionPanelMapping.keySet()) {
+                // coord[0] is y coordinate, coord[1] is x coordinate, coord[2] is radius
+                int[] coord = selectionPanelMapping.get(actionName);
+                assert coord != null;
+                if (Math.sqrt(Math.pow(coord[0] - y, 2) + Math.pow(coord[1] - x, 2)) < coord[2]) {
+                    return actionName;
+                }
+            }
+        }
         // Check if the touch point is inside a territory
-        if (isNotInsideMap(y, x)) return "Outside";
+        if (isNotInsideMap(y, x)) return TouchEvent.OUTSIDE.name();
         // Convert to original coordinate
         y = (int) (y / this.scale);
         x = (int) (x / this.scale);
@@ -118,11 +160,49 @@ public class TouchEventMapping {
 
     /**
      * Check if the coordinate is not inside the map
+     *
      * @param y y coordinate
      * @param x x coordinate
      * @return true if the coordinate is not inside the map, false otherwise
      */
     private boolean isNotInsideMap(int y, int x) {
         return y < this.mapBorder[0] || y > this.mapBorder[2] || x < this.mapBorder[3] || x > this.mapBorder[1];
+    }
+
+
+    public static boolean checkIsAction(String string) {
+        for (TouchEvent event : TouchEvent.values()) {
+            if (event.name().equals(string)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static TouchEvent getAction(String selected1, String selected2, String terrFrom, GameMap map) {
+        if (selected1 == null || selected2 == null) return null;
+        // Property and Unit info
+        if (!TouchEventMapping.checkIsAction(selected1) && TouchEventMapping.checkIsAction(selected2)) {
+            switch (TouchEvent.valueOf(selected2)) {
+                case PROP:
+                    return TouchEvent.PROP;
+                case UNIT:
+                    return TouchEvent.UNIT;
+            }
+        }
+        // Attack or Move
+        if (TouchEventMapping.checkIsAction(selected1) && !TouchEventMapping.checkIsAction(selected2)) {
+            if (selected1.equals(TouchEvent.ORDER.name()) && terrFrom != null) {
+                // Target territory is not self
+                if (Validation.checkAdjacent(map, terrFrom, selected2) && !map.getOwnerByTerrName(selected2).equals(map.getOwnerByTerrName(terrFrom))) {
+                    return TouchEvent.ATTACK;
+                }
+                // Target territory is self's, but not itself
+                if (Validation.checkPathExist(map, terrFrom, selected2) && !terrFrom.equals(selected2)) {
+                    return TouchEvent.MOVE;
+                }
+            }
+        }
+        return null;
     }
 }

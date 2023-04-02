@@ -57,10 +57,10 @@ public class Client {
         client.initClient(client.isMock);
 
         // Start game
-        while (client.game.getGameState() != State.GAME_OVER) {
-            if (client.isMock) {
-                client.playOneTurnMock();
-            } else {
+        if (client.isMock) {
+            client.playOneTurnMock();
+        } else {
+            while (client.game.getGameState() != State.GAME_OVER) {
                 client.playOneTurn();
             }
         }
