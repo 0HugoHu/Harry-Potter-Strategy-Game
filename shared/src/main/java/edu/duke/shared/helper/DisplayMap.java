@@ -68,7 +68,11 @@ public class DisplayMap {
                     sb.append(adjName).append(", ");
                 }
                 sb.delete(sb.length() - 2, sb.length());
-                sb.append(")\n");
+                sb.append(")");
+                sb.append(" [");
+                sb.append("Unicorn Horns: ").append(t.getHorns()).append(", ");
+                sb.append("Silver Coins: ").append(t.getCoins()).append(".");
+                sb.append("]\n");
             }
             sb.append("\n\n");
         }

@@ -2,6 +2,7 @@ package edu.duke.shared.map;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import edu.duke.shared.player.Player;
@@ -27,6 +28,17 @@ public class Territory implements Serializable {
     private final HashSet<String> adjs;
 
     /**
+     * This is the corresponding food resources in our design
+     */
+    private int coins;
+    /**
+     * This is the corresponding tech resources in our design
+     */
+    private int horns;
+
+    private boolean[] ResourcePro;
+
+    /**
      * Initialize Territory by name
      *
      * @param name Territory name
@@ -38,6 +50,9 @@ public class Territory implements Serializable {
         this.units = new ArrayList<>();
         this.coords = new HashSet<>();
         this.adjs = new HashSet<>();
+        this.coins=0;
+        this.horns=0;
+        this.ResourcePro=new boolean[]{false,false};
     }
 
     /**
@@ -50,13 +65,17 @@ public class Territory implements Serializable {
      * @param coords      Coordinates inside this territory
      * @param adjs        Adjacent territories
      */
-    public Territory(String name, Player playerOwner, String owner, ArrayList<Unit> units, HashSet<int[]> coords, HashSet<String> adjs) {
+    public Territory(String name, Player playerOwner, String owner, ArrayList<Unit> units, HashSet<int[]> coords,
+                     HashSet<String> adjs) {
         this.playerOwner = playerOwner;
         this.name = name;
         this.owner = owner;
         this.units = units;
         this.coords = coords;
         this.adjs = adjs;
+        this.coins=0;
+        this.horns=0;
+        this.ResourcePro=new boolean[]{false,false};
     }
 
 
@@ -146,12 +165,20 @@ public class Territory implements Serializable {
      */
     public boolean removeUnit() {
         for (Unit u : this.units) {
-            if (u.getType().equals(UnitType.NORMAL)) {
+            if (u.getType().equals(UnitType.GNOME)) {
                 this.units.remove(u);
                 return true;
             }
         }
         return false;
+    }
+
+    public int getCoinsNum(){
+        return coins;
+    }
+
+    public int getHornsNum(){
+        return horns;
     }
 
 
@@ -279,6 +306,64 @@ public class Territory implements Serializable {
         return this.units.size();
     }
 
+    public int getCoins() {
+        return coins;
+    }
+
+    public void addCoins(int coins) {
+        this.coins +=coins;
+    }
+
+    public void minusCoins(int coins) {
+        this.coins -=coins;
+    }
+
+
+    public int getHorns() {
+        return horns;
+    }
+
+    public void addHorns(int horns) {
+        this.horns +=horns;
+    }
+
+    public void minusHorns(int horns) {
+        this.horns -=horns;
+    }
+
+    public boolean[] getReources(){
+        return this.ResourcePro;
+    }
+
+    public void setUnicornLand(){
+        ResourcePro[0]=true;
+    }
+
+    public void setNifflerLand(){
+        ResourcePro[1]=true;
+    }
+
+    /**
+     * check if this land produces Unicorn horn
+     * @return
+     */
+    public boolean checkUnicornLand(){
+        if(ResourcePro[0]){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * check if this land produces silver coin
+     * @return
+     */
+    public boolean checkNifflerLand(){
+        if(ResourcePro[1]){
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Get all coordinates on this territory

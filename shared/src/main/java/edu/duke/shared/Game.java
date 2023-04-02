@@ -314,7 +314,7 @@ public class Game implements Serializable {
         for (Map.Entry<Territory, Integer> entry : unitAddMap.entrySet()) {
             Territory currTerr = entry.getKey();
             for (int i = 0; i < entry.getValue(); i++) {
-                currTerr.addUnit(new Unit("Normal"));
+                currTerr.addUnit(new Unit("Gnome"));
             }
         }
     }
@@ -530,6 +530,19 @@ public class Game implements Serializable {
             players.get(i / (numTerrs / numPlayers)).expandTerr(terrs.get(i));
             terrs.get(i).changePlayerOwner(players.get(i / (numTerrs / numPlayers)));
             terrs.get(i).changeOwner(players.get(i / (numTerrs / numPlayers)).getPlayerName());
+            int k=numTerrs / numPlayers;
+            if(i==0){
+                terrs.get(i).addHorns(50);
+                terrs.get(i).setUnicornLand();
+            }
+            else if(i%k==0){
+                terrs.get(i).addHorns(50);
+                terrs.get(i).setUnicornLand();
+            }
+            else{
+                terrs.get(i).addCoins(100);
+                terrs.get(i).setNifflerLand();
+            }
         }
     }
 

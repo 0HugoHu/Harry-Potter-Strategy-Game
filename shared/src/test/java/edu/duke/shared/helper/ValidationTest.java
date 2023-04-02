@@ -68,7 +68,7 @@ public class ValidationTest {
         game.allocateTerritories();
         for (Territory t : map.getTerritories()) {
             for (int i = 0; i < 4; i++)
-                t.addUnit(new Unit("Normal"));
+                t.addUnit(new Unit("Gnome"));
         }
         MoveTurn mt = new MoveTurn(map, 0, p1.getPlayerName());
         String from = map.getTerritoriesByOwner(p1.getPlayerName()).get(0).getName();
@@ -98,7 +98,7 @@ public class ValidationTest {
         game.allocateTerritories();
         for (Territory t : map.getTerritories()) {
             for (int i = 0; i < 4; i++)
-                t.addUnit(new Unit("Normal"));
+                t.addUnit(new Unit("Gnome"));
         }
         MoveTurn mt = new MoveTurn(map, 0, p1.getPlayerName());
         String from = map.getTerritoriesByOwner(p1.getPlayerName()).get(0).getName();
@@ -131,7 +131,7 @@ public class ValidationTest {
         game.allocateTerritories();
         for (Territory t : map.getTerritories()) {
             for (int i = 0; i < 4; i++)
-                t.addUnit(new Unit("Normal"));
+                t.addUnit(new Unit("Gnome"));
         }
         AttackTurn at = new AttackTurn(map, 0, p2.getPlayerName());
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> Validation.checkAttack(at, null, map.getTerritoriesByOwner(p2.getPlayerName()).get(0).getName(),
@@ -180,7 +180,7 @@ public class ValidationTest {
         game.allocateTerritories();
         for (Territory t : map.getTerritories()) {
             for (int i = 0; i < 4; i++)
-                t.addUnit(new Unit("Normal"));
+                t.addUnit(new Unit("Gnome"));
         }
         AttackTurn at = new AttackTurn(map, 0, p2.getPlayerName());
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> Validation.checkAttack(at, null, map.getTerritoriesByOwner(p2.getPlayerName()).get(0).getName(),
