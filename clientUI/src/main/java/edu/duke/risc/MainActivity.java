@@ -33,18 +33,4 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    /**
-     * Hide the action bar and the status bar
-     */
-    private void hideActionBar() {
-        View decorView = getWindow().getDecorView();
-        // Hide the status bar.
-        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
-        // Remember that you should never show the action bar if the
-        // status bar is hidden, so hide that too if necessary.
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.hide();
-    }
 }

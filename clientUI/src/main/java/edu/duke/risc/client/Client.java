@@ -21,7 +21,7 @@ public class Client {
     // Host name
     //private String HOST = "vcm-30577.vm.duke.edu";
     //
-     private final String HOST;
+    private final String HOST;
     // Port number
     private final static int PORT = 5410;
     // Number of units at the beginning
@@ -44,7 +44,7 @@ public class Client {
      * Initialize Client
      */
     public Client(String HOST) {
-        this(HOST,null);
+        this(HOST, null);
     }
 
     /*
@@ -52,7 +52,7 @@ public class Client {
      * @param playerName Player name
      */
     public Client(String HOST, String playerName) {
-        this.HOST=HOST;
+        this.HOST = HOST;
         this.playerName = playerName;
         System.out.println("Created a player.\n");
         this.clientSocket = connectSocket(HOST, PORT);
@@ -99,7 +99,17 @@ public class Client {
         }
         GameObject obj = new GameObject(this.clientSocket);
         this.game = (Game) obj.decodeObj();
+        this.game.setPlayerName(this.playerName);
+        this.game.setPlayerId(this.playerID);
         return this.game;
+    }
+
+    /*
+     * Send game object
+     * @param game Game object
+     */
+    public void setGame(Game game) {
+        this.game = game;
     }
 
 
@@ -148,7 +158,7 @@ public class Client {
     private void setupUnits() {
         DisplayMap displayMap = new DisplayMap(this.game, this.playerID);
         System.out.println(displayMap.showMap());
-        System.out.println(displayMap.showUnits(true,null,null));
+        System.out.println(displayMap.showUnits(true, null, null));
 
         System.out.println("Please set up your units. You have " + numUnits + " units in total.\n");
         int totalUnits = 0;
@@ -228,55 +238,12 @@ public class Client {
      * Play one turn
      */
     public void playOneTurn() {
-        // Client receive game from the server
-        Game currGame = getGame();
-        this.game = currGame;
-        DisplayMap displayMap = new DisplayMap(currGame, this.playerID);
-
-        System.out.println(displayMap.showMap());
-
-        // Read instructions
-        MoveTurn moveTurn = new MoveTurn(this.game.getMap(), this.game.getTurn(), this.playerName);
-        AttackTurn attackTurn = new AttackTurn(this.game.getMap(), this.game.getTurn(), this.playerName);
-        if (!this.isLoser) {
-            String order;
-            while (true) {
-                System.out.println(displayMap.showUnits(false,moveTurn,attackTurn));
-                order = scanner.nextLine();
-                if (order.equals("D"))
-                    break;
-                while (!(order.equals("M") || order.equals("A") || order.equals("D"))) {
-                    System.out.println("Please enter M to move, A to attack, D to done:\n");
-                    order = scanner.nextLine();
-                }
-                if (order.equals("D"))
-                    break;
-                switch (order) {
-                    case "M":
-                        orderMove(moveTurn,attackTurn);
-                        break;
-                    case "A":
-                        orderAttack(attackTurn,moveTurn);
-                        break;
-                }
-            }
-        }
-
-        // Done
-        this.game.addToTurnMap(this.playerID, moveTurn, attackTurn);
         GameObject obj = new GameObject(this.clientSocket);
         obj.encodeObj(this.game);
-
-        System.out.println("Waiting for other players...\n");
-
-        // Receive turn result
-        receiveTurnResult();
     }
 
-    public void playOneTurnMock() {
-        // Client receive game from the server
-        this.game = getGame();
 
+    public void playOneTurnMock() {
         // Read instructions
         MoveTurn moveTurn = new MoveTurn(this.game.getMap(), this.game.getTurn(), this.playerName);
         AttackTurn attackTurn = new AttackTurn(this.game.getMap(), this.game.getTurn(), this.playerName);
@@ -290,7 +257,7 @@ public class Client {
     /*
      * Receive turn result
      */
-    private void receiveTurnResult() {
+    public void receiveTurnResult() {
         // Client receive game from the server
         this.game = getGame();
         if (this.game.getGameState() == State.GAME_OVER) {
@@ -302,58 +269,7 @@ public class Client {
         }
     }
 
-    /*
-     * Order move from player's console
-     */
-    private void orderMove(MoveTurn moveTurn,AttackTurn attackTurn) {
-        System.out.println("Please enter the name of the territory you want to move from:\n");
-        String from = scanner.nextLine();
-        System.out.println("Please enter the name of the territory you want to move to:\n");
-        String to = scanner.nextLine();
-        System.out.println("Please enter the number of units you want to move:\n");
-        int numUnits = Validation.getValidNumber(scanner);
-        try {
-            Validation.checkMove(moveTurn, attackTurn, from, to, numUnits);
-            moveTurn.addMove(new Move(from, to, numUnits, this.playerName));
-        } catch (Exception e) {
-            System.out.println("Invalid input: " + e.getMessage());
-            while (true) {
-                System.out.println("Please enter X to return to menu, or enter C to continue\n");
-                String operation = scanner.nextLine();
-                if (operation.equals("X")) return;
-                if (operation.equals("C")) {
-                    orderMove(moveTurn,attackTurn);
-                    break;
-                }
-            }
-        }
-    }
 
-    /*
-     * Order attack from player's console
-     */
-    private void orderAttack(AttackTurn attackTurn,MoveTurn moveTurn) {
-        System.out.println("Please enter the name of the territory you want to attack from:\n");
-        String from = scanner.nextLine();
-        System.out.println("Please enter the name of the territory you want to attack to:\n");
-        String to = scanner.nextLine();
-        System.out.println("Please enter the number of units you want to use in attack:\n");
-        int numUnits = Validation.getValidNumber(scanner);
-        try {
-            Validation.checkAttack(attackTurn, moveTurn, from, to, numUnits);
-            attackTurn.addAttack(new Attack(from, to, numUnits, this.playerName));
-        } catch (Exception e) {
-            System.out.println("Invalid input: " + e.getMessage());
-            while (true) {
-                System.out.println("Please enter X to return to menu, or enter C to continue\n");
-                String operation = scanner.nextLine();
-                if (operation.equals("X")) return;
-                if (operation.equals("C")) {
-                    orderAttack(attackTurn,moveTurn);
-                    break;
-                }
-            }
-        }
-    }
+
 
 }

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import edu.duke.risc.ui.state.TouchEvent;
+import edu.duke.shared.Game;
 import edu.duke.shared.helper.Validation;
 import edu.duke.shared.map.GameMap;
 import edu.duke.shared.map.Territory;
@@ -126,7 +127,7 @@ public class TouchEventMapping {
      * @param x x coordinate of the touch point
      * @return the territory name that is closest to the touch point
      */
-    public String getOnTouchObject(int y, int x, String selected2) {
+    public String getOnTouchObject(int y, int x, String selected2, Game game) {
         // First check if it is on the selection panel
         if (selected2 == null || !TouchEventMapping.checkIsAction(selected2)) {
             for (String actionName : selectionPanelMapping.keySet()) {
@@ -134,6 +135,13 @@ public class TouchEventMapping {
                 int[] coord = selectionPanelMapping.get(actionName);
                 assert coord != null;
                 if (Math.sqrt(Math.pow(coord[0] - y, 2) + Math.pow(coord[1] - x, 2)) < coord[2]) {
+                    // Can only execute the action if the territory belongs to the player
+                    if (actionName.equals(TouchEvent.ORDER.name())) {
+                        Territory t = game.getMap().getTerritory(selected2);
+                        if (t == null || !t.getOwner().equals(game.getPlayerName())) {
+                            continue;
+                        }
+                    }
                     return actionName;
                 }
             }

@@ -16,6 +16,11 @@
     <string name="attack">Attack</string>
     <string name="move">Move</string>
     <string name="back">Back</string>
+
+    <string name="waiting">Waiting for other players…</string>
+    <string name="turn_x">Turn %X Begins</string>
+
+
     <string name="example_unit">Boggarts</string>
     <string name="example_unit2">Dementors</string>
     <string name="example_unit3">Goblins</string>
