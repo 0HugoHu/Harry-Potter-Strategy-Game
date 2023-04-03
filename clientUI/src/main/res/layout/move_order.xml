@@ -8,6 +8,7 @@
     android:visibility="invisible">
 
     <LinearLayout
+        android:id="@+id/order_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:baselineAligned="false"
@@ -128,4 +129,16 @@
                 app:layout_constraintTop_toBottomOf="@+id/list" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
+
+    <include
+        android:id="@+id/global_prompt"
+        layout="@layout/global_prompt"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </include>
 </androidx.constraintlayout.widget.ConstraintLayout>

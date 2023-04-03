@@ -28,6 +28,7 @@ import edu.duke.risc.ui.action.TouchEventMapping;
 import edu.duke.risc.ui.state.MapAnimationType;
 import edu.duke.risc.ui.state.MapUpdateType;
 import edu.duke.risc.ui.state.TouchEvent;
+import edu.duke.shared.Game;
 import edu.duke.shared.map.GameMap;
 import edu.duke.shared.player.Player;
 
@@ -95,12 +96,14 @@ public class GameView extends SurfaceView implements Runnable {
     private final Bitmap backgroundImageBitmap;
     private EventListener eventListener;
 
+    private Game mGame;
 
-    public GameView(Context context) {
-        this(context, null);
+
+    public GameView(Context context, Game game) {
+        this(context, null, game);
     }
 
-    public GameView(Context context, AttributeSet attrs) {
+    public GameView(Context context, AttributeSet attrs, Game game) {
         super(context, attrs);
         this.mSurfaceHolder = getHolder();
         this.mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -110,6 +113,7 @@ public class GameView extends SurfaceView implements Runnable {
         this.mScaleGestureDetector = new ScaleGestureDetector(context, new ScaleListener());
         this.selectionBubbleBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.selection_bubble_bold);
         this.backgroundImageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.backgroud_map);
+        this.mGame = game;
     }
 
     /**
@@ -193,6 +197,10 @@ public class GameView extends SurfaceView implements Runnable {
         this.mGameMap = gameMap;
         this.touchEventMapping = new TouchEventMapping(mGameMap);
         mUpdateType = MapUpdateType.REFRESH;
+    }
+
+    public void updateGame(Game game) {
+        this.mGame = game;
     }
 
     public void initColorMapping(ArrayList<Player> players) {
@@ -307,9 +315,9 @@ public class GameView extends SurfaceView implements Runnable {
 //                        animationTimer500();
                         // Record the last touch territory
                         if (territorySelected == null) {
-                            territorySelected = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX(), territorySelected);
+                            territorySelected = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX(), territorySelected, mGame);
                         } else if (territorySelectedDouble == null) {
-                            territorySelectedDouble = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX(), territorySelected);
+                            territorySelectedDouble = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX(), territorySelected, mGame);
                             // When the first touch is a territory, and the second touch is an
                             // action, the first territory will be recorded.
                             if (!TouchEventMapping.checkIsAction(territorySelected) && territorySelectedDouble.equals(TouchEvent.ORDER.name())) {
@@ -321,7 +329,7 @@ public class GameView extends SurfaceView implements Runnable {
                                 territorySelectedPrevious = territorySelected;
                             }
                             territorySelected = territorySelectedDouble;
-                            territorySelectedDouble = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX(), territorySelected);
+                            territorySelectedDouble = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX(), territorySelected, mGame);
                             actionCallback();
                         }
                     }

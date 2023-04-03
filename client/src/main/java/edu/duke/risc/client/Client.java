@@ -22,7 +22,7 @@ public class Client {
     // Host name
     //private String HOST = "vcm-30577.vm.duke.edu";
     //
-     private final String HOST;
+    private final String HOST;
     // Port number
     private final static int PORT = 5410;
     // Number of units at the beginning
@@ -57,10 +57,10 @@ public class Client {
         client.initClient(client.isMock);
 
         // Start game
-        if (client.isMock) {
-            client.playOneTurnMock();
-        } else {
-            while (client.game.getGameState() != State.GAME_OVER) {
+        while (client.game.getGameState() != State.GAME_OVER) {
+            if (client.isMock) {
+                client.playOneTurnMock();
+            } else {
                 client.playOneTurn();
             }
         }
@@ -74,15 +74,15 @@ public class Client {
      * Initialize Client
      */
     public Client(String HOST) {
-        this(HOST,null);
+        this(HOST, null);
     }
 
     /*
      * Initialize Client by player name
      * @param playerName Player name
      */
-    public Client(String HOST,String playerName) {
-        this.HOST=HOST;
+    public Client(String HOST, String playerName) {
+        this.HOST = HOST;
         this.playerName = playerName;
         System.out.println("Created a player.\n");
         this.clientSocket = connectSocket(HOST, PORT);
@@ -172,7 +172,7 @@ public class Client {
     private void setupUnits() {
         DisplayMap displayMap = new DisplayMap(this.game, this.playerID);
         System.out.println(displayMap.showMap());
-        System.out.println(displayMap.showUnits(true,null,null));
+        System.out.println(displayMap.showUnits(true, null, null));
 
         System.out.println("Please set up your units. You have " + numUnits + " units in total.\n");
         int totalUnits = 0;
@@ -264,7 +264,7 @@ public class Client {
         if (!this.isLoser) {
             String order;
             while (true) {
-                System.out.println(displayMap.showUnits(false,moveTurn,attackTurn));
+                System.out.println(displayMap.showUnits(false, moveTurn, attackTurn));
                 order = scanner.nextLine();
                 if (order.equals("D"))
                     break;
@@ -276,10 +276,10 @@ public class Client {
                     break;
                 switch (order) {
                     case "M":
-                        orderMove(moveTurn,attackTurn);
+                        orderMove(moveTurn, attackTurn);
                         break;
                     case "A":
-                        orderAttack(attackTurn,moveTurn);
+                        orderAttack(attackTurn, moveTurn);
                         break;
                 }
             }
@@ -328,7 +328,7 @@ public class Client {
     /*
      * Order move from player's console
      */
-    private void orderMove(MoveTurn moveTurn,AttackTurn attackTurn) {
+    private void orderMove(MoveTurn moveTurn, AttackTurn attackTurn) {
         System.out.println("Please enter the name of the territory you want to move from:\n");
         String from = scanner.nextLine();
         System.out.println("Please enter the name of the territory you want to move to:\n");
@@ -345,7 +345,7 @@ public class Client {
                 String operation = scanner.nextLine();
                 if (operation.equals("X")) return;
                 if (operation.equals("C")) {
-                    orderMove(moveTurn,attackTurn);
+                    orderMove(moveTurn, attackTurn);
                     break;
                 }
             }
@@ -355,7 +355,7 @@ public class Client {
     /*
      * Order attack from player's console
      */
-    private void orderAttack(AttackTurn attackTurn,MoveTurn moveTurn) {
+    private void orderAttack(AttackTurn attackTurn, MoveTurn moveTurn) {
         System.out.println("Please enter the name of the territory you want to attack from:\n");
         String from = scanner.nextLine();
         System.out.println("Please enter the name of the territory you want to attack to:\n");
@@ -372,7 +372,7 @@ public class Client {
                 String operation = scanner.nextLine();
                 if (operation.equals("X")) return;
                 if (operation.equals("C")) {
-                    orderAttack(attackTurn,moveTurn);
+                    orderAttack(attackTurn, moveTurn);
                     break;
                 }
             }

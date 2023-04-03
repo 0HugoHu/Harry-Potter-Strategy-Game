@@ -1,5 +1,6 @@
 package edu.duke.risc.client;
 
+
 import edu.duke.shared.Game;
 
 public class ClientAdapter {
@@ -11,12 +12,17 @@ public class ClientAdapter {
         this.client = new Client(HOST);
     }
 
+
     public void init(boolean isMock) {
         this.client.initClient(isMock);
     }
 
-    public Game getGame() {
-        return this.client.accessGame();
+    public Game getNewGame() {
+        return this.client.getGame();
+    }
+
+    public void updateGame(Game game) {
+        this.client.setGame(game);
     }
 
     public void close() {
@@ -29,6 +35,11 @@ public class ClientAdapter {
         } else {
             this.client.playOneTurn();
         }
+        this.client.receiveTurnResult();
+    }
+
+    public String getPlayerName() {
+        return this.client.getPlayerName();
     }
 
 }

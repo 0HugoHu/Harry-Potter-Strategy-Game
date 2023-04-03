@@ -1,20 +1,40 @@
 package edu.duke.risc.client;
 
 import android.app.IntentService;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 
 import androidx.annotation.Nullable;
 
 import edu.duke.shared.Game;
+import edu.duke.shared.helper.State;
 
 public class ClientIntentService extends IntentService {
 
     // Status codes
-    public static final int STATUS_RUNNING = 0;
     public static final int STATUS_FINISHED = 1;
-    public static final int STATUS_ERROR = 2;
+
+    private Game game;
+    private static final Object receivedPlayerOrder = new Object();
+
+    BroadcastReceiver br = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String log = "Action: " + intent.getAction() + "\n" +
+                    "URI: " + intent.toUri(Intent.URI_INTENT_SCHEME) + "\n";
+            System.out.println(log);
+
+            game = (Game) intent.getSerializableExtra("game");
+
+            synchronized(receivedPlayerOrder) {
+                receivedPlayerOrder.notifyAll();
+            }
+        }
+    };
 
     public ClientIntentService() {
         super(ClientIntentService.class.getName());
@@ -22,26 +42,46 @@ public class ClientIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
+        // Register Broadcast Receiver
+        IntentFilter intentFilter = new IntentFilter("RISC_SEND_TO_SERVER");
+        registerReceiver(br, intentFilter);
+
+        // Fetch game from server
         assert intent != null;
-        final ResultReceiver receiver = intent.getParcelableExtra("receiver");
+        final ResultReceiver receiver = intent.getParcelableExtra("RISC_FETCH_FROM_SERVER");
 
-        ClientAdapter client1 = new ClientAdapter();
-        client1.init(true);
+        ClientAdapter clientAdapter = new ClientAdapter();
+        clientAdapter.init(true);
 
+        while (this.game == null || this.game.getGameState() != State.GAME_OVER) {
+            fetchResult(clientAdapter, receiver);
+            // Wait until action is committed
+            synchronized(receivedPlayerOrder) {
+                try {
+                    System.out.println("Waiting for player order");
+                    receivedPlayerOrder.wait();
+                } catch(InterruptedException ignored) {
 
-//        while (client1.getGame().getGameState() != State.GAME_OVER) {
+                }
+            }
+            System.out.println("Player order received");
+            clientAdapter.updateGame(this.game);
+            // Send action to server
+            clientAdapter.playOneTurn(false);
+        }
 
-
-            client1.playOneTurn(true);
-//        }
-
-        Game game = client1.getGame();
-        Bundle b = new Bundle();
-        System.out.println("Game received");
-        b.putSerializable("game", game);
-        receiver.send(STATUS_FINISHED, b);
         // End Game
         System.out.println("Game End.\n");
-//        client1.close();
+        clientAdapter.close();
     }
+
+    private void fetchResult(ClientAdapter clientAdapter, ResultReceiver receiver) {
+        this.game = clientAdapter.getNewGame();
+        this.game.setPlayerName(clientAdapter.getPlayerName());
+        System.out.println("Game received");
+        Bundle b = new Bundle();
+        b.putSerializable("game", this.game);
+        receiver.send(STATUS_FINISHED, b);
+    }
+
 }
