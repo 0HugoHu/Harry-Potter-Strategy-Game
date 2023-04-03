@@ -1,8 +1,12 @@
 package edu.duke.shared.map;
 
+import javafx.util.Pair;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+//import android.util.Pair;
+
 
 public class GameMap implements Serializable {
     // All territories on this map
@@ -16,6 +20,16 @@ public class GameMap implements Serializable {
     // Territory border coordinates
     // byte pattern code: 0001: top, 0010: right, 0100: bottom, 1000: left
     private final HashMap<String, Byte> borderPoints;
+    private final HashMap<Pair<String,String>,Integer> distances;
+    public int getDistance(String first, String second){
+        Pair pq=new Pair(first,second);
+        return distances.get(pq);
+    }
+    public void putDistance(String first,String second,int dis) {
+        Pair pq=new Pair(first,second);
+        distances.put(pq,dis);
+    }
+
 
     /**
      * Initialize Map by height and width
@@ -42,6 +56,7 @@ public class GameMap implements Serializable {
         this.numTerritories = numTerritories;
         this.territories = territories;
         this.borderPoints = new HashMap<>();
+        this.distances=new HashMap<>();
     }
 
     /**

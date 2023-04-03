@@ -71,7 +71,7 @@ public class DisplayMap {
                 sb.append(")");
                 sb.append(" [");
                 sb.append("Unicorn Horns: ").append(t.getHorns()).append(", ");
-                sb.append("Silver Coins: ").append(t.getCoins()).append(".");
+                sb.append("Silver Coins: ").append(t.getCoins());
                 sb.append("]\n");
             }
             sb.append("\n\n");

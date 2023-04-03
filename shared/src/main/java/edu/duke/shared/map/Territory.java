@@ -38,6 +38,8 @@ public class Territory implements Serializable {
 
     private boolean[] ResourcePro;
 
+    private String details;
+
     /**
      * Initialize Territory by name
      *
@@ -53,6 +55,7 @@ public class Territory implements Serializable {
         this.coins=0;
         this.horns=0;
         this.ResourcePro=new boolean[]{false,false};
+        this.details="";
     }
 
     /**
@@ -66,7 +69,7 @@ public class Territory implements Serializable {
      * @param adjs        Adjacent territories
      */
     public Territory(String name, Player playerOwner, String owner, ArrayList<Unit> units, HashSet<int[]> coords,
-                     HashSet<String> adjs) {
+                     HashSet<String> adjs,String details) {
         this.playerOwner = playerOwner;
         this.name = name;
         this.owner = owner;
@@ -76,6 +79,7 @@ public class Territory implements Serializable {
         this.coins=0;
         this.horns=0;
         this.ResourcePro=new boolean[]{false,false};
+        this.details=details;
     }
 
 
@@ -172,15 +176,6 @@ public class Territory implements Serializable {
         }
         return false;
     }
-
-    public int getCoinsNum(){
-        return coins;
-    }
-
-    public int getHornsNum(){
-        return horns;
-    }
-
 
     /**
      * Get the name of this territory
@@ -297,6 +292,8 @@ public class Territory implements Serializable {
     }
 
 
+
+
     /**
      * Get the number of units on this territory
      *
@@ -304,6 +301,22 @@ public class Territory implements Serializable {
      */
     public int getNumUnits() {
         return this.units.size();
+    }
+
+    /**
+     * set territory details
+     * @param details
+     */
+    public void addDetails(String details){
+        this.details=details;
+    }
+
+    /**
+     * return the details of a territory
+     * @return
+     */
+    public String getDetails(){
+        return details;
     }
 
     public int getCoins() {
@@ -335,10 +348,16 @@ public class Territory implements Serializable {
         return this.ResourcePro;
     }
 
+    /**
+     * set the land to be able to produce unicorn horns
+     */
     public void setUnicornLand(){
         ResourcePro[0]=true;
     }
 
+    /**
+     * set the land to be able to produce silver coins
+     */
     public void setNifflerLand(){
         ResourcePro[1]=true;
     }
@@ -373,5 +392,16 @@ public class Territory implements Serializable {
     public HashSet<int[]> getCoords() {
         return this.coords;
     }
+
+    public int[] getCentralPoint(){
+        int s1=0;
+        int s2=0;
+        for (int[] coord:coords){
+            s1+=coord[0];
+            s2+=coord[1];
+        }
+        return new int[]{s1/coords.size(),s2/coords.size()};
+    }
+
 
 }
