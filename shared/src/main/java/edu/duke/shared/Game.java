@@ -190,11 +190,10 @@ public class Game implements Serializable {
 
         Territory desTerr = gameMap.getTerritory(destination);
         int desPlayerId = gameMap.getTerritory(destination).getPlayerOwner().getPlayerId();
+        System.out.println(turnList.size());
+        System.out.println(getTurn());
 
-        System.out.println(desTerr.getName());
-        System.out.println(desPlayerId);
         ArrayList<Turn> desTurn = turnList.get(getTurn()).get(desPlayerId);
-        System.out.println(desTurn.size());
         assert desTurn != null;
 
         AttackTurn attackTurn = (AttackTurn) (desTurn.get(1));
