@@ -2,6 +2,7 @@ package edu.duke.shared.player;
 
 import java.io.Serializable;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import edu.duke.shared.helper.State;
@@ -160,6 +161,30 @@ public class Player implements Serializable {
      */
     public void setSocket(Socket socket) {
         this.socket = socket;
+    }
+
+    public String getAllResources(){
+        int horns=0;
+        int coins=0;
+        for(Territory terr:playerTerrs){
+            horns+=terr.getHorns();
+            coins+=terr.getCoins();
+        }
+        String res="Player "+playerName+" have "+horns+" unicorn horns, and "+coins+" silver coins.";
+        return res;
+    }
+
+    public HashMap<String,Integer> getAllRes(){
+        int horns=0;
+        int coins=0;
+        for(Territory terr:playerTerrs){
+            horns+=terr.getHorns();
+            coins+=terr.getCoins();
+        }
+        HashMap<String,Integer> res=new HashMap<>();
+        res.put("Horns",horns);
+        res.put("Coins",coins);
+        return res;
     }
 
 

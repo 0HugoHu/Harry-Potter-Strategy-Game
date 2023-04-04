@@ -101,7 +101,7 @@ public class PlayerThreadTest {
         player.playerThread = playerThread;
         Territory terr = new Territory("terr1");
         terr.changeOwner("test");
-        terr.addUnit(new Unit("Normal"));
+        terr.addUnit(new Unit("Gnome"));
         player.expandTerr(terr);
         game.addPlayer(player);
         game.setPlayerName("test");
@@ -121,7 +121,7 @@ public class PlayerThreadTest {
         terr = new Territory("terr1");
         terr.changeOwner("test");
         for (int i = 0; i < 3; i++) {
-            terr.addUnit(new Unit("Normal"));
+            terr.addUnit(new Unit("Gnome"));
         }
         player.expandTerr(terr);
         Territory terr2 = new Territory("terr2");
@@ -161,7 +161,7 @@ public class PlayerThreadTest {
         terr = new Territory("terr1");
         terr.changeOwner("test");
         for (int i = 0; i < 3; i++) {
-            terr.addUnit(new Unit("Normal"));
+            terr.addUnit(new Unit("Gnome"));
         }
         player.expandTerr(terr);
         terr2 = new Territory("terr2");

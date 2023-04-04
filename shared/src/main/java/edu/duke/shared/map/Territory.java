@@ -29,12 +29,34 @@ public class Territory implements Serializable {
     private int[] borders;
 
     /**
+     * This is the corresponding food resources in our design
+     */
+    private int coins;
+    /**
+     * This is the corresponding tech resources in our design
+     */
+    private int horns;
+
+    private boolean[] ResourcePro;
+
+    private String details;
+
+    /**
      * Initialize Territory by name
      *
      * @param name Territory name
      */
     public Territory(String name) {
-        this(name, null, "", new ArrayList<>(), new HashSet<>(), new HashSet<>());
+        this.name = name;
+        this.owner = "";
+        this.playerOwner = null;
+        this.units = new ArrayList<>();
+        this.coords = new HashSet<>();
+        this.adjs = new HashSet<>();
+        this.coins=0;
+        this.horns=0;
+        this.ResourcePro=new boolean[]{false,false};
+        this.details="";
     }
 
     /**
@@ -47,13 +69,18 @@ public class Territory implements Serializable {
      * @param coords      Coordinates inside this territory
      * @param adjs        Adjacent territories
      */
-    public Territory(String name, Player playerOwner, String owner, ArrayList<Unit> units, HashSet<int[]> coords, HashSet<String> adjs) {
+    public Territory(String name, Player playerOwner, String owner, ArrayList<Unit> units, HashSet<int[]> coords,
+                     HashSet<String> adjs,String details) {
         this.playerOwner = playerOwner;
         this.name = name;
         this.owner = owner;
         this.units = units;
         this.coords = coords;
         this.adjs = adjs;
+        this.coins=0;
+        this.horns=0;
+        this.ResourcePro=new boolean[]{false,false};
+        this.details=details;
         // Initialize borders
         // This is not the actual borders, but the borders of the rectangle that contains all the coordinates
         this.borders = new int[] {Integer.MAX_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE};
@@ -171,7 +198,7 @@ public class Territory implements Serializable {
      */
     public boolean removeUnit() {
         for (Unit u : this.units) {
-            if (u.getType().equals(UnitType.NORMAL)) {
+            if (u.getType().equals(UnitType.GNOME)) {
                 this.units.remove(u);
                 return true;
             }
@@ -318,6 +345,86 @@ public class Territory implements Serializable {
         return this.units.size();
     }
 
+    /**
+     * set territory details
+     * @param details
+     */
+    public void addDetails(String details){
+        this.details=details;
+    }
+
+    /**
+     * return the details of a territory
+     * @return
+     */
+    public String getDetails(){
+        return details;
+    }
+
+    public int getCoins() {
+        return coins;
+    }
+
+    public void addCoins(int coins) {
+        this.coins +=coins;
+    }
+
+    public void minusCoins(int coins) {
+        this.coins -=coins;
+    }
+
+
+    public int getHorns() {
+        return horns;
+    }
+
+    public void addHorns(int horns) {
+        this.horns +=horns;
+    }
+
+    public void minusHorns(int horns) {
+        this.horns -=horns;
+    }
+
+    public boolean[] getReources(){
+        return this.ResourcePro;
+    }
+
+    /**
+     * set the land to be able to produce unicorn horns
+     */
+    public void setUnicornLand(){
+        ResourcePro[0]=true;
+    }
+
+    /**
+     * set the land to be able to produce silver coins
+     */
+    public void setNifflerLand(){
+        ResourcePro[1]=true;
+    }
+
+    /**
+     * check if this land produces Unicorn horn
+     * @return
+     */
+    public boolean checkUnicornLand(){
+        if(ResourcePro[0]){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * check if this land produces silver coin
+     * @return
+     */
+    public boolean checkNifflerLand(){
+        if(ResourcePro[1]){
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Get all coordinates on this territory
@@ -327,5 +434,16 @@ public class Territory implements Serializable {
     public HashSet<int[]> getCoords() {
         return this.coords;
     }
+
+    public int[] getCentralPoint(){
+        int s1=0;
+        int s2=0;
+        for (int[] coord:coords){
+            s1+=coord[0];
+            s2+=coord[1];
+        }
+        return new int[]{s1/coords.size(),s2/coords.size()};
+    }
+
 
 }

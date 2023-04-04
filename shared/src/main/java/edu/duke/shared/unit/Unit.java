@@ -11,6 +11,7 @@ public class Unit implements Serializable {
     private final int defense;
     // Unit hit points
     private final int hp;
+    private final int bonus;
 
     /**
      * Initialize Unit by name
@@ -22,17 +23,50 @@ public class Unit implements Serializable {
         this.type = type;
         // Switch case for different types of units
         switch (type) {
-            case NORMAL:
+            case GNOME:
+                this.bonus=0;
                 this.attack = 2;
                 this.defense = 1;
                 this.hp = 2;
                 break;
-            case DEFENSE:
+            case DWARF:
+                this.bonus=1;
+                this.attack = 1;
+                this.defense = 3;
+                this.hp = 3;
+                break;
+            case HOUSE_ELF:
+                this.bonus=3;
+                this.attack = 1;
+                this.defense = 3;
+                this.hp = 3;
+                break;
+            case GOBLIN:
+                this.bonus=5;
+                this.attack = 1;
+                this.defense = 3;
+                this.hp = 3;
+                break;
+            case VAMPIRE:
+                this.bonus=8;
+                this.attack = 1;
+                this.defense = 3;
+                this.hp = 3;
+                break;
+            case CENTAUR:
+                this.bonus=11;
+                this.attack = 1;
+                this.defense = 3;
+                this.hp = 3;
+                break;
+            case WEREWOLF:
+                this.bonus=15;
                 this.attack = 1;
                 this.defense = 3;
                 this.hp = 3;
                 break;
             default:
+                this.bonus=0;
                 this.attack = 0;
                 this.defense = 0;
                 this.hp = 0;
@@ -47,11 +81,12 @@ public class Unit implements Serializable {
      * @param attack  Unit attack power
      * @param defense Unit defense power
      */
-    public Unit(String name, int attack, int defense, int hp) {
+    public Unit(String name, int attack, int defense, int hp,int bonus) {
         this.type = convertStringToUnitType(name);
         this.attack = attack;
         this.defense = defense;
         this.hp = hp;
+        this.bonus=bonus;
     }
 
     /**
@@ -90,6 +125,10 @@ public class Unit implements Serializable {
         return this.hp;
     }
 
+    public int getBonus(){
+        return this.bonus;
+    }
+
     /**
      * Convert string to UnitType
      *
@@ -98,14 +137,22 @@ public class Unit implements Serializable {
      */
     public static UnitType convertStringToUnitType(String name) {
         switch (name) {
-            case "Normal":
-                return UnitType.NORMAL;
-            case "Defense":
-                return UnitType.DEFENSE;
-            case "Basic":
-                return UnitType.BASIC;
+            case "Gnome":
+                return UnitType.GNOME;
+            case "Dwarf":
+                return UnitType.DWARF;
+            case "House-elf":
+                return UnitType.HOUSE_ELF;
+            case "Goblin":
+                return UnitType.GOBLIN;
+            case "Vampire":
+                return UnitType.VAMPIRE;
+            case "Centaur":
+                return UnitType.CENTAUR;
+            case "Werewolf":
+                return UnitType.WEREWOLF;
             default:
-                return UnitType.NORMAL;
+                return UnitType.GNOME;
         }
     }
 }

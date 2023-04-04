@@ -211,6 +211,7 @@ public class Server {
             return;
         }
         growUnits();
+        growResources();
         this.game.setGameState(State.TURN_END);
         sendToAllPlayers();
 
@@ -269,7 +270,22 @@ public class Server {
     public void growUnits() {
         //After each turn, all territories should add one new unit
         for (Territory t : this.game.getMap().getTerritories()) {
-            t.addUnit(new Unit("Normal"));
+            t.addUnit(new Unit("Gnome"));
+        }
+    }
+
+    /**
+     * Grow resources for each corresponding territory
+     */
+    public void growResources() {
+        //After each turn, all territories should add one new unit
+        for (Territory t : this.game.getMap().getTerritories()) {
+            if(t.checkUnicornLand()){
+                t.addHorns(70);
+            }
+            if(t.checkNifflerLand()){
+                t.addCoins(50);
+            }
         }
     }
 

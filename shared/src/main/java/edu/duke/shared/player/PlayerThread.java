@@ -99,7 +99,7 @@ public class PlayerThread implements Runnable, Serializable {
                 for (Territory t : terr_set) {
                     this.serverGame.getMap().getTerritory(t.getName()).removeAllUnits();
                     for (int j = 0; j < p.getPlayerThread().getCurrGame().getMap().getTerritory(t.getName()).getNumUnits(); j++)
-                        this.serverGame.getMap().getTerritory(t.getName()).addUnit(new Unit("Normal"));
+                        this.serverGame.getMap().getTerritory(t.getName()).addUnit(new Unit("Gnome"));
                     totalUnits += t.getNumUnits();
                 }
 
@@ -127,7 +127,7 @@ public class PlayerThread implements Runnable, Serializable {
                     if (t.getOwner().equals(p.getPlayerName())) {
                         t.removeAllUnits();
                         for (int j = 0; j < this.currGame.getMap().getTerritory(t.getName()).getNumUnits(); j++)
-                            t.addUnit(new Unit("Normal"));
+                            t.addUnit(new Unit("Gnome"));
                     }
                 }
 
