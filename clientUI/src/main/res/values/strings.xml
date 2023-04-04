@@ -19,6 +19,7 @@
 
     <string name="waiting">Waiting for other players…</string>
     <string name="turn_x">Turn %X Begins</string>
+    <string name="end_turn">End Turn</string>
 
 
     <string name="example_unit">Boggarts</string>

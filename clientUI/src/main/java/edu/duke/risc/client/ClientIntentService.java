@@ -9,6 +9,11 @@ import android.os.Bundle;
 import android.os.ResultReceiver;
 
 import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import edu.duke.shared.Game;
 import edu.duke.shared.helper.State;
@@ -29,8 +34,7 @@ public class ClientIntentService extends IntentService {
             System.out.println(log);
 
             game = (Game) intent.getSerializableExtra("game");
-
-            synchronized(receivedPlayerOrder) {
+            synchronized (receivedPlayerOrder) {
                 receivedPlayerOrder.notifyAll();
             }
         }
@@ -43,8 +47,7 @@ public class ClientIntentService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         // Register Broadcast Receiver
-        IntentFilter intentFilter = new IntentFilter("RISC_SEND_TO_SERVER");
-        registerReceiver(br, intentFilter);
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(br, new IntentFilter("RISC_SEND_TO_SERVER"));
 
         // Fetch game from server
         assert intent != null;
@@ -55,14 +58,14 @@ public class ClientIntentService extends IntentService {
 
         while (this.game == null || this.game.getGameState() != State.GAME_OVER) {
             fetchResult(clientAdapter, receiver);
+            System.out.println("Start waiting for player order");
             // Wait until action is committed
-            synchronized(receivedPlayerOrder) {
-                try {
-                    System.out.println("Waiting for player order");
+            try {
+                synchronized (receivedPlayerOrder) {
                     receivedPlayerOrder.wait();
-                } catch(InterruptedException ignored) {
-
                 }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
             System.out.println("Player order received");
             clientAdapter.updateGame(this.game);

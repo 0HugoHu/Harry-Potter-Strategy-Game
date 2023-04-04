@@ -308,6 +308,9 @@ public class Client {
         this.game.addToTurnMap(this.playerID, moveTurn, attackTurn);
         GameObject obj = new GameObject(this.clientSocket);
         obj.encodeObj(this.game);
+
+        // Receive turn result
+        receiveTurnResult();
     }
 
     /*
