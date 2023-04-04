@@ -1,7 +1,6 @@
 package edu.duke.risc.ui.main;
 
 import android.content.Context;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.content.Intent;
 
@@ -12,18 +11,13 @@ import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.os.Handler;
-import android.text.method.Touch;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SeekBar;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -35,13 +29,11 @@ import edu.duke.risc.ui.model.UnitDataModel;
 import edu.duke.risc.ui.state.TouchEvent;
 import edu.duke.risc.ui.view.GameView;
 import edu.duke.shared.Game;
-import edu.duke.shared.helper.GameObject;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.turn.Attack;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Move;
 import edu.duke.shared.turn.MoveTurn;
-import edu.duke.shared.unit.Unit;
 
 public class GameFragment extends Fragment implements ClientResultReceiver.AppReceiver {
 
@@ -55,7 +47,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     private boolean isColorMapping = false;
 
     ArrayList<UnitDataModel> dataModels;
-    ListView listView;
+    ListView move_attack_listview;
+    ListView unit_listview;
     private UnitDataAdapter adapter;
 
     private String orderTerrFrom;
@@ -64,8 +57,14 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
     ConstraintLayout shadow_view;
     ConstraintLayout base_view;
-    LinearLayout order_view;
+    View order_view;
+    View inner_order_view;
     ViewGroup global_prompt;
+
+    ViewGroup move_attack_view;
+    ViewGroup prop_view;
+    ViewGroup unit_view;
+
 
     private MoveTurn moveTurn;
     private AttackTurn attackTurn;
@@ -117,7 +116,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             this.mGame = (Game) resultData.getSerializable("game");
             // update the game view
             global_prompt.setVisibility(View.GONE);
-            order_view.setVisibility(View.VISIBLE);
+            inner_order_view.setVisibility(View.VISIBLE);
             base_view.setVisibility(View.GONE);
             if (!isColorMapping) {
                 mGameView.initColorMapping(this.mGame.getPlayerList());
@@ -148,40 +147,69 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     }
 
     private FrameLayout setupFrameLayout(Context context) {
-        mGameView = new GameView(context, this.mGame);
-        mGameView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-
-
+        // FrameLayout: Hold the game view and the UI
         FrameLayout framelayout = new FrameLayout(context);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT);
 
-        LayoutInflater inflater_move = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final ViewGroup nullParent = null;
-        View move_order = inflater_move.inflate(R.layout.move_order, nullParent, false);
+        // SurfaceView: Draw game map and units
+        mGameView = new GameView(context, this.mGame);
+        mGameView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 
+        // Load the main order view
+        LayoutInflater inflater_order = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final ViewGroup nullParent = null;
+        order_view = inflater_order.inflate(R.layout.order_view, nullParent, false);
+
+        // Prepare for three fragments
+        move_attack_view = order_view.findViewById(R.id.inflate_move_attack);
+        prop_view = order_view.findViewById(R.id.inflate_prop);
+        unit_view = order_view.findViewById(R.id.inflate_unit);
+
+        // Load the global prompt view
         LayoutInflater inflater_ui = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View ui = inflater_ui.inflate(R.layout.game_ui, nullParent, false);
 
-
-        listView = move_order.findViewById(R.id.list);
+        // Initialize the list view and adapter
+        move_attack_listview = move_attack_view.findViewById(R.id.list);
+        unit_listview = unit_view.findViewById(R.id.unit_list);
         dataModels = new ArrayList<>();
         adapter = new UnitDataAdapter(dataModels, context);
-        listView.setAdapter(adapter);
+        move_attack_listview.setAdapter(adapter);
+        unit_listview.setAdapter(adapter);
 
-
-        Button commit_btn = move_order.findViewById(R.id.attack_btn);
-        TextView cost_error_prompt = move_order.findViewById(R.id.cost_error_prompt);
-        TextView view_title = move_order.findViewById(R.id.view_title);
-        TextView cost_title = move_order.findViewById(R.id.cost_title);
-        TextView total_cost = move_order.findViewById(R.id.total_cost);
-        shadow_view = move_order.findViewById(R.id.shadow_view);
-        base_view = move_order.findViewById(R.id.base_view);
-        order_view = move_order.findViewById(R.id.order_view);
-        global_prompt = move_order.findViewById(R.id.global_prompt);
-
+        // Initialize widgets in the move_attack view
+        Button commit_btn = move_attack_view.findViewById(R.id.attack_btn);
         Button end_turn_btn = ui.findViewById(R.id.end_turn);
+        TextView cost_error_prompt = move_attack_view.findViewById(R.id.cost_error_prompt);
+        TextView view_title = move_attack_view.findViewById(R.id.view_title);
+        TextView cost_title = move_attack_view.findViewById(R.id.cost_title);
+        TextView total_cost = move_attack_view.findViewById(R.id.total_cost);
+        // Prop
+        TextView prop_title = prop_view.findViewById(R.id.prop_title);
+        TextView prop_owner = prop_view.findViewById(R.id.prop_owner);
+        TextView prop_desc = prop_view.findViewById(R.id.prop_desc);
+        Button prop_btn = prop_view.findViewById(R.id.prop_back_btn);
+        // Unit
+        TextView unit_title = unit_view.findViewById(R.id.unit_title);
+        Button unit_btn = unit_view.findViewById(R.id.unit_back_btn);
+
+        // Initialize widgets in common use
+        shadow_view = order_view.findViewById(R.id.shadow_view);
+        base_view = order_view.findViewById(R.id.base_view);
+        global_prompt = order_view.findViewById(R.id.global_prompt);
+        inner_order_view = order_view.findViewById(R.id.inner_order_view);
+
+
+        prop_btn.setOnClickListener(v -> {
+            base_view.setVisibility(View.GONE);
+        });
+
+        unit_btn.setOnClickListener(v -> {
+            base_view.setVisibility(View.GONE);
+        });
+
 
         // TODO: Use for test only
         int max_cost = 10;
@@ -202,8 +230,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         });
 
         commit_btn.setOnClickListener(v -> {
-            // Read instructions
-
             if (mTouchEvent == TouchEvent.MOVE) {
                 for (UnitDataModel unit : dataModels) {
                     int number = unit.getNumber();
@@ -221,79 +247,76 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             } else {
                 return;
             }
-
             // Done
             base_view.setVisibility(View.GONE);
         });
 
+        // Click the shadow area to close the order view
         shadow_view.setOnClickListener(v -> base_view.setVisibility(View.GONE));
 
         mGameView.setEventListener(new GameView.EventListener() {
             @Override
             public void onMoveOrder(String terrFrom, String terrTo) {
                 // Update
+                move_attack_view.setVisibility(View.VISIBLE);
+                prop_view.setVisibility(View.GONE);
+                unit_view.setVisibility(View.GONE);
+                base_view.setVisibility(View.VISIBLE);
                 orderTerrFrom = terrFrom;
                 orderTerrTo = terrTo;
                 updateTerrInfo(terrFrom);
-
-                base_view.setVisibility(View.VISIBLE);
                 String title = "Move: " + terrFrom + " to " + terrTo;
                 view_title.setText(title);
-                listView.setVisibility(View.VISIBLE);
-                cost_title.setVisibility(View.VISIBLE);
-                total_cost.setVisibility(View.VISIBLE);
                 commit_btn.setText(context.getResources().getString(R.string.move));
+                // Set touch event
                 mTouchEvent = TouchEvent.MOVE;
             }
 
             @Override
             public void onAttackOrder(String terrFrom, String terrTo) {
+                move_attack_view.setVisibility(View.VISIBLE);
+                prop_view.setVisibility(View.GONE);
+                unit_view.setVisibility(View.GONE);
+                base_view.setVisibility(View.VISIBLE);
                 orderTerrFrom = terrFrom;
                 orderTerrTo = terrTo;
                 updateTerrInfo(terrFrom);
-
-                base_view.setVisibility(View.VISIBLE);
                 String title = "Attack: " + terrFrom + " to " + terrTo;
                 view_title.setText(title);
-                listView.setVisibility(View.VISIBLE);
-                cost_title.setVisibility(View.VISIBLE);
-                total_cost.setVisibility(View.VISIBLE);
                 commit_btn.setText(context.getResources().getString(R.string.attack));
                 mTouchEvent = TouchEvent.ATTACK;
             }
 
             @Override
             public void onPropOrder(String territoryName) {
-                updateTerrInfo(territoryName);
-
+                move_attack_view.setVisibility(View.GONE);
+                prop_view.setVisibility(View.VISIBLE);
+                unit_view.setVisibility(View.GONE);
                 base_view.setVisibility(View.VISIBLE);
+                updateTerrInfo(territoryName);
                 String title = "Prop: " + territoryName;
-                view_title.setText(title);
-                listView.setVisibility(View.GONE);
-                cost_title.setVisibility(View.INVISIBLE);
-                total_cost.setVisibility(View.INVISIBLE);
-                commit_btn.setText(context.getResources().getString(R.string.back));
+                prop_title.setText(title);
+                prop_owner.setText("Owner: " + mGame.getMap().getTerritory(territoryName).getOwner());
+                prop_desc.setText("Description: \n" + context.getResources().getString(R.string.terr_desc_example));
                 mTouchEvent = TouchEvent.PROP;
             }
 
             @Override
             public void onUnitOrder(String territoryName) {
-                updateTerrInfo(territoryName);
-
+                move_attack_view.setVisibility(View.GONE);
+                prop_view.setVisibility(View.GONE);
+                unit_view.setVisibility(View.VISIBLE);
                 base_view.setVisibility(View.VISIBLE);
+                updateTerrInfo(territoryName);
                 String title = "Unit: " + territoryName;
-                view_title.setText(title);
-                listView.setVisibility(View.VISIBLE);
-                cost_title.setVisibility(View.INVISIBLE);
-                total_cost.setVisibility(View.INVISIBLE);
-                commit_btn.setText(context.getResources().getString(R.string.back));
+                unit_title.setText(title);
                 mTouchEvent = TouchEvent.UNIT;
             }
         });
 
         end_turn_btn.setOnClickListener(v -> {
             base_view.setVisibility(View.VISIBLE);
-            order_view.setVisibility(View.GONE);
+            inner_order_view.setVisibility(View.GONE);
             global_prompt.setVisibility(View.VISIBLE);
             // Commit all moves and attacks
             this.mGame.addToTurnMap(this.mGame.getPlayerId(), moveTurn, attackTurn);
@@ -307,7 +330,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
         framelayout.addView(mGameView);
         framelayout.addView(ui, params);
-        framelayout.addView(move_order, params);
+        framelayout.addView(order_view, params);
 
         return framelayout;
     }

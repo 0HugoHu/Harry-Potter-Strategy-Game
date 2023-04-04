@@ -21,6 +21,8 @@
     <string name="turn_x">Turn %X Begins</string>
     <string name="end_turn">End Turn</string>
 
+    <string name="terr_desc_example">The Great Lake, alternatively known as the Black Lake, was a large body of water. It was a landlocked freshwater lake located to the south of Hogwarts Castle. The castle stands on a cliff overlooking the water. It was about half a mile in diameter and the castle\'s plumbing network drained into it. The lake had a number of very unusual inhabitants, including a Giant Squid, a village of Merpeople, and many Grindylows.</string>
+
 
     <string name="example_unit">Boggarts</string>
     <string name="example_unit2">Dementors</string>
