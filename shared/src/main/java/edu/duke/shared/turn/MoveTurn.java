@@ -46,7 +46,7 @@ public class MoveTurn extends Turn {
         for (Move move : moves) {
             for (int i = 0; i < move.getNumUnits(); i++) {
                 map.getTerritory(move.getFrom()).removeUnit();
-                map.getTerritory(move.getTo()).addUnit(new Unit("Normal"));
+                map.getTerritory(move.getTo()).addUnit(new Unit("Gnome"));
             }
         }
     }

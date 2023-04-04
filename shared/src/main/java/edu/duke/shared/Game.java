@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import edu.duke.shared.helper.Dice;
 import edu.duke.shared.helper.Header;
@@ -190,10 +191,8 @@ public class Game implements Serializable {
 
         Territory desTerr = gameMap.getTerritory(destination);
         int desPlayerId = gameMap.getTerritory(destination).getPlayerOwner().getPlayerId();
-
         ArrayList<Turn> desTurn = turnList.get(getTurn()).get(desPlayerId);
         assert desTurn != null;
-
         AttackTurn attackTurn = (AttackTurn) (desTurn.get(1));
         ArrayList<Attack> atts = attackTurn.getAttacks();
         int defenseForce = desTerr.getNumUnits();
@@ -322,7 +321,7 @@ public class Game implements Serializable {
         for (Map.Entry<Territory, Integer> entry : unitAddMap.entrySet()) {
             Territory currTerr = entry.getKey();
             for (int i = 0; i < entry.getValue(); i++) {
-                currTerr.addUnit(new Unit("Normal"));
+                currTerr.addUnit(new Unit("Gnome"));
             }
         }
     }
@@ -526,7 +525,11 @@ public class Game implements Serializable {
     }
 
     /**
-     * Allocate territories to players
+     * Allocate territories to players,
+     * and allocate corresponding resources to each territory.
+     * For each player, they got one unicorn territory which produces unicorn horns(tech resources),
+     * also many sniffler territories which produce silver coins(food resources).
+     * The silver coins each sniffler territory produces are random, but they should add up to 300 for each player.
      */
     public void allocateTerritories() {
         GameMap gameMap = this.getMap();
@@ -534,10 +537,47 @@ public class Game implements Serializable {
         int numPlayers = this.getNumPlayers();
         ArrayList<Territory> terrs = gameMap.getTerritories();
         ArrayList<Player> players = this.getPlayerList();
+        int count=0;
+        boolean continueFlag=true;
         for (int i = 0; i < numTerrs; i++) {
             players.get(i / (numTerrs / numPlayers)).expandTerr(terrs.get(i));
             terrs.get(i).changePlayerOwner(players.get(i / (numTerrs / numPlayers)));
             terrs.get(i).changeOwner(players.get(i / (numTerrs / numPlayers)).getPlayerName());
+            int k=numTerrs / numPlayers;
+            if(i==0){
+                terrs.get(i).addHorns(100);
+                terrs.get(i).setUnicornLand();
+            }
+            else if(i%k==0){
+                continueFlag=true;
+                count=0;
+                terrs.get(i).addHorns(100);
+                terrs.get(i).setUnicornLand();
+            }
+            else if((i+1)%k==0){
+                int res=300-count;
+                terrs.get(i).addCoins(res);
+                terrs.get(i).setNifflerLand();
+            }
+            else{
+                int res=0;
+                boolean flag=true;
+                while (flag&&continueFlag) {
+                    flag=false;
+                    Random random = new Random();
+                    res = random.nextInt(100) + 1;
+                    count += res;
+                    if (count > 300) {
+                        count-=res;
+                        flag=true;
+                    }
+                    if(count==300){
+                        continueFlag=false;
+                    }
+                }
+                terrs.get(i).addCoins(res);
+                terrs.get(i).setNifflerLand();
+            }
         }
     }
 

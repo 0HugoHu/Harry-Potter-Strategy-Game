@@ -188,7 +188,7 @@ public class Client {
                 Validation.checkUnit(this.game.getMap(), source, numUnits, Client.numUnits - totalUnits, this.playerName);
                 totalUnits += numUnits;
                 for (int i = 0; i < numUnits; i++)
-                    this.game.getMap().getTerritory(source).addUnit(new Unit("Normal"));
+                    this.game.getMap().getTerritory(source).addUnit(new Unit("Gnome"));
             } catch (Exception e) {
                 System.out.println("Invalid input: " + e.getMessage());
             }

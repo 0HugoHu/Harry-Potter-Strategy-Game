@@ -111,7 +111,7 @@ public class GameTest {
 
         for(Territory t:terrs){
             for (int i = 0; i < 6; i++)
-                newGame.getMap().getTerritory(t.getName()).addUnit(new Unit("Normal"));
+                newGame.getMap().getTerritory(t.getName()).addUnit(new Unit("Gnome"));
         }
 
         AttackTurn attTurn1=new AttackTurn(m,0,"A");

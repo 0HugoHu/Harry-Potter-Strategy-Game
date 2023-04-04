@@ -34,14 +34,14 @@ public class TerritoryTest {
     @Test
     public void addUnit() {
         Territory t = new Territory("Terr0");
-        Unit u = new Unit("Normal");
+        Unit u = new Unit("Gnome");
         assertTrue(t.addUnit(u));
     }
 
     @Test
     public void removeUnit() {
         Territory t = new Territory("Terr0");
-        Unit u = new Unit("Normal");
+        Unit u = new Unit("Gnome");
         assertTrue(t.addUnit(u));
         assertTrue(t.removeUnit(u));
     }
@@ -70,9 +70,9 @@ public class TerritoryTest {
     @Test
     public void getUnits() {
         Territory t = new Territory("Terr0");
-        Unit u1 = new Unit("Unit1", 1, 2, 3);
-        Unit u2 = new Unit("Unit2", 2, 3, 4);
-        Unit u3 = new Unit("Unit3", 3, 4, 5);
+        Unit u1 = new Unit("Unit1", 1, 2, 3,0);
+        Unit u2 = new Unit("Unit2", 2, 3, 4,0);
+        Unit u3 = new Unit("Unit3", 3, 4, 5,0);
         t.addUnit(u1);
         t.addUnit(u2);
         t.addUnit(u3);
@@ -86,9 +86,9 @@ public class TerritoryTest {
     @Test
     public void removeAllUnits() {
         Territory t = new Territory("Terr0");
-        Unit u1 = new Unit("Unit1", 1, 2, 3);
-        Unit u2 = new Unit("Unit2", 2, 3, 4);
-        Unit u3 = new Unit("Unit3", 3, 4, 5);
+        Unit u1 = new Unit("Unit1", 1, 2, 3,0);
+        Unit u2 = new Unit("Unit2", 2, 3, 4,0);
+        Unit u3 = new Unit("Unit3", 3, 4, 5,0);
         t.addUnit(u1);
         t.addUnit(u2);
         t.addUnit(u3);
@@ -104,9 +104,9 @@ public class TerritoryTest {
     @Test
     public void removeUnitByName() {
         Territory t = new Territory("Terr0");
-        Unit u1 = new Unit("Unit1", 1, 2, 3);
-        Unit u2 = new Unit("Unit2", 2, 3, 4);
-        Unit u3 = new Unit("Unit3", 3, 4, 5);
+        Unit u1 = new Unit("Unit1", 1, 2, 3,0);
+        Unit u2 = new Unit("Unit2", 2, 3, 4,0);
+        Unit u3 = new Unit("Unit3", 3, 4, 5,0);
         t.addUnit(u1);
         t.addUnit(u2);
         t.addUnit(u3);
@@ -140,9 +140,9 @@ public class TerritoryTest {
     @Test
     public void getNumUnits() {
         Territory t = new Territory("Terr0");
-        Unit u1 = new Unit("Unit1", 1, 2, 3);
-        Unit u2 = new Unit("Unit2", 2, 3, 4);
-        Unit u3 = new Unit("Unit3", 3, 4, 5);
+        Unit u1 = new Unit("Unit1", 1, 2, 3,0);
+        Unit u2 = new Unit("Unit2", 2, 3, 4,0);
+        Unit u3 = new Unit("Unit3", 3, 4, 5,0);
         t.addUnit(u1);
         t.addUnit(u2);
         t.addUnit(u3);
@@ -214,16 +214,16 @@ public class TerritoryTest {
         assertTrue(t.isAdjacent("Test"));
         assertFalse(t.isAdjacent("Test2"));
         assertTrue(t.getAdjacents().contains("Test"));
-        Unit u1 = new Unit("Defense");
-        Unit u2 = new Unit("Normal");
+        Unit u1 = new Unit("Dwarf");
+        Unit u2 = new Unit("Gnome");
         t.addUnit(u1);
         assertFalse(t.removeUnit(u2));
 
-        assertFalse(t.removeUnit(UnitType.NORMAL));
-        assertTrue(t.removeUnit(UnitType.DEFENSE));
+        assertFalse(t.removeUnit(UnitType.GNOME));
+        assertTrue(t.removeUnit(UnitType.DWARF));
         t.addUnit(u1);
         assertFalse(t.removeUnit());
-        assertFalse(t.removeUnitByName("Normal"));
+        assertFalse(t.removeUnitByName("Gnome"));
     }
 
 }
