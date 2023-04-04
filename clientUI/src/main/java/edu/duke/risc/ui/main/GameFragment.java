@@ -1,6 +1,7 @@
 package edu.duke.risc.ui.main;
 
 import android.content.Context;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.content.Intent;
 
@@ -8,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.os.Handler;
 import android.text.method.Touch;
@@ -65,6 +67,9 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     LinearLayout order_view;
     ViewGroup global_prompt;
 
+    private MoveTurn moveTurn;
+    private AttackTurn attackTurn;
+
 
     public static GameFragment newInstance() {
         return new GameFragment();
@@ -111,14 +116,16 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         if (resultCode == ClientIntentService.STATUS_FINISHED) {
             this.mGame = (Game) resultData.getSerializable("game");
             // update the game view
-            global_prompt.setVisibility(View.INVISIBLE);
+            global_prompt.setVisibility(View.GONE);
             order_view.setVisibility(View.VISIBLE);
-            base_view.setVisibility(View.INVISIBLE);
+            base_view.setVisibility(View.GONE);
             if (!isColorMapping) {
                 mGameView.initColorMapping(this.mGame.getPlayerList());
                 isColorMapping = true;
             }
             if (this.mGame != null) {
+                moveTurn = new MoveTurn(this.mGame.getMap(), this.mGame.getTurn(), this.mGame.getPlayerName());
+                attackTurn = new AttackTurn(this.mGame.getMap(), this.mGame.getTurn(), this.mGame.getPlayerName());
                 mGameView.updateMap(this.mGame.getMap());
                 mGameView.updateGame(this.mGame);
             }
@@ -154,6 +161,9 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         final ViewGroup nullParent = null;
         View move_order = inflater_move.inflate(R.layout.move_order, nullParent, false);
 
+        LayoutInflater inflater_ui = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View ui = inflater_ui.inflate(R.layout.game_ui, nullParent, false);
+
 
         listView = move_order.findViewById(R.id.list);
         dataModels = new ArrayList<>();
@@ -170,6 +180,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         base_view = move_order.findViewById(R.id.base_view);
         order_view = move_order.findViewById(R.id.order_view);
         global_prompt = move_order.findViewById(R.id.global_prompt);
+
+        Button end_turn_btn = ui.findViewById(R.id.end_turn);
 
         // TODO: Use for test only
         int max_cost = 10;
@@ -191,8 +203,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
         commit_btn.setOnClickListener(v -> {
             // Read instructions
-            MoveTurn moveTurn = new MoveTurn(this.mGame.getMap(), this.mGame.getTurn(), this.mGame.getPlayerName());
-            AttackTurn attackTurn = new AttackTurn(this.mGame.getMap(), this.mGame.getTurn(), this.mGame.getPlayerName());
 
             if (mTouchEvent == TouchEvent.MOVE) {
                 for (UnitDataModel unit : dataModels) {
@@ -213,18 +223,10 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             }
 
             // Done
-            this.mGame.addToTurnMap(this.mGame.getPlayerId(), moveTurn, attackTurn);
-            order_view.setVisibility(View.INVISIBLE);
-            global_prompt.setVisibility(View.VISIBLE);
-            // Send the game object to ClientIntentService
-            Intent intent = new Intent();
-            intent.setAction("RISC_SEND_TO_SERVER");
-            intent.putExtra("game", this.mGame);
-            context.sendBroadcast(intent);
-
+            base_view.setVisibility(View.GONE);
         });
 
-        shadow_view.setOnClickListener(v -> base_view.setVisibility(View.INVISIBLE));
+        shadow_view.setOnClickListener(v -> base_view.setVisibility(View.GONE));
 
         mGameView.setEventListener(new GameView.EventListener() {
             @Override
@@ -289,13 +291,26 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             }
         });
 
+        end_turn_btn.setOnClickListener(v -> {
+            base_view.setVisibility(View.VISIBLE);
+            order_view.setVisibility(View.GONE);
+            global_prompt.setVisibility(View.VISIBLE);
+            // Commit all moves and attacks
+            this.mGame.addToTurnMap(this.mGame.getPlayerId(), moveTurn, attackTurn);
+            // Send the game object to ClientIntentService
+            Intent intent = new Intent();
+            intent.setAction("RISC_SEND_TO_SERVER");
+            intent.putExtra("game", this.mGame);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        });
+
 
         framelayout.addView(mGameView);
+        framelayout.addView(ui, params);
         framelayout.addView(move_order, params);
 
         return framelayout;
     }
-
 
 
     private void updateTerrInfo(String terrName) {
