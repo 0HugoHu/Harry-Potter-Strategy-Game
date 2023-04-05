@@ -181,7 +181,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
         // Initialize widgets in the move_attack view
         Button commit_btn = move_attack_view.findViewById(R.id.attack_btn);
-        Button end_turn_btn = ui.findViewById(R.id.end_turn);
         TextView cost_error_prompt = move_attack_view.findViewById(R.id.cost_error_prompt);
         TextView view_title = move_attack_view.findViewById(R.id.view_title);
         TextView cost_title = move_attack_view.findViewById(R.id.cost_title);
@@ -200,6 +199,12 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         base_view = order_view.findViewById(R.id.base_view);
         global_prompt = order_view.findViewById(R.id.global_prompt);
         inner_order_view = order_view.findViewById(R.id.inner_order_view);
+
+        // Initialize widgets in ui surface
+        Button chat_btn = ui.findViewById(R.id.ui_chat);
+        Button end_turn_btn = ui.findViewById(R.id.end_turn);
+        Button rank_btn = ui.findViewById(R.id.rank);
+        Button tech_btn = ui.findViewById(R.id.tech);
 
 
         prop_btn.setOnClickListener(v -> {
@@ -315,9 +320,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         });
 
         end_turn_btn.setOnClickListener(v -> {
-            base_view.setVisibility(View.VISIBLE);
-            inner_order_view.setVisibility(View.GONE);
-            global_prompt.setVisibility(View.VISIBLE);
+            waitForOthers();
             // Commit all moves and attacks
             this.mGame.addToTurnMap(this.mGame.getPlayerId(), moveTurn, attackTurn);
             // Send the game object to ClientIntentService
@@ -330,6 +333,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         framelayout.addView(mGameView);
         framelayout.addView(ui, params);
         framelayout.addView(order_view, params);
+
+        waitForOthers();
 
         return framelayout;
     }
@@ -349,6 +354,12 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             dataModels.add(new UnitDataModel(requireActivity().getResources().getString(R.string.example_unit), unitNum));
         }
         adapter.notifyDataSetChanged();
+    }
+
+    private void waitForOthers() {
+        base_view.setVisibility(View.VISIBLE);
+        inner_order_view.setVisibility(View.GONE);
+        global_prompt.setVisibility(View.VISIBLE);
     }
 
 }
