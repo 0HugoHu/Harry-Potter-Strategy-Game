@@ -11,6 +11,8 @@
     <color name="global_prompt_shadow">#AA000000</color>
     <color name="global_prompt_text">#FFEEEEEE</color>
 
+    <color name="text_white">#FFFEFEFE</color>
+
     <color name="order_background">#FFEEEEEE</color>
     <color name="order_shadow">#55000000</color>
     <color name="order_title">#FF000000</color>

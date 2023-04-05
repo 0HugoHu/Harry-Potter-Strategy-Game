@@ -1,11 +1,11 @@
 package edu.duke.shared.map;
 
-import javafx.util.Pair;
+
+import com.sun.tools.javac.util.Pair;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-//import android.util.Pair;
 
 
 public class GameMap implements Serializable {

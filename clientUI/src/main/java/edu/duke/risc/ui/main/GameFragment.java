@@ -327,7 +327,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         });
 
-
         framelayout.addView(mGameView);
         framelayout.addView(ui, params);
         framelayout.addView(order_view, params);
