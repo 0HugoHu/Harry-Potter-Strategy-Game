@@ -1,8 +1,6 @@
 package edu.duke.shared.map;
 
 
-import com.sun.tools.javac.util.Pair;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,14 +18,15 @@ public class GameMap implements Serializable {
     // Territory border coordinates
     // byte pattern code: 0001: top, 0010: right, 0100: bottom, 1000: left
     private final HashMap<String, Byte> borderPoints;
-    private final HashMap<Pair<String,String>,Integer> distances;
-    public int getDistance(String first, String second){
-        Pair pq=new Pair(first,second);
-        return distances.get(pq);
+    private final HashMap<String[], Integer> distances;
+
+    public int getDistance(String first, String second) {
+        String[] pair = new String[]{first, second};
+        return distances.get(pair);
     }
-    public void putDistance(String first,String second,int dis) {
-        Pair pq=new Pair(first,second);
-        distances.put(pq,dis);
+    public void putDistance(String first, String second, int dis) {
+        String[] pq = new String[]{first, second};
+        distances.put(pq, dis);
     }
 
 
@@ -56,7 +55,7 @@ public class GameMap implements Serializable {
         this.numTerritories = numTerritories;
         this.territories = territories;
         this.borderPoints = new HashMap<>();
-        this.distances=new HashMap<>();
+        this.distances = new HashMap<>();
     }
 
     /**

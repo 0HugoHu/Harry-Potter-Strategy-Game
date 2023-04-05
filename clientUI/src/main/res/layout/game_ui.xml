@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/ui_chat"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:background="@drawable/chat_bg_s"
@@ -46,7 +46,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/ui_player_name_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/harry_potter"
@@ -67,7 +67,7 @@
                     android:textColor="@color/ui_gold"
                     android:textSize="@dimen/ui_bold_text_size"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/textView4"
+                    app:layout_constraintStart_toEndOf="@+id/ui_player_name_label"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -82,7 +82,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/ui_player_school_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/harry_potter"
@@ -103,7 +103,7 @@
                     android:textColor="@color/ui_ravenclaw"
                     android:textSize="@dimen/ui_bold_text_size"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/textView5"
+                    app:layout_constraintStart_toEndOf="@+id/ui_player_school_label"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -118,7 +118,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/textView6"
+                    android:id="@+id/ui_horn_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/harry_potter"
@@ -139,7 +139,18 @@
                     android:textColor="@color/ui_silver"
                     android:textSize="@dimen/ui_bold_text_size"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/textView6"
+                    app:layout_constraintStart_toEndOf="@+id/ui_horn_label"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/horn_img"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:src="@drawable/horn"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ui_horn"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -154,7 +165,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/textView7"
+                    android:id="@+id/ui_coin_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/harry_potter"
@@ -175,7 +186,17 @@
                     android:textColor="@color/ui_bronze"
                     android:textSize="@dimen/ui_bold_text_size"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/textView7"
+                    app:layout_constraintStart_toEndOf="@+id/ui_coin_label"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/coin_img"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="4dp"
+                    android:src="@drawable/galleon"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ui_coin"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
