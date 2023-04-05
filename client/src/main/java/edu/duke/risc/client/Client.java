@@ -314,42 +314,68 @@ public class Client {
         }
     }
 
-    /*
-     * Order attack from player's console
-     */
     private void orderAttack(AttackTurn attackTurn,MoveTurn moveTurn) {
         System.out.println("Please enter the name of the territory you want to attack from:\n");
         String from = scanner.nextLine();
         System.out.println("Please enter the name of the territory you want to attack to:\n");
         String to = scanner.nextLine();
-        System.out.println("Please enter the number of Gnomes you want to use in attack:\n");
-        int GnomesNumUnits = Validation.getValidNumber(scanner);
-        System.out.println("Please enter the number of Dwarfs you want to use in attack:\n");
-        int DwarfsNumUnits = Validation.getValidNumber(scanner);
-        System.out.println("Please enter the number of House-elfs you want to use in attack:\n");
-        int HouseElfsNumUnits = Validation.getValidNumber(scanner);
-
-        HashMap<UnitType,Integer> unitList=new HashMap<>();
-        unitList.put(UnitType.GNOME,GnomesNumUnits);
-        unitList.put(UnitType.DWARF,DwarfsNumUnits);
-        unitList.put(UnitType.HOUSE_ELF,HouseElfsNumUnits);
-        attackTurn.addAttack(new Attack(from, to, unitList, this.playerName));
-//        try {
-//            //Validation.checkAttack(attackTurn, moveTurn, from, to, numUnits);
-//            attackTurn.addAttack(new Attack(from, to, numUnits, this.playerName));
-//        } catch (Exception e) {
-//            System.out.println("Invalid input: " + e.getMessage());
-//            while (true) {
-//                System.out.println("Please enter X to return to menu, or enter C to continue\n");
-//                String operation = scanner.nextLine();
-//                if (operation.equals("X")) return;
-//                if (operation.equals("C")) {
-//                    orderAttack(attackTurn,moveTurn);
-//                    break;
-//                }
-//            }
-//        }
-
+        System.out.println("Please enter the number of units you want to use in attack:\n");
+        int numUnits = Validation.getValidNumber(scanner);
+        try {
+            Validation.checkAttack(attackTurn, moveTurn, from, to, numUnits);
+            attackTurn.addAttack(new Attack(from, to, numUnits, this.playerName));
+        } catch (Exception e) {
+            System.out.println("Invalid input: " + e.getMessage());
+            while (true) {
+                System.out.println("Please enter X to return to menu, or enter C to continue\n");
+                String operation = scanner.nextLine();
+                if (operation.equals("X")) return;
+                if (operation.equals("C")) {
+                    orderAttack(attackTurn,moveTurn);
+                    break;
+                }
+            }
+        }
     }
+
+
+
+    /*
+     * Order attack from player's console
+     */
+//    private void orderAttack(AttackTurn attackTurn,MoveTurn moveTurn) {
+//        System.out.println("Please enter the name of the territory you want to attack from:\n");
+//        String from = scanner.nextLine();
+//        System.out.println("Please enter the name of the territory you want to attack to:\n");
+//        String to = scanner.nextLine();
+//        System.out.println("Please enter the number of Gnomes you want to use in attack:\n");
+//        int GnomesNumUnits = Validation.getValidNumber(scanner);
+//        System.out.println("Please enter the number of Dwarfs you want to use in attack:\n");
+//        int DwarfsNumUnits = Validation.getValidNumber(scanner);
+//        System.out.println("Please enter the number of House-elfs you want to use in attack:\n");
+//        int HouseElfsNumUnits = Validation.getValidNumber(scanner);
+//
+//        HashMap<UnitType,Integer> unitList=new HashMap<>();
+//        unitList.put(UnitType.GNOME,GnomesNumUnits);
+//        unitList.put(UnitType.DWARF,DwarfsNumUnits);
+//        unitList.put(UnitType.HOUSE_ELF,HouseElfsNumUnits);
+//        attackTurn.addAttack(new Attack(from, to, unitList, this.playerName));
+////        try {
+////            //Validation.checkAttack(attackTurn, moveTurn, from, to, numUnits);
+////            attackTurn.addAttack(new Attack(from, to, numUnits, this.playerName));
+////        } catch (Exception e) {
+////            System.out.println("Invalid input: " + e.getMessage());
+////            while (true) {
+////                System.out.println("Please enter X to return to menu, or enter C to continue\n");
+////                String operation = scanner.nextLine();
+////                if (operation.equals("X")) return;
+////                if (operation.equals("C")) {
+////                    orderAttack(attackTurn,moveTurn);
+////                    break;
+////                }
+////            }
+////        }
+//
+//    }
 
 }
