@@ -1,9 +1,11 @@
 package edu.duke.risc.ui.draw;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Map;
 
+import edu.duke.risc.R;
 import edu.duke.risc.ui.action.TouchEventMapping;
 import edu.duke.risc.ui.state.TouchEvent;
 import edu.duke.shared.helper.Validation;
@@ -47,6 +50,8 @@ public class MapTiles {
     // Background image
     private final Bitmap backgroundImageBitmap;
 
+    private Typeface plain;
+
 
     /**
      * Constructor
@@ -54,7 +59,7 @@ public class MapTiles {
      * @param viewWidth  width of the view
      * @param viewHeight height of the view
      */
-    public MapTiles(int viewWidth, int viewHeight, Bitmap backgroundImageBitmap) {
+    public MapTiles(Context mContext, int viewWidth, int viewHeight, Bitmap backgroundImageBitmap) {
         this.paddingLeft = Math.max(viewWidth / 10, this.paddingLeft);
         this.paddingTop = Math.max(viewHeight / 10, this.paddingRight);
         this.paddingRight = this.paddingLeft;
@@ -62,10 +67,12 @@ public class MapTiles {
         this.mapViewWidth = viewWidth - this.paddingLeft - this.paddingRight;
         this.mapViewHeight = viewHeight - this.paddingTop - this.paddingBottom;
         this.backgroundImageBitmap = backgroundImageBitmap;
+        plain = mContext.getResources().getFont(R.font.harry_potter);
+        plain = Typeface.create(plain, Typeface.ITALIC);
     }
 
     public void initColorMapping(ArrayList<Player> players) {
-        int[] colors = new int[]{0x44003366, 0x44660000, 0x44003300, 0x44CC9900};
+        int[] colors = new int[]{0x66003366, 0x55660000, 0x66003300, 0x55CC9900};
         for (Player player : players) {
             this.ownerColor.put(player.getPlayerName(), colors[player.getPlayerId()]);
         }
@@ -130,7 +137,7 @@ public class MapTiles {
                 String selectedOwner = map.getOwnerByTerrName(territorySelected);
                 String territoryName = map.getTerritoryNameByCoord(y, x);
                 Territory t = map.getTerritory(territoryName);
-                mPaint.setColor(ownerColor.getOrDefault(owner, 0xFF000000));
+                mPaint.setColor(ownerColor.getOrDefault(owner, 0x44000000));
                 byte pattern = map.isBorderPoint(y, x);
 
                 // Draw new tile
@@ -140,7 +147,7 @@ public class MapTiles {
                     /* *****************
                      Draw border of current selected territory
                     ****************** */
-                    mPaint.setColor(0xFF000000);
+                    mPaint.setColor(0x44000000);
                     // If this border is selected
                     if (showCurrentTerr(territoryName, territorySelected, territorySelectedDouble)) {
                         this.boarderSize = 6;
@@ -176,14 +183,17 @@ public class MapTiles {
             for (int x = 0; x < width; x++) {
                 String owner = map.getOwnerByCoord(y, x);
                 String territoryName = map.getTerritoryNameByCoord(y, x);
-                mPaint.setColor(ownerColor.getOrDefault(owner, 0xFF000000));
+                mPaint.setColor(ownerColor.getOrDefault(owner, 0x44000000));
                 // Update center point of each territory
                 if (touchEventMapping.isCenterPoint(y, x)) {
                     assert (touchEventMapping.updateTerritoryMapping(map.getTerritoryNameByCoord(y, x), new int[]{(int) (this.paddingTop + offsetY + y * size + size / 2), (int) (this.paddingLeft + offsetX + x * size + size / 2)}));
                     // show center point
-                    mPaint.setColor(0xFF000000);
-                    mPaint.setTextSize(size);
-                    canvas.drawText(territoryName + ": " + map.getTerritory(territoryName).getNumUnits(), this.paddingLeft + offsetX + (int) ((x - 0.5) * size), this.paddingTop + offsetY + (int) ((y + 0.5) * size), mPaint);
+                    mPaint.setColor(0xDD000000);
+                    mPaint.setTextSize((int)(size));
+                    mPaint.setTypeface(plain);
+                    int textWidth = (int) mPaint.measureText(territoryName);
+                    canvas.drawText(territoryName, this.paddingLeft + offsetX + x * size - (int)(textWidth / 2), this.paddingTop + offsetY + (y + 1) * size, mPaint);
+                    // Restore typeface
                 }
             }
         }

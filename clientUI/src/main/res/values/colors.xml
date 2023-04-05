@@ -23,6 +23,11 @@
     <color name="ui_hufflepuff">#DDA600</color>
     <color name="ui_slytherin">#009700</color>
 
+    <color name="map_ravenclaw">#44003366</color>
+    <color name="map_gryffindor">#44660000</color>
+    <color name="map_hufflepuff">#44CC9900</color>
+    <color name="map_slytherin">#44003300</color>
+
 
     <color name="order_background">#FFEEEEEE</color>
     <color name="order_shadow">#55000000</color>
