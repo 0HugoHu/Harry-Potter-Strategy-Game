@@ -13,6 +13,17 @@
 
     <color name="text_white">#FFFEFEFE</color>
 
+    <color name="ui_gold">#FFEABE62</color>
+    <color name="ui_silver">#FFC0C0C0</color>
+    <color name="ui_bronze">#FFCD7F32</color>
+    <color name="ui_blue_light">#FF87CEEB</color>
+
+    <color name="ui_ravenclaw">#0070E1</color>
+    <color name="ui_gryffindor">#DC0000</color>
+    <color name="ui_hufflepuff">#DDA600</color>
+    <color name="ui_slytherin">#009700</color>
+
+
     <color name="order_background">#FFEEEEEE</color>
     <color name="order_shadow">#55000000</color>
     <color name="order_title">#FF000000</color>

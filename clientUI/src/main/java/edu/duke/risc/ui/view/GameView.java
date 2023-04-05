@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Handler;
 import android.text.method.Touch;
 import android.util.AttributeSet;
@@ -98,6 +99,9 @@ public class GameView extends SurfaceView implements Runnable {
 
     private Game mGame;
 
+    private Rect mRect = new Rect();
+    private final Bitmap wallpaperBitmap;
+
 
     public GameView(Context context, Game game) {
         this(context, null, game);
@@ -113,6 +117,7 @@ public class GameView extends SurfaceView implements Runnable {
         this.mScaleGestureDetector = new ScaleGestureDetector(context, new ScaleListener());
         this.selectionBubbleBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.selection_bubble_bold);
         this.backgroundImageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.backgroud_map);
+        this.wallpaperBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.wallpaper);
         this.mGame = game;
     }
 
@@ -132,6 +137,7 @@ public class GameView extends SurfaceView implements Runnable {
         mViewHeight = h;
         mMapTiles = new MapTiles(mViewWidth, mViewHeight, backgroundImageBitmap);
         mMapUI = new MapUI(mViewWidth, mViewHeight, selectionBubbleBitmap);
+        this.mRect.set(0, 0, mViewWidth, mViewHeight);
     }
 
     /**
@@ -147,8 +153,9 @@ public class GameView extends SurfaceView implements Runnable {
             if (mSurfaceHolder.getSurface().isValid()) {
                 if (mUpdateType != MapUpdateType.NONE) {
                     canvas = mSurfaceHolder.lockCanvas();
+                    // Draw background image
 
-                    canvas.drawColor(Color.WHITE);
+                    canvas.drawBitmap(wallpaperBitmap, null, mRect, null);
                     canvas.scale(scale, scale);
                     switch (mUpdateType) {
                         case REFRESH:
