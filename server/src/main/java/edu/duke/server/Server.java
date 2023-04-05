@@ -292,11 +292,23 @@ public class Server {
     public void growResources() {
         //After each turn, all territories should add one new unit
         for (Territory t : this.game.getMap().getTerritories()) {
-            if(t.checkUnicornLand()){
-                t.addHorns(70);
+            if(t.getType().equals("plain")){
+                t.addHorns(30);
+                t.addCoins(30);
             }
-            if(t.checkNifflerLand()){
-                t.addCoins(50);
+            if(t.getType().equals("cliff")){
+                t.addHorns(50);
+            }
+            if(t.getType().equals("canyon")){
+                t.addHorns(25);
+                t.addCoins(45);
+            }
+            if(t.getType().equals("desert")){
+                t.addCoins(45);
+            }
+            if(t.getType().equals("forest")){
+                t.addHorns(45);
+                t.addCoins(25);
             }
         }
     }

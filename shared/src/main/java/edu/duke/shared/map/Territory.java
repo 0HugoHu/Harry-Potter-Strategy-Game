@@ -38,6 +38,8 @@ public class Territory implements Serializable {
 
     private boolean[] ResourcePro;
 
+    private String type;
+
     private String details;
 
     /**
@@ -56,6 +58,7 @@ public class Territory implements Serializable {
         this.horns=0;
         this.ResourcePro=new boolean[]{false,false};
         this.details="";
+        this.type="";
     }
 
     /**
@@ -69,7 +72,7 @@ public class Territory implements Serializable {
      * @param adjs        Adjacent territories
      */
     public Territory(String name, Player playerOwner, String owner, ArrayList<Unit> units, HashSet<int[]> coords,
-                     HashSet<String> adjs,String details) {
+                     HashSet<String> adjs,String details,String type) {
         this.playerOwner = playerOwner;
         this.name = name;
         this.owner = owner;
@@ -80,6 +83,7 @@ public class Territory implements Serializable {
         this.horns=0;
         this.ResourcePro=new boolean[]{false,false};
         this.details=details;
+        this.type=type;
     }
 
 
@@ -373,6 +377,64 @@ public class Territory implements Serializable {
         return false;
     }
 
+    public String getType(){
+        return this.type;
+    }
+
+    /**
+     * set different and assign initial resources to different territories
+     * @param typeName
+     */
+    public void setType(String typeName){
+        switch(typeName){
+            case "plain":
+                this.type="plain";
+                setUnicornLand();;
+                setNifflerLand();
+                addHorns(50);
+                addCoins(50);
+                break;
+            case "cliff":
+                this.type="cliff";
+                setUnicornLand();;
+                addHorns(100);
+                break;
+            case "canyon":
+                this.type="canyon";
+                setUnicornLand();;
+                setNifflerLand();
+                addHorns(25);
+                addCoins(75);
+                break;
+            case "desert":
+                this.type="desert";
+                setNifflerLand();
+                addCoins(95);
+                break;
+            case "forest":
+                this.type="forest";
+                setUnicornLand();;
+                setNifflerLand();
+                addHorns(125);
+                addCoins(125);
+                break;
+            case "wetland":
+                this.type="wetland";
+                setUnicornLand();;
+                setNifflerLand();
+                addHorns(75);
+                addCoins(15);
+                break;
+            default:
+                this.type="plain";
+                setUnicornLand();;
+                setNifflerLand();
+                addHorns(50);
+                addCoins(50);
+                break;
+        }
+    }
+
     /**
      * check if this land produces silver coin
      * @return
@@ -402,6 +464,21 @@ public class Territory implements Serializable {
         }
         return new int[]{s1/coords.size(),s2/coords.size()};
     }
+
+    /**
+     * If the player want to upgrade from one type to another,
+     * this function will return the corresponding costs
+     * @param type1
+     * @param type2
+     * @return
+     */
+    public int getUpdateValue(String type1,String type2){
+        int cost1=new Unit(type1).getCost();
+        int cost2=new Unit(type2).getCost();
+        int costDiff=cost2-cost1;
+        return costDiff;
+    }
+
 
 
 }

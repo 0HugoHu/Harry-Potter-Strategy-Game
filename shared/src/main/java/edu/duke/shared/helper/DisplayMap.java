@@ -69,7 +69,7 @@ public class DisplayMap {
                 }
                 sb.delete(sb.length() - 2, sb.length());
                 sb.append(")");
-                sb.append(" [");
+                sb.append(" [ Type ").append(t.getType()).append("; ");
                 sb.append("Unicorn Horns: ").append(t.getHorns()).append(", ");
                 sb.append("Silver Coins: ").append(t.getCoins());
                 sb.append("]\n");

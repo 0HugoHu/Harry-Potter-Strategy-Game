@@ -1,10 +1,7 @@
 package edu.duke.shared;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import edu.duke.shared.helper.Dice;
 import edu.duke.shared.helper.Header;
@@ -521,58 +518,75 @@ public class Game implements Serializable {
     /**
      * Allocate territories to players,
      * and allocate corresponding resources to each territory.
-     * For each player, they got one unicorn territory which produces unicorn horns(tech resources),
-     * also many sniffler territories which produce silver coins(food resources).
-     * The silver coins each sniffler territory produces are random, but they should add up to 300 for each player.
+     *
+     * Each territory could be one of these six types: Plain, Cliff, Canyon, Desert, Forest, Wetland;
+     * With different type, they have different initial resources.
+     * Each player will be equally assigned with various types of territories.
      */
-    public void allocateTerritories() {
+    public void allocateTerritories(){
         GameMap gameMap = this.getMap();
         int numTerrs = gameMap.getNumTerritories();
         int numPlayers = this.getNumPlayers();
         ArrayList<Territory> terrs = gameMap.getTerritories();
         ArrayList<Player> players = this.getPlayerList();
-        int count=0;
-        boolean continueFlag=true;
-        for (int i = 0; i < numTerrs; i++) {
+
+        for (int i = 0; i < numTerrs; i++){
             players.get(i / (numTerrs / numPlayers)).expandTerr(terrs.get(i));
             terrs.get(i).changePlayerOwner(players.get(i / (numTerrs / numPlayers)));
             terrs.get(i).changeOwner(players.get(i / (numTerrs / numPlayers)).getPlayerName());
-            int k=numTerrs / numPlayers;
-            if(i==0){
-                terrs.get(i).addHorns(100);
-                terrs.get(i).setUnicornLand();
-            }
-            else if(i%k==0){
-                continueFlag=true;
-                count=0;
-                terrs.get(i).addHorns(100);
-                terrs.get(i).setUnicornLand();
-            }
-            else if((i+1)%k==0){
-                int res=300-count;
-                terrs.get(i).addCoins(res);
-                terrs.get(i).setNifflerLand();
-            }
-            else{
-                int res=0;
-                boolean flag=true;
-                while (flag&&continueFlag) {
-                    flag=false;
-                    Random random = new Random();
-                    res = random.nextInt(100) + 1;
-                    count += res;
-                    if (count > 300) {
-                        count-=res;
-                        flag=true;
-                    }
-                    if(count==300){
-                        continueFlag=false;
-                    }
-                }
-                terrs.get(i).addCoins(res);
-                terrs.get(i).setNifflerLand();
-            }
         }
+        switch (numPlayers){
+            case(2):
+                ArrayList<String> typeNames1=new ArrayList<String>(Arrays.asList("plain", "plain", "cliff","cliff",
+                        "canyon","canyon","desert","desert","forest","forest","wetland","wetland"));
+                Collections.shuffle(typeNames1);
+                for(int i = 0; i < 12; i++){
+                    terrs.get(i).setType(typeNames1.get(i));
+                }
+                Collections.shuffle(typeNames1);
+                for(int i = 12; i < 24; i++){
+                    terrs.get(i).setType(typeNames1.get(i-12));
+                }
+                break;
+            case(3):
+                ArrayList<String> typeNames2=new ArrayList<String>(Arrays.asList("plain", "plain", "cliff",
+                        "canyon","desert","forest","forest","wetland"));
+                Collections.shuffle(typeNames2);
+                for(int i = 0; i < 8; i++){
+                    terrs.get(i).setType(typeNames2.get(i));
+                }
+                Collections.shuffle(typeNames2);
+                for(int i = 8; i < 16; i++){
+                    terrs.get(i).setType(typeNames2.get(i-8));
+                }
+                Collections.shuffle(typeNames2);
+                for(int i = 16; i < 24; i++){
+                    terrs.get(i).setType(typeNames2.get(i-16));
+                }
+                break;
+            case(4):
+                ArrayList<String> typeNames3=new ArrayList<String>(Arrays.asList("plain", "cliff",
+                        "canyon","desert","forest","wetland"));
+                Collections.shuffle(typeNames3);
+                for(int i = 0; i < 6; i++){
+                    terrs.get(i).setType(typeNames3.get(i));
+                }
+                Collections.shuffle(typeNames3);
+                for(int i = 6; i < 12; i++){
+                    terrs.get(i).setType(typeNames3.get(i-6));
+                }
+                Collections.shuffle(typeNames3);
+                for(int i = 12; i < 18; i++){
+                    terrs.get(i).setType(typeNames3.get(i-12));
+                }
+                Collections.shuffle(typeNames3);
+                for(int i = 18; i < 24; i++){
+                    terrs.get(i).setType(typeNames3.get(i-18));
+                }
+                break;
+        }
+
     }
+
 
 }

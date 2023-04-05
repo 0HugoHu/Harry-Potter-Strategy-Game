@@ -6,12 +6,8 @@ public class Unit implements Serializable {
     // Unit name
     private final UnitType type;
     // Unit attack power
-    private final int attack;
-    // Unit defense power
-    private final int defense;
-    // Unit hit points
-    private final int hp;
     private final int bonus;
+    private final int cost;
 
     /**
      * Initialize Unit by name
@@ -25,51 +21,35 @@ public class Unit implements Serializable {
         switch (type) {
             case GNOME:
                 this.bonus=0;
-                this.attack = 2;
-                this.defense = 1;
-                this.hp = 2;
+                this.cost=0;
                 break;
             case DWARF:
                 this.bonus=1;
-                this.attack = 1;
-                this.defense = 3;
-                this.hp = 3;
+                this.cost=3;
                 break;
             case HOUSE_ELF:
                 this.bonus=3;
-                this.attack = 1;
-                this.defense = 3;
-                this.hp = 3;
+                this.cost=11;
                 break;
             case GOBLIN:
                 this.bonus=5;
-                this.attack = 1;
-                this.defense = 3;
-                this.hp = 3;
+                this.cost=30;
                 break;
             case VAMPIRE:
                 this.bonus=8;
-                this.attack = 1;
-                this.defense = 3;
-                this.hp = 3;
+                this.cost=55;
                 break;
             case CENTAUR:
                 this.bonus=11;
-                this.attack = 1;
-                this.defense = 3;
-                this.hp = 3;
+                this.cost=90;
                 break;
             case WEREWOLF:
                 this.bonus=15;
-                this.attack = 1;
-                this.defense = 3;
-                this.hp = 3;
+                this.cost=140;
                 break;
             default:
                 this.bonus=0;
-                this.attack = 0;
-                this.defense = 0;
-                this.hp = 0;
+                this.cost=0;
                 break;
         }
     }
@@ -83,10 +63,8 @@ public class Unit implements Serializable {
      */
     public Unit(String name, int attack, int defense, int hp,int bonus) {
         this.type = convertStringToUnitType(name);
-        this.attack = attack;
-        this.defense = defense;
-        this.hp = hp;
         this.bonus=bonus;
+        this.cost=0;
     }
 
     /**
@@ -98,36 +76,15 @@ public class Unit implements Serializable {
         return this.type;
     }
 
-    /**
-     * Get unit attack power
-     *
-     * @return unit attack power
-     */
-    public int getAttack() {
-        return this.attack;
-    }
-
-    /**
-     * Get unit defense power
-     *
-     * @return unit defense power
-     */
-    public int getDefense() {
-        return this.defense;
-    }
-
-    /**
-     * Get unit hp value
-     *
-     * @return unit hp value
-     */
-    public int getHp() {
-        return this.hp;
-    }
 
     public int getBonus(){
         return this.bonus;
     }
+
+    public int getCost(){
+        return this.cost;
+    }
+
 
     /**
      * Convert string to UnitType
