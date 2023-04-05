@@ -97,6 +97,8 @@ public class GameView extends SurfaceView implements Runnable {
     private final Bitmap backgroundImageBitmap;
     private EventListener eventListener;
 
+    private Context mContext;
+
     private Game mGame;
 
     private Rect mRect = new Rect();
@@ -109,6 +111,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     public GameView(Context context, AttributeSet attrs, Game game) {
         super(context, attrs);
+        this.mContext = context;
         this.mSurfaceHolder = getHolder();
         this.mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.mPaint.setFilterBitmap(true);
@@ -116,7 +119,7 @@ public class GameView extends SurfaceView implements Runnable {
         this.mHandler = new Handler();
         this.mScaleGestureDetector = new ScaleGestureDetector(context, new ScaleListener());
         this.selectionBubbleBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.selection_bubble_bold);
-        this.backgroundImageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.backgroud_map);
+        this.backgroundImageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background_map_opt);
         this.wallpaperBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.wallpaper);
         this.mGame = game;
     }
@@ -135,7 +138,7 @@ public class GameView extends SurfaceView implements Runnable {
         super.onSizeChanged(w, h, oldw, oldh);
         mViewWidth = w;
         mViewHeight = h;
-        mMapTiles = new MapTiles(mViewWidth, mViewHeight, backgroundImageBitmap);
+        mMapTiles = new MapTiles(mContext, mViewWidth, mViewHeight, backgroundImageBitmap);
         mMapUI = new MapUI(mViewWidth, mViewHeight, selectionBubbleBitmap);
         this.mRect.set(0, 0, mViewWidth, mViewHeight);
     }
@@ -154,7 +157,6 @@ public class GameView extends SurfaceView implements Runnable {
                 if (mUpdateType != MapUpdateType.NONE) {
                     canvas = mSurfaceHolder.lockCanvas();
                     // Draw background image
-
                     canvas.drawBitmap(wallpaperBitmap, null, mRect, null);
                     canvas.scale(scale, scale);
                     switch (mUpdateType) {
@@ -174,7 +176,7 @@ public class GameView extends SurfaceView implements Runnable {
                 }
                 if (mAnimationType != MapAnimationType.NONE) {
                     canvas = mSurfaceHolder.lockCanvas();
-                    canvas.drawColor(Color.WHITE);
+                    canvas.drawBitmap(wallpaperBitmap, null, mRect, null);
                     canvas.scale(scale, scale);
                     if (animationTimer500) {
                         switch (mAnimationType) {
