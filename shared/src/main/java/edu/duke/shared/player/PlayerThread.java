@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.concurrent.locks.ReentrantLock;
 
 import edu.duke.shared.Game;
 import edu.duke.shared.helper.GameObject;
@@ -30,6 +31,8 @@ public class PlayerThread implements Runnable, Serializable {
     private final int playerId;
 
     public int forTesting;
+
+    private ReentrantLock serverGameLock = new ReentrantLock();
 
     /**
      * Initialize the PlayerThread
@@ -102,7 +105,6 @@ public class PlayerThread implements Runnable, Serializable {
                         this.serverGame.getMap().getTerritory(t.getName()).addUnit(new Unit("Gnome"));
                     totalUnits += t.getNumUnits();
                 }
-
                 break;
             }
             case TURN_BEGIN:
@@ -118,31 +120,33 @@ public class PlayerThread implements Runnable, Serializable {
                 if (!Validation.checkAttacks(attackTurn)) {
                     System.out.println("The attack turn from player " + this.playerId + " is illegal.");
                 }
-                //TODO: actions if move or attack validation on server fail
 
-
-                // Merge Unit
-                Player p = this.serverGame.getPlayerList().get(this.playerId);
-                for (Territory t : this.serverGame.getMap().getTerritories()) {
-                    if (t.getOwner().equals(p.getPlayerName())) {
-                        t.removeAllUnits();
-                        for (int j = 0; j < this.currGame.getMap().getTerritory(t.getName()).getNumUnits(); j++)
-                            t.addUnit(new Unit("Gnome"));
+                // Prevent multiple threads from modifying the server game at the same time
+                serverGameLock.lock();
+                try {
+                    // Merge Unit
+                    Player p = this.serverGame.getPlayerList().get(this.playerId);
+                    for (Territory t : this.serverGame.getMap().getTerritories()) {
+                        if (t.getOwner().equals(p.getPlayerName())) {
+                            t.removeAllUnits();
+                            for (int j = 0; j < this.currGame.getMap().getTerritory(t.getName()).getNumUnits(); j++)
+                                t.addUnit(new Unit("Gnome"));
+                        }
                     }
-                }
 
-                // Merge all turns from different players
-                ArrayList<Turn> newTurns = this.currGame.getTurnList().get(turnIndex).get(this.playerId);
-                // For the first player, add a new turn
-                if (this.serverGame.getTurnList().size() == turnIndex || forTesting == 2) {
-                    HashMap<Integer, ArrayList<Turn>> newTurnsMap = new HashMap<>();
-                    newTurnsMap.put(this.playerId, newTurns);
-                    this.serverGame.getTurnList().add(newTurnsMap);
-                } else {
-                    this.serverGame.getTurnList().get(turnIndex).put(this.playerId, newTurns);
+                    // Merge all turns from different players
+                    ArrayList<Turn> newTurns = this.currGame.getTurnList().get(turnIndex).get(this.playerId);
+                    // For the first player, add a new turn
+                    if (this.serverGame.getTurnList().size() == turnIndex || forTesting == 2) {
+                        HashMap<Integer, ArrayList<Turn>> newTurnsMap = new HashMap<>();
+                        newTurnsMap.put(this.playerId, newTurns);
+                        this.serverGame.getTurnList().add(newTurnsMap);
+                    } else {
+                        this.serverGame.getTurnList().get(turnIndex).put(this.playerId, newTurns);
+                    }
+                } finally {
+                    serverGameLock.unlock();
                 }
-
-                // Attack cannot be done here
                 break;
             case TURN_END:
             case GAME_OVER:
