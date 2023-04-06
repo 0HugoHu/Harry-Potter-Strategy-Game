@@ -16,10 +16,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import edu.duke.risc.R;
 import edu.duke.risc.client.ClientIntentService;
@@ -30,6 +32,7 @@ import edu.duke.risc.ui.state.TouchEvent;
 import edu.duke.risc.ui.view.GameView;
 import edu.duke.shared.Game;
 import edu.duke.shared.map.Territory;
+import edu.duke.shared.player.Player;
 import edu.duke.shared.turn.Attack;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Move;
@@ -40,6 +43,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     private GameView mGameView;
 
     private Game mGame;
+
+    private Context context;
 
     private TouchEvent mTouchEvent;
 
@@ -59,11 +64,16 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     ConstraintLayout base_view;
     View order_view;
     View inner_order_view;
+
+    View init_view;
+    View ui_view;
     ViewGroup global_prompt;
 
     ViewGroup move_attack_view;
     ViewGroup prop_view;
     ViewGroup unit_view;
+
+    ViewGroup init_base_view;
 
 
     private MoveTurn moveTurn;
@@ -118,6 +128,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             global_prompt.setVisibility(View.GONE);
             inner_order_view.setVisibility(View.VISIBLE);
             base_view.setVisibility(View.GONE);
+            // Assign text
+            assignText();
             if (!isColorMapping) {
                 mGameView.initColorMapping(this.mGame.getPlayerList());
                 isColorMapping = true;
@@ -147,6 +159,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     }
 
     private FrameLayout setupFrameLayout(Context context) {
+        this.context = context;
         // FrameLayout: Hold the game view and the UI
         FrameLayout framelayout = new FrameLayout(context);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
@@ -169,7 +182,11 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
         // Load the global prompt view
         LayoutInflater inflater_ui = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View ui = inflater_ui.inflate(R.layout.game_ui, nullParent, false);
+        ui_view = inflater_ui.inflate(R.layout.game_ui, nullParent, false);
+
+        // Load the init view
+        LayoutInflater inflater_init = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        init_view = inflater_init.inflate(R.layout.init_view, nullParent, false);
 
         // Initialize the list view and adapter
         move_attack_listview = move_attack_view.findViewById(R.id.list);
@@ -201,10 +218,20 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         inner_order_view = order_view.findViewById(R.id.inner_order_view);
 
         // Initialize widgets in ui surface
-        Button chat_btn = ui.findViewById(R.id.ui_chat);
-        Button end_turn_btn = ui.findViewById(R.id.end_turn);
-        Button rank_btn = ui.findViewById(R.id.rank);
-        Button tech_btn = ui.findViewById(R.id.tech);
+        Button chat_btn = ui_view.findViewById(R.id.ui_chat);
+        Button end_turn_btn = ui_view.findViewById(R.id.end_turn);
+        Button rank_btn = ui_view.findViewById(R.id.rank);
+        Button tech_btn = ui_view.findViewById(R.id.tech);
+
+        // Initialize widgets in init view
+        Button init_btn = init_view.findViewById(R.id.init_view_accept);
+        init_base_view = init_view.findViewById(R.id.init_base);
+        init_base_view.setVisibility(View.GONE);
+
+
+        init_btn.setOnClickListener(v -> {
+            init_base_view.setVisibility(View.GONE);
+        });
 
 
         prop_btn.setOnClickListener(v -> {
@@ -331,8 +358,9 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         });
 
         framelayout.addView(mGameView);
-        framelayout.addView(ui, params);
+        framelayout.addView(ui_view, params);
         framelayout.addView(order_view, params);
+        framelayout.addView(init_view, params);
 
         waitForOthers();
 
@@ -360,6 +388,64 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         base_view.setVisibility(View.VISIBLE);
         inner_order_view.setVisibility(View.GONE);
         global_prompt.setVisibility(View.VISIBLE);
+    }
+
+    private void assignText() {
+        init_base_view.setVisibility(View.VISIBLE);
+        // Assign the text and image
+        TextView init_player_name = init_view.findViewById(R.id.init_player_name);
+        TextView init_house = init_view.findViewById(R.id.init_view_house);
+        TextView ui_house = ui_view.findViewById(R.id.ui_player_school);
+        ImageView init_house_img = init_view.findViewById(R.id.init_view_house_img);
+
+        init_player_name.setText(this.mGame.getPlayerName());
+        switch (this.mGame.getPlayerId()) {
+            case 0:
+                init_house.setText(context.getResources().getString(R.string.ravenclaw));
+                init_house.setTextColor(getResources().getColor(R.color.ui_ravenclaw));
+                init_house_img.setImageResource(R.drawable.house_rauenclaw);
+                ui_house.setText(context.getResources().getString(R.string.ravenclaw));
+                ui_house.setTextColor(getResources().getColor(R.color.ui_ravenclaw));
+                break;
+            case 1:
+                init_house.setText(context.getResources().getString(R.string.hufflepuff));
+                init_house.setTextColor(getResources().getColor(R.color.ui_hufflepuff));
+                init_house_img.setImageResource(R.drawable.house_hufflepuff);
+                ui_house.setText(context.getResources().getString(R.string.hufflepuff));
+                ui_house.setTextColor(getResources().getColor(R.color.ui_hufflepuff));
+                break;
+            case 2:
+                init_house.setText(context.getResources().getString(R.string.gryffindor));
+                init_house.setTextColor(getResources().getColor(R.color.ui_gryffindor));
+                init_house_img.setImageResource(R.drawable.house_gryffindor);
+                ui_house.setText(context.getResources().getString(R.string.gryffindor));
+                ui_house.setTextColor(getResources().getColor(R.color.ui_gryffindor));
+                break;
+            case 3:
+                init_house.setText(context.getResources().getString(R.string.slytherin));
+                init_house.setTextColor(getResources().getColor(R.color.ui_slytherin));
+                init_house_img.setImageResource(R.drawable.house_slytherin);
+                ui_house.setText(context.getResources().getString(R.string.slytherin));
+                ui_house.setTextColor(getResources().getColor(R.color.ui_slytherin));
+                break;
+        }
+        TextView ui_player_name = ui_view.findViewById(R.id.ui_player_name);
+        TextView ui_horn = ui_view.findViewById(R.id.ui_horn);
+        TextView ui_coin = ui_view.findViewById(R.id.ui_coin);
+        TextView ui_world_level = ui_view.findViewById(R.id.ui_world_level);
+
+        Player player = this.mGame.getPlayer(this.mGame.getPlayerName());
+        HashMap<String, Integer> resources = player.getAllRes();
+        if (resources == null || resources.size() == 0 || resources.get("horn") == null || resources.get("coin") == null) {
+            ui_horn.setText(String.valueOf(0));
+            ui_coin.setText(String.valueOf(0));
+            ui_world_level.setText(String.valueOf(1));
+            return;
+        }
+        ui_horn.setText(String.valueOf(resources.get("horn")));
+        ui_coin.setText(String.valueOf(resources.get("coin")));
+//        ui_world_level.setText(String.valueOf(player.getWorldLevel()));
+        ui_world_level.setText(String.valueOf(1));
     }
 
 }

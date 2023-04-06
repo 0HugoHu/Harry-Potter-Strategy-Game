@@ -33,6 +33,7 @@
     <color name="order_shadow">#55000000</color>
     <color name="order_title">#FF000000</color>
     <color name="order_text">#FF000000</color>
+    <color name="order_text_gray">#AA000000</color>
     <color name="error_prompt">#FFD32F2F</color>
 
 </resources>

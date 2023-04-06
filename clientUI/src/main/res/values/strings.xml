@@ -22,6 +22,7 @@
     <string name="end_turn">End Turn</string>
 
     <string name="terr_desc_example">The Great Lake, alternatively known as the Black Lake, was a large body of water. It was a landlocked freshwater lake located to the south of Hogwarts Castle. The castle stands on a cliff overlooking the water. It was about half a mile in diameter and the castle\'s plumbing network drained into it. The lake had a number of very unusual inhabitants, including a Giant Squid, a village of Merpeople, and many Grindylows.</string>
+    <string name="init_view_text1">We are pleased to inform you that you have been accepted at Hogwarts School of Witchcraft and Wizardry. After careful consideration of the Sorting Hat, you are placed to:</string>
     <string name="chat">CHAT</string>
     <string name="end_turn_btn">END</string>
     <string name="tech_btn">TECH</string>
@@ -29,13 +30,20 @@
     <string name="player">PLAYER: </string>
     <string name="player_name_example">Harry541</string>
     <string name="house">HOUSE: </string>
-    <string name="school_name_example">RAVENCLAW</string>
+    <string name="house_name_example">RAVENCLAW</string>
+    <string name="house_name_example_s">Ravenclaw</string>
     <string name="horn">HORN: </string>
     <string name="horn_name_example">37</string>
     <string name="coin">COIN: </string>
     <string name="coin_name_example">100</string>
     <string name="world_level">WORLD LEVEL: </string>
     <string name="world_level_name_example">2</string>
+    <string name="accept_offer">I\'m Pleased to Accept My Offer</string>
+
+    <string name="ravenclaw">Ravenclaw</string>
+    <string name="gryffindor">Gryffindor</string>
+    <string name="hufflepuff">Hufflepuff</string>
+    <string name="slytherin">Slytherin</string>
 
     <string name="example_unit">Boggarts</string>
     <string name="example_unit2">Dementors</string>
