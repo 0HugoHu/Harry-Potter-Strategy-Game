@@ -126,7 +126,7 @@ public class MapTiles {
         int size = Math.min(this.mapViewWidth / width, this.mapViewHeight / height);
 
         // Draw background image
-        Rect src = new Rect((int)(this.paddingLeft + offsetX), (int)(this.paddingTop + offsetY), (int)(this.paddingLeft + offsetX) + width * size, (int)(this.paddingTop + offsetY) + height * size);
+        Rect src = new Rect((int) (this.paddingLeft + offsetX), (int) (this.paddingTop + offsetY), (int) (this.paddingLeft + offsetX) + width * size, (int) (this.paddingTop + offsetY) + height * size);
         canvas.drawBitmap(this.backgroundImageBitmap, null, src, null);
 
         System.out.println(territorySelected + " " + territorySelectedDouble);
@@ -140,7 +140,7 @@ public class MapTiles {
                 mPaint.setColor(ownerColor.getOrDefault(owner, 0x44000000));
                 byte pattern = map.isBorderPoint(y, x);
 
-                // Draw new tile
+                // Draw new map tile
                 canvas.drawRect(this.paddingLeft + offsetX + x * size, this.paddingTop + offsetY + y * size, this.paddingLeft + offsetX + x * size + size, this.paddingTop + offsetY + y * size + size, mPaint);
 
                 if (pattern != 0) {
@@ -189,15 +189,36 @@ public class MapTiles {
                     assert (touchEventMapping.updateTerritoryMapping(map.getTerritoryNameByCoord(y, x), new int[]{(int) (this.paddingTop + offsetY + y * size + size / 2), (int) (this.paddingLeft + offsetX + x * size + size / 2)}));
                     // show center point
                     mPaint.setColor(0xDD000000);
-                    mPaint.setTextSize((int)(size));
+                    mPaint.setTextSize((int) (size));
                     mPaint.setTypeface(plain);
                     int textWidth = (int) mPaint.measureText(territoryName);
-                    canvas.drawText(territoryName, this.paddingLeft + offsetX + x * size - (int)(textWidth / 2), this.paddingTop + offsetY + (y + 1) * size, mPaint);
-                    // Restore typeface
+                    canvas.drawText(territoryName, this.paddingLeft + offsetX + x * size - (int) (textWidth / 2), this.paddingTop + offsetY + (y + 1) * size, mPaint);
+                    // Draw distance text
+                    if (showAdjacentTerr(territorySelected, territorySelectedDouble)) {
+                        Territory t = map.getTerritory(territoryName);
+                        String selectedOwner = map.getOwnerByTerrName(territorySelected);
+                        boolean distanceFlag = false;
+                        if (t.isAdjacent(territorySelected)) {
+                            // Other's territory
+                            if (!owner.equals(selectedOwner)) {
+                                distanceFlag = true;
+                            }
+                        }
+                        // Also add distance that can be visited by path
+                        if (showSelfTerr(territoryName, territorySelected)) {
+                            distanceFlag = true;
+                        }
+
+                        if (distanceFlag) {
+                            // Show distance between two territories
+                            mPaint.setColor(0xFFF57F17);
+                            canvas.drawText(String.valueOf(map.getDistance(territoryName, territorySelected)), this.paddingLeft + offsetX + x * size, this.paddingTop + offsetY + (y - 1) * size, mPaint);
+                        }
+                    }
                 }
             }
         }
-        touchEventMapping.updateBoundary(new int[] {(int)(this.paddingTop + offsetY), (int)(this.paddingLeft + offsetX + width * size), (int)(this.paddingTop + offsetY + height * size), (int)(this.paddingLeft + offsetX)});
+        touchEventMapping.updateBoundary(new int[]{(int) (this.paddingTop + offsetY), (int) (this.paddingLeft + offsetX + width * size), (int) (this.paddingTop + offsetY + height * size), (int) (this.paddingLeft + offsetX)});
     }
 
     private void drawBorders(byte pattern, int y, int x, int size, Canvas canvas, Paint mPaint) {
@@ -223,9 +244,10 @@ public class MapTiles {
 
     /**
      * Check if the territory been selected should display its border
+     *
      * @param territoryName the territory name been checked
-     * @param selected1 the first selected event
-     * @param selected2 the second selected event
+     * @param selected1     the first selected event
+     * @param selected2     the second selected event
      * @return true if the territory should display its border
      */
     private boolean showCurrentTerr(String territoryName, String selected1, String selected2) {
@@ -242,7 +264,7 @@ public class MapTiles {
         return selected1 != null && selected2 != null && selected2.equals(TouchEvent.ORDER.name());
     }
 
-    private boolean showSelfTerr(String territoryName,String selected1) {
+    private boolean showSelfTerr(String territoryName, String selected1) {
         // If "order" action is selected
         return !TouchEventMapping.checkIsAction(selected1) && !selected1.equals(territoryName) && Validation.checkPathExist(this.mGameMap, selected1, territoryName);
     }

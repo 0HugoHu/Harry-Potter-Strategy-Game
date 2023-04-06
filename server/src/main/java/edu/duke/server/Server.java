@@ -112,6 +112,7 @@ public class Server {
      */
     public Server(int numOfPlayers, int numUnits) {
         this.game = new Game(numOfPlayers, numUnits);
+
         try {
             this.serverSocket = new ServerSocket(PORT);
         } catch (Exception e) {

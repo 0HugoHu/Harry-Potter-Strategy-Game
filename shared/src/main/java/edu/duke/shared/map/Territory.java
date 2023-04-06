@@ -445,5 +445,4 @@ public class Territory implements Serializable {
         return new int[]{s1/coords.size(),s2/coords.size()};
     }
 
-
 }
