@@ -99,7 +99,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:fontFamily="@font/harry_potter"
-                    android:text="@string/school_name_example"
+                    android:text="@string/house_name_example"
                     android:textColor="@color/ui_ravenclaw"
                     android:textSize="@dimen/ui_bold_text_size"
                     app:layout_constraintBottom_toBottomOf="parent"
