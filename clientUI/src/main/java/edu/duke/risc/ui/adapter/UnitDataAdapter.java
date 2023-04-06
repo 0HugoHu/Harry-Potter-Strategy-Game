@@ -30,9 +30,10 @@ public class UnitDataAdapter extends ArrayAdapter<UnitDataModel> implements View
 
     // View lookup cache
     private static class ViewHolder {
-        TextView txtName;
-        SeekBar txtSeekBar;
-        EditText editText;
+        TextView name;
+        TextView number;
+        SeekBar seekbar;
+        EditText edittext;
     }
 
     public UnitDataAdapter(ArrayList<UnitDataModel> data, Context context) {
@@ -59,22 +60,24 @@ public class UnitDataAdapter extends ArrayAdapter<UnitDataModel> implements View
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.order_item, parent, false);
-            viewHolder.txtName = convertView.findViewById(R.id.unit_name);
-            viewHolder.txtSeekBar = convertView.findViewById(R.id.seek_bar);
-            viewHolder.editText = convertView.findViewById(R.id.number_input);
+            viewHolder.name = convertView.findViewById(R.id.unit_name);
+            viewHolder.number = convertView.findViewById(R.id.order_item_num);
+            viewHolder.seekbar = convertView.findViewById(R.id.seek_bar);
+            viewHolder.edittext = convertView.findViewById(R.id.number_input);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.txtName.setText(dataModel.getName());
-        viewHolder.txtSeekBar.setMax(dataModel.getMax());
-        viewHolder.editText.setText("0");
-        viewHolder.txtSeekBar.setProgress(0);
-        viewHolder.txtSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        viewHolder.name.setText(dataModel.getName());
+        viewHolder.number.setText(String.valueOf(dataModel.getMax()));
+        viewHolder.seekbar.setMax(dataModel.getMax());
+        viewHolder.edittext.setText("0");
+        viewHolder.seekbar.setProgress(0);
+        viewHolder.seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                viewHolder.editText.setText(String.valueOf(progress));
+                viewHolder.edittext.setText(String.valueOf(progress));
                 dataSet.get(position).setNumber(progress);
                 if (costListener != null) {
                     costListener.onCostChange();
@@ -93,21 +96,21 @@ public class UnitDataAdapter extends ArrayAdapter<UnitDataModel> implements View
         });
 
         // Change the seek bar value when the edit text is changed
-        viewHolder.editText.setOnFocusChangeListener((v, hasFocus) -> {
+        viewHolder.edittext.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
-                String value = viewHolder.editText.getText().toString();
+                String value = viewHolder.edittext.getText().toString();
                 if (value.equals("")) {
-                    viewHolder.editText.setText("");
-                    viewHolder.txtSeekBar.setProgress(0);
+                    viewHolder.edittext.setText("");
+                    viewHolder.seekbar.setProgress(0);
                     dataSet.get(position).setNumber(0);
                 } else {
                     int valueInt = Integer.parseInt(value);
                     if (valueInt > dataModel.getMax()) {
-                        viewHolder.editText.setText(String.valueOf(dataModel.getMax()));
-                        viewHolder.txtSeekBar.setProgress(dataModel.getMax());
+                        viewHolder.edittext.setText(String.valueOf(dataModel.getMax()));
+                        viewHolder.seekbar.setProgress(dataModel.getMax());
                         dataSet.get(position).setNumber(dataModel.getMax());
                     } else {
-                        viewHolder.txtSeekBar.setProgress(valueInt);
+                        viewHolder.seekbar.setProgress(valueInt);
                         dataSet.get(position).setNumber(valueInt);
                     }
                 }
