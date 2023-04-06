@@ -2,6 +2,7 @@ package edu.duke.server;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -32,6 +33,8 @@ public class Server {
     private ServerSocket serverSocket;
     // Logger
     private static final Logger logger = Logger.getLogger("serverLog.txt");
+
+    private ReentrantLock serverGameLock = new ReentrantLock();
 
     /**
      * Main method
@@ -169,7 +172,12 @@ public class Server {
             GameObject obj = new GameObject(clientSocket);
             // Encode player specific Id to client
             this.game.setPlayerId(i);
-            obj.encodeObj(this.game);
+            serverGameLock.lock();
+            try {
+                obj.encodeObj(this.game);
+            } finally {
+                serverGameLock.unlock();
+            }
         }
     }
 
