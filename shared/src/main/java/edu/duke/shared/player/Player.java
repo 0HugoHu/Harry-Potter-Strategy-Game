@@ -22,6 +22,8 @@ public class Player implements Serializable {
     // Player's thread
     public transient Thread thread;
 
+    private int worldLevel;
+
 
     /**
      * Initialize the Player by name
@@ -38,6 +40,7 @@ public class Player implements Serializable {
         this.playerThread = new PlayerThread(this.socket, this.playerId);
         this.thread = new Thread(this.playerThread);
         this.thread.start();
+        this.worldLevel=1;
     }
 
     /**
@@ -145,6 +148,33 @@ public class Player implements Serializable {
         return playerTerrs;
     }
 
+
+    /**
+     * This function return the cost for each level of upgrade goal
+     * @param goal
+     * @return
+     */
+    public int upgradeCost(int goal){
+        switch (goal){
+            case 2:
+                return 20;
+            case 3:
+                return 40;
+            case 4:
+                return 80;
+            case 5:
+                return 160;
+            case 6:
+                return 320;
+            default:
+                return 20;
+        }
+    }
+
+    public int getWorldLevel(){
+        return  worldLevel;
+    }
+
     /**
      * return connection socket of this player
      *
@@ -163,29 +193,20 @@ public class Player implements Serializable {
         this.socket = socket;
     }
 
-    public String getAllResources() {
-        int horns = 0;
-        int coins = 0;
-        for (Territory terr : playerTerrs) {
-            horns += terr.getHorns();
-            coins += terr.getCoins();
+    /**
+     * return the corresponding resources for this player, with the Integer[] array's
+     * first index being coin resources, second index being horn resources.
+     * @return
+     */
+    public Integer[] getAllRes(){
+        Integer[] count=new Integer[]{0,0};
+        for(Territory terr:playerTerrs){
+            count[0]+=terr.getCoins();
+            count[1]+= terr.getHorns();
         }
-        String res = "Player " + playerName + " have " + horns + " unicorn horns, and " + coins + " silver coins.";
-        return res;
+        return count;
     }
 
-    public HashMap<String, Integer> getAllRes() {
-        int horns = 0;
-        int coins = 0;
-        for (Territory terr : playerTerrs) {
-            horns += terr.getHorns();
-            coins += terr.getCoins();
-        }
-        HashMap<String, Integer> res = new HashMap<>();
-        res.put("Horns", horns);
-        res.put("Coins", coins);
-        return res;
-    }
 
 
 }

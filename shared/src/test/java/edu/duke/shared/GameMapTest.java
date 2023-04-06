@@ -2,9 +2,12 @@ package edu.duke.shared;
 
 import static org.junit.Assert.*;
 
+import edu.duke.shared.player.Player;
 import org.junit.Test;
 
+import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import edu.duke.shared.map.GameMap;
 import edu.duke.shared.map.Territory;
@@ -176,4 +179,42 @@ public class GameMapTest {
         GameMap gameMap = new GameMap(10, 10, 1, terrList);
         assertTrue(gameMap.completed());
     }
+
+
+    @Test
+    public void testGetResources(){
+        ArrayList<Territory> terrList = new ArrayList<>();
+        Territory t1 = new Territory("A");
+        Player p1 = new Player(0, new Socket());
+        p1.setPlayerName("Alice");
+
+        t1.changePlayerOwner(p1);
+        t1.addCoins(100);
+        t1.addHorns(40);
+        terrList.add(t1);
+
+        Territory t2 = new Territory("B");
+
+        t2.changePlayerOwner(p1);
+        t2.addCoins(99);
+        t2.addHorns(58);
+        terrList.add(t2);
+
+        GameMap gameMap = new GameMap(10, 10, 2, terrList);
+//        Integer[] count=gameMap.getResources(0);
+//        assertEquals(100,(int)count[0]);
+//        assertEquals(40,(int)count[1]);
+
+        Integer[] count1=gameMap.getResources(0);
+        assertEquals(199,(int)count1[0]);
+        assertEquals(98,(int)count1[1]);
+
+        t2.addCoins(1);
+        Integer[] count2=gameMap.getResources(0);
+        assertEquals(200,(int)count2[0]);
+
+    }
+
+
+
 }

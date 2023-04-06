@@ -23,7 +23,7 @@ public class Server {
     // Port number
     private final static int PORT = 5410;
     // Number of players
-    private final static int numPlayers = 4;
+    private final static int numPlayers = 3;
     // Number of units at the beginning
     private final static int numUnits = 24;
     // Gameplay controller
@@ -281,11 +281,23 @@ public class Server {
     public void growResources() {
         //After each turn, all territories should add one new unit
         for (Territory t : this.game.getMap().getTerritories()) {
-            if(t.checkUnicornLand()){
-                t.addHorns(70);
+            if(t.getType().equals("plain")){
+                t.addHorns(30);
+                t.addCoins(30);
             }
-            if(t.checkNifflerLand()){
-                t.addCoins(50);
+            if(t.getType().equals("cliff")){
+                t.addHorns(50);
+            }
+            if(t.getType().equals("canyon")){
+                t.addHorns(25);
+                t.addCoins(45);
+            }
+            if(t.getType().equals("desert")){
+                t.addCoins(45);
+            }
+            if(t.getType().equals("forest")){
+                t.addHorns(45);
+                t.addCoins(25);
             }
         }
     }

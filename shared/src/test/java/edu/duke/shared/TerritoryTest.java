@@ -196,7 +196,7 @@ public class TerritoryTest {
         coords.add(c1);
         coords.add(c2);
         adjs.add(adj1);
-        Territory t = new Territory(name, p, owner, units, coords, adjs);
+        Territory t = new Territory(name, p, owner, units, coords, adjs,"lll","plain");
         assertEquals(owner, t.getOwner());
         assertEquals(p, t.getPlayerOwner());
         assertEquals(name, t.getName());
@@ -204,6 +204,8 @@ public class TerritoryTest {
         assertEquals(coords, t.getCoords());
         assertTrue(t.isAdjacent(adj1));
         assertFalse(t.isAdjacent(adj2));
+        assertEquals("lll",t.getDetails());
+        assertEquals("plain",t.getType());
 
     }
     

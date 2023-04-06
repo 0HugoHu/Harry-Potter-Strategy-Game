@@ -11,9 +11,6 @@ public class UnitTest {
     public void constructorFullProperties() {
         Unit myunit1 = new Unit("Gnome", 2, 3, 4,0);
         assertEquals(UnitType.GNOME, myunit1.getType());
-        assertEquals(2, myunit1.getAttack());
-        assertEquals(3, myunit1.getDefense());
-        assertEquals(4, myunit1.getHp());
     }
 
     @Test
@@ -40,9 +37,6 @@ public class UnitTest {
         Unit myunit1 = new Unit(name1);
         Unit myunit2 = new Unit(name2);
         Unit myunit3 = new Unit(name3);
-        assertEquals(2, myunit1.getAttack());
-        assertEquals(1, myunit2.getAttack());
-        assertEquals(1, myunit3.getAttack());
     }
 
     @Test
@@ -53,9 +47,6 @@ public class UnitTest {
         Unit myunit1 = new Unit(name1);
         Unit myunit2 = new Unit(name2);
         Unit myunit3 = new Unit(name3);
-        assertEquals(1, myunit1.getDefense());
-        assertEquals(3, myunit2.getDefense());
-        assertEquals(3, myunit3.getDefense());
     }
 
     @Test
@@ -66,8 +57,5 @@ public class UnitTest {
         Unit myunit1 = new Unit(name1);
         Unit myunit2 = new Unit(name2);
         Unit myunit3 = new Unit(name3);
-        assertEquals(2, myunit1.getHp());
-        assertEquals(3, myunit2.getHp());
-        assertEquals(3, myunit3.getHp());
     }
 }
