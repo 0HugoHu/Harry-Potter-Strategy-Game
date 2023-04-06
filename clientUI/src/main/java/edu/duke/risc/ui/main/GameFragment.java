@@ -19,6 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +27,9 @@ import java.util.HashMap;
 import edu.duke.risc.R;
 import edu.duke.risc.client.ClientIntentService;
 import edu.duke.risc.client.ClientResultReceiver;
+import edu.duke.risc.ui.adapter.TerrDataAdapter;
 import edu.duke.risc.ui.adapter.UnitDataAdapter;
+import edu.duke.risc.ui.model.TerrDataModel;
 import edu.duke.risc.ui.model.UnitDataModel;
 import edu.duke.risc.ui.state.TouchEvent;
 import edu.duke.risc.ui.view.GameView;
@@ -37,6 +40,7 @@ import edu.duke.shared.turn.Attack;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Move;
 import edu.duke.shared.turn.MoveTurn;
+import edu.duke.shared.unit.Unit;
 
 public class GameFragment extends Fragment implements ClientResultReceiver.AppReceiver {
 
@@ -48,13 +52,14 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
     private TouchEvent mTouchEvent;
 
-    // if setup color mapping
-    private boolean isColorMapping = false;
-
-    ArrayList<UnitDataModel> dataModels;
+    ArrayList<UnitDataModel> unitDataModels;
+    ArrayList<TerrDataModel> terrDataModels;
     ListView move_attack_listview;
     ListView unit_listview;
-    private UnitDataAdapter adapter;
+
+    ListView unit_init_listview;
+    private UnitDataAdapter unitAdapter;
+    private TerrDataAdapter terrAdapter;
 
     private String orderTerrFrom;
 
@@ -72,6 +77,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     ViewGroup move_attack_view;
     ViewGroup prop_view;
     ViewGroup unit_view;
+    ViewGroup unit_init_view;
 
     ViewGroup init_base_view;
 
@@ -128,18 +134,37 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             global_prompt.setVisibility(View.GONE);
             inner_order_view.setVisibility(View.VISIBLE);
             base_view.setVisibility(View.GONE);
-            // Assign text
-            assignText();
-            if (!isColorMapping) {
-                mGameView.initColorMapping(this.mGame.getPlayerList());
-                isColorMapping = true;
+            System.out.println("Game state: " + mGame.getGameState());
+            switch (mGame.getGameState()) {
+                // The first two states should be done in the login page
+                case WAITING_TO_JOIN:
+                case READY_TO_INIT_NAME:
+                case READY_TO_INIT_UNITS:
+                    mGameView.initColorMapping(this.mGame.getPlayerList());
+                    mGameView.updateMap(this.mGame.getMap());
+                    mGameView.updateGame(this.mGame);
+                    // Assign text
+                    assignText();
+                    // Assign units
+                    assignUnits();
+                    break;
+                case TURN_BEGIN:
+                    // Update the game view
+                    ui_view.findViewById(R.id.ui_side_bar_init).setVisibility(View.GONE);
+                    ui_view.findViewById(R.id.ui_side_bar).setVisibility(View.VISIBLE);
+                    moveTurn = new MoveTurn(this.mGame.getMap(), this.mGame.getTurn(), this.mGame.getPlayerName());
+                    attackTurn = new AttackTurn(this.mGame.getMap(), this.mGame.getTurn(), this.mGame.getPlayerName());
+                    mGameView.updateMap(this.mGame.getMap());
+                    mGameView.updateGame(this.mGame);
+                    break;
+                case TURN_END:
+                    // TODO: Prompt next turn
+                    break;
+                case GAME_OVER:
+                    // TODO: Prompt game over
+                    break;
             }
-            if (this.mGame != null) {
-                moveTurn = new MoveTurn(this.mGame.getMap(), this.mGame.getTurn(), this.mGame.getPlayerName());
-                attackTurn = new AttackTurn(this.mGame.getMap(), this.mGame.getTurn(), this.mGame.getPlayerName());
-                mGameView.updateMap(this.mGame.getMap());
-                mGameView.updateGame(this.mGame);
-            }
+
         }
     }
 
@@ -179,6 +204,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         move_attack_view = order_view.findViewById(R.id.inflate_move_attack);
         prop_view = order_view.findViewById(R.id.inflate_prop);
         unit_view = order_view.findViewById(R.id.inflate_unit);
+        unit_init_view = order_view.findViewById(R.id.inflate_init_unit);
 
         // Load the global prompt view
         LayoutInflater inflater_ui = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -191,16 +217,15 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         // Initialize the list view and adapter
         move_attack_listview = move_attack_view.findViewById(R.id.list);
         unit_listview = unit_view.findViewById(R.id.unit_list);
-        dataModels = new ArrayList<>();
-        adapter = new UnitDataAdapter(dataModels, context);
-        move_attack_listview.setAdapter(adapter);
-        unit_listview.setAdapter(adapter);
+        unitDataModels = new ArrayList<>();
+        unitAdapter = new UnitDataAdapter(unitDataModels, context);
+        move_attack_listview.setAdapter(unitAdapter);
+        unit_listview.setAdapter(unitAdapter);
 
         // Initialize widgets in the move_attack view
         Button commit_btn = move_attack_view.findViewById(R.id.attack_btn);
         TextView cost_error_prompt = move_attack_view.findViewById(R.id.cost_error_prompt);
         TextView view_title = move_attack_view.findViewById(R.id.view_title);
-        TextView cost_title = move_attack_view.findViewById(R.id.cost_title);
         TextView total_cost = move_attack_view.findViewById(R.id.total_cost);
         // Prop
         TextView prop_title = prop_view.findViewById(R.id.prop_title);
@@ -222,6 +247,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         Button end_turn_btn = ui_view.findViewById(R.id.end_turn);
         Button rank_btn = ui_view.findViewById(R.id.rank);
         Button tech_btn = ui_view.findViewById(R.id.tech);
+        ui_view.findViewById(R.id.ui_side_bar).setVisibility(View.GONE);
 
         // Initialize widgets in init view
         Button init_btn = init_view.findViewById(R.id.init_view_accept);
@@ -231,6 +257,14 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
         init_btn.setOnClickListener(v -> {
             init_base_view.setVisibility(View.GONE);
+            base_view.setVisibility(View.VISIBLE);
+            inner_order_view.setVisibility(View.VISIBLE);
+            shadow_view.setVisibility(View.VISIBLE);
+            base_view.findViewById(R.id.inflate_move_attack).setVisibility(View.GONE);
+            base_view.findViewById(R.id.inflate_unit).setVisibility(View.GONE);
+            base_view.findViewById(R.id.inflate_prop).setVisibility(View.GONE);
+            base_view.findViewById(R.id.inflate_init_unit).setVisibility(View.VISIBLE);
+            base_view.findViewById(R.id.global_prompt).setVisibility(View.GONE);
         });
 
 
@@ -247,8 +281,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         int max_cost = 10;
 
         // Update the cost when the number of units change
-        adapter.setCostListener(() -> {
-            int cost = adapter.getTotalCost();
+        unitAdapter.setCostListener(() -> {
+            int cost = unitAdapter.getTotalCost();
             total_cost.setText(String.valueOf(cost));
             if (cost > max_cost) {
                 total_cost.setTextColor(getResources().getColor(R.color.error_prompt));
@@ -261,19 +295,24 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             }
         });
 
+        // Commit move or attack orders
         commit_btn.setOnClickListener(v -> {
             if (mTouchEvent == TouchEvent.MOVE) {
-                for (UnitDataModel unit : dataModels) {
+                for (UnitDataModel unit : unitDataModels) {
                     int number = unit.getNumber();
                     if (number > 0) {
                         moveTurn.addMove(new Move(orderTerrFrom, orderTerrTo, unit.getNumber(), this.mGame.getPlayerName()));
+                        unit.setMax(unit.getMax() - number);
+                        unitAdapter.notifyDataSetChanged();
                     }
                 }
             } else if (mTouchEvent == TouchEvent.ATTACK) {
-                for (UnitDataModel unit : dataModels) {
+                for (UnitDataModel unit : unitDataModels) {
                     int number = unit.getNumber();
                     if (number > 0) {
                         attackTurn.addAttack(new Attack(orderTerrFrom, orderTerrTo, unit.getNumber(), this.mGame.getPlayerName()));
+                        unit.setMax(unit.getMax() - number);
+                        unitAdapter.notifyDataSetChanged();
                     }
                 }
             } else {
@@ -357,6 +396,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         });
 
+        // Add views to the layout
         framelayout.addView(mGameView);
         framelayout.addView(ui_view, params);
         framelayout.addView(order_view, params);
@@ -369,7 +409,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
 
     private void updateTerrInfo(String terrName) {
-        dataModels.clear();
+        unitDataModels.clear();
 
         Territory territory = mGame.getMap().getTerritory(terrName);
         if (territory == null) {
@@ -379,9 +419,21 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         // TODO: Wait for Unit class implementation
         int unitNum = territory.getUnits().size();
         if (unitNum > 0) {
-            dataModels.add(new UnitDataModel(requireActivity().getResources().getString(R.string.example_unit), unitNum));
+            unitDataModels.add(new UnitDataModel(requireActivity().getResources().getString(R.string.example_unit), unitNum));
         }
-        adapter.notifyDataSetChanged();
+        unitAdapter.notifyDataSetChanged();
+    }
+
+    private void updateUnitInitInfo() {
+        terrDataModels.clear();
+
+        String playerName = mGame.getPlayerName();
+        for (Territory territory : mGame.getMap().getTerritories()) {
+            if (territory.getOwner().equals(playerName)) {
+                terrDataModels.add(new TerrDataModel(territory.getName()));
+            }
+        }
+        terrAdapter.notifyDataSetChanged();
     }
 
     private void waitForOthers() {
@@ -391,14 +443,17 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     }
 
     private void assignText() {
+        ui_view.findViewById(R.id.ui_side_bar_init).setVisibility(View.VISIBLE);
         init_base_view.setVisibility(View.VISIBLE);
         // Assign the text and image
         TextView init_player_name = init_view.findViewById(R.id.init_player_name);
         TextView init_house = init_view.findViewById(R.id.init_view_house);
         TextView ui_house = ui_view.findViewById(R.id.ui_player_school);
         ImageView init_house_img = init_view.findViewById(R.id.init_view_house_img);
+        TextView ui_player_name = ui_view.findViewById(R.id.ui_player_name);
 
         init_player_name.setText(this.mGame.getPlayerName());
+        ui_player_name.setText(this.mGame.getPlayerName());
         switch (this.mGame.getPlayerId()) {
             case 0:
                 init_house.setText(context.getResources().getString(R.string.ravenclaw));
@@ -429,7 +484,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 ui_house.setTextColor(getResources().getColor(R.color.ui_slytherin));
                 break;
         }
-        TextView ui_player_name = ui_view.findViewById(R.id.ui_player_name);
         TextView ui_horn = ui_view.findViewById(R.id.ui_horn);
         TextView ui_coin = ui_view.findViewById(R.id.ui_coin);
         TextView ui_world_level = ui_view.findViewById(R.id.ui_world_level);
@@ -446,6 +500,75 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         ui_coin.setText(String.valueOf(resources.get("coin")));
 //        ui_world_level.setText(String.valueOf(player.getWorldLevel()));
         ui_world_level.setText(String.valueOf(1));
+    }
+
+    private void assignUnits() {
+        // Initialize the list view and adapter
+        unit_init_listview = unit_init_view.findViewById(R.id.terr_list);
+        terrDataModels = new ArrayList<>();
+        terrAdapter = new TerrDataAdapter(terrDataModels, context);
+        unit_init_listview.setAdapter(terrAdapter);
+
+        TextView total_num = unit_init_view.findViewById(R.id.total_num_placed);
+        TextView unit_placed_error_prompt = unit_init_view.findViewById(R.id.unit_placed_error_prompt);
+        Button commit_init_btn = ui_view.findViewById(R.id.commit_init_btn);
+
+        // Get player's territories list
+        updateUnitInitInfo();
+
+        // Update the cost when the number of units change
+        terrAdapter.setTotalNumListener(() -> {
+            int totalNum = terrAdapter.getTotalNum();
+            total_num.setText(String.valueOf(totalNum));
+            if (totalNum > 24) {
+                total_num.setTextColor(getResources().getColor(R.color.error_prompt));
+                commit_init_btn.setEnabled(false);
+                unit_placed_error_prompt.setText(context.getResources().getString(R.string.unit_placed_fault2));
+                unit_placed_error_prompt.setVisibility(View.VISIBLE);
+            } else if (totalNum < 24) {
+                total_num.setTextColor(getResources().getColor(R.color.error_prompt));
+                commit_init_btn.setEnabled(false);
+                unit_placed_error_prompt.setText(context.getResources().getString(R.string.unit_placed_fault));
+                unit_placed_error_prompt.setVisibility(View.VISIBLE);
+            } else {
+                total_num.setTextColor(getResources().getColor(R.color.order_text_white));
+                commit_init_btn.setEnabled(true);
+                unit_placed_error_prompt.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        ui_view.findViewById(R.id.unit_init_btn).setOnClickListener(v -> {
+            base_view.setVisibility(View.VISIBLE);
+        });
+
+        base_view.findViewById(R.id.inflate_init_unit).findViewById(R.id.init_unit_back_btn).setOnClickListener(v -> {
+            base_view.setVisibility(View.GONE);
+        });
+
+        commit_init_btn.setOnClickListener(v -> {
+            // Check if the number of units placed is correct
+            if (terrAdapter.getTotalNum() != 24) {
+                Toast.makeText(context, context.getResources().getString(R.string.unit_placed_fault), Toast.LENGTH_SHORT).show();
+                return;
+            }
+            for (TerrDataModel terr : terrDataModels) {
+                if (terr.getNumber() > 0) {
+                    for (int i = 0; i < terr.getNumber(); i++) {
+                        this.mGame.getMap().getTerritory(terr.getName()).addUnit(new Unit("Gnome"));
+                    }
+                }
+            }
+
+            // Submit game object
+            waitForOthers();
+            // Send the game object to ClientIntentService
+            Intent intent = new Intent();
+            intent.setAction("RISC_SEND_TO_SERVER");
+            intent.putExtra("game", this.mGame);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        });
+
+
     }
 
 }

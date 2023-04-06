@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/inflate_init_unit"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:visibility="visible"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    android:background="@drawable/btn_bg_purple_protrait"
+    android:clickable="true" >
+
+    <TextView
+        android:id="@+id/init_unit_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/gumela"
+        android:text="@string/unit_init_title"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/init_unit_desc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/gumela"
+        android:text="@string/unit_init_desc"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_small"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/init_unit_title"
+        app:layout_constraintTop_toBottomOf="@+id/init_unit_title" />
+
+    <ListView
+        android:id="@+id/terr_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/unit_placed_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/init_unit_title"
+        app:layout_constraintTop_toBottomOf="@+id/init_unit_desc">
+
+    </ListView>
+
+    <TextView
+        android:id="@+id/unit_placed_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="@string/unit_placed"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_small"
+        android:fontFamily="@font/gumela"
+        app:layout_constraintBottom_toTopOf="@+id/unit_placed_error_prompt"
+        app:layout_constraintStart_toStartOf="@+id/terr_list" />
+
+    <TextView
+        android:id="@+id/total_num_placed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/zero"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_small"
+        android:fontFamily="@font/gumela"
+        app:layout_constraintBottom_toBottomOf="@+id/unit_placed_title"
+        app:layout_constraintStart_toEndOf="@+id/unit_placed_title"
+        app:layout_constraintTop_toTopOf="@+id/unit_placed_title" />
+
+    <TextView
+        android:id="@+id/unit_placed_error_prompt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="@string/unit_placed_fault"
+        android:textColor="@color/error_prompt"
+        android:textSize="@dimen/order_text_small"
+        android:fontFamily="@font/gumela"
+        android:textStyle="italic"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/init_unit_back_btn"
+        app:layout_constraintEnd_toEndOf="@+id/terr_list"
+        app:layout_constraintStart_toStartOf="@+id/unit_placed_title" />
+
+
+    <Button
+        android:id="@+id/init_unit_back_btn"
+        android:layout_width="0dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/btn_bg_brown_wide"
+        android:fontFamily="@font/gumela"
+        android:text="@string/unit_init_back_btn"
+        android:textColor="@color/text_white"
+        android:textSize="@dimen/order_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/init_unit_title" />
+</androidx.constraintlayout.widget.ConstraintLayout>

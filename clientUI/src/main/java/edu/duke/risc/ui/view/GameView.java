@@ -30,6 +30,7 @@ import edu.duke.risc.ui.state.MapAnimationType;
 import edu.duke.risc.ui.state.MapUpdateType;
 import edu.duke.risc.ui.state.TouchEvent;
 import edu.duke.shared.Game;
+import edu.duke.shared.helper.State;
 import edu.duke.shared.map.GameMap;
 import edu.duke.shared.player.Player;
 
@@ -317,29 +318,31 @@ public class GameView extends SurfaceView implements Runnable {
             }
 
             case MotionEvent.ACTION_UP: {
-                if (this.isClick) {
-                    this.isClick = false;
-                    if (this.touchEventMapping != null) {
-                        mAnimationType = MapAnimationType.TERRITORY_SELECTED;
+                if (mGame.getGameState() != State.READY_TO_INIT_UNITS) {
+                    if (this.isClick) {
+                        this.isClick = false;
+                        if (this.touchEventMapping != null) {
+                            mAnimationType = MapAnimationType.TERRITORY_SELECTED;
 //                        animationTimer500();
-                        // Record the last touch territory
-                        if (territorySelected == null) {
-                            territorySelected = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX(), territorySelected, mGame);
-                        } else if (territorySelectedDouble == null) {
-                            territorySelectedDouble = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX(), territorySelected, mGame);
-                            // When the first touch is a territory, and the second touch is an
-                            // action, the first territory will be recorded.
-                            if (!TouchEventMapping.checkIsAction(territorySelected) && territorySelectedDouble.equals(TouchEvent.ORDER.name())) {
-                                territorySelectedPrevious = territorySelected;
+                            // Record the last touch territory
+                            if (territorySelected == null) {
+                                territorySelected = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX(), territorySelected, mGame);
+                            } else if (territorySelectedDouble == null) {
+                                territorySelectedDouble = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX(), territorySelected, mGame);
+                                // When the first touch is a territory, and the second touch is an
+                                // action, the first territory will be recorded.
+                                if (!TouchEventMapping.checkIsAction(territorySelected) && territorySelectedDouble.equals(TouchEvent.ORDER.name())) {
+                                    territorySelectedPrevious = territorySelected;
+                                }
+                                actionCallback();
+                            } else {
+                                if (!TouchEventMapping.checkIsAction(territorySelected) && territorySelectedDouble.equals(TouchEvent.ORDER.name())) {
+                                    territorySelectedPrevious = territorySelected;
+                                }
+                                territorySelected = territorySelectedDouble;
+                                territorySelectedDouble = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX(), territorySelected, mGame);
+                                actionCallback();
                             }
-                            actionCallback();
-                        } else {
-                            if (!TouchEventMapping.checkIsAction(territorySelected) && territorySelectedDouble.equals(TouchEvent.ORDER.name())) {
-                                territorySelectedPrevious = territorySelected;
-                            }
-                            territorySelected = territorySelectedDouble;
-                            territorySelectedDouble = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX(), territorySelected, mGame);
-                            actionCallback();
                         }
                     }
                 }

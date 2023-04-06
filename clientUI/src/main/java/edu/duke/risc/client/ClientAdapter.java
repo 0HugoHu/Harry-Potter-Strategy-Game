@@ -29,6 +29,10 @@ public class ClientAdapter {
         this.client.safeClose();
     }
 
+    public void sendUnitInit() {
+        this.client.playOneTurn();
+    }
+
     public void playOneTurn(boolean isMock) {
         if (isMock) {
             this.client.playOneTurnMock();
@@ -40,6 +44,10 @@ public class ClientAdapter {
 
     public String getPlayerName() {
         return this.client.getPlayerName();
+    }
+
+    public int getPlayerId() {
+        return this.client.getPlayerId();
     }
 
 }

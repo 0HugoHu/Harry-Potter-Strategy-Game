@@ -81,6 +81,10 @@ public class Client {
         return this.playerName;
     }
 
+    public int getPlayerId() {
+        return this.playerID;
+    }
+
     /*
      * Get game object
      */
@@ -133,57 +137,11 @@ public class Client {
         // Wait until all players have joined the game
         waitForPlayers();
 
+        // TODO: always mock
         // Send player name
-        sendPlayerName(isMock);
-
-        // Client receive game from the server
-        Game currGame = getGame();
-        this.game = currGame;
-
-        // Read and set Id
-        this.playerID = currGame.getPlayerId();
-        System.out.println("Your game ID is: " + this.playerID + "\n");
-
-        // Units initialization
-        if (isMock) {
-            setupUnitsMock();
-        } else {
-            setupUnits();
-        }
+        sendPlayerName(true);
     }
 
-    /*
-     * Set up units
-     */
-    private void setupUnits() {
-        DisplayMap displayMap = new DisplayMap(this.game, this.playerID);
-        System.out.println(displayMap.showMap());
-        System.out.println(displayMap.showUnits(true, null, null));
-
-        System.out.println("Please set up your units. You have " + numUnits + " units in total.\n");
-        int totalUnits = 0;
-        HashSet<Territory> terrs = this.game.getPlayer(playerName).getPlayerTerrs();
-        for (Territory t : terrs) this.game.getMap().getTerritory(t.getName()).removeAllUnits();
-        while (totalUnits < numUnits) {
-            int numRemainingUnits = Client.numUnits - totalUnits;
-            System.out.println("Please enter the name of the territory you want to add units to:\n");
-            String source = scanner.nextLine();
-            System.out.println("Please enter the number of units you want to add(" + numRemainingUnits + " Remaining):\n");
-            int numUnits = Validation.getValidNumber(scanner);
-            try {
-                Validation.checkUnit(this.game.getMap(), source, numUnits, Client.numUnits - totalUnits, this.playerName);
-                totalUnits += numUnits;
-                for (int i = 0; i < numUnits; i++)
-                    this.game.getMap().getTerritory(source).addUnit(new Unit("Normal"));
-            } catch (Exception e) {
-                System.out.println("Invalid input: " + e.getMessage());
-            }
-        }
-
-        System.out.println("Total units placed: " + totalUnits + ". You have placed exactly " + numUnits + " units.");
-        GameObject obj = new GameObject(this.clientSocket);
-        obj.encodeObj(this.game);
-    }
 
     private void setupUnitsMock() {
         for (int i = 0; i < numUnits; i++)
@@ -240,6 +198,7 @@ public class Client {
     public void playOneTurn() {
         GameObject obj = new GameObject(this.clientSocket);
         obj.encodeObj(this.game);
+        System.out.println("Game objct sent to server.\n");
     }
 
 

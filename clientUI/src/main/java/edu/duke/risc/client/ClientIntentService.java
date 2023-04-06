@@ -54,9 +54,12 @@ public class ClientIntentService extends IntentService {
         final ResultReceiver receiver = intent.getParcelableExtra("RISC_FETCH_FROM_SERVER");
 
         ClientAdapter clientAdapter = new ClientAdapter();
-        clientAdapter.init(true);
+        clientAdapter.init(false);
 
-        while (this.game == null || this.game.getGameState() != State.GAME_OVER) {
+        // Initialize unit
+        initUnit(clientAdapter, receiver);
+
+        while (this.game.getGameState() != State.GAME_OVER) {
             fetchResult(clientAdapter, receiver);
             System.out.println("Start waiting for player order");
             // Wait until action is committed
@@ -81,10 +84,25 @@ public class ClientIntentService extends IntentService {
     private void fetchResult(ClientAdapter clientAdapter, ResultReceiver receiver) {
         this.game = clientAdapter.getNewGame();
         this.game.setPlayerName(clientAdapter.getPlayerName());
+        this.game.setPlayerId(clientAdapter.getPlayerId());
         System.out.println("Game received");
         Bundle b = new Bundle();
         b.putSerializable("game", this.game);
         receiver.send(STATUS_FINISHED, b);
+    }
+
+    private void initUnit(ClientAdapter clientAdapter, ResultReceiver receiver) {
+        fetchResult(clientAdapter, receiver);
+        try {
+            synchronized (receivedPlayerOrder) {
+                receivedPlayerOrder.wait();
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Player unit list received");
+        clientAdapter.updateGame(this.game);
+        clientAdapter.sendUnitInit();
     }
 
 }
