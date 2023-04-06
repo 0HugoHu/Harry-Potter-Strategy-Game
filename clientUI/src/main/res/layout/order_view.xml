@@ -31,6 +31,8 @@
 
         <include layout="@layout/unit_view"/>
 
+        <include layout="@layout/init_unit_view"/>
+
     </LinearLayout>
 
     <include

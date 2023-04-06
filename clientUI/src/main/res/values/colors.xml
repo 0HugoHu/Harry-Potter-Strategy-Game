@@ -13,6 +13,8 @@
 
     <color name="text_white">#FFFEFEFE</color>
 
+    <color name="order_text_white">#EEFEFEFE</color>
+
     <color name="ui_gold">#FFEABE62</color>
     <color name="ui_silver">#FFC0C0C0</color>
     <color name="ui_bronze">#FFCD7F32</color>

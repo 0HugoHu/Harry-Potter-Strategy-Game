@@ -25,4 +25,8 @@ public class UnitDataModel {
     public void setNumber(int number) {
         this.number = number;
     }
+
+    public void setMax(int max) {
+        this.max_number = max;
+    }
 }
