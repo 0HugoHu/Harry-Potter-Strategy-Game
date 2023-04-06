@@ -112,4 +112,25 @@ public class Unit implements Serializable {
                 return UnitType.GNOME;
         }
     }
+
+    public static String getName(UnitType type) {
+        switch (type) {
+            case GNOME:
+                return "Gnome";
+            case DWARF:
+                return "Dwarf";
+            case HOUSE_ELF:
+                return "House-elf";
+            case GOBLIN:
+                return "Goblin";
+            case VAMPIRE:
+                return "Vampire";
+            case CENTAUR:
+                return "Centaur";
+            case WEREWOLF:
+                return "Werewolf";
+            default:
+                return "Gnome";
+        }
+    }
 }

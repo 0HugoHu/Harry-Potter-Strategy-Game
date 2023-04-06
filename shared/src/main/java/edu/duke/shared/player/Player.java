@@ -40,7 +40,7 @@ public class Player implements Serializable {
         this.playerThread = new PlayerThread(this.socket, this.playerId);
         this.thread = new Thread(this.playerThread);
         this.thread.start();
-        this.worldLevel=1;
+        this.worldLevel = 1;
     }
 
     /**
@@ -151,11 +151,12 @@ public class Player implements Serializable {
 
     /**
      * This function return the cost for each level of upgrade goal
+     *
      * @param goal
      * @return
      */
-    public int upgradeCost(int goal){
-        switch (goal){
+    public int upgradeCost(int goal) {
+        switch (goal) {
             case 2:
                 return 20;
             case 3:
@@ -171,8 +172,8 @@ public class Player implements Serializable {
         }
     }
 
-    public int getWorldLevel(){
-        return  worldLevel;
+    public int getWorldLevel() {
+        return worldLevel;
     }
 
     /**
@@ -196,17 +197,25 @@ public class Player implements Serializable {
     /**
      * return the corresponding resources for this player, with the Integer[] array's
      * first index being coin resources, second index being horn resources.
+     *
      * @return
      */
-    public Integer[] getAllRes(){
-        Integer[] count=new Integer[]{0,0};
-        for(Territory terr:playerTerrs){
-            count[0]+=terr.getCoins();
-            count[1]+= terr.getHorns();
+    private int[] getAllRes() {
+        int[] count = new int[]{0, 0};
+        for (Territory terr : playerTerrs) {
+            count[0] += terr.getCoins();
+            count[1] += terr.getHorns();
         }
         return count;
     }
 
+    public int getCoins() {
+        return getAllRes()[0];
+    }
+
+    public int getHorns() {
+        return getAllRes()[1];
+    }
 
 
 }
