@@ -1,5 +1,7 @@
 package edu.duke.risc.ui.model;
 
+import edu.duke.shared.unit.UnitType;
+
 public class UnitDataModel {
     String name;
     int max_number;
@@ -28,5 +30,9 @@ public class UnitDataModel {
 
     public void setMax(int max) {
         this.max_number = max;
+    }
+
+    public UnitType getType() {
+        return UnitType.valueOf(name.toUpperCase());
     }
 }

@@ -41,6 +41,7 @@ import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Move;
 import edu.duke.shared.turn.MoveTurn;
 import edu.duke.shared.unit.Unit;
+import edu.duke.shared.unit.UnitType;
 
 public class GameFragment extends Fragment implements ClientResultReceiver.AppReceiver {
 
@@ -84,6 +85,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
     private MoveTurn moveTurn;
     private AttackTurn attackTurn;
+
+    private HashMap<String, HashMap<String, Integer>> unitMoveAttackMap;
 
 
     public static GameFragment newInstance() {
@@ -149,6 +152,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     assignUnits();
                     break;
                 case TURN_BEGIN:
+                    updatePlayerValues();
+                    unitMoveAttackMap = new HashMap<>();
                     // Update the game view
                     ui_view.findViewById(R.id.ui_side_bar_init).setVisibility(View.GONE);
                     ui_view.findViewById(R.id.ui_side_bar).setVisibility(View.VISIBLE);
@@ -277,14 +282,11 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         });
 
 
-        // TODO: Use for test only
-        int max_cost = 10;
-
         // Update the cost when the number of units change
         unitAdapter.setCostListener(() -> {
             int cost = unitAdapter.getTotalCost();
             total_cost.setText(String.valueOf(cost));
-            if (cost > max_cost) {
+            if (cost > mGame.getPlayer(mGame.getPlayerName()).getCoins()) {
                 total_cost.setTextColor(getResources().getColor(R.color.error_prompt));
                 commit_btn.setEnabled(false);
                 cost_error_prompt.setVisibility(View.VISIBLE);
@@ -302,8 +304,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     int number = unit.getNumber();
                     if (number > 0) {
                         moveTurn.addMove(new Move(orderTerrFrom, orderTerrTo, unit.getNumber(), this.mGame.getPlayerName()));
-                        unit.setMax(unit.getMax() - number);
-                        unitAdapter.notifyDataSetChanged();
+                        updateUnitMoveAttackMap(number, unit);
                     }
                 }
             } else if (mTouchEvent == TouchEvent.ATTACK) {
@@ -311,8 +312,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     int number = unit.getNumber();
                     if (number > 0) {
                         attackTurn.addAttack(new Attack(orderTerrFrom, orderTerrTo, unit.getNumber(), this.mGame.getPlayerName()));
-                        unit.setMax(unit.getMax() - number);
-                        unitAdapter.notifyDataSetChanged();
+                        updateUnitMoveAttackMap(number, unit);
                     }
                 }
             } else {
@@ -407,6 +407,21 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         return framelayout;
     }
 
+    private void updateUnitMoveAttackMap(int number, UnitDataModel unit) {
+        if (unitMoveAttackMap.containsKey(orderTerrFrom)) {
+            HashMap<String, Integer> map = unitMoveAttackMap.get(orderTerrFrom);
+            if (map.containsKey(unit.getName())) {
+                map.put(unit.getName(), map.get(unit.getName()) + number);
+            } else {
+                map.put(unit.getName(), number);
+            }
+        } else {
+            HashMap<String, Integer> map = new HashMap<>();
+            map.put(unit.getName(), number);
+            unitMoveAttackMap.put(orderTerrFrom, map);
+        }
+    }
+
 
     private void updateTerrInfo(String terrName) {
         unitDataModels.clear();
@@ -416,11 +431,18 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             return;
         }
 
-        // TODO: Wait for Unit class implementation
-        int unitNum = territory.getUnits().size();
-        if (unitNum > 0) {
-            unitDataModels.add(new UnitDataModel(requireActivity().getResources().getString(R.string.example_unit), unitNum));
+        HashMap<String, Integer> minusMap = unitMoveAttackMap.get(terrName);
+        HashMap<String, Integer> map = new HashMap<>();
+        for (Unit unit : territory.getUnits()) {
+            map.put(Unit.getName(unit.getType()), map.getOrDefault(Unit.getName(unit.getType()), 0) + 1);
         }
+        for (String type : map.keySet()) {
+            if (minusMap != null && minusMap.containsKey(type)) {
+                map.put(type, map.get(type) - minusMap.get(type));
+            }
+            unitDataModels.add(new UnitDataModel(type, map.get(type)));
+        }
+
         unitAdapter.notifyDataSetChanged();
     }
 
@@ -484,22 +506,20 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 ui_house.setTextColor(getResources().getColor(R.color.ui_slytherin));
                 break;
         }
+        // Update the player values
+        updatePlayerValues();
+    }
+
+    private void updatePlayerValues() {
         TextView ui_horn = ui_view.findViewById(R.id.ui_horn);
         TextView ui_coin = ui_view.findViewById(R.id.ui_coin);
         TextView ui_world_level = ui_view.findViewById(R.id.ui_world_level);
 
         Player player = this.mGame.getPlayer(this.mGame.getPlayerName());
-        HashMap<String, Integer> resources = player.getAllRes();
-        if (resources == null || resources.size() == 0 || resources.get("horn") == null || resources.get("coin") == null) {
-            ui_horn.setText(String.valueOf(0));
-            ui_coin.setText(String.valueOf(0));
-            ui_world_level.setText(String.valueOf(1));
-            return;
-        }
-        ui_horn.setText(String.valueOf(resources.get("horn")));
-        ui_coin.setText(String.valueOf(resources.get("coin")));
-//        ui_world_level.setText(String.valueOf(player.getWorldLevel()));
-        ui_world_level.setText(String.valueOf(1));
+
+        ui_coin.setText(String.valueOf(player.getCoins()));
+        ui_horn.setText(String.valueOf(player.getHorns()));
+        ui_world_level.setText(String.valueOf(player.getWorldLevel()));
     }
 
     private void assignUnits() {

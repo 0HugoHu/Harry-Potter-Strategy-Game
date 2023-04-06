@@ -55,11 +55,11 @@ public class Territory implements Serializable {
         this.units = new ArrayList<>();
         this.coords = new HashSet<>();
         this.adjs = new HashSet<>();
-        this.coins=0;
-        this.horns=0;
-        this.ResourcePro=new boolean[]{false,false};
-        this.details="";
-        this.type="";
+        this.coins = 0;
+        this.horns = 0;
+        this.ResourcePro = new boolean[]{false, false};
+        this.details = "";
+        this.type = "";
     }
 
     /**
@@ -73,21 +73,21 @@ public class Territory implements Serializable {
      * @param adjs        Adjacent territories
      */
     public Territory(String name, Player playerOwner, String owner, ArrayList<Unit> units, HashSet<int[]> coords,
-                     HashSet<String> adjs,String details,String type) {
+                     HashSet<String> adjs, String details, String type) {
         this.playerOwner = playerOwner;
         this.name = name;
         this.owner = owner;
         this.units = units;
         this.coords = coords;
         this.adjs = adjs;
-        this.coins=0;
-        this.horns=0;
-        this.ResourcePro=new boolean[]{false,false};
-        this.details=details;
-        this.type=type;
+        this.coins = 0;
+        this.horns = 0;
+        this.ResourcePro = new boolean[]{false, false};
+        this.details = details;
+        this.type = type;
         // Initialize borders
         // This is not the actual borders, but the borders of the rectangle that contains all the coordinates
-        this.borders = new int[] {Integer.MAX_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE};
+        this.borders = new int[]{Integer.MAX_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE};
         for (int[] coord : this.coords) {
             if (coord[0] < this.borders[0]) {
                 this.borders[0] = coord[0];
@@ -106,6 +106,7 @@ public class Territory implements Serializable {
 
     /**
      * Check if a coordinate is inside this territory rectangle block
+     *
      * @param y y coordinate to be checked
      * @param x x coordinate to be checked
      * @return true if inside
@@ -113,7 +114,6 @@ public class Territory implements Serializable {
     public boolean checkInsideBorders(int y, int x) {
         return y < this.borders[0] || y > this.borders[1] || x > this.borders[2] || x < this.borders[3];
     }
-
 
 
     /**
@@ -339,8 +339,6 @@ public class Territory implements Serializable {
     }
 
 
-
-
     /**
      * Get the number of units on this territory
      *
@@ -352,17 +350,19 @@ public class Territory implements Serializable {
 
     /**
      * set territory details
+     *
      * @param details
      */
-    public void addDetails(String details){
-        this.details=details;
+    public void addDetails(String details) {
+        this.details = details;
     }
 
     /**
      * return the details of a territory
+     *
      * @return
      */
-    public String getDetails(){
+    public String getDetails() {
         return details;
     }
 
@@ -371,11 +371,11 @@ public class Territory implements Serializable {
     }
 
     public void addCoins(int coins) {
-        this.coins +=coins;
+        this.coins += coins;
     }
 
     public void minusCoins(int coins) {
-        this.coins -=coins;
+        this.coins -= coins;
     }
 
 
@@ -384,93 +384,95 @@ public class Territory implements Serializable {
     }
 
     public void addHorns(int horns) {
-        this.horns +=horns;
+        this.horns += horns;
     }
 
     public void minusHorns(int horns) {
-        this.horns -=horns;
+        this.horns -= horns;
     }
 
-    public boolean[] getReources(){
+    public boolean[] getReources() {
         return this.ResourcePro;
     }
 
     /**
      * set the land to be able to produce unicorn horns
      */
-    public void setUnicornLand(){
-        ResourcePro[0]=true;
+    public void setUnicornLand() {
+        ResourcePro[0] = true;
     }
 
     /**
      * set the land to be able to produce silver coins
      */
-    public void setNifflerLand(){
-        ResourcePro[1]=true;
+    public void setNifflerLand() {
+        ResourcePro[1] = true;
     }
 
     /**
      * check if this land produces Unicorn horn
+     *
      * @return
      */
-    public boolean checkUnicornLand(){
-        if(ResourcePro[0]){
+    public boolean checkUnicornLand() {
+        if (ResourcePro[0]) {
             return true;
         }
         return false;
     }
 
-    public String getType(){
+    public String getType() {
         return this.type;
     }
 
     /**
      * set different and assign initial resources to different territories
+     *
      * @param typeName
      */
-    public void setType(String typeName){
-        switch(typeName){
+    public void setType(String typeName) {
+        switch (typeName) {
             case "plain":
-                this.type="plain";
-                setUnicornLand();;
+                this.type = "plain";
+                setUnicornLand();
                 setNifflerLand();
                 addHorns(50);
                 addCoins(50);
                 break;
             case "cliff":
-                this.type="cliff";
-                setUnicornLand();;
+                this.type = "cliff";
+                setUnicornLand();
                 addHorns(100);
                 break;
             case "canyon":
-                this.type="canyon";
-                setUnicornLand();;
+                this.type = "canyon";
+                setUnicornLand();
                 setNifflerLand();
                 addHorns(25);
                 addCoins(75);
                 break;
             case "desert":
-                this.type="desert";
+                this.type = "desert";
                 setNifflerLand();
                 addCoins(95);
                 break;
             case "forest":
-                this.type="forest";
-                setUnicornLand();;
+                this.type = "forest";
+                setUnicornLand();
                 setNifflerLand();
                 addHorns(125);
                 addCoins(125);
                 break;
             case "wetland":
-                this.type="wetland";
-                setUnicornLand();;
+                this.type = "wetland";
+                setUnicornLand();
                 setNifflerLand();
                 addHorns(75);
                 addCoins(15);
                 break;
             default:
-                this.type="plain";
-                setUnicornLand();;
+                this.type = "plain";
+                setUnicornLand();
                 setNifflerLand();
                 addHorns(50);
                 addCoins(50);
@@ -480,10 +482,11 @@ public class Territory implements Serializable {
 
     /**
      * check if this land produces silver coin
+     *
      * @return
      */
-    public boolean checkNifflerLand(){
-        if(ResourcePro[1]){
+    public boolean checkNifflerLand() {
+        if (ResourcePro[1]) {
             return true;
         }
         return false;
@@ -498,30 +501,29 @@ public class Territory implements Serializable {
         return this.coords;
     }
 
-    public int[] getCentralPoint(){
-        int s1=0;
-        int s2=0;
-        for (int[] coord:coords){
-            s1+=coord[0];
-            s2+=coord[1];
+    public int[] getCentralPoint() {
+        int s1 = 0;
+        int s2 = 0;
+        for (int[] coord : coords) {
+            s1 += coord[0];
+            s2 += coord[1];
         }
-        return new int[]{s1/coords.size(),s2/coords.size()};
+        return new int[]{s1 / coords.size(), s2 / coords.size()};
     }
 
     /**
      * If the player want to upgrade from one type to another,
      * this function will return the corresponding costs
+     *
      * @param type1
      * @param type2
      * @return
      */
-    public int getUpdateValue(String type1,String type2){
-        int cost1=new Unit(type1).getCost();
-        int cost2=new Unit(type2).getCost();
-        int costDiff=cost2-cost1;
-        return costDiff;
+    public int getUpdateValue(String type1, String type2) {
+        int cost1 = new Unit(type1).getCost();
+        int cost2 = new Unit(type2).getCost();
+        return cost2 - cost1;
     }
-
 
 
 }
