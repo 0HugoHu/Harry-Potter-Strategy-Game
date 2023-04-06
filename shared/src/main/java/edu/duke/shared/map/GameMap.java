@@ -239,8 +239,25 @@ public class GameMap implements Serializable {
                 this.borderPoints.put(y * 100000 + x + "", pattern);
             }
         }
-
         return true;
     }
+
+    /**
+     * return the corresponding resources for the certain player, with the Integer[] array's
+     * first index being coin resources, second index being horn resources.
+     * @param playerID
+     * @return
+     */
+    public Integer[] getResources(int playerID){
+        Integer[] count=new Integer[]{0,0};
+        for(Territory terr:territories){
+            if(terr.getPlayerOwner().getPlayerId()==playerID){
+                count[0]+=terr.getCoins();
+                count[1]+=terr.getHorns();
+            }
+        }
+        return count;
+    }
+
 
 }

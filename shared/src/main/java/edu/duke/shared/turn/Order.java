@@ -2,9 +2,11 @@ package edu.duke.shared.turn;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import edu.duke.shared.player.Player;
 import edu.duke.shared.unit.Unit;
+import edu.duke.shared.unit.UnitType;
 
 public abstract class Order implements Serializable {
     // Source territory
@@ -12,7 +14,7 @@ public abstract class Order implements Serializable {
     // Destination territory
     protected final String to;
     // Number of units
-    protected ArrayList<Unit> unitList;
+    protected HashMap<UnitType,Integer> unitList;
 
     protected int numUnits;
     // Player name
@@ -34,7 +36,7 @@ public abstract class Order implements Serializable {
     }
 
 
-    public Order(String from, String to, ArrayList<Unit> unitList, String playerName) {
+    public Order(String from, String to, HashMap<UnitType,Integer> unitList, String playerName) {
         this.from = from;
         this.to = to;
         this.unitList = unitList;
@@ -72,7 +74,7 @@ public abstract class Order implements Serializable {
         return unitList.size();
     }
 
-    public ArrayList<Unit> getUnitList(){
+    public HashMap<UnitType,Integer> getUnitList(){
         return unitList;
     }
 

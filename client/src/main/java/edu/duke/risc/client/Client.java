@@ -3,6 +3,7 @@ package edu.duke.risc.client;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
 
@@ -17,12 +18,13 @@ import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Move;
 import edu.duke.shared.turn.MoveTurn;
 import edu.duke.shared.unit.Unit;
+import edu.duke.shared.unit.UnitType;
 
 public class Client {
     // Host name
     //private String HOST = "vcm-30577.vm.duke.edu";
     //
-    private final String HOST;
+     private final String HOST;
     // Port number
     private final static int PORT = 5410;
     // Number of units at the beginning
