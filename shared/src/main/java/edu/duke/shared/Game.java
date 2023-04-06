@@ -292,6 +292,10 @@ public class Game implements Serializable {
             remainAtt += att.get(0).get(k).getNumUnits();
         }
         unitAddMap.put(finalTerr, remainAtt);
+        Player winner=getPlayer(att.get(0).get(0).getPlayerName());
+        winner.getPlayerTerrs().add(desTerr);
+        Player loser=desTerr.getPlayerOwner();
+        loser.getPlayerTerrs().remove(desTerr);
         //change the owner of the territory
         desTerr.changePlayerOwner(getPlayer(att.get(0).get(0).getPlayerName()));
         desTerr.changeOwner(att.get(0).get(0).getPlayerName());

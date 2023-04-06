@@ -116,7 +116,7 @@ public class GameTest {
 
         AttackTurn attTurn1=new AttackTurn(m,0,"A");
         MoveTurn moveTurn1=new MoveTurn(m,0,"A");
-        Attack attack3=new Attack("B","G",2,"A");
+        Attack attack3=new Attack("Hogwarts","Beauxbatons",2,"A");
         attTurn1.addAttack(attack3);
         ArrayList<Turn> newTurn1 = new ArrayList<>();
         newTurn1.add(moveTurn1);
@@ -124,7 +124,7 @@ public class GameTest {
 
         AttackTurn attTurn2=new AttackTurn(m,0,"B");
         MoveTurn moveTurn2=new MoveTurn(m,0,"B");
-        Attack attack4=new Attack("G","C",2,"B");
+        Attack attack4=new Attack("Beauxbatons","Grimmauld Place",2,"B");
         attTurn2.addAttack(attack4);
         ArrayList<Turn> newTurn2 = new ArrayList<>();
         newTurn2.add(moveTurn2);
@@ -132,8 +132,8 @@ public class GameTest {
 
         AttackTurn attTurn3=new AttackTurn(m,0,"C");
         MoveTurn moveTurn3=new MoveTurn(m,0,"C");
-        Attack attack1=new Attack("I","G",2,"C");
-        Attack attack2=new Attack("J","G",1,"C");
+        Attack attack1=new Attack("Little Whinging","Beauxbatons",2,"C");
+        Attack attack2=new Attack("Ministry of Magic","Beauxbatons",1,"C");
         attTurn3.addAttack(attack1);
         attTurn3.addAttack(attack2);
         ArrayList<Turn> newTurn3 = new ArrayList<>();
