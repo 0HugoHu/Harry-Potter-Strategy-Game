@@ -34,7 +34,7 @@ public class Server {
     // Logger
     private static final Logger logger = Logger.getLogger("serverLog.txt");
 
-    private ReentrantLock serverGameLock = new ReentrantLock();
+    private final ReentrantLock serverGameLock = new ReentrantLock();
 
     /**
      * Main method
@@ -172,11 +172,11 @@ public class Server {
             GameObject obj = new GameObject(clientSocket);
             // Encode player specific Id to client
             this.game.setPlayerId(i);
+            serverGameLock.lock();
             try {
-                Thread.sleep(100);
                 obj.encodeObj(this.game);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+            } finally {
+                serverGameLock.unlock();
             }
         }
     }

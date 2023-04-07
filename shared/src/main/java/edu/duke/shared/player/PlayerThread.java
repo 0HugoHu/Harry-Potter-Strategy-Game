@@ -111,8 +111,11 @@ public class PlayerThread implements Runnable, Serializable {
                 System.out.println("Received player " + this.playerId + "'s action list.");
 
                 int turnIndex = this.currGame.getTurn();
-                MoveTurn moveTurn = (MoveTurn) Objects.requireNonNull(this.currGame.getTurnList().get(turnIndex).get(this.playerId)).get(0);
-                AttackTurn attackTurn = (AttackTurn) Objects.requireNonNull(this.currGame.getTurnList().get(turnIndex).get(this.playerId)).get(1);
+                MoveTurn moveTurn = (MoveTurn) this.currGame.getTurnList().get(turnIndex).get(this.playerId).get(0);
+                AttackTurn attackTurn = (AttackTurn) this.currGame.getTurnList().get(turnIndex).get(this.playerId).get(1);
+                if (moveTurn == null || attackTurn == null) {
+                    System.out.println("The move turn or attack turn from player " + this.playerId + " is null.");
+                }
                 if (!Validation.checkMoves(moveTurn)) {
                     System.out.println("The move turn from player " + this.playerId + " is illegal.");
                 }
