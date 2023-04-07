@@ -82,10 +82,6 @@ public class Client {
         return this.playerName;
     }
 
-    public int getPlayerId() {
-        return this.playerID;
-    }
-
     /*
      * Get game object
      */
@@ -105,7 +101,6 @@ public class Client {
         GameObject obj = new GameObject(this.clientSocket);
         this.game = (Game) obj.decodeObj();
         this.game.setPlayerName(this.playerName);
-        this.game.setPlayerId(this.playerID);
         return this.game;
     }
 
@@ -190,6 +185,7 @@ public class Client {
     private void waitForPlayers() {
         // Client receive game from the server
         Game currGame = getGame();
+        this.playerID = currGame.getPlayerId();
         assert (currGame.getGameState().equals(State.READY_TO_INIT_NAME));
     }
 
@@ -234,8 +230,6 @@ public class Client {
             isLoser = true;
         }
     }
-
-
 
 
 }

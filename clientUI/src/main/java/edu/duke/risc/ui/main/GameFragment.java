@@ -476,6 +476,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
         init_player_name.setText(this.mGame.getPlayerName());
         ui_player_name.setText(this.mGame.getPlayerName());
+        System.out.println("Player ID: " + this.mGame.getPlayerId());
         switch (this.mGame.getPlayerId()) {
             case 0:
                 init_house.setText(context.getResources().getString(R.string.ravenclaw));

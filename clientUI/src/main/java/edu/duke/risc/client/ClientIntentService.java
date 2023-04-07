@@ -84,7 +84,6 @@ public class ClientIntentService extends IntentService {
     private void fetchResult(ClientAdapter clientAdapter, ResultReceiver receiver) {
         this.game = clientAdapter.getNewGame();
         this.game.setPlayerName(clientAdapter.getPlayerName());
-        this.game.setPlayerId(clientAdapter.getPlayerId());
         System.out.println("Game received");
         Bundle b = new Bundle();
         b.putSerializable("game", this.game);
