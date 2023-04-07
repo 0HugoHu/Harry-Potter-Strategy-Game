@@ -73,13 +73,14 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
     View init_view;
     View ui_view;
-    ViewGroup global_prompt;
 
+
+    ViewGroup global_prompt;
     ViewGroup move_attack_view;
     ViewGroup prop_view;
     ViewGroup unit_view;
     ViewGroup unit_init_view;
-
+    ViewGroup tech_view;
     ViewGroup init_base_view;
 
 
@@ -210,6 +211,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         prop_view = order_view.findViewById(R.id.inflate_prop);
         unit_view = order_view.findViewById(R.id.inflate_unit);
         unit_init_view = order_view.findViewById(R.id.inflate_init_unit);
+        tech_view = order_view.findViewById(R.id.inflate_tech_view);
 
         // Load the global prompt view
         LayoutInflater inflater_ui = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -259,6 +261,10 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         init_base_view = init_view.findViewById(R.id.init_base);
         init_base_view.setVisibility(View.GONE);
 
+        // Initialize widgets in tech view
+        TextView tech_error_prompt = tech_view.findViewById(R.id.tech_error_prompt);
+        Button tech_upgrade_btn = tech_view.findViewById(R.id.tech_upgrade_btn);
+        Button tech_back_btn = tech_view.findViewById(R.id.tech_back_btn);
 
         init_btn.setOnClickListener(v -> {
             init_base_view.setVisibility(View.GONE);
@@ -269,7 +275,40 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             base_view.findViewById(R.id.inflate_unit).setVisibility(View.GONE);
             base_view.findViewById(R.id.inflate_prop).setVisibility(View.GONE);
             base_view.findViewById(R.id.inflate_init_unit).setVisibility(View.VISIBLE);
+            base_view.findViewById(R.id.inflate_tech_view).setVisibility(View.GONE);
             base_view.findViewById(R.id.global_prompt).setVisibility(View.GONE);
+        });
+
+        tech_btn.setOnClickListener(v -> {
+            move_attack_view.setVisibility(View.GONE);
+            prop_view.setVisibility(View.GONE);
+            unit_view.setVisibility(View.GONE);
+            unit_init_view.setVisibility(View.GONE);
+            tech_view.setVisibility(View.VISIBLE);
+            base_view.setVisibility(View.VISIBLE);
+            int tech_level = mGame.getPlayer(mGame.getPlayerName()).getWorldLevel();
+            String upgrade = "Upgrade: " + (tech_level + 1) * 300 + " horns";
+            tech_upgrade_btn.setText(upgrade);
+            // TODO: only for text
+            if ((tech_level + 1 ) * 300 > mGame.getPlayer(mGame.getPlayerName()).getHorns()) {
+                tech_error_prompt.setVisibility(View.VISIBLE);
+                tech_upgrade_btn.setEnabled(false);
+                tech_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
+            } else {
+                tech_error_prompt.setVisibility(View.INVISIBLE);
+                tech_upgrade_btn.setEnabled(true);
+                tech_upgrade_btn.setTextColor(getResources().getColor(R.color.order_text));
+            }
+        });
+
+        tech_back_btn.setOnClickListener(v -> {
+            base_view.setVisibility(View.GONE);
+        });
+
+        tech_upgrade_btn.setOnClickListener(v -> {
+            mGame.getPlayer(mGame.getPlayerName()).upgradeWorldLevel();
+            Toast.makeText(context, "Upgrade success!", Toast.LENGTH_SHORT).show();
+            base_view.setVisibility(View.GONE);
         });
 
 
@@ -320,6 +359,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             }
             // Done
             base_view.setVisibility(View.GONE);
+            Toast.makeText(context, "Order recorded!", Toast.LENGTH_SHORT).show();
         });
 
         // Click the shadow area to close the order view
@@ -332,6 +372,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 move_attack_view.setVisibility(View.VISIBLE);
                 prop_view.setVisibility(View.GONE);
                 unit_view.setVisibility(View.GONE);
+                unit_init_view.setVisibility(View.GONE);
+                tech_view.setVisibility(View.GONE);
                 base_view.setVisibility(View.VISIBLE);
                 orderTerrFrom = terrFrom;
                 orderTerrTo = terrTo;
@@ -348,6 +390,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 move_attack_view.setVisibility(View.VISIBLE);
                 prop_view.setVisibility(View.GONE);
                 unit_view.setVisibility(View.GONE);
+                unit_init_view.setVisibility(View.GONE);
+                tech_view.setVisibility(View.GONE);
                 base_view.setVisibility(View.VISIBLE);
                 orderTerrFrom = terrFrom;
                 orderTerrTo = terrTo;
@@ -363,6 +407,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 move_attack_view.setVisibility(View.GONE);
                 prop_view.setVisibility(View.VISIBLE);
                 unit_view.setVisibility(View.GONE);
+                unit_init_view.setVisibility(View.GONE);
+                tech_view.setVisibility(View.GONE);
                 base_view.setVisibility(View.VISIBLE);
                 updateTerrInfo(territoryName);
                 String title = "Prop: " + territoryName;
@@ -377,6 +423,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 move_attack_view.setVisibility(View.GONE);
                 prop_view.setVisibility(View.GONE);
                 unit_view.setVisibility(View.VISIBLE);
+                unit_init_view.setVisibility(View.GONE);
+                tech_view.setVisibility(View.GONE);
                 base_view.setVisibility(View.VISIBLE);
                 updateTerrInfo(territoryName);
                 String title = "Unit: " + territoryName;
@@ -485,21 +533,21 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 ui_house.setText(context.getResources().getString(R.string.ravenclaw));
                 ui_house.setTextColor(getResources().getColor(R.color.ui_ravenclaw));
                 break;
-            case 1:
+            case 3:
                 init_house.setText(context.getResources().getString(R.string.hufflepuff));
                 init_house.setTextColor(getResources().getColor(R.color.ui_hufflepuff));
                 init_house_img.setImageResource(R.drawable.house_hufflepuff);
                 ui_house.setText(context.getResources().getString(R.string.hufflepuff));
                 ui_house.setTextColor(getResources().getColor(R.color.ui_hufflepuff));
                 break;
-            case 2:
+            case 1:
                 init_house.setText(context.getResources().getString(R.string.gryffindor));
                 init_house.setTextColor(getResources().getColor(R.color.ui_gryffindor));
                 init_house_img.setImageResource(R.drawable.house_gryffindor);
                 ui_house.setText(context.getResources().getString(R.string.gryffindor));
                 ui_house.setTextColor(getResources().getColor(R.color.ui_gryffindor));
                 break;
-            case 3:
+            case 2:
                 init_house.setText(context.getResources().getString(R.string.slytherin));
                 init_house.setTextColor(getResources().getColor(R.color.ui_slytherin));
                 init_house_img.setImageResource(R.drawable.house_slytherin);

@@ -5,6 +5,7 @@
 
     <string name="cost">Cost: </string>
     <string name="zero">0</string>
+    <string name="one">1</string>
     <string name="cost_fault">Your coins are not enough! Consider switching a destination or reducing the number of units!</string>
     <string name="unit_placed">Unit Placed: </string>
     <string name="unit_placed_fault">You have not placed all the 24 units!</string>
@@ -13,6 +14,8 @@
     <string name="tech_level_desc">The mystery of the Ancient Wand remains unsolved. Perform a sacred ritual with the Ancient Wand and a unicorn\'s horn, and perchance it shall bestow you advantage in the contest.</string>
     <string name="tech_fault">You have no enough horns to upgrade!</string>
     <string name="current_level">Current Level: </string>
+    <string name="tech_bonus_example">At this stage, young wizard, you shall release the Gnome from its enchantment. Be prepared, for in the next level, a stout-hearted Dwarf shall join your ranks, eager to lend its magical prowess to your quest.</string>
+    <string name="upgrade">Upgrade</string>
 
     <string name="attack">Attack</string>
     <string name="move">Move</string>
