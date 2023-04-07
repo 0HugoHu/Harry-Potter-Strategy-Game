@@ -121,32 +121,27 @@ public class PlayerThread implements Runnable, Serializable {
                     System.out.println("The attack turn from player " + this.playerId + " is illegal.");
                 }
 
-                // Prevent multiple threads from modifying the server game at the same time
-                serverGameLock.lock();
-                try {
-                    // Merge Unit
-                    Player p = this.serverGame.getPlayerList().get(this.playerId);
-                    for (Territory t : this.serverGame.getMap().getTerritories()) {
-                        if (t.getOwner().equals(p.getPlayerName())) {
-                            t.removeAllUnits();
-                            for (int j = 0; j < this.currGame.getMap().getTerritory(t.getName()).getNumUnits(); j++)
-                                t.addUnit(new Unit("Gnome"));
-                        }
+                // Merge Unit
+                Player p = this.serverGame.getPlayerList().get(this.playerId);
+                for (Territory t : this.serverGame.getMap().getTerritories()) {
+                    if (t.getOwner().equals(p.getPlayerName())) {
+                        t.removeAllUnits();
+                        for (int j = 0; j < this.currGame.getMap().getTerritory(t.getName()).getNumUnits(); j++)
+                            t.addUnit(new Unit("Gnome"));
                     }
-
-                    // Merge all turns from different players
-                    ArrayList<Turn> newTurns = this.currGame.getTurnList().get(turnIndex).get(this.playerId);
-                    // For the first player, add a new turn
-                    if (this.serverGame.getTurnList().size() == turnIndex || forTesting == 2) {
-                        HashMap<Integer, ArrayList<Turn>> newTurnsMap = new HashMap<>();
-                        newTurnsMap.put(this.playerId, newTurns);
-                        this.serverGame.getTurnList().add(newTurnsMap);
-                    } else {
-                        this.serverGame.getTurnList().get(turnIndex).put(this.playerId, newTurns);
-                    }
-                } finally {
-                    serverGameLock.unlock();
                 }
+
+                // Merge all turns from different players
+                ArrayList<Turn> newTurns = this.currGame.getTurnList().get(turnIndex).get(this.playerId);
+                // For the first player, add a new turn
+                if (this.serverGame.getTurnList().size() == turnIndex || forTesting == 2) {
+                    HashMap<Integer, ArrayList<Turn>> newTurnsMap = new HashMap<>();
+                    newTurnsMap.put(this.playerId, newTurns);
+                    this.serverGame.getTurnList().add(newTurnsMap);
+                } else {
+                    this.serverGame.getTurnList().get(turnIndex).put(this.playerId, newTurns);
+                }
+
                 break;
             case TURN_END:
             case GAME_OVER:

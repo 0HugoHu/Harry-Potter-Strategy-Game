@@ -3,6 +3,7 @@ package edu.duke.risc.client;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Scanner;
 
 import edu.duke.shared.Game;
@@ -207,6 +208,12 @@ public class Client {
         MoveTurn moveTurn = new MoveTurn(this.game.getMap(), this.game.getTurn(), this.playerName);
         AttackTurn attackTurn = new AttackTurn(this.game.getMap(), this.game.getTurn(), this.playerName);
 
+        Random random = new Random();
+        try {
+            Thread.sleep(random.nextInt(1000));
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         // Done
         this.game.addToTurnMap(this.playerID, moveTurn, attackTurn);
         GameObject obj = new GameObject(this.clientSocket);
