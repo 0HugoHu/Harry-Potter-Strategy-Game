@@ -5,6 +5,7 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Scanner;
 
 import edu.duke.shared.Game;
@@ -305,6 +306,13 @@ public class Client {
         // Read instructions
         MoveTurn moveTurn = new MoveTurn(this.game.getMap(), this.game.getTurn(), this.playerName);
         AttackTurn attackTurn = new AttackTurn(this.game.getMap(), this.game.getTurn(), this.playerName);
+
+        Random random = new Random();
+        try {
+            Thread.sleep(random.nextInt(5000));
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         // Done
         this.game.addToTurnMap(this.playerID, moveTurn, attackTurn);
