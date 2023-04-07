@@ -14,6 +14,7 @@
         android:baselineAligned="false"
         android:orientation="horizontal"
         android:weightSum="2.5"
+        android:background="@color/order_shadow"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -22,14 +23,16 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1.5"
-            android:background="@color/order_shadow"
             android:clickable="true" />
+
 
         <include layout="@layout/move_attack_view"/>
 
         <include layout="@layout/prop_view"/>
 
         <include layout="@layout/unit_view"/>
+
+        <include layout="@layout/tech_view"/>
 
         <include layout="@layout/init_unit_view"/>
 

@@ -222,5 +222,11 @@ public class Player implements Serializable {
         return getAllRes()[1];
     }
 
+    public void upgradeWorldLevel() {
+        this.worldLevel++;
+        // TODO: Minus the cost
+
+    }
+
 
 }

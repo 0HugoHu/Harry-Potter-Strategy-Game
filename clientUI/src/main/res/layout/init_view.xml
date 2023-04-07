@@ -78,7 +78,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:background="@drawable/topbar_bg_purple"
+            android:background="@drawable/btn_dark_brown"
             android:fontFamily="@font/harry_potter"
             android:text="@string/accept_offer"
             android:textColor="@color/text_white"
