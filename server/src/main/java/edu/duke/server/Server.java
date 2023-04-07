@@ -163,9 +163,7 @@ public class Server {
     public void sendToAllPlayers() {
         for (int i = 0; i < this.getNumOfPlayers(); i++) {
             // Start thread for each player
-            this.game.getPlayerList().get(i).start(this.game.getGameState());
-            // Also send server game to player thread
-            this.game.getPlayerList().get(i).getPlayerThread().setServerGame(this.game);
+            this.game.getPlayerList().get(i).start(this.game);
 
             // Send message to client
             Socket clientSocket = this.game.getPlayerList().get(i).getSocket();

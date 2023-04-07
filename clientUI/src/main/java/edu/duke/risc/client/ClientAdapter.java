@@ -46,8 +46,5 @@ public class ClientAdapter {
         return this.client.getPlayerName();
     }
 
-    public int getPlayerId() {
-        return this.client.getPlayerId();
-    }
 
 }

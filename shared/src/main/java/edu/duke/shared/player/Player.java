@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import edu.duke.shared.Game;
 import edu.duke.shared.helper.State;
 import edu.duke.shared.map.Territory;
 
@@ -46,10 +47,14 @@ public class Player implements Serializable {
     /**
      * Initialize the Player by name
      *
-     * @param state game state
+     * @param serverGame server game
      */
-    public void start(State state) {
-        this.playerThread = new PlayerThread(state, this.socket, this.playerId);
+    public void start(Game serverGame) {
+        this.playerThread = new PlayerThread(serverGame.getGameState(), this.socket, this.playerId);
+        this.playerThread.setServerGame(serverGame);
+        if (this.thread != null) {
+            this.thread.interrupt();
+        }
         this.thread = new Thread(this.playerThread);
         this.thread.start();
     }
