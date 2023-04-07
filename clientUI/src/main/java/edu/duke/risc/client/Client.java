@@ -199,7 +199,7 @@ public class Client {
     public void playOneTurn() {
         GameObject obj = new GameObject(this.clientSocket);
         obj.encodeObj(this.game);
-        System.out.println("Game objct sent to server.\n");
+        System.out.println("Game object sent to server.\n");
     }
 
 
