@@ -172,11 +172,11 @@ public class Server {
             GameObject obj = new GameObject(clientSocket);
             // Encode player specific Id to client
             this.game.setPlayerId(i);
-            serverGameLock.lock();
+            obj.encodeObj(this.game);
             try {
-                obj.encodeObj(this.game);
-            } finally {
-                serverGameLock.unlock();
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
