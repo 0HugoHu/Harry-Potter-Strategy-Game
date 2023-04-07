@@ -32,7 +32,7 @@ public class PlayerThread implements Runnable, Serializable {
 
     public int forTesting;
 
-    private ReentrantLock serverGameLock = new ReentrantLock();
+    private final ReentrantLock serverGameLock = new ReentrantLock();
 
     /**
      * Initialize the PlayerThread
