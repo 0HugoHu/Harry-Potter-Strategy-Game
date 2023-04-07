@@ -16,6 +16,9 @@
     <string name="current_level">Current Level: </string>
     <string name="tech_bonus_example">At this stage, young wizard, you shall release the Gnome from its enchantment. Be prepared, for in the next level, a stout-hearted Dwarf shall join your ranks, eager to lend its magical prowess to your quest.</string>
     <string name="upgrade">Upgrade</string>
+    <string name="upgrade_unit">Upgrade Unit:</string>
+    <string name="from">From:</string>
+    <string name="to">To:</string>
 
     <string name="attack">Attack</string>
     <string name="move">Move</string>

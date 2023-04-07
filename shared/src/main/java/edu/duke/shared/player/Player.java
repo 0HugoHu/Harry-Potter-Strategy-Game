@@ -160,7 +160,7 @@ public class Player implements Serializable {
      * @param goal
      * @return
      */
-    public int upgradeCost(int goal) {
+    public static int upgradeCost(int goal) {
         switch (goal) {
             case 2:
                 return 20;
@@ -205,7 +205,7 @@ public class Player implements Serializable {
      *
      * @return
      */
-    private int[] getAllRes() {
+    public int[] getAllRes() {
         int[] count = new int[]{0, 0};
         for (Territory terr : playerTerrs) {
             count[0] += terr.getCoins();
