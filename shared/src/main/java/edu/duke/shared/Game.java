@@ -514,6 +514,7 @@ public class Game implements Serializable {
         newTurn.add(attackTurn);
         turnMap.put(playerId, newTurn);
         this.turnList.add(turnMap);
+        System.out.println("size: " + this.turnList.get(turnList.size() - 1).get(playerId).size());
     }
 
     /**
