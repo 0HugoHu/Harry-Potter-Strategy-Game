@@ -99,8 +99,8 @@ public class Server {
 
         // Send message to all players
         this.game.setGameState(State.READY_TO_INIT_UNITS);
-        sendToAllPlayers();
         System.out.println("Message sent to all players.\n");
+        sendToAllPlayers();
 
         // Receive Units setup from all players
         waitForThreadJoin();
@@ -173,8 +173,8 @@ public class Server {
             // Encode player specific Id to client
             this.game.setPlayerId(i);
             try {
+                Thread.sleep(100);
                 obj.encodeObj(this.game);
-                Thread.sleep(300);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -207,8 +207,8 @@ public class Server {
      */
     private void startOneTurn() {
         this.game.setGameState(State.TURN_BEGIN);
-        sendToAllPlayers();
         System.out.println("Start turn " + this.game.getTurn() + ".\n");
+        sendToAllPlayers();
 
         // Receive action list from all players
         waitForThreadJoin();
