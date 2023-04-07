@@ -287,10 +287,10 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             tech_view.setVisibility(View.VISIBLE);
             base_view.setVisibility(View.VISIBLE);
             int tech_level = mGame.getPlayer(mGame.getPlayerName()).getWorldLevel();
-            String upgrade = "Upgrade: " + (tech_level + 1) * 300 + " horns";
+            String upgrade = "Upgrade: " + Player.upgradeCost(tech_level + 1) + " horns";
             tech_upgrade_btn.setText(upgrade);
             // TODO: only for text
-            if ((tech_level + 1 ) * 300 > mGame.getPlayer(mGame.getPlayerName()).getHorns()) {
+            if (Player.upgradeCost(tech_level + 1) > mGame.getPlayer(mGame.getPlayerName()).getHorns()) {
                 tech_error_prompt.setVisibility(View.VISIBLE);
                 tech_upgrade_btn.setEnabled(false);
                 tech_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));

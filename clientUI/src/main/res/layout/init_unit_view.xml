@@ -99,7 +99,7 @@
     <Button
         android:id="@+id/init_unit_back_btn"
         android:layout_width="0dp"
-        android:layout_height="36dp"
+        android:layout_height="@dimen/order_button_height"
         android:layout_marginEnd="@dimen/order_text_margin"
         android:layout_marginBottom="16dp"
         android:background="@drawable/btn_dark_brown"

@@ -39,7 +39,7 @@
     <Button
         android:id="@+id/attack_btn"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/order_button_height"
         android:layout_marginBottom="16dp"
         android:text="@string/attack"
         android:textStyle="bold"

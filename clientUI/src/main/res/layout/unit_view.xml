@@ -2,12 +2,14 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/inflate_unit"
-    android:layout_width="0dp"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_weight="1"
-    android:background="@color/order_background"
+    android:background="@drawable/purple_bg_edge_protrait"
     android:clickable="true"
+    android:visibility="visible"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -15,25 +17,28 @@
 
     <TextView
         android:id="@+id/unit_title"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textColor="@color/order_title"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/unit_back_btn"
-        app:layout_constraintStart_toStartOf="@+id/unit_back_btn"
+        android:layout_marginStart="@dimen/order_text_margin"
+        android:layout_marginTop="@dimen/order_text_margin"
+        android:fontFamily="@font/gumela"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_title"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/unit_back_btn"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_height="@dimen/order_button_height"
+        android:layout_marginStart="@dimen/order_text_margin"
+        android:layout_marginEnd="@dimen/order_text_margin"
         android:layout_marginBottom="16dp"
-        android:text="@string/back"
-        android:textStyle="bold"
+        android:text="@string/unit_init_back_btn"
+        android:fontFamily="@font/gumela"
+        android:textSize="@dimen/order_text"
+        android:textColor="@color/order_text_white"
+        android:background="@drawable/btn_dark_brown"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -42,37 +47,92 @@
         android:id="@+id/unit_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/unit_back_btn"
+        android:layout_marginTop="@dimen/order_text_margin"
+        android:layout_marginEnd="@dimen/order_text_margin"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/unit_upgrade_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/unit_title"
         app:layout_constraintTop_toBottomOf="@+id/unit_title">
 
     </ListView>
 
-    <View
-        android:id="@+id/divider"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toTopOf="@+id/list"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    <TextView
+        android:id="@+id/unit_upgrade_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/gumela"
+        android:text="@string/upgrade_unit"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_small"
+        app:layout_constraintBottom_toTopOf="@+id/unit_upgrade_from"
+        app:layout_constraintStart_toStartOf="@+id/unit_list" />
 
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
+    <Spinner
+        android:id="@+id/unit_from_spinner"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/unit_upgrade_from"
+        app:layout_constraintStart_toEndOf="@+id/unit_upgrade_from"
+        app:layout_constraintTop_toTopOf="@+id/unit_upgrade_from" />
+
+    <Spinner
+        android:id="@+id/unit_to_spinner"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/unit_upgrade_from"
+        app:layout_constraintStart_toEndOf="@+id/unit_upgrade_to"
+        app:layout_constraintTop_toTopOf="@+id/unit_upgrade_from" />
+
+    <TextView
+        android:id="@+id/unit_upgrade_from"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:fontFamily="@font/gumela"
+        android:text="@string/from"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_small"
+        app:layout_constraintBottom_toTopOf="@+id/unit_back_btn"
+        app:layout_constraintStart_toStartOf="@+id/unit_upgrade_title" />
+
+    <TextView
+        android:id="@+id/unit_upgrade_to"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/list" />
+        android:fontFamily="@font/gumela"
+        android:text="@string/to"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_small"
+        app:layout_constraintBottom_toBottomOf="@id/unit_upgrade_from"
+        app:layout_constraintStart_toEndOf="@+id/unit_from_spinner"
+        app:layout_constraintTop_toTopOf="@+id/unit_upgrade_from" />
+
+    <EditText
+        android:id="@+id/editTextNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="@+id/unit_upgrade_from"
+        app:layout_constraintStart_toEndOf="@+id/unit_to_spinner"
+        app:layout_constraintTop_toTopOf="@+id/unit_upgrade_from" />
+
+    <Button
+        android:id="@+id/unit_upgrade_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/inset_bg_turn_commit_turn"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="@+id/unit_upgrade_from"
+        app:layout_constraintStart_toEndOf="@+id/editTextNumber"
+        app:layout_constraintTop_toTopOf="@+id/unit_upgrade_from" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
