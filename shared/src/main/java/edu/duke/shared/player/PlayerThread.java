@@ -111,6 +111,8 @@ public class PlayerThread implements Runnable, Serializable {
                 System.out.println("Received player " + this.playerId + "'s action list.");
 
                 int turnIndex = this.currGame.getTurn();
+                System.out.println("Turn index: " + turnIndex);
+                System.out.println(this.currGame.getTurnList().get(turnIndex).get(this.playerId).size());
                 MoveTurn moveTurn = (MoveTurn) this.currGame.getTurnList().get(turnIndex).get(this.playerId).get(0);
                 AttackTurn attackTurn = (AttackTurn) this.currGame.getTurnList().get(turnIndex).get(this.playerId).get(1);
                 if (moveTurn == null || attackTurn == null) {
