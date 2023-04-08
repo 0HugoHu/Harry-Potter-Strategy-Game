@@ -27,7 +27,7 @@ public class Server {
     // Number of players
     private final static int numPlayers = 4;
     // Number of units at the beginning
-    private final static int numUnits = 24;
+    private final static int numUnits = 48;
     // Gameplay controller
     private final Game game;
     // Server socket
@@ -303,6 +303,11 @@ public class Server {
             // Update the player's resources
             p.updateResources(this.game.getMap().getTerritoriesByOwner(p.getPlayerName()));
         }
+        for (int i = 0; i < this.getNumOfPlayers(); i++) {
+            this.game.getPlayerList().get(i).setCoins();
+            this.game.getPlayerList().get(i).setHorns();
+        }
+
     }
 
 }
