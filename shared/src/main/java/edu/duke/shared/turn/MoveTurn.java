@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import edu.duke.shared.map.GameMap;
 import edu.duke.shared.unit.Unit;
+import edu.duke.shared.unit.UnitType;
 
 public class MoveTurn extends Turn {
     // List of moves
@@ -46,7 +47,7 @@ public class MoveTurn extends Turn {
         for (Move move : moves) {
             for (int i = 0; i < move.getNumUnits(); i++) {
                 map.getTerritory(move.getFrom()).removeUnit();
-                map.getTerritory(move.getTo()).addUnit(new Unit("Gnome"));
+                map.getTerritory(move.getTo()).addUnit(UnitType.GNOME);
             }
         }
     }

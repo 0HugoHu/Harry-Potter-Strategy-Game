@@ -2,10 +2,7 @@ package edu.duke.shared.player;
 
 import java.io.Serializable;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Objects;
+import java.util.*;
 
 import edu.duke.shared.Game;
 import edu.duke.shared.helper.GameObject;
@@ -16,6 +13,7 @@ import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.MoveTurn;
 import edu.duke.shared.turn.Turn;
 import edu.duke.shared.unit.Unit;
+import edu.duke.shared.unit.UnitType;
 
 public class PlayerThread implements Runnable, Serializable {
     // Global game state of the game
@@ -98,8 +96,13 @@ public class PlayerThread implements Runnable, Serializable {
                 int totalUnits = 0;
                 for (Territory t : terr_set) {
                     this.serverGame.getMap().getTerritory(t.getName()).removeAllUnits();
-                    for (int j = 0; j < p.getPlayerThread().getCurrGame().getMap().getTerritory(t.getName()).getNumUnits(); j++)
-                        this.serverGame.getMap().getTerritory(t.getName()).addUnit(new Unit("Gnome"));
+                    for(Map.Entry<UnitType,Integer> entry:this.currGame.getMap().getTerritory(t.getName()).getUnits().entrySet()){
+                        for(int i=0;i<entry.getValue();i++){
+                            this.serverGame.getMap().getTerritory(t.getName()).addUnit(entry.getKey());
+                        }
+                    }
+//                    for (int j = 0; j < p.getPlayerThread().getCurrGame().getMap().getTerritory(t.getName()).getNumUnits(); j++)
+//                        this.serverGame.getMap().getTerritory(t.getName()).addUnit(UnitType.GNOME);
                     totalUnits += t.getNumUnits();
                 }
 
@@ -126,8 +129,13 @@ public class PlayerThread implements Runnable, Serializable {
                 for (Territory t : this.serverGame.getMap().getTerritories()) {
                     if (t.getOwner().equals(p.getPlayerName())) {
                         t.removeAllUnits();
-                        for (int j = 0; j < this.currGame.getMap().getTerritory(t.getName()).getNumUnits(); j++)
-                            t.addUnit(new Unit("Gnome"));
+                        for(Map.Entry<UnitType,Integer> entry:this.currGame.getMap().getTerritory(t.getName()).getUnits().entrySet()){
+                            for(int i=0;i<entry.getValue();i++){
+                                t.addUnit(entry.getKey());
+                            }
+                        }
+//                        for (int j = 0; j < this.currGame.getMap().getTerritory(t.getName()).getNumUnits(); j++)
+//                            t.addUnit(UnitType.GNOME);
                     }
                 }
 

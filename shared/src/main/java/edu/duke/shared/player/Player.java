@@ -23,6 +23,8 @@ public class Player implements Serializable {
     public transient Thread thread;
 
     private int worldLevel;
+    private int coins;
+    private int horns;
 
 
     /**
@@ -41,6 +43,8 @@ public class Player implements Serializable {
         this.thread = new Thread(this.playerThread);
         this.thread.start();
         this.worldLevel=1;
+        this.coins=0;
+        this.horns=0;
     }
 
     /**
@@ -157,17 +161,17 @@ public class Player implements Serializable {
     public int upgradeCost(int goal){
         switch (goal){
             case 2:
-                return 20;
+                return 60;
             case 3:
-                return 40;
-            case 4:
                 return 80;
+            case 4:
+                return 100;
             case 5:
                 return 160;
             case 6:
                 return 320;
             default:
-                return 20;
+                return 60;
         }
     }
 
@@ -207,5 +211,22 @@ public class Player implements Serializable {
         }
         return count;
     }
+
+    public int getCoins(){
+        return getAllRes()[0];
+    }
+
+    public int getHorns(){
+        return getAllRes()[1];
+    }
+
+    public void setCoins(){
+        this.coins=getCoins();
+    }
+
+    public void setHorns(){
+        this.horns=getHorns();
+    }
+
 
 }

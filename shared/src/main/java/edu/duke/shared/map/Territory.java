@@ -1,9 +1,11 @@
 package edu.duke.shared.map;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import edu.duke.shared.player.Player;
 import edu.duke.shared.unit.Unit;
@@ -21,7 +23,7 @@ public class Territory implements Serializable {
         For extendability, as units can have different attack and defense
         abilities in the following evolutions.
      */
-    private final ArrayList<Unit> units;
+    private final HashMap<UnitType,Integer> units;
     // Coordinates inside this territory
     private final HashSet<int[]> coords;
     // Adjacent Territory name
@@ -51,7 +53,7 @@ public class Territory implements Serializable {
         this.name = name;
         this.owner = "";
         this.playerOwner = null;
-        this.units = new ArrayList<>();
+        this.units = new HashMap<>();
         this.coords = new HashSet<>();
         this.adjs = new HashSet<>();
         this.coins=0;
@@ -71,7 +73,7 @@ public class Territory implements Serializable {
      * @param coords      Coordinates inside this territory
      * @param adjs        Adjacent territories
      */
-    public Territory(String name, Player playerOwner, String owner, ArrayList<Unit> units, HashSet<int[]> coords,
+    public Territory(String name, Player playerOwner, String owner, HashMap<UnitType,Integer> units, HashSet<int[]> coords,
                      HashSet<String> adjs,String details,String type) {
         this.playerOwner = playerOwner;
         this.name = name;
@@ -126,11 +128,15 @@ public class Territory implements Serializable {
     /**
      * Add a unit to this territory
      *
-     * @param unit Unit to be added
      * @return true if successfully added
      */
-    public boolean addUnit(Unit unit) {
-        this.units.add(unit);
+    public boolean addUnit(UnitType type) {
+        this.units.put(type, units.getOrDefault(type,0)+1);
+        return true;
+    }
+
+    public boolean addUnit(Unit unit){
+        this.units.put(unit.getType(), units.getOrDefault(type,0)+1);
         return true;
     }
 
@@ -141,9 +147,9 @@ public class Territory implements Serializable {
      * @return true if successfully removed
      */
     public boolean removeUnit(Unit unit) {
-        for (Unit u : this.units) {
-            if (u.getType().equals(unit.getType())) {
-                this.units.remove(u);
+        for (Map.Entry<UnitType,Integer> entry:units.entrySet()) {
+            if (entry.getKey().equals(unit.getType())) {
+                units.put(entry.getKey(),entry.getValue()-1);
                 return true;
             }
         }
@@ -157,9 +163,9 @@ public class Territory implements Serializable {
      * @return true if successfully removed
      */
     public boolean removeUnit(UnitType unitType) {
-        for (Unit u : this.units) {
-            if (u.getType().equals(unitType)) {
-                this.units.remove(u);
+        for (Map.Entry<UnitType,Integer> entry:units.entrySet()) {
+            if (entry.getKey().equals(unitType)) {
+                units.put(entry.getKey(),entry.getValue()-1);
                 return true;
             }
         }
@@ -172,9 +178,9 @@ public class Territory implements Serializable {
      * @return true if successfully removed
      */
     public boolean removeUnit() {
-        for (Unit u : this.units) {
-            if (u.getType().equals(UnitType.GNOME)) {
-                this.units.remove(u);
+        for (Map.Entry<UnitType,Integer> entry:units.entrySet()) {
+            if (entry.getKey().equals(UnitType.GNOME)) {
+                units.put(entry.getKey(),entry.getValue()-1);
                 return true;
             }
         }
@@ -225,6 +231,15 @@ public class Territory implements Serializable {
         return true;
     }
 
+    public void printUnits(){
+        System.out.print("For territory"+this.getName());
+        for(Map.Entry<UnitType,Integer> entry:units.entrySet()){
+            System.out.print(" Unittype: "+entry.getKey()+" , ");
+            System.out.print("Num: "+entry.getValue()+" ; ");
+        }
+        System.out.println();
+    }
+
 
     /**
      * return the playerowner of this territory
@@ -241,7 +256,7 @@ public class Territory implements Serializable {
      *
      * @return units of this territory
      */
-    public ArrayList<Unit> getUnits() {
+    public HashMap<UnitType, Integer> getUnits() {
         return this.units;
     }
 
@@ -261,9 +276,9 @@ public class Territory implements Serializable {
      */
     public boolean removeUnitByName(String name) {
         UnitType unitType = Unit.convertStringToUnitType(name);
-        for (Unit unit : this.units) {
-            if (unit.getType() == unitType) {
-                this.units.remove(unit);
+        for (Map.Entry<UnitType,Integer> entry:units.entrySet()) {
+            if (entry.getKey().equals(unitType)) {
+                units.put(entry.getKey(),entry.getValue()-1);
                 return true;
             }
         }
@@ -304,7 +319,11 @@ public class Territory implements Serializable {
      * @return number of units on this territory
      */
     public int getNumUnits() {
-        return this.units.size();
+        int total=0;
+        for(Map.Entry<UnitType,Integer> entry:units.entrySet()){
+            total+=entry.getValue();
+        }
+        return total;
     }
 
     /**
@@ -391,19 +410,19 @@ public class Territory implements Serializable {
                 this.type="plain";
                 setUnicornLand();;
                 setNifflerLand();
-                addHorns(50);
+                addHorns(5);
                 addCoins(50);
                 break;
             case "cliff":
                 this.type="cliff";
                 setUnicornLand();;
-                addHorns(100);
+                addHorns(10);
                 break;
             case "canyon":
                 this.type="canyon";
                 setUnicornLand();;
                 setNifflerLand();
-                addHorns(25);
+                addHorns(7);
                 addCoins(75);
                 break;
             case "desert":
@@ -415,21 +434,21 @@ public class Territory implements Serializable {
                 this.type="forest";
                 setUnicornLand();;
                 setNifflerLand();
-                addHorns(125);
+                addHorns(35);
                 addCoins(125);
                 break;
             case "wetland":
                 this.type="wetland";
                 setUnicornLand();;
                 setNifflerLand();
-                addHorns(75);
+                addHorns(7);
                 addCoins(15);
                 break;
             default:
                 this.type="plain";
                 setUnicornLand();;
                 setNifflerLand();
-                addHorns(50);
+                addHorns(5);
                 addCoins(50);
                 break;
         }

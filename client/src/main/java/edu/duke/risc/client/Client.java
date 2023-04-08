@@ -28,7 +28,7 @@ public class Client {
     // Port number
     private final static int PORT = 5410;
     // Number of units at the beginning
-    private final static int numUnits = 24;
+    private final static int numUnits = 48;
     // Player Id on server
     private int playerID;
     // Player name
@@ -81,7 +81,7 @@ public class Client {
         this.playerName = playerName;
         System.out.println("Created a player.\n");
         this.clientSocket = connectSocket(HOST, PORT);
-        this.game = new Game(0, 24);
+        this.game = new Game(0, 48);
     }
 
     public Socket connectSocket(String HOST, int PORT) {
@@ -154,7 +154,8 @@ public class Client {
         System.out.println("Your game ID is: " + this.playerID + "\n");
 
         // Units initialization
-        setupUnits();
+        //setupUnits();
+        BuiltInSetUpUnits();
     }
 
     /*
@@ -179,7 +180,7 @@ public class Client {
                 Validation.checkUnit(this.game.getMap(), source, numUnits, Client.numUnits - totalUnits, this.playerName);
                 totalUnits += numUnits;
                 for (int i = 0; i < numUnits; i++)
-                    this.game.getMap().getTerritory(source).addUnit(new Unit("Gnome"));
+                    this.game.getMap().getTerritory(source).addUnit(UnitType.GNOME);
             } catch (Exception e) {
                 System.out.println("Invalid input: " + e.getMessage());
             }
@@ -187,6 +188,28 @@ public class Client {
         System.out.println("Total units placed: " + totalUnits + ". You have placed exactly " + numUnits + " units.");
         GameObject obj = new GameObject(this.clientSocket);
         obj.encodeObj(this.game);
+    }
+
+    public void BuiltInSetUpUnits(){
+        DisplayMap displayMap = new DisplayMap(this.game, this.playerID);
+        System.out.println(displayMap.showMap());
+        System.out.println(displayMap.showUnits(true,null,null));
+
+        HashSet<Territory> terrs = this.game.getPlayer(playerName).getPlayerTerrs();
+        for (Territory t : terrs) this.game.getMap().getTerritory(t.getName()).removeAllUnits();
+        for(Territory t:terrs){
+            this.game.getMap().getTerritory(t.getName()).addUnit(UnitType.GNOME);
+            this.game.getMap().getTerritory(t.getName()).addUnit(UnitType.GNOME);
+            this.game.getMap().getTerritory(t.getName()).addUnit(UnitType.DWARF);
+            this.game.getMap().getTerritory(t.getName()).addUnit(UnitType.DWARF);
+            this.game.getMap().getTerritory(t.getName()).addUnit(UnitType.HOUSE_ELF);
+            this.game.getMap().getTerritory(t.getName()).addUnit(UnitType.HOUSE_ELF);
+        }
+//        System.out.println("Please enter the name of the territory you want to add units to:\n");
+//        String source = scanner.nextLine();
+        GameObject obj = new GameObject(this.clientSocket);
+        obj.encodeObj(this.game);
+
     }
 
     /*
@@ -255,7 +278,7 @@ public class Client {
                         orderMove(moveTurn,attackTurn);
                         break;
                     case "A":
-                        orderAttack(attackTurn,moveTurn);
+                        orderAttack2(attackTurn,moveTurn);
                         break;
                 }
             }
@@ -343,23 +366,23 @@ public class Client {
     /*
      * Order attack from player's console
      */
-//    private void orderAttack(AttackTurn attackTurn,MoveTurn moveTurn) {
-//        System.out.println("Please enter the name of the territory you want to attack from:\n");
-//        String from = scanner.nextLine();
-//        System.out.println("Please enter the name of the territory you want to attack to:\n");
-//        String to = scanner.nextLine();
-//        System.out.println("Please enter the number of Gnomes you want to use in attack:\n");
-//        int GnomesNumUnits = Validation.getValidNumber(scanner);
-//        System.out.println("Please enter the number of Dwarfs you want to use in attack:\n");
-//        int DwarfsNumUnits = Validation.getValidNumber(scanner);
-//        System.out.println("Please enter the number of House-elfs you want to use in attack:\n");
-//        int HouseElfsNumUnits = Validation.getValidNumber(scanner);
-//
-//        HashMap<UnitType,Integer> unitList=new HashMap<>();
-//        unitList.put(UnitType.GNOME,GnomesNumUnits);
-//        unitList.put(UnitType.DWARF,DwarfsNumUnits);
-//        unitList.put(UnitType.HOUSE_ELF,HouseElfsNumUnits);
-//        attackTurn.addAttack(new Attack(from, to, unitList, this.playerName));
+    private void orderAttack2(AttackTurn attackTurn,MoveTurn moveTurn) {
+        System.out.println("Please enter the name of the territory you want to attack from:\n");
+        String from = scanner.nextLine();
+        System.out.println("Please enter the name of the territory you want to attack to:\n");
+        String to = scanner.nextLine();
+        System.out.println("Please enter the number of Gnomes you want to use in attack:\n");
+        int GnomesNumUnits = Validation.getValidNumber(scanner);
+        System.out.println("Please enter the number of Dwarfs you want to use in attack:\n");
+        int DwarfsNumUnits = Validation.getValidNumber(scanner);
+        System.out.println("Please enter the number of House-elfs you want to use in attack:\n");
+        int HouseElfsNumUnits = Validation.getValidNumber(scanner);
+
+        HashMap<UnitType,Integer> unitList=new HashMap<>();
+        unitList.put(UnitType.GNOME,GnomesNumUnits);
+        unitList.put(UnitType.DWARF,DwarfsNumUnits);
+        unitList.put(UnitType.HOUSE_ELF,HouseElfsNumUnits);
+        attackTurn.addAttack(new Attack(from, to, unitList, this.playerName));
 ////        try {
 ////            //Validation.checkAttack(attackTurn, moveTurn, from, to, numUnits);
 ////            attackTurn.addAttack(new Attack(from, to, numUnits, this.playerName));
@@ -375,7 +398,7 @@ public class Client {
 ////                }
 ////            }
 ////        }
-//
-//    }
+
+    }
 
 }

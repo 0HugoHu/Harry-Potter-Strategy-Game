@@ -8,6 +8,7 @@ import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.MoveTurn;
 import edu.duke.shared.turn.Turn;
 import edu.duke.shared.unit.Unit;
+import edu.duke.shared.unit.UnitType;
 import org.junit.Test;
 
 import java.net.Socket;
@@ -111,7 +112,7 @@ public class GameTest {
 
         for(Territory t:terrs){
             for (int i = 0; i < 6; i++)
-                newGame.getMap().getTerritory(t.getName()).addUnit(new Unit("Gnome"));
+                newGame.getMap().getTerritory(t.getName()).addUnit(UnitType.GNOME);
         }
 
         AttackTurn attTurn1=new AttackTurn(m,0,"A");

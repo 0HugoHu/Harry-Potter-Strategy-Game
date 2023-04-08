@@ -18,6 +18,7 @@ import edu.duke.shared.map.Territory;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Turn;
 import edu.duke.shared.unit.Unit;
+import edu.duke.shared.unit.UnitType;
 
 public class Server {
     // Port number
@@ -25,7 +26,7 @@ public class Server {
     // Number of players
     private final static int numPlayers = 3;
     // Number of units at the beginning
-    private final static int numUnits = 24;
+    private final static int numUnits = 48;
     // Gameplay controller
     private final Game game;
     // Server socket
@@ -282,7 +283,7 @@ public class Server {
     public void growUnits() {
         //After each turn, all territories should add one new unit
         for (Territory t : this.game.getMap().getTerritories()) {
-            t.addUnit(new Unit("Gnome"));
+            t.addUnit(UnitType.GNOME);
         }
     }
 
@@ -311,6 +312,11 @@ public class Server {
                 t.addCoins(25);
             }
         }
+        for (int i = 0; i < this.getNumOfPlayers(); i++) {
+            this.game.getPlayerList().get(i).setCoins();
+            this.game.getPlayerList().get(i).setHorns();
+        }
+
     }
 
 }

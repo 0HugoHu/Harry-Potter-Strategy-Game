@@ -6,6 +6,9 @@ import edu.duke.shared.player.Player;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Move;
 import edu.duke.shared.turn.MoveTurn;
+import edu.duke.shared.unit.UnitType;
+
+import java.util.Map;
 
 public class DisplayMap {
     // Map
@@ -69,10 +72,16 @@ public class DisplayMap {
                 }
                 sb.delete(sb.length() - 2, sb.length());
                 sb.append(")");
-                sb.append(" [ Type ").append(t.getType()).append("; ");
-                sb.append("Unicorn Horns: ").append(t.getHorns()).append(", ");
-                sb.append("Silver Coins: ").append(t.getCoins());
-                sb.append("]\n");
+                if(t.getUnits()!=null){
+                sb.append(" [ Units:  ");
+                for(Map.Entry<UnitType,Integer> entry:t.getUnits().entrySet()){
+                    sb.append(entry.getKey().toString()).append(" : ").append(entry.getValue()).append(" ;");
+                }
+                sb.append(" ]").append("\n");}
+//                sb.append(" [ Type ").append(t.getType()).append("; ");
+//                sb.append("Unicorn Horns: ").append(t.getHorns()).append(", ");
+//                sb.append("Silver Coins: ").append(t.getCoins());
+//                sb.append("]\n");
             }
             sb.append("\n\n");
         }

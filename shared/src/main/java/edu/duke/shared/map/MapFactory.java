@@ -134,6 +134,7 @@ public class MapFactory {
         //Initialize the array of territories
         Territory[] t = new Territory[this.numTerritories];
         for (int i = 0; i < this.numTerritories; i++) {
+//            char name = (char) ('A' + i);
             t[i] = new Territory(territoryNames[i]);
             t[i].addDetails(territoryDetails[i]);
             int coord_1d = gameMap.getHeight() * gameMap.getWidth() / this.numTerritories * i;
