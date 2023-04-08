@@ -1,34 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="@dimen/spinner_width_inner"
+    android:layout_height="@dimen/spinner_height"
+    android:background="@drawable/item"
     android:paddingStart="8dp"
-    android:paddingEnd="8dp">
+    android:paddingEnd="4dp">
 
     <cn.gavinliu.android.lib.shapedimageview.ShapedImageView
         android:id="@+id/spinner_img"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:src="@drawable/gnome"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shape_mode="circle"
-        app:stroke_color="@color/order_text"
-        app:stroke_width="2dp" />
+        app:stroke_color="@color/text_white"
+        app:stroke_width="1dp" />
 
     <TextView
         android:id="@+id/spinner_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/spinner_img"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toEndOf="@id/spinner_img"
         app:layout_constraintTop_toTopOf="@id/spinner_img"
         app:layout_constraintBottom_toBottomOf="@id/spinner_img"
         android:fontFamily="@font/gumela"
         android:text="@string/gnome"
         android:textColor="@color/order_text_white"
-        android:textSize="@dimen/order_text_small" />
+        android:textSize="@dimen/order_text_extra_small" />
 
+    <ImageView
+        android:id="@+id/spinner_arrow"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:rotation="90"
+        android:src="@drawable/inset_bg_arrow_down_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

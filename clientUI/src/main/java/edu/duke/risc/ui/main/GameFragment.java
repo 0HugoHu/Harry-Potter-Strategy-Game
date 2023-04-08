@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import edu.duke.risc.R;
 import edu.duke.risc.client.ClientIntentService;
@@ -47,6 +49,7 @@ import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Move;
 import edu.duke.shared.turn.MoveTurn;
 import edu.duke.shared.unit.Unit;
+import edu.duke.shared.unit.UnitType;
 
 public class GameFragment extends Fragment implements ClientResultReceiver.AppReceiver {
 
@@ -62,6 +65,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     ArrayList<TerrDataModel> terrDataModels;
     ArrayList<UnitUpgradeDataModel> unitUpgradeDataModels;
     ArrayList<UnitSpinnerDataModel> unitSpinnerDataModels;
+    ArrayList<UnitSpinnerDataModel> unitSpinnerToDataModels;
     ListView move_attack_listview;
     ListView unit_listview;
     ListView unit_init_listview;
@@ -69,6 +73,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     private TerrDataAdapter terrAdapter;
     private UnitUpgradeDataAdapter unitUpgradeAdapter;
     private UnitSpinnerAdapter unitSpinnerAdapter;
+    private UnitSpinnerAdapter unitSpinnerToAdapter;
 
     private String orderTerrFrom;
 
@@ -259,15 +264,17 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         // Unit
         TextView unit_title = unit_view.findViewById(R.id.unit_title);
         EditText unit_num = unit_view.findViewById(R.id.unit_upgrade_num_input);
-        unit_num.setText("0");
         Button unit_btn = unit_view.findViewById(R.id.unit_back_btn);
         Button unit_upgrade_btn = unit_view.findViewById(R.id.unit_upgrade_btn);
         Spinner unit_from_spinner = unit_view.findViewById(R.id.unit_from_spinner);
         Spinner unit_to_spinner = unit_view.findViewById(R.id.unit_to_spinner);
 
         unitSpinnerDataModels = new ArrayList<>();
+        unitSpinnerToDataModels = new ArrayList<>();
         unitSpinnerAdapter = new UnitSpinnerAdapter(unitSpinnerDataModels, context);
+        unitSpinnerToAdapter = new UnitSpinnerAdapter(unitSpinnerToDataModels, context);
         unit_from_spinner.setAdapter(unitSpinnerAdapter);
+        unit_to_spinner.setAdapter(unitSpinnerToAdapter);
 
         // Initialize widgets in common use
         shadow_view = order_view.findViewById(R.id.shadow_view);
@@ -295,12 +302,34 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         Button tech_back_btn = tech_view.findViewById(R.id.tech_back_btn);
         ImageView tech_img = tech_view.findViewById(R.id.tech_img);
 
+        unit_from_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                UnitSpinnerDataModel unitSpinnerDataModel = unitSpinnerDataModels.get(i);
+                unitSpinnerToDataModels.clear();
+                ArrayList<String> nextLevel = Unit.getNextLevel(Unit.convertStringToUnitType(unitSpinnerDataModel.getName()));
+                if (nextLevel != null) {
+                    for (String next : nextLevel) {
+                        unitSpinnerToDataModels.add(new UnitSpinnerDataModel(next));
+                    }
+                }
+                unitSpinnerToAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         unit_upgrade_btn.setOnClickListener(view -> {
             String num_s = unit_num.getText().toString();
             if (num_s != null && !num_s.equals("")) {
                 int num = Integer.parseInt(num_s);
                 if (num > 0) {
-                    // Get upgrade unit from and to
+                    String from = unit_from_spinner.getSelectedItem().toString();
+                    String to = unit_to_spinner.getSelectedItem().toString();
+                    System.out.println("From: " + from + " To: " + to);
                 }
             }
 
@@ -572,16 +601,25 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
     private void updateUnitUpgradeInfo(String terrName) {
         unitSpinnerDataModels.clear();
+        unitSpinnerToDataModels.clear();
+
         Territory territory = mGame.getMap().getTerritory(terrName);
         if (territory == null) {
             return;
         }
+        HashSet<UnitType> unitTypes = new HashSet<>();
 
         for (Unit unit : territory.getUnits()) {
+            System.out.println(unit.getType());
+            if (unitTypes.contains(unit.getType())) {
+                continue;
+            }
             unitSpinnerDataModels.add(new UnitSpinnerDataModel(Unit.getName(unit.getType())));
+            unitTypes.add(unit.getType());
         }
 
         unitSpinnerAdapter.notifyDataSetChanged();
+        unitSpinnerToAdapter.notifyDataSetChanged();
     }
 
 

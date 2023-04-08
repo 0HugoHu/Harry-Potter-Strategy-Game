@@ -39,6 +39,7 @@
     <string name="plus1">+1</string>
 
     <string name="gnome">Gnome</string>
+    <string name="spinner_title">Select unit</string>
 
     <string name="attack">Attack</string>
     <string name="move">Move</string>
