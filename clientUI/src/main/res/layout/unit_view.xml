@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/inflate_unit"
-    android:layout_width="0dp"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_weight="1"
     android:background="@drawable/purple_bg_edge_protrait"
@@ -74,6 +74,10 @@
         android:layout_width="75dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
+        android:background="@drawable/white_outline"
+        android:popupBackground="@drawable/white_outline"
+        android:spinnerMode="dropdown"
+        tools:listitem="@layout/unit_spinner_item"
         app:layout_constraintBottom_toTopOf="@+id/unit_back_btn"
         app:layout_constraintStart_toStartOf="@+id/unit_upgrade_from" />
 
@@ -124,7 +128,7 @@
         app:layout_constraintTop_toTopOf="@+id/unit_upgrade_from" />
 
     <EditText
-        android:id="@+id/editTextNumber"
+        android:id="@+id/unit_upgrade_num_input"
         android:layout_width="32dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -139,10 +143,10 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="16dp"
-        android:background="@drawable/inset_bg_turn_commit_turn"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextNumber"
-        app:layout_constraintStart_toEndOf="@+id/editTextNumber"
-        app:layout_constraintTop_toTopOf="@+id/editTextNumber" />
+        android:background="@drawable/inset_bg_turn_commit_btn"
+        app:layout_constraintBottom_toBottomOf="@+id/unit_upgrade_num_input"
+        app:layout_constraintStart_toEndOf="@+id/unit_upgrade_num_input"
+        app:layout_constraintTop_toTopOf="@+id/unit_upgrade_num_input" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

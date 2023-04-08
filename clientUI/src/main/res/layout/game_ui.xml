@@ -65,7 +65,7 @@
                 android:layout_height="40dp"
                 android:layout_marginEnd="8dp"
                 android:background="@drawable/btn_bg_purple_s"
-                android:foreground="@drawable/inset_bg_turn_commit_turn"
+                android:foreground="@drawable/inset_bg_turn_commit_btn"
                 app:layout_constraintBottom_toTopOf="@+id/commit_init_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -415,7 +415,7 @@
                 android:layout_height="40dp"
                 android:layout_marginEnd="8dp"
                 android:background="@drawable/btn_bg_brown_s"
-                android:foreground="@drawable/inset_bg_turn_commit_turn"
+                android:foreground="@drawable/inset_bg_turn_commit_btn"
                 app:layout_constraintBottom_toTopOf="@+id/end_turn_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

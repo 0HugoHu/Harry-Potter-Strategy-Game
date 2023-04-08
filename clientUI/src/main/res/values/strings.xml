@@ -36,6 +36,9 @@
     <string name="from">From:</string>
     <string name="to">To:</string>
     <string name="num">Number:</string>
+    <string name="plus1">+1</string>
+
+    <string name="gnome">Gnome</string>
 
     <string name="attack">Attack</string>
     <string name="move">Move</string>

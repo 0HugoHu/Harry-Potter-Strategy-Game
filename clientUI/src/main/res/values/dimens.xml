@@ -19,6 +19,8 @@
     <dimen name="order_text_extra_small">12sp</dimen>
     <dimen name="order_button_height">30dp</dimen>
 
+    <dimen name="button_round_radius">8dp</dimen>
+
     <dimen name="order_text_margin">32dp</dimen>
 
     <dimen name="init_view_title">24sp</dimen>

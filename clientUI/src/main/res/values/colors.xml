@@ -35,6 +35,7 @@
     <color name="order_text">#FF000000</color>
     <color name="order_text_gray">#AA000000</color>
     <color name="error_prompt">#FFD32F2F</color>
+    <color name="order_text_green">#FF009700</color>
     <color name="order_text_white">#EEFEFEFE</color>
 
 </resources>
