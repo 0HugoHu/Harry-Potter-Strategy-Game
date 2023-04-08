@@ -307,7 +307,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 UnitSpinnerDataModel unitSpinnerDataModel = unitSpinnerDataModels.get(i);
                 unitSpinnerToDataModels.clear();
-                ArrayList<String> nextLevel = Unit.getNextLevel(Unit.convertStringToUnitType(unitSpinnerDataModel.getName()));
+                int worldLevel = mGame.getPlayer(mGame.getPlayerName()).getWorldLevel();
+                ArrayList<String> nextLevel = Unit.getNextLevel(Unit.convertStringToUnitType(unitSpinnerDataModel.getName()), worldLevel);
                 if (nextLevel != null) {
                     for (String next : nextLevel) {
                         unitSpinnerToDataModels.add(new UnitSpinnerDataModel(next));
