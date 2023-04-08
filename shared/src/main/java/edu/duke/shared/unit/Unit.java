@@ -20,36 +20,36 @@ public class Unit implements Serializable {
         // Switch case for different types of units
         switch (type) {
             case GNOME:
-                this.bonus=0;
-                this.cost=0;
+                this.bonus = 0;
+                this.cost = 0;
                 break;
             case DWARF:
-                this.bonus=1;
-                this.cost=3;
+                this.bonus = 1;
+                this.cost = 3;
                 break;
             case HOUSE_ELF:
-                this.bonus=3;
-                this.cost=11;
+                this.bonus = 3;
+                this.cost = 11;
                 break;
             case GOBLIN:
-                this.bonus=5;
-                this.cost=30;
+                this.bonus = 5;
+                this.cost = 30;
                 break;
             case VAMPIRE:
-                this.bonus=8;
-                this.cost=55;
+                this.bonus = 8;
+                this.cost = 55;
                 break;
             case CENTAUR:
-                this.bonus=11;
-                this.cost=90;
+                this.bonus = 11;
+                this.cost = 90;
                 break;
             case WEREWOLF:
-                this.bonus=15;
-                this.cost=140;
+                this.bonus = 15;
+                this.cost = 140;
                 break;
             default:
-                this.bonus=0;
-                this.cost=0;
+                this.bonus = 0;
+                this.cost = 0;
                 break;
         }
     }
@@ -61,10 +61,10 @@ public class Unit implements Serializable {
      * @param attack  Unit attack power
      * @param defense Unit defense power
      */
-    public Unit(String name, int attack, int defense, int hp,int bonus) {
+    public Unit(String name, int attack, int defense, int hp, int bonus) {
         this.type = convertStringToUnitType(name);
-        this.bonus=bonus;
-        this.cost=0;
+        this.bonus = bonus;
+        this.cost = 0;
     }
 
     /**
@@ -77,11 +77,11 @@ public class Unit implements Serializable {
     }
 
 
-    public int getBonus(){
+    public int getBonus() {
         return this.bonus;
     }
 
-    public int getCost(){
+    public int getCost() {
         return this.cost;
     }
 

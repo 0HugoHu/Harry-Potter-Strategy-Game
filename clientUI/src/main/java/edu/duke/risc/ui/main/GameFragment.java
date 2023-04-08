@@ -15,9 +15,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,8 +31,12 @@ import edu.duke.risc.client.ClientIntentService;
 import edu.duke.risc.client.ClientResultReceiver;
 import edu.duke.risc.ui.adapter.TerrDataAdapter;
 import edu.duke.risc.ui.adapter.UnitDataAdapter;
+import edu.duke.risc.ui.adapter.UnitSpinnerAdapter;
+import edu.duke.risc.ui.adapter.UnitUpgradeDataAdapter;
 import edu.duke.risc.ui.model.TerrDataModel;
 import edu.duke.risc.ui.model.UnitDataModel;
+import edu.duke.risc.ui.model.UnitSpinnerDataModel;
+import edu.duke.risc.ui.model.UnitUpgradeDataModel;
 import edu.duke.risc.ui.state.TouchEvent;
 import edu.duke.risc.ui.view.GameView;
 import edu.duke.shared.Game;
@@ -54,12 +60,15 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
     ArrayList<UnitDataModel> unitDataModels;
     ArrayList<TerrDataModel> terrDataModels;
+    ArrayList<UnitUpgradeDataModel> unitUpgradeDataModels;
+    ArrayList<UnitSpinnerDataModel> unitSpinnerDataModels;
     ListView move_attack_listview;
     ListView unit_listview;
-
     ListView unit_init_listview;
     private UnitDataAdapter unitAdapter;
     private TerrDataAdapter terrAdapter;
+    private UnitUpgradeDataAdapter unitUpgradeAdapter;
+    private UnitSpinnerAdapter unitSpinnerAdapter;
 
     private String orderTerrFrom;
 
@@ -89,6 +98,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     private boolean isUpgradedWorldLevel = false;
 
     private HashMap<String, HashMap<String, Integer>> unitMoveAttackMap;
+    private HashMap<String, HashMap<String, Integer>> unitUpgradeMap;
 
 
     public static GameFragment newInstance() {
@@ -158,6 +168,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 case TURN_BEGIN:
                     updatePlayerValues();
                     unitMoveAttackMap = new HashMap<>();
+                    unitUpgradeMap = new HashMap<>();
                     // Update the game view
                     ui_view.findViewById(R.id.ui_side_bar_init).setVisibility(View.GONE);
                     ui_view.findViewById(R.id.ui_side_bar).setVisibility(View.VISIBLE);
@@ -228,9 +239,12 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         move_attack_listview = move_attack_view.findViewById(R.id.list);
         unit_listview = unit_view.findViewById(R.id.unit_list);
         unitDataModels = new ArrayList<>();
+        unitUpgradeDataModels = new ArrayList<>();
         unitAdapter = new UnitDataAdapter(unitDataModels, context);
+        unitUpgradeAdapter = new UnitUpgradeDataAdapter(unitUpgradeDataModels, context);
         move_attack_listview.setAdapter(unitAdapter);
-        unit_listview.setAdapter(unitAdapter);
+        unit_listview.setAdapter(unitUpgradeAdapter);
+
 
         // Initialize widgets in the move_attack view
         Button commit_btn = move_attack_view.findViewById(R.id.attack_btn);
@@ -244,7 +258,16 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         Button prop_btn = prop_view.findViewById(R.id.prop_back_btn);
         // Unit
         TextView unit_title = unit_view.findViewById(R.id.unit_title);
+        EditText unit_num = unit_view.findViewById(R.id.unit_upgrade_num_input);
+        unit_num.setText("0");
         Button unit_btn = unit_view.findViewById(R.id.unit_back_btn);
+        Button unit_upgrade_btn = unit_view.findViewById(R.id.unit_upgrade_btn);
+        Spinner unit_from_spinner = unit_view.findViewById(R.id.unit_upgrade_from);
+        Spinner unit_to_spinner = unit_view.findViewById(R.id.unit_upgrade_to);
+
+        unitSpinnerDataModels = new ArrayList<>();
+        unitSpinnerAdapter = new UnitSpinnerAdapter(unitSpinnerDataModels, context);
+        unit_from_spinner.setAdapter(unitSpinnerAdapter);
 
         // Initialize widgets in common use
         shadow_view = order_view.findViewById(R.id.shadow_view);
@@ -271,6 +294,17 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         Button tech_upgrade_btn = tech_view.findViewById(R.id.tech_upgrade_btn);
         Button tech_back_btn = tech_view.findViewById(R.id.tech_back_btn);
         ImageView tech_img = tech_view.findViewById(R.id.tech_img);
+
+        unit_upgrade_btn.setOnClickListener(view -> {
+            String num_s = unit_num.getText().toString();
+            if (num_s != null && !num_s.equals("")) {
+                int num = Integer.parseInt(num_s);
+                if (num > 0) {
+                    // Get upgrade unit from and to
+                }
+            }
+
+        });
 
         init_btn.setOnClickListener(v -> {
             init_base_view.setVisibility(View.GONE);
@@ -473,7 +507,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 unit_init_view.setVisibility(View.GONE);
                 tech_view.setVisibility(View.GONE);
                 base_view.setVisibility(View.VISIBLE);
-                updateTerrInfo(territoryName);
+                updateUnitUpgradeInfo(territoryName);
                 String title = "Unit in " + territoryName;
                 unit_title.setText(title);
                 mTouchEvent = TouchEvent.UNIT;
@@ -521,9 +555,39 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         }
     }
 
+    private void updateUnitUpgradeMap(int number, UnitDataModel unit) {
+        if (unitUpgradeMap.containsKey(orderTerrFrom)) {
+            HashMap<String, Integer> map = unitUpgradeMap.get(orderTerrFrom);
+            if (map.containsKey(unit.getName())) {
+                map.put(unit.getName(), map.get(unit.getName()) + number);
+            } else {
+                map.put(unit.getName(), number);
+            }
+        } else {
+            HashMap<String, Integer> map = new HashMap<>();
+            map.put(unit.getName(), number);
+            unitUpgradeMap.put(orderTerrFrom, map);
+        }
+    }
+
+    private void updateUnitUpgradeInfo(String terrName) {
+        unitSpinnerDataModels.clear();
+        Territory territory = mGame.getMap().getTerritory(terrName);
+        if (territory == null) {
+            return;
+        }
+
+        for (Unit unit : territory.getUnits()) {
+            unitSpinnerDataModels.add(new UnitSpinnerDataModel(Unit.getName(unit.getType())));
+        }
+
+        unitSpinnerAdapter.notifyDataSetChanged();
+    }
+
 
     private void updateTerrInfo(String terrName) {
         unitDataModels.clear();
+        unitUpgradeDataModels.clear();
 
         Territory territory = mGame.getMap().getTerritory(terrName);
         if (territory == null) {
@@ -531,6 +595,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         }
 
         HashMap<String, Integer> minusMap = unitMoveAttackMap.get(terrName);
+        HashMap<String, Integer> upgradeMap = unitUpgradeMap.get(terrName);
         HashMap<String, Integer> map = new HashMap<>();
         for (Unit unit : territory.getUnits()) {
             map.put(Unit.getName(unit.getType()), map.getOrDefault(Unit.getName(unit.getType()), 0) + 1);
@@ -540,9 +605,22 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 map.put(type, map.get(type) - minusMap.get(type));
             }
             unitDataModels.add(new UnitDataModel(type, map.get(type)));
+            if (upgradeMap != null && upgradeMap.containsKey(type)) {
+                UnitUpgradeDataModel unitUpgradeDataModel = new UnitUpgradeDataModel(type, map.get(type));
+                int delta = upgradeMap.get(type);
+                if (delta > 0) {
+                    unitUpgradeDataModel.setDelta("+" + delta);
+                } else {
+                    unitUpgradeDataModel.setDelta("-" + delta);
+                }
+                unitUpgradeDataModels.add(unitUpgradeDataModel);
+            } else {
+                unitUpgradeDataModels.add(new UnitUpgradeDataModel(type, map.get(type)));
+            }
         }
 
         unitAdapter.notifyDataSetChanged();
+        unitUpgradeAdapter.notifyDataSetChanged();
     }
 
     private void updateUnitInitInfo() {
