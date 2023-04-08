@@ -101,7 +101,7 @@
         android:id="@+id/unit_upgrade_to"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="16dp"
         android:fontFamily="@font/gumela"
         android:text="@string/to"
         android:textColor="@color/order_text_white"
@@ -110,11 +110,24 @@
         app:layout_constraintStart_toEndOf="@+id/unit_from_spinner"
         app:layout_constraintTop_toTopOf="@+id/unit_upgrade_from" />
 
+    <TextView
+        android:id="@+id/unit_upgrade_num_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:fontFamily="@font/gumela"
+        android:text="@string/num"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_small"
+        app:layout_constraintBottom_toBottomOf="@id/unit_upgrade_from"
+        app:layout_constraintStart_toEndOf="@+id/unit_to_spinner"
+        app:layout_constraintTop_toTopOf="@+id/unit_upgrade_from" />
+
     <EditText
         android:id="@+id/editTextNumber"
         android:layout_width="32dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="16dp"
         android:ems="10"
         android:inputType="number"
         app:layout_constraintBottom_toBottomOf="@+id/unit_to_spinner"

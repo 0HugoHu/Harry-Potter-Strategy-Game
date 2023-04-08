@@ -266,8 +266,11 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
         // Initialize widgets in tech view
         TextView tech_error_prompt = tech_view.findViewById(R.id.tech_error_prompt);
+        TextView tech_level_value = tech_view.findViewById(R.id.tech_level_value);
+        TextView tech_level_desc = tech_view.findViewById(R.id.tech_level_desc);
         Button tech_upgrade_btn = tech_view.findViewById(R.id.tech_upgrade_btn);
         Button tech_back_btn = tech_view.findViewById(R.id.tech_back_btn);
+        ImageView tech_img = tech_view.findViewById(R.id.tech_img);
 
         init_btn.setOnClickListener(v -> {
             init_base_view.setVisibility(View.GONE);
@@ -298,12 +301,51 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 tech_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
                 if (this.isUpgradedWorldLevel) {
                     tech_error_prompt.setText(getResources().getString(R.string.tech_fault2));
+                    tech_upgrade_btn.setText(getResources().getString(R.string.tech_fault3));
                 }
+            } else if (tech_level == 6) {
+                tech_error_prompt.setText(getResources().getString(R.string.tech_fault4));
                 tech_upgrade_btn.setText(getResources().getString(R.string.tech_fault3));
             } else {
                 tech_error_prompt.setVisibility(View.INVISIBLE);
                 tech_upgrade_btn.setEnabled(true);
                 tech_upgrade_btn.setTextColor(getResources().getColor(R.color.order_text));
+            }
+            switch (tech_level) {
+                case 1:
+                    tech_level_value.setText(getResources().getString(R.string.one));
+                    tech_img.setImageResource(R.drawable.wand_1);
+                    tech_level_desc.setText(getResources().getString(R.string.tech_bonus_1));
+                    break;
+                case 2:
+                    tech_level_value.setText(getResources().getString(R.string.two));
+                    tech_img.setImageResource(R.drawable.wand_2);
+                    tech_level_desc.setText(getResources().getString(R.string.tech_bonus_2));
+                    break;
+                case 3:
+                    tech_level_value.setText(getResources().getString(R.string.three));
+                    tech_img.setImageResource(R.drawable.wand_3);
+                    tech_level_desc.setText(getResources().getString(R.string.tech_bonus_3));
+                    break;
+                case 4:
+                    tech_level_value.setText(getResources().getString(R.string.four));
+                    tech_img.setImageResource(R.drawable.wand_4);
+                    tech_level_desc.setText(getResources().getString(R.string.tech_bonus_4));
+                    break;
+                case 5:
+                    tech_level_value.setText(getResources().getString(R.string.five));
+                    tech_img.setImageResource(R.drawable.wand_5);
+                    tech_level_desc.setText(getResources().getString(R.string.tech_bonus_5));
+                    break;
+                case 6:
+                    tech_level_value.setText(getResources().getString(R.string.six));
+                    tech_img.setImageResource(R.drawable.wand_6);
+                    tech_level_desc.setText(getResources().getString(R.string.tech_bonus_6));
+                    break;
+                default:
+                    tech_level_value.setText(getResources().getString(R.string.zero));
+                    tech_img.setImageResource(R.drawable.wand_101);
+                    break;
             }
         });
 
@@ -384,7 +426,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 orderTerrFrom = terrFrom;
                 orderTerrTo = terrTo;
                 updateTerrInfo(terrFrom);
-                String title = "Move: " + terrFrom + " to " + terrTo;
+                String title = "Move from " + terrFrom + " to " + terrTo;
                 view_title.setText(title);
                 commit_btn.setText(context.getResources().getString(R.string.move));
                 // Set touch event
@@ -402,7 +444,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 orderTerrFrom = terrFrom;
                 orderTerrTo = terrTo;
                 updateTerrInfo(terrFrom);
-                String title = "Attack: " + terrFrom + " to " + terrTo;
+                String title = "Attack from " + terrFrom + " to " + terrTo;
                 view_title.setText(title);
                 commit_btn.setText(context.getResources().getString(R.string.attack));
                 mTouchEvent = TouchEvent.ATTACK;
@@ -417,8 +459,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 tech_view.setVisibility(View.GONE);
                 base_view.setVisibility(View.VISIBLE);
                 updateTerrInfo(territoryName);
-                String title = "Prop: " + territoryName;
-                prop_title.setText(title);
+                prop_title.setText(territoryName);
                 prop_owner.setText("Owner: " + mGame.getMap().getTerritory(territoryName).getOwner());
                 prop_desc.setText("Description: \n" + context.getResources().getString(R.string.terr_desc_example));
                 mTouchEvent = TouchEvent.PROP;
@@ -433,7 +474,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 tech_view.setVisibility(View.GONE);
                 base_view.setVisibility(View.VISIBLE);
                 updateTerrInfo(territoryName);
-                String title = "Unit: " + territoryName;
+                String title = "Unit in " + territoryName;
                 unit_title.setText(title);
                 mTouchEvent = TouchEvent.UNIT;
             }

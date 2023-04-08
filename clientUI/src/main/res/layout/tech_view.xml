@@ -129,7 +129,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/gumela"
-        android:text="@string/tech_bonus_example"
+        android:text="@string/tech_bonus_1"
         android:textColor="@color/order_text_white"
         android:textSize="@dimen/order_text_extra_small"
         app:layout_constraintEnd_toEndOf="@+id/tech_img"
