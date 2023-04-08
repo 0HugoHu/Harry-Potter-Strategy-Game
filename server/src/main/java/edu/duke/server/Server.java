@@ -105,6 +105,9 @@ public class Server {
         // Receive Units setup from all players
         waitForThreadJoin();
         System.out.println("Received all units info.\n");
+
+        // Initialize default resources
+        growResources();
     }
 
     /**
