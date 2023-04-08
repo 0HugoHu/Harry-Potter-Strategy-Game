@@ -142,6 +142,7 @@ public class GameView extends SurfaceView implements Runnable {
         mMapTiles = new MapTiles(mContext, mViewWidth, mViewHeight, backgroundImageBitmap);
         mMapUI = new MapUI(mViewWidth, mViewHeight, selectionBubbleBitmap);
         this.mRect.set(0, 0, mViewWidth, mViewHeight);
+        mUpdateType = MapUpdateType.REFRESH;
     }
 
     /**

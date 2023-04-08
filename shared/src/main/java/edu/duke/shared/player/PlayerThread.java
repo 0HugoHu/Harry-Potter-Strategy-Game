@@ -145,6 +145,11 @@ public class PlayerThread implements Runnable, Serializable {
                     this.serverGame.getTurnList().get(turnIndex).put(this.playerId, newTurns);
                 }
 
+                // Copy the player's property
+                if (p.willUpgradeWorldLevel) {
+                    this.serverGame.getPlayerList().get(this.playerId).upgradeWorldLevel();
+                }
+
                 break;
             case TURN_END:
             case GAME_OVER:

@@ -2,6 +2,7 @@ package edu.duke.shared.player;
 
 import java.io.Serializable;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -24,6 +25,9 @@ public class Player implements Serializable {
     public transient Thread thread;
 
     private int worldLevel;
+    private int coins;
+    private int horns;
+    public boolean willUpgradeWorldLevel = false;
 
 
     /**
@@ -205,27 +209,28 @@ public class Player implements Serializable {
      *
      * @return
      */
-    public int[] getAllRes() {
-        int[] count = new int[]{0, 0};
-        for (Territory terr : playerTerrs) {
-            count[0] += terr.getCoins();
-            count[1] += terr.getHorns();
+    public void updateResources(ArrayList<Territory> territories) {
+        int coins = 0;
+        int horns = 0;
+        for (Territory t : territories) {
+            coins += t.getCoins();
+            horns += t.getHorns();
         }
-        return count;
+        this.coins += coins;
+        this.horns += horns;
     }
 
     public int getCoins() {
-        return getAllRes()[0];
+        return this.coins;
     }
 
     public int getHorns() {
-        return getAllRes()[1];
+        return this.horns;
     }
 
     public void upgradeWorldLevel() {
         this.worldLevel++;
-        // TODO: Minus the cost
-
+        this.horns -= upgradeCost(this.worldLevel);
     }
 
 
