@@ -43,40 +43,32 @@ public class UnitSpinnerAdapter extends ArrayAdapter<UnitSpinnerDataModel> {
 
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
-        View view;
+        View view = layoutInflater.inflate(R.layout.unit_spinner_item, parent, false);
         if (position == 0) {
-            view = layoutInflater.inflate(R.layout.spinner_header, parent, false);
-            view.setOnClickListener(v -> {
-                View root = parent.getRootView();
-                root.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK));
-                root.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_BACK));
-            });
+            view.findViewById(R.id.spinner_arrow).setVisibility(View.VISIBLE);
         } else {
-            view = layoutInflater.inflate(R.layout.spinner_dropdown, parent, false);
-            UnitSpinnerDataModel data = getItem(position);
-            if (data != null) {
-                setSpinnerUnitItem(view, data);
-            }
+            view.findViewById(R.id.spinner_arrow).setVisibility(View.GONE);
+        }
+        UnitSpinnerDataModel data = getItem(position);
+        if (data != null) {
+            setSpinnerUnitItem(view, data);
         }
         return view;
     }
 
     @Override
     public UnitSpinnerDataModel getItem(int position) {
-        if (position == 0) {
-            return null;
-        }
-        return super.getItem(position - 1);
+        return super.getItem(position);
     }
 
     @Override
     public int getCount() {
-        return super.getCount() + 1;
+        return super.getCount();
     }
 
     @Override
     public boolean isEnabled(int position) {
-        return position != 0;
+        return true;
     }
 
     private void setSpinnerUnitItem(View view, UnitSpinnerDataModel data) {

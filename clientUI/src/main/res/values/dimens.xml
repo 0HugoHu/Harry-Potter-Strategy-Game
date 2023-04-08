@@ -20,6 +20,9 @@
     <dimen name="order_button_height">30dp</dimen>
 
     <dimen name="button_round_radius">8dp</dimen>
+    <dimen name="spinner_width_inner">115dp</dimen>
+    <dimen name="spinner_width">115dp</dimen>
+    <dimen name="spinner_height">30dp</dimen>
 
     <dimen name="order_text_margin">32dp</dimen>
 

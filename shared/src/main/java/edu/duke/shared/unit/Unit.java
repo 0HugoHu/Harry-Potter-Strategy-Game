@@ -1,6 +1,8 @@
 package edu.duke.shared.unit;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class Unit implements Serializable {
     // Unit name
@@ -132,5 +134,26 @@ public class Unit implements Serializable {
             default:
                 return "Gnome";
         }
+    }
+
+    public static ArrayList<String> getNextLevel(UnitType type) {
+        ArrayList<String> nextLevel = new ArrayList<>();
+        switch (type) {
+            case GNOME:
+                nextLevel.add("Dwarf");
+            case DWARF:
+                nextLevel.add("House-elf");
+            case HOUSE_ELF:
+                nextLevel.add("Goblin");
+            case GOBLIN:
+                nextLevel.add("Vampire");
+            case VAMPIRE:
+                nextLevel.add("Centaur");
+            case CENTAUR:
+                nextLevel.add("Werewolf");
+            case WEREWOLF:
+                return null;
+        }
+        return nextLevel;
     }
 }

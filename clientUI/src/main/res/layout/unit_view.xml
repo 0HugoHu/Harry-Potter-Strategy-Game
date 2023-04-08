@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/inflate_unit"
-    android:layout_width="match_parent"
+    android:layout_width="0dp"
     android:layout_height="match_parent"
     android:layout_weight="1"
     android:background="@drawable/purple_bg_edge_protrait"
@@ -71,23 +71,27 @@
 
     <Spinner
         android:id="@+id/unit_from_spinner"
-        android:layout_width="75dp"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/spinner_width"
+        android:layout_height="@dimen/spinner_height"
         android:layout_marginBottom="32dp"
-        android:background="@drawable/white_outline"
-        android:popupBackground="@drawable/white_outline"
+        android:background="@drawable/item"
+        android:popupBackground="@color/transparent"
         android:spinnerMode="dropdown"
-        tools:listitem="@layout/unit_spinner_item"
         app:layout_constraintBottom_toTopOf="@+id/unit_back_btn"
-        app:layout_constraintStart_toStartOf="@+id/unit_upgrade_from" />
+        app:layout_constraintStart_toStartOf="@+id/unit_upgrade_from"
+        tools:listitem="@layout/unit_spinner_item" />
 
     <Spinner
         android:id="@+id/unit_to_spinner"
-        android:layout_width="75dp"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/spinner_width"
+        android:layout_height="@dimen/spinner_height"
+        android:background="@drawable/item"
+        android:popupBackground="@color/transparent"
+        android:spinnerMode="dropdown"
         app:layout_constraintBottom_toBottomOf="@+id/unit_from_spinner"
         app:layout_constraintStart_toStartOf="@+id/unit_upgrade_to"
-        app:layout_constraintTop_toTopOf="@+id/unit_from_spinner" />
+        app:layout_constraintTop_toTopOf="@+id/unit_from_spinner"
+        tools:listitem="@layout/unit_spinner_item" />
 
     <TextView
         android:id="@+id/unit_upgrade_from"
@@ -131,22 +135,21 @@
         android:id="@+id/unit_upgrade_num_input"
         android:layout_width="32dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:ems="10"
         android:inputType="number"
-        app:layout_constraintBottom_toBottomOf="@+id/unit_to_spinner"
-        app:layout_constraintStart_toEndOf="@+id/unit_to_spinner"
-        app:layout_constraintTop_toTopOf="@+id/unit_to_spinner" />
+        android:text="@string/one"
+        app:layout_constraintBottom_toBottomOf="@+id/unit_upgrade_num_title"
+        app:layout_constraintStart_toEndOf="@+id/unit_upgrade_num_title"
+        app:layout_constraintTop_toTopOf="@+id/unit_upgrade_num_title" />
 
     <Button
         android:id="@+id/unit_upgrade_btn"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginStart="16dp"
         android:background="@drawable/inset_bg_turn_commit_btn"
-        app:layout_constraintBottom_toBottomOf="@+id/unit_upgrade_num_input"
-        app:layout_constraintStart_toEndOf="@+id/unit_upgrade_num_input"
-        app:layout_constraintTop_toTopOf="@+id/unit_upgrade_num_input" />
+        app:layout_constraintBottom_toBottomOf="@+id/unit_to_spinner"
+        app:layout_constraintEnd_toEndOf="@+id/unit_back_btn"
+        app:layout_constraintTop_toTopOf="@+id/unit_to_spinner" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
