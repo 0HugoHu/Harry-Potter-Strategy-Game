@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/inflate_unit"
-    android:layout_width="0dp"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_weight="1"
     android:background="@drawable/purple_bg_edge_protrait"
@@ -73,11 +73,11 @@
         android:id="@+id/unit_from_spinner"
         android:layout_width="@dimen/spinner_width"
         android:layout_height="@dimen/spinner_height"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/item"
         android:popupBackground="@color/transparent"
         android:spinnerMode="dropdown"
-        app:layout_constraintBottom_toTopOf="@+id/unit_back_btn"
+        app:layout_constraintBottom_toTopOf="@+id/unit_upgrade_num_title"
         app:layout_constraintStart_toStartOf="@+id/unit_upgrade_from"
         tools:listitem="@layout/unit_spinner_item" />
 
@@ -122,20 +122,24 @@
         android:id="@+id/unit_upgrade_num_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
         android:fontFamily="@font/gumela"
         android:text="@string/num"
         android:textColor="@color/order_text_white"
         android:textSize="@dimen/order_text_small"
-        app:layout_constraintBottom_toBottomOf="@id/unit_upgrade_from"
-        app:layout_constraintStart_toEndOf="@+id/unit_to_spinner"
-        app:layout_constraintTop_toTopOf="@+id/unit_upgrade_from" />
+        app:layout_constraintBottom_toTopOf="@+id/unit_upgrade_btn"
+        app:layout_constraintStart_toStartOf="@+id/unit_from_spinner" />
 
     <EditText
         android:id="@+id/unit_upgrade_num_input"
         android:layout_width="32dp"
         android:layout_height="wrap_content"
-        android:ems="10"
+        android:layout_marginStart="16dp"
+        android:ems="1"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_extra_small"
+        android:fontFamily="@font/gumela"
+        android:backgroundTint="@color/order_text_white"
         android:inputType="number"
         android:text="@string/one"
         app:layout_constraintBottom_toBottomOf="@+id/unit_upgrade_num_title"
@@ -144,12 +148,17 @@
 
     <Button
         android:id="@+id/unit_upgrade_btn"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/inset_bg_turn_commit_btn"
-        app:layout_constraintBottom_toBottomOf="@+id/unit_to_spinner"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/order_button_height"
+        android:background="@drawable/btn_white"
+        android:fontFamily="@font/gumela"
+        android:text="@string/upgrade"
+        android:textColor="@color/order_text"
+        android:textSize="@dimen/order_text"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/unit_back_btn"
         app:layout_constraintEnd_toEndOf="@+id/unit_back_btn"
-        app:layout_constraintTop_toTopOf="@+id/unit_to_spinner" />
+        app:layout_constraintStart_toStartOf="@+id/unit_back_btn" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

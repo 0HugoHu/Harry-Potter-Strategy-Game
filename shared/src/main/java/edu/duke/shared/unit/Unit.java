@@ -136,21 +136,27 @@ public class Unit implements Serializable {
         }
     }
 
-    public static ArrayList<String> getNextLevel(UnitType type) {
+    public static ArrayList<String> getNextLevel(UnitType type, int level) {
         ArrayList<String> nextLevel = new ArrayList<>();
         switch (type) {
             case GNOME:
                 nextLevel.add("Dwarf");
             case DWARF:
-                nextLevel.add("House-elf");
+                if (level >= 2)
+                    nextLevel.add("House-elf");
             case HOUSE_ELF:
-                nextLevel.add("Goblin");
+                if (level >= 3)
+                    nextLevel.add("Goblin");
             case GOBLIN:
-                nextLevel.add("Vampire");
+                if (level >= 4)
+                    nextLevel.add("Vampire");
             case VAMPIRE:
-                nextLevel.add("Centaur");
+                if (level >= 5)
+                    nextLevel.add("Centaur");
             case CENTAUR:
-                nextLevel.add("Werewolf");
+                if (level >= 6)
+                    nextLevel.add("Werewolf");
+                break;
             case WEREWOLF:
                 return null;
         }
