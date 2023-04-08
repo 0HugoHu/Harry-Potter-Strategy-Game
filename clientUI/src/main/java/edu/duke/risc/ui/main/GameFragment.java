@@ -41,7 +41,6 @@ import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Move;
 import edu.duke.shared.turn.MoveTurn;
 import edu.duke.shared.unit.Unit;
-import edu.duke.shared.unit.UnitType;
 
 public class GameFragment extends Fragment implements ClientResultReceiver.AppReceiver {
 
@@ -86,6 +85,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
     private MoveTurn moveTurn;
     private AttackTurn attackTurn;
+
+    private boolean isUpgradedWorldLevel = false;
 
     private HashMap<String, HashMap<String, Integer>> unitMoveAttackMap;
 
@@ -133,6 +134,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     @Override
     public void onReceiveResult(int resultCode, Bundle resultData) {
         if (resultCode == ClientIntentService.STATUS_FINISHED) {
+            // Clear the flag
+            this.isUpgradedWorldLevel = false;
             this.mGame = (Game) resultData.getSerializable("game");
             // update the game view
             global_prompt.setVisibility(View.GONE);
@@ -290,7 +293,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             String upgrade = "Upgrade: " + Player.upgradeCost(tech_level + 1) + " horns";
             tech_upgrade_btn.setText(upgrade);
             // TODO: only for text
-            if (Player.upgradeCost(tech_level + 1) > mGame.getPlayer(mGame.getPlayerName()).getHorns()) {
+            if (Player.upgradeCost(tech_level + 1) > mGame.getPlayer(mGame.getPlayerName()).getHorns() || this.isUpgradedWorldLevel) {
                 tech_error_prompt.setVisibility(View.VISIBLE);
                 tech_upgrade_btn.setEnabled(false);
                 tech_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
@@ -306,8 +309,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         });
 
         tech_upgrade_btn.setOnClickListener(v -> {
-            mGame.getPlayer(mGame.getPlayerName()).upgradeWorldLevel();
-            Toast.makeText(context, "Upgrade success!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Upgrade will be completed in the next turn!", Toast.LENGTH_SHORT).show();
+            this.isUpgradedWorldLevel = true;
             base_view.setVisibility(View.GONE);
         });
 
@@ -434,7 +437,11 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         });
 
         end_turn_btn.setOnClickListener(v -> {
-            waitForOthers();
+            showWaitTexts();
+            // execute world level events
+            if (this.isUpgradedWorldLevel) {
+                mGame.getPlayer(mGame.getPlayerName()).willUpgradeWorldLevel = true;
+            }
             // Commit all moves and attacks
             this.mGame.addToTurnMap(this.mGame.getPlayerId(), moveTurn, attackTurn);
             // Send the game object to ClientIntentService
@@ -450,7 +457,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         framelayout.addView(order_view, params);
         framelayout.addView(init_view, params);
 
-        waitForOthers();
+        showWaitTexts();
 
         return framelayout;
     }
@@ -506,7 +513,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         terrAdapter.notifyDataSetChanged();
     }
 
-    private void waitForOthers() {
+    private void showWaitTexts() {
         base_view.setVisibility(View.VISIBLE);
         inner_order_view.setVisibility(View.GONE);
         global_prompt.setVisibility(View.VISIBLE);
@@ -629,7 +636,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             }
 
             // Submit game object
-            waitForOthers();
+            showWaitTexts();
             // Send the game object to ClientIntentService
             Intent intent = new Intent();
             intent.setAction("RISC_SEND_TO_SERVER");
