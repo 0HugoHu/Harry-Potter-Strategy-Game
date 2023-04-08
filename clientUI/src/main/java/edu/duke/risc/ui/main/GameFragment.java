@@ -262,8 +262,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         unit_num.setText("0");
         Button unit_btn = unit_view.findViewById(R.id.unit_back_btn);
         Button unit_upgrade_btn = unit_view.findViewById(R.id.unit_upgrade_btn);
-        Spinner unit_from_spinner = unit_view.findViewById(R.id.unit_upgrade_from);
-        Spinner unit_to_spinner = unit_view.findViewById(R.id.unit_upgrade_to);
+        Spinner unit_from_spinner = unit_view.findViewById(R.id.unit_from_spinner);
+        Spinner unit_to_spinner = unit_view.findViewById(R.id.unit_to_spinner);
 
         unitSpinnerDataModels = new ArrayList<>();
         unitSpinnerAdapter = new UnitSpinnerAdapter(unitSpinnerDataModels, context);
