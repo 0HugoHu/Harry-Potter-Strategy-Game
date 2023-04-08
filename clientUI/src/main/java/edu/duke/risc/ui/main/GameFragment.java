@@ -292,11 +292,14 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             int tech_level = mGame.getPlayer(mGame.getPlayerName()).getWorldLevel();
             String upgrade = "Upgrade: " + Player.upgradeCost(tech_level + 1) + " horns";
             tech_upgrade_btn.setText(upgrade);
-            // TODO: only for text
             if (Player.upgradeCost(tech_level + 1) > mGame.getPlayer(mGame.getPlayerName()).getHorns() || this.isUpgradedWorldLevel) {
                 tech_error_prompt.setVisibility(View.VISIBLE);
                 tech_upgrade_btn.setEnabled(false);
                 tech_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
+                if (this.isUpgradedWorldLevel) {
+                    tech_error_prompt.setText(getResources().getString(R.string.tech_fault2));
+                }
+                tech_upgrade_btn.setText(getResources().getString(R.string.tech_fault3));
             } else {
                 tech_error_prompt.setVisibility(View.INVISIBLE);
                 tech_upgrade_btn.setEnabled(true);

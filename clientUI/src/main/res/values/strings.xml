@@ -13,6 +13,8 @@
     <string name="tech_level">World Tech Level</string>
     <string name="tech_level_desc">The mystery of the Ancient Wand remains unsolved. Perform a sacred ritual with the Ancient Wand and a unicorn\'s horn, and perchance it shall bestow you advantage in the contest.</string>
     <string name="tech_fault">You have no enough horns to upgrade!</string>
+    <string name="tech_fault2">You have already upgraded this turn!</string>
+    <string name="tech_fault3">Not Applicable</string>
     <string name="current_level">Current Level: </string>
     <string name="tech_bonus_example">At this stage, young wizard, you shall release the Gnome from its enchantment. Be prepared, for in the next level, a stout-hearted Dwarf shall join your ranks, eager to lend its magical prowess to your quest.</string>
     <string name="upgrade">Upgrade</string>
