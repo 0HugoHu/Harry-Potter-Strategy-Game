@@ -146,7 +146,7 @@ public class PlayerThread implements Runnable, Serializable {
                 }
 
                 // Copy the player's property
-                if (p.willUpgradeWorldLevel) {
+                if (this.currGame.getPlayerList().get(this.playerId).willUpgradeWorldLevel) {
                     this.serverGame.getPlayerList().get(this.playerId).upgradeWorldLevel();
                 }
 
