@@ -439,6 +439,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             if (num_s != null && !num_s.equals("")) {
                 int num = Integer.parseInt(num_s);
                 if (num > 0) {
+                    System.out.println("Upgrade in terr: " + orderTerrFrom);
                     int cost = this.mGame.getMap().getTerritory(orderTerrFrom).getUpdateValue(selected_from, selected_to) * num;
                     if (this.mGame.getPlayer(mGame.getPlayerName()).getCoins() < cost) {
                         unit_upgrade_btn.setEnabled(false);
@@ -577,6 +578,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 unit_init_view.setVisibility(View.GONE);
                 tech_view.setVisibility(View.GONE);
                 base_view.setVisibility(View.VISIBLE);
+                orderTerrFrom = territoryName;
                 updateTerrInfo(territoryName);
                 prop_title.setText(territoryName);
                 prop_owner.setText("Owner: " + mGame.getMap().getTerritory(territoryName).getOwner());
@@ -592,6 +594,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 unit_init_view.setVisibility(View.GONE);
                 tech_view.setVisibility(View.GONE);
                 base_view.setVisibility(View.VISIBLE);
+                orderTerrFrom = territoryName;
                 updateUnitUpgradeInfo(territoryName);
                 String title = "Unit in " + territoryName;
                 unit_title.setText(title);
@@ -666,7 +669,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         HashSet<UnitType> unitTypes = new HashSet<>();
 
         for (Unit unit : territory.getUnits()) {
-            System.out.println(unit.getType());
             if (unitTypes.contains(unit.getType())) {
                 continue;
             }

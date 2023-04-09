@@ -535,15 +535,21 @@ public class Territory implements Serializable {
      * @return 1 if the player has enough coins to upgrade, 0 otherwise
      */
     public int upgradeUnit(String type1, String type2, int num) {
+        ArrayList<Integer> deleteIndex = new ArrayList<>();
+        int i = 0;
         for (Unit unit : units) {
             if (unit.getType().equals(Unit.convertStringToUnitType(type1))) {
-                removeUnit(unit);
-                addUnit(new Unit(type2));
+                deleteIndex.add(i);
+                units.add(new Unit(type2));
                 num--;
             }
+            i++;
             if (num == 0) break;
         }
         assert num == 0;
+        for (int index : deleteIndex) {
+            units.remove(index - num++);
+        }
         return getUpdateValue(type1, type2) * num;
     }
 
