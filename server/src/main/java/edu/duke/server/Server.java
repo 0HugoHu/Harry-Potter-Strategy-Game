@@ -312,11 +312,6 @@ public class Server {
                 t.addCoins(25);
             }
         }
-        for (int i = 0; i < this.getNumOfPlayers(); i++) {
-            this.game.getPlayerList().get(i).setCoins();
-            this.game.getPlayerList().get(i).setHorns();
-        }
-
     }
 
 }

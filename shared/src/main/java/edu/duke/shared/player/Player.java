@@ -163,13 +163,13 @@ public class Player implements Serializable {
             case 2:
                 return 60;
             case 3:
-                return 80;
-            case 4:
                 return 100;
+            case 4:
+                return 200;
             case 5:
-                return 160;
+                return 300;
             case 6:
-                return 320;
+                return 400;
             default:
                 return 60;
         }
@@ -209,6 +209,8 @@ public class Player implements Serializable {
             count[0]+=terr.getCoins();
             count[1]+= terr.getHorns();
         }
+        this.coins += coins;
+        this.horns += horns;
         return count;
     }
 
