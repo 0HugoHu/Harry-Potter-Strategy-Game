@@ -16,13 +16,15 @@
 
     <TextView
         android:id="@+id/view_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/order_text_margin"
         android:layout_marginTop="@dimen/order_text_margin"
+        android:layout_marginEnd="@dimen/order_text_margin"
         android:fontFamily="@font/gumela"
         android:textColor="@color/order_text_white"
         android:textSize="@dimen/order_text_title"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

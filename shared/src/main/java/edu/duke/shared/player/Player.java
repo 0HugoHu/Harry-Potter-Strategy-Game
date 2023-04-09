@@ -25,7 +25,7 @@ public class Player implements Serializable {
     public transient Thread thread;
 
     private int worldLevel;
-    private int coins;
+    public int coins;
     private int horns;
     public boolean willUpgradeWorldLevel = false;
 

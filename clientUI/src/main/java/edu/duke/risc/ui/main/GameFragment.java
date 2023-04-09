@@ -334,9 +334,19 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 unitSpinnerToAdapter.notifyDataSetChanged();
                 System.out.println("unitSpinnerToDataModels.size() = " + unitSpinnerToDataModels.size());
                 if (unitSpinnerToDataModels.size() > 0) {
+                    // Update seek bar range
+                    for (int j = 0; j < unitDataModels.size(); j++) {
+                        if (unitDataModels.get(j).getName().equals(selected_from)) {
+                            selected_to = unitSpinnerToDataModels.get(0).getName();
+                            unit_num.setMax(unitDataModels.get(j).getMax());
+                            unit_num.setMin(1);
+                            break;
+                        }
+                    }
                     unit_to_spinner.setSelection(0);
                 } else {
                     unit_upgrade_btn.setEnabled(false);
+                    unit_num.setEnabled(false);
                     unit_upgrade_btn.setText(getResources().getString(R.string.tech_fault3));
                     unit_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
                 }
@@ -365,11 +375,13 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 int cost = mGame.getMap().getTerritory(orderTerrFrom).getUpdateValue(selected_from, selected_to);
                 if (cost <= mGame.getPlayer(mGame.getPlayerName()).getCoins()) {
                     unit_upgrade_btn.setEnabled(true);
+                    unit_num.setEnabled(true);
                     String cost_s = "Upgrade: " + cost + " coins";
                     unit_upgrade_btn.setText(cost_s);
                     unit_upgrade_btn.setTextColor(getResources().getColor(R.color.order_text));
                 } else {
                     unit_upgrade_btn.setEnabled(false);
+                    unit_num.setEnabled(false);
                     unit_upgrade_btn.setText(getResources().getString(R.string.tech_fault3));
                     unit_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
                 }
@@ -479,9 +491,11 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 unit_upgrade_btn.setText(cost_s);
                 if (mGame.getPlayer(mGame.getPlayerName()).getCoins() > cost) {
                     unit_upgrade_btn.setEnabled(true);
+                    unit_num.setEnabled(true);
                     unit_upgrade_btn.setTextColor(getResources().getColor(R.color.order_text));
                 } else {
                     unit_upgrade_btn.setEnabled(false);
+                    unit_num.setEnabled(false);
                     unit_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
                 }
             }
@@ -511,7 +525,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             updateUnitUpgradeMap(-num, selected_from);
             updateUnitUpgradeMap(num, selected_to);
             Toast.makeText(context, getResources().getString(R.string.unit_upgrade_success), Toast.LENGTH_SHORT).show();
-
+            base_view.setVisibility(View.GONE);
         });
 
 
@@ -526,14 +540,15 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
         // Update the cost when the number of units change
         unitAdapter.setCostListener(() -> {
-            int cost = unitAdapter.getTotalCost();
+            // TODO: implement the cost calculation
+            int cost = unitAdapter.getTotalCost() * 15;
             total_cost.setText(String.valueOf(cost));
             if (cost > mGame.getPlayer(mGame.getPlayerName()).getCoins()) {
                 total_cost.setTextColor(getResources().getColor(R.color.error_prompt));
                 commit_btn.setEnabled(false);
                 cost_error_prompt.setVisibility(View.VISIBLE);
             } else {
-                total_cost.setTextColor(getResources().getColor(R.color.order_text));
+                total_cost.setTextColor(getResources().getColor(R.color.order_text_white));
                 commit_btn.setEnabled(true);
                 cost_error_prompt.setVisibility(View.INVISIBLE);
             }
@@ -619,7 +634,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 Territory t = mGame.getMap().getTerritory(territoryName);
                 String owner = "Owner: " + t.getOwner();
                 prop_owner.setText(owner);
-                prop_type.setText(t.getType_HPStyle());
+                String type = "Type: " + t.getType_HPStyle();
+                prop_type.setText(type);
                 prop_desc.setText(t.getDetails_HPStyle());
                 //TODO: should be changed to the real image
                 switch (t.getType()) {
@@ -663,11 +679,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     unit_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
                     unit_upgrade_btn.setEnabled(false);
                     unit_num.setEnabled(false);
-                } else {
-                    unit_upgrade_btn.setText(getResources().getString(R.string.upgrade));
-                    unit_upgrade_btn.setTextColor(getResources().getColor(R.color.order_text));
-                    unit_upgrade_btn.setEnabled(true);
-                    unit_num.setEnabled(true);
                 }
                 String title = "Unit in " + territoryName;
                 unit_title.setText(title);
@@ -762,13 +773,14 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 unit_to_spinner.setSelection(0);
             } else {
                 unit_upgrade_btn.setEnabled(false);
+                unit_num.setEnabled(false);
                 unit_upgrade_btn.setText(getResources().getString(R.string.tech_fault3));
                 unit_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
             }
         } else {
             unit_upgrade_btn.setEnabled(false);
-            unit_upgrade_btn.setText(getResources().getString(R.string.tech_fault3));
             unit_num.setEnabled(false);
+            unit_upgrade_btn.setText(getResources().getString(R.string.tech_fault3));
         }
 
         unitSpinnerAdapter.notifyDataSetChanged();
@@ -799,10 +811,10 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             if (upgradeMap != null && upgradeMap.containsKey(type)) {
                 UnitUpgradeDataModel unitUpgradeDataModel = new UnitUpgradeDataModel(type, map.get(type));
                 int delta = upgradeMap.get(type);
-                if (delta > 0) {
+                if (delta >= 0) {
                     unitUpgradeDataModel.setDelta("+" + delta);
                 } else {
-                    unitUpgradeDataModel.setDelta("-" + delta);
+                    unitUpgradeDataModel.setDelta("" + delta);
                 }
                 unitUpgradeDataModels.add(unitUpgradeDataModel);
             } else {

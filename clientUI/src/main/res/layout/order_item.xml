@@ -11,8 +11,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="@string/example_unit"
-        android:textColor="@color/order_text"
-        android:textSize="@dimen/normal_text_size"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_small"
+        android:fontFamily="@font/gumela"
+        android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,7 +24,7 @@
         style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="@dimen/seekbar_width"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:max="8"
         android:progress="3"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -31,27 +33,30 @@
 
     <TextView
         android:id="@+id/number_input"
-        android:layout_width="wrap_content"
+        android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
+        android:fontFamily="@font/gumela"
         android:text="@string/one"
         android:textAlignment="viewEnd"
-        android:textSize="@dimen/normal_text_size"
         android:textColor="@color/order_text_white"
-        android:fontFamily="@font/gumela"
+        android:textSize="@dimen/order_text_small"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/order_item_num"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="@font/gumela"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_small"
         app:layout_constraintBottom_toBottomOf="@+id/unit_name"
-        app:layout_constraintStart_toEndOf="@+id/unit_name"
+        app:layout_constraintEnd_toStartOf="@+id/seek_bar"
         app:layout_constraintTop_toTopOf="@+id/unit_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
