@@ -29,25 +29,21 @@
         app:layout_constraintEnd_toStartOf="@+id/number_input"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
+    <TextView
         android:id="@+id/number_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        android:inputType="numberDecimal"
-        android:lineSpacingMultiplier="1.25"
-        android:maxEms="2"
-        android:minEms="2"
-        android:singleLine="true"
-        android:text="@string/zero"
+        android:text="@string/one"
         android:textAlignment="viewEnd"
         android:textSize="@dimen/normal_text_size"
+        android:textColor="@color/order_text_white"
+        android:fontFamily="@font/gumela"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:autofillHints="" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/order_item_num"

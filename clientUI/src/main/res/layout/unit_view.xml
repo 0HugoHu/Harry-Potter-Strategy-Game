@@ -130,23 +130,6 @@
         app:layout_constraintBottom_toTopOf="@+id/unit_upgrade_btn"
         app:layout_constraintStart_toStartOf="@+id/unit_from_spinner" />
 
-    <EditText
-        android:id="@+id/unit_upgrade_num_input"
-        android:layout_width="32dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:backgroundTint="@color/order_text_white"
-        android:ems="1"
-        android:fontFamily="@font/gumela"
-        android:inputType="number"
-        android:text="@string/one"
-        android:textAlignment="center"
-        android:textColor="@color/order_text_white"
-        android:textSize="@dimen/order_text_extra_small"
-        app:layout_constraintBottom_toBottomOf="@+id/unit_upgrade_num_title"
-        app:layout_constraintStart_toEndOf="@+id/unit_upgrade_num_title"
-        app:layout_constraintTop_toTopOf="@+id/unit_upgrade_num_title" />
-
     <Button
         android:id="@+id/unit_upgrade_btn"
         android:layout_width="0dp"
@@ -160,6 +143,33 @@
         app:layout_constraintBottom_toTopOf="@+id/unit_back_btn"
         app:layout_constraintEnd_toEndOf="@+id/unit_back_btn"
         app:layout_constraintStart_toStartOf="@+id/unit_back_btn" />
+
+    <SeekBar
+        android:id="@+id/unit_upgrade_num_input"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:max="10"
+        android:progress="3"
+        app:layout_constraintBottom_toBottomOf="@+id/unit_upgrade_num_title"
+        app:layout_constraintEnd_toEndOf="@+id/unit_to_spinner"
+        app:layout_constraintStart_toEndOf="@+id/unit_num_text"
+        app:layout_constraintStarttoEndOf="@+id/unit_num_text"
+        app:layout_constraintTop_toTopOf="@+id/unit_upgrade_num_title" />
+
+    <TextView
+        android:id="@+id/unit_num_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:fontFamily="@font/gumela"
+        android:text="@string/one"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_extra_small"
+        app:layout_constraintBottom_toBottomOf="@id/unit_upgrade_num_input"
+        app:layout_constraintStart_toEndOf="@+id/unit_upgrade_num_title"
+        app:layout_constraintTop_toTopOf="@id/unit_upgrade_num_input" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

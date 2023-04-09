@@ -76,7 +76,7 @@
         android:fontFamily="@font/gumela"
         android:text="@string/tech_fault"
         android:textColor="@color/error_prompt"
-        android:textSize="@dimen/order_text_small"
+        android:textSize="@dimen/order_text_extra_small"
         android:textStyle="italic"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/tech_upgrade_btn"

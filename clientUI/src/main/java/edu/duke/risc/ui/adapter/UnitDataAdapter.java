@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -33,7 +32,7 @@ public class UnitDataAdapter extends ArrayAdapter<UnitDataModel> implements View
         TextView name;
         TextView number;
         SeekBar seekbar;
-        EditText edittext;
+        TextView textView;
     }
 
     public UnitDataAdapter(ArrayList<UnitDataModel> data, Context context) {
@@ -63,7 +62,7 @@ public class UnitDataAdapter extends ArrayAdapter<UnitDataModel> implements View
             viewHolder.name = convertView.findViewById(R.id.unit_name);
             viewHolder.number = convertView.findViewById(R.id.order_item_num);
             viewHolder.seekbar = convertView.findViewById(R.id.seek_bar);
-            viewHolder.edittext = convertView.findViewById(R.id.number_input);
+            viewHolder.textView = convertView.findViewById(R.id.number_input);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -72,12 +71,13 @@ public class UnitDataAdapter extends ArrayAdapter<UnitDataModel> implements View
         viewHolder.name.setText(dataModel.getName());
         viewHolder.number.setText(String.valueOf(dataModel.getMax()));
         viewHolder.seekbar.setMax(dataModel.getMax());
-        viewHolder.edittext.setText("0");
-        viewHolder.seekbar.setProgress(0);
+        viewHolder.seekbar.setMin(1);
+        viewHolder.textView.setText("1");
+        viewHolder.seekbar.setProgress(1);
         viewHolder.seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                viewHolder.edittext.setText(String.valueOf(progress));
+                viewHolder.textView.setText(String.valueOf(progress));
                 dataSet.get(position).setNumber(progress);
                 if (costListener != null) {
                     costListener.onCostChange();
@@ -95,27 +95,6 @@ public class UnitDataAdapter extends ArrayAdapter<UnitDataModel> implements View
             }
         });
 
-        // Change the seek bar value when the edit text is changed
-        viewHolder.edittext.setOnFocusChangeListener((v, hasFocus) -> {
-            if (!hasFocus) {
-                String value = viewHolder.edittext.getText().toString();
-                if (value.equals("")) {
-                    viewHolder.edittext.setText("");
-                    viewHolder.seekbar.setProgress(0);
-                    dataSet.get(position).setNumber(0);
-                } else {
-                    int valueInt = Integer.parseInt(value);
-                    if (valueInt > dataModel.getMax()) {
-                        viewHolder.edittext.setText(String.valueOf(dataModel.getMax()));
-                        viewHolder.seekbar.setProgress(dataModel.getMax());
-                        dataSet.get(position).setNumber(dataModel.getMax());
-                    } else {
-                        viewHolder.seekbar.setProgress(valueInt);
-                        dataSet.get(position).setNumber(valueInt);
-                    }
-                }
-            }
-        });
 
         // Return the completed view to render on screen
         return convertView;
