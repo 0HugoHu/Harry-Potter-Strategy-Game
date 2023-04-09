@@ -96,6 +96,12 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     ViewGroup tech_view;
     ViewGroup init_base_view;
 
+    Spinner unit_from_spinner;
+
+    // Spinner selected unit from
+    String selected_from;
+    String selected_to;
+
 
     private MoveTurn moveTurn;
     private AttackTurn attackTurn;
@@ -266,7 +272,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         EditText unit_num = unit_view.findViewById(R.id.unit_upgrade_num_input);
         Button unit_btn = unit_view.findViewById(R.id.unit_back_btn);
         Button unit_upgrade_btn = unit_view.findViewById(R.id.unit_upgrade_btn);
-        Spinner unit_from_spinner = unit_view.findViewById(R.id.unit_from_spinner);
+        unit_from_spinner = unit_view.findViewById(R.id.unit_from_spinner);
         Spinner unit_to_spinner = unit_view.findViewById(R.id.unit_to_spinner);
 
         unitSpinnerDataModels = new ArrayList<>();
@@ -306,15 +312,19 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 UnitSpinnerDataModel unitSpinnerDataModel = unitSpinnerDataModels.get(i);
+                selected_from = unitSpinnerDataModel.getName();
                 unitSpinnerToDataModels.clear();
                 int worldLevel = mGame.getPlayer(mGame.getPlayerName()).getWorldLevel();
-                ArrayList<String> nextLevel = Unit.getNextLevel(Unit.convertStringToUnitType(unitSpinnerDataModel.getName()), worldLevel);
+                ArrayList<String> nextLevel = Unit.getNextLevel(Unit.convertStringToUnitType(selected_from), worldLevel);
                 if (nextLevel != null) {
                     for (String next : nextLevel) {
                         unitSpinnerToDataModels.add(new UnitSpinnerDataModel(next));
                     }
                 }
                 unitSpinnerToAdapter.notifyDataSetChanged();
+                if (unitSpinnerToDataModels.size() > 0) {
+                    unit_to_spinner.setSelection(0);
+                }
             }
 
             @Override
@@ -323,17 +333,17 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             }
         });
 
-        unit_upgrade_btn.setOnClickListener(view -> {
-            String num_s = unit_num.getText().toString();
-            if (num_s != null && !num_s.equals("")) {
-                int num = Integer.parseInt(num_s);
-                if (num > 0) {
-                    String from = unit_from_spinner.getSelectedItem().toString();
-                    String to = unit_to_spinner.getSelectedItem().toString();
-                    System.out.println("From: " + from + " To: " + to);
-                }
+        unit_to_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                UnitSpinnerDataModel unitSpinnerDataModel = unitSpinnerToDataModels.get(i);
+                selected_to = unitSpinnerDataModel.getName();
             }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
         });
 
         init_btn.setOnClickListener(v -> {
@@ -421,6 +431,51 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             Toast.makeText(context, "Upgrade will be completed in the next turn!", Toast.LENGTH_SHORT).show();
             this.isUpgradedWorldLevel = true;
             base_view.setVisibility(View.GONE);
+        });
+
+        unit_num.setOnFocusChangeListener((v, hasFocus) -> {
+            String num_s = unit_num.getText().toString();
+            boolean fail_flag = false;
+            if (num_s != null && !num_s.equals("")) {
+                int num = Integer.parseInt(num_s);
+                if (num > 0) {
+                    int cost = this.mGame.getMap().getTerritory(orderTerrFrom).getUpdateValue(selected_from, selected_to) * num;
+                    if (this.mGame.getPlayer(mGame.getPlayerName()).getCoins() < cost) {
+                        unit_upgrade_btn.setEnabled(false);
+                        unit_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
+                    } else {
+                        fail_flag = true;
+                    }
+                } else {
+                    fail_flag = true;
+                }
+            } else {
+                fail_flag = true;
+            }
+            if (fail_flag) {
+                unit_upgrade_btn.setEnabled(true);
+                unit_upgrade_btn.setTextColor(getResources().getColor(R.color.order_text));
+            }
+        });
+
+        unit_upgrade_btn.setOnClickListener(v -> {
+            String num_s = unit_num.getText().toString();
+            if (num_s != null && !num_s.equals("")) {
+                int num = Integer.parseInt(num_s);
+                if (num > 0) {
+                    assert selected_from != null;
+                    assert selected_to != null;
+                    // Upgrade the unit
+                    int cost = this.mGame.getMap().getTerritory(orderTerrFrom).upgradeUnit(selected_from, selected_to, num);
+                    this.mGame.getPlayer(mGame.getPlayerName()).setExpenses(cost);
+                    // Update cost on top bar display
+                    updatePlayerValues();
+                    // Update the unit number
+                    updateUnitUpgradeMap(-num, selected_from);
+                    updateUnitUpgradeMap(num, selected_to);
+                    Toast.makeText(context, getResources().getString(R.string.unit_upgrade_success), Toast.LENGTH_SHORT).show();
+                }
+            }
         });
 
 
@@ -585,17 +640,17 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         }
     }
 
-    private void updateUnitUpgradeMap(int number, UnitDataModel unit) {
+    private void updateUnitUpgradeMap(int number, String unitName) {
         if (unitUpgradeMap.containsKey(orderTerrFrom)) {
             HashMap<String, Integer> map = unitUpgradeMap.get(orderTerrFrom);
-            if (map.containsKey(unit.getName())) {
-                map.put(unit.getName(), map.get(unit.getName()) + number);
+            if (map.containsKey(unitName)) {
+                map.put(unitName, map.get(unitName) + number);
             } else {
-                map.put(unit.getName(), number);
+                map.put(unitName, number);
             }
         } else {
             HashMap<String, Integer> map = new HashMap<>();
-            map.put(unit.getName(), number);
+            map.put(unitName, number);
             unitUpgradeMap.put(orderTerrFrom, map);
         }
     }
@@ -617,6 +672,10 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             }
             unitSpinnerDataModels.add(new UnitSpinnerDataModel(Unit.getName(unit.getType())));
             unitTypes.add(unit.getType());
+        }
+
+        if (unitTypes.size() != 0) {
+            unit_from_spinner.setSelection(0);
         }
 
         unitSpinnerAdapter.notifyDataSetChanged();
