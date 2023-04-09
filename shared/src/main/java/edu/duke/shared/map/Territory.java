@@ -514,6 +514,8 @@ public class Territory implements Serializable {
                 return "An already magical terrain in the Harry Potter universe, the Forbidden Forest is a dense and dangerous place filled with magical creatures, some friendly and others hostile. Dark magic, ancient secrets, and hidden paths abound, making it a place of wonder and fear.";
             case "mountain":
                 return "A magical wetland where the water's surface shimmers with an otherworldly glow, hiding countless magical creatures below. The flora would have magical properties, and the area would be a haven for potion ingredients and rare creatures like magical amphibians and insects.";
+            case "wetland":
+                return "";
             default:
                 return "Not Defined";
         }

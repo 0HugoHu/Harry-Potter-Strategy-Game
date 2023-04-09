@@ -7,11 +7,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Handler;
-import android.text.method.Touch;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -21,6 +19,7 @@ import android.view.SurfaceView;
 import androidx.core.view.MotionEventCompat;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import edu.duke.risc.R;
 import edu.duke.risc.ui.draw.MapTiles;
@@ -48,6 +47,7 @@ import edu.duke.shared.player.Player;
  * Additional thread management would otherwise be necessary. See code comments.
  */
 
+@SuppressLint("ViewConstructor")
 public class GameView extends SurfaceView implements Runnable {
 
     private float mLastTouchX;
@@ -69,8 +69,6 @@ public class GameView extends SurfaceView implements Runnable {
 
     private final Paint mPaint;
 
-    private int mViewWidth;
-    private int mViewHeight;
     private final SurfaceHolder mSurfaceHolder;
 
     private GameMap mGameMap = null;
@@ -98,11 +96,11 @@ public class GameView extends SurfaceView implements Runnable {
     private final Bitmap backgroundImageBitmap;
     private EventListener eventListener;
 
-    private Context mContext;
+    private final Context mContext;
 
     private Game mGame;
 
-    private Rect mRect = new Rect();
+    private final Rect mRect = new Rect();
     private final Bitmap wallpaperBitmap;
 
 
@@ -121,8 +119,35 @@ public class GameView extends SurfaceView implements Runnable {
         this.mScaleGestureDetector = new ScaleGestureDetector(context, new ScaleListener());
         this.selectionBubbleBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.selection_bubble_bold);
         this.backgroundImageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background_map_opt);
-        this.wallpaperBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.wallpaper);
         this.mGame = game;
+        Random rand = new Random();
+        int wallpaperId = rand.nextInt(8) + 1;
+        switch (wallpaperId) {
+            case 1:
+                this.wallpaperBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background_1);
+                break;
+            case 2:
+                this.wallpaperBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background_2);
+                break;
+            case 3:
+                this.wallpaperBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background_3);
+                break;
+            case 4:
+                this.wallpaperBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background_4);
+                break;
+            case 5:
+                this.wallpaperBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background_5);
+                break;
+            case 6:
+                this.wallpaperBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background_6);
+                break;
+            case 7:
+                this.wallpaperBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background_7);
+                break;
+            default:
+                this.wallpaperBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background_8);
+                break;
+        }
     }
 
     /**
@@ -137,11 +162,9 @@ public class GameView extends SurfaceView implements Runnable {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        mViewWidth = w;
-        mViewHeight = h;
-        mMapTiles = new MapTiles(mContext, mViewWidth, mViewHeight, backgroundImageBitmap);
-        mMapUI = new MapUI(mViewWidth, mViewHeight, selectionBubbleBitmap);
-        this.mRect.set(0, 0, mViewWidth, mViewHeight);
+        mMapTiles = new MapTiles(mContext, w, h, backgroundImageBitmap);
+        mMapUI = new MapUI(w, h, selectionBubbleBitmap);
+        this.mRect.set(0, 0, w, h);
         mUpdateType = MapUpdateType.REFRESH;
     }
 

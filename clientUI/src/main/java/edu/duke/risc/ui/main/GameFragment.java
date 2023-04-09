@@ -325,14 +325,12 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
                 int worldLevel = mGame.getPlayer(mGame.getPlayerName()).getWorldLevel();
                 ArrayList<String> nextLevel = Unit.getNextLevel(Unit.convertStringToUnitType(selected_from), worldLevel);
-                System.out.println("nextLevel size = " + nextLevel.size());
                 if (nextLevel != null) {
                     for (String next : nextLevel) {
                         unitSpinnerToDataModels.add(new UnitSpinnerDataModel(next));
                     }
                 }
                 unitSpinnerToAdapter.notifyDataSetChanged();
-                System.out.println("unitSpinnerToDataModels.size() = " + unitSpinnerToDataModels.size());
                 if (unitSpinnerToDataModels.size() > 0) {
                     // Update seek bar range
                     for (int j = 0; j < unitDataModels.size(); j++) {
@@ -373,16 +371,15 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 }
                 unit_num.setProgress(1);
                 int cost = mGame.getMap().getTerritory(orderTerrFrom).getUpdateValue(selected_from, selected_to);
+                String cost_s = "Upgrade: " + cost + " coins";
+                unit_upgrade_btn.setText(cost_s);
                 if (cost <= mGame.getPlayer(mGame.getPlayerName()).getCoins()) {
                     unit_upgrade_btn.setEnabled(true);
                     unit_num.setEnabled(true);
-                    String cost_s = "Upgrade: " + cost + " coins";
-                    unit_upgrade_btn.setText(cost_s);
                     unit_upgrade_btn.setTextColor(getResources().getColor(R.color.order_text));
                 } else {
                     unit_upgrade_btn.setEnabled(false);
                     unit_num.setEnabled(false);
-                    unit_upgrade_btn.setText(getResources().getString(R.string.tech_fault3));
                     unit_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
                 }
             }
@@ -495,7 +492,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     unit_upgrade_btn.setTextColor(getResources().getColor(R.color.order_text));
                 } else {
                     unit_upgrade_btn.setEnabled(false);
-                    unit_num.setEnabled(false);
                     unit_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
                 }
             }
@@ -637,25 +633,24 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 String type = "Type: " + t.getType_HPStyle();
                 prop_type.setText(type);
                 prop_desc.setText(t.getDetails_HPStyle());
-                //TODO: should be changed to the real image
                 switch (t.getType()) {
                     case "plain":
-                        prop_img.setImageResource(R.drawable.terr_forest_test);
+                        prop_img.setImageResource(R.drawable.terr_plain);
                         break;
                     case "cliff":
-                        prop_img.setImageResource(R.drawable.terr_forest_test);
+                        prop_img.setImageResource(R.drawable.terr_cliff);
                         break;
                     case "canyon":
-                        prop_img.setImageResource(R.drawable.terr_forest_test);
+                        prop_img.setImageResource(R.drawable.terr_canyon);
                         break;
                     case "desert":
-                        prop_img.setImageResource(R.drawable.terr_forest_test);
+                        prop_img.setImageResource(R.drawable.terr_desert);
                         break;
                     case "forest":
-                        prop_img.setImageResource(R.drawable.terr_forest_test);
+                        prop_img.setImageResource(R.drawable.terr_forest);
                         break;
                     case "wetland":
-                        prop_img.setImageResource(R.drawable.terr_forest_test);
+                        prop_img.setImageResource(R.drawable.terr_wetland);
                         break;
                     default:
                         break;
@@ -752,7 +747,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             unitSpinnerDataModels.add(new UnitSpinnerDataModel(unit.getName()));
         }
 
-        System.out.println("unitSpinnerDataModels size: " + unitSpinnerDataModels.size());
 
         if (unitSpinnerDataModels.size() != 0) {
             UnitSpinnerDataModel unitSpinnerDataModel = unitSpinnerDataModels.get(0);
@@ -761,14 +755,12 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
             int worldLevel = mGame.getPlayer(mGame.getPlayerName()).getWorldLevel();
             ArrayList<String> nextLevel = Unit.getNextLevel(Unit.convertStringToUnitType(selected_from), worldLevel);
-            System.out.println("nextLevel size = " + nextLevel.size());
             if (nextLevel != null) {
                 for (String next : nextLevel) {
                     unitSpinnerToDataModels.add(new UnitSpinnerDataModel(next));
                 }
             }
             unitSpinnerToAdapter.notifyDataSetChanged();
-            System.out.println("unitSpinnerToDataModels.size() = " + unitSpinnerToDataModels.size());
             if (unitSpinnerToDataModels.size() > 0) {
                 unit_to_spinner.setSelection(0);
             } else {
@@ -968,8 +960,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             intent.putExtra("game", this.mGame);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         });
-
-
     }
 
 }
