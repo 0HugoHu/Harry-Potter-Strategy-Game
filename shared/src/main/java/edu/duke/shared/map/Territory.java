@@ -425,6 +425,26 @@ public class Territory implements Serializable {
         return this.type;
     }
 
+    public String getType_HPStyle() {
+        switch (this.type) {
+            case "plain":
+                return "Enchanted Plain";
+            case "cliff":
+                return "Spellbound Cliff";
+            case "canyon":
+                return "Arcane Canyon";
+            case "desert":
+                return "Bewitched Desert";
+            case "forest":
+                return "Forbidden Forest";
+            case "mountain":
+                return "Enchanted Wetland";
+            default:
+                return "Not Defined";
+        }
+    }
+
+
     /**
      * set different and assign initial resources to different territories
      *
@@ -480,6 +500,25 @@ public class Territory implements Serializable {
         }
     }
 
+    public String getDetails_HPStyle() {
+        switch (this.type) {
+            case "plain":
+                return "The grass would sway and whisper ancient secrets, occasionally concealing rare magical creatures and hidden portals to other realms. The plain would be the site of ancient magical battles, with the possibility of discovering enchanted artifacts.";
+            case "cliff":
+                return "These towering cliffs would have an almost magnetic pull, enticing daring magical creatures to live on the cliff face. Flying broomsticks and magical transportation methods would be necessary for access, and the cliffs might even change shape or location to prevent trespassers.";
+            case "canyon":
+                return "A vast, mysterious canyon that contains peculiar magical ecosystems and is home to an array of magical creatures. The canyon walls might be etched with ancient runes, while the wind carries the faint echoes of long-forgotten spells.";
+            case "desert":
+                return "A seemingly endless expanse of sand with magical mirages, hidden oases, and rare magical flora that can survive the harsh conditions. Sandstorms in this desert are not only natural but could also be the result of ancient magical curses or protective enchantments.";
+            case "forest":
+                return "An already magical terrain in the Harry Potter universe, the Forbidden Forest is a dense and dangerous place filled with magical creatures, some friendly and others hostile. Dark magic, ancient secrets, and hidden paths abound, making it a place of wonder and fear.";
+            case "mountain":
+                return "A magical wetland where the water's surface shimmers with an otherworldly glow, hiding countless magical creatures below. The flora would have magical properties, and the area would be a haven for potion ingredients and rare creatures like magical amphibians and insects.";
+            default:
+                return "Not Defined";
+        }
+    }
+
     /**
      * check if this land produces silver coin
      *
@@ -531,7 +570,7 @@ public class Territory implements Serializable {
      *
      * @param type1 The unit type that the player want to upgrade from
      * @param type2 The unit type that the player want to upgrade to
-     * @param num The number of units that the player want to upgrade
+     * @param num   The number of units that the player want to upgrade
      * @return 1 if the player has enough coins to upgrade, 0 otherwise
      */
     public int upgradeUnit(String type1, String type2, int num) {
@@ -540,7 +579,6 @@ public class Territory implements Serializable {
         for (Unit unit : units) {
             if (unit.getType().equals(Unit.convertStringToUnitType(type1))) {
                 deleteIndex.add(i);
-                units.add(new Unit(type2));
                 num--;
             }
             i++;
@@ -549,10 +587,10 @@ public class Territory implements Serializable {
         assert num == 0;
         for (int index : deleteIndex) {
             units.remove(index - num++);
+            units.add(new Unit(type2));
         }
         return getUpdateValue(type1, type2) * num;
     }
-
 
 
 }
