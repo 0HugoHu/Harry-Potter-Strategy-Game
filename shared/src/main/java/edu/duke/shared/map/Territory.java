@@ -525,5 +525,28 @@ public class Territory implements Serializable {
         return cost2 - cost1;
     }
 
+    /**
+     * If the player want to upgrade from one type to another,
+     * this function will return the corresponding costs
+     *
+     * @param type1 The unit type that the player want to upgrade from
+     * @param type2 The unit type that the player want to upgrade to
+     * @param num The number of units that the player want to upgrade
+     * @return 1 if the player has enough coins to upgrade, 0 otherwise
+     */
+    public int upgradeUnit(String type1, String type2, int num) {
+        for (Unit unit : units) {
+            if (unit.getType().equals(Unit.convertStringToUnitType(type1))) {
+                removeUnit(unit);
+                addUnit(new Unit(type2));
+                num--;
+            }
+            if (num == 0) break;
+        }
+        assert num == 0;
+        return getUpdateValue(type1, type2) * num;
+    }
+
+
 
 }
