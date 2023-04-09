@@ -303,11 +303,6 @@ public class Server {
             // Update the player's resources
             p.updateResources(this.game.getMap().getTerritoriesByOwner(p.getPlayerName()));
         }
-        for (int i = 0; i < this.getNumOfPlayers(); i++) {
-            this.game.getPlayerList().get(i).setCoins();
-            this.game.getPlayerList().get(i).setHorns();
-        }
-
     }
 
 }
