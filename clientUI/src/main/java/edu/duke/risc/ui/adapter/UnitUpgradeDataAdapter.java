@@ -62,10 +62,12 @@ public class UnitUpgradeDataAdapter extends ArrayAdapter<UnitUpgradeDataModel> i
         String delta = dataModel.getDelta();
         viewHolder.delta.setText(delta);
         if (delta.equals("0")) {
-            viewHolder.delta.setTextColor(mContext.getResources().getColor(R.color.order_text_white));
+            viewHolder.delta.setVisibility(View.INVISIBLE);
         } else if (delta.contains("-")) {
+            viewHolder.delta.setVisibility(View.VISIBLE);
             viewHolder.delta.setTextColor(mContext.getResources().getColor(R.color.error_prompt));
         } else {
+            viewHolder.delta.setVisibility(View.VISIBLE);
             viewHolder.delta.setTextColor(mContext.getResources().getColor(R.color.order_text_green));
         }
         viewHolder.delta.setText(String.valueOf(dataModel.getDelta()));

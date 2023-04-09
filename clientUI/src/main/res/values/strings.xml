@@ -58,16 +58,16 @@
     <string name="rank_btn">RANK</string>
     <string name="unit_btn">UNIT</string>
     <string name="player">PLAYER: </string>
-    <string name="player_name_example">Harry541</string>
+    <string name="player_name_example">Harry Potter</string>
     <string name="house">HOUSE: </string>
     <string name="house_name_example">RAVENCLAW</string>
     <string name="house_name_example_s">Ravenclaw</string>
     <string name="horn">HORN: </string>
-    <string name="horn_name_example">37</string>
+    <string name="horn_name_example">50</string>
     <string name="coin">COIN: </string>
     <string name="coin_name_example">100</string>
     <string name="world_level">WORLD LEVEL: </string>
-    <string name="world_level_name_example">2</string>
+    <string name="world_level_name_example">1</string>
     <string name="accept_offer">I\'m Pleased to Accept My Offer</string>
 
     <string name="unit_init_desc">You have 24 units in total. Put them across your territories.</string>

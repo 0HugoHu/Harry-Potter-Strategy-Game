@@ -137,8 +137,9 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/btn_white"
         android:fontFamily="@font/gumela"
-        android:text="@string/upgrade"
-        android:textColor="@color/order_text"
+        android:enabled="false"
+        android:text="@string/tech_fault3"
+        android:textColor="@color/error_prompt"
         android:textSize="@dimen/order_text"
         app:layout_constraintBottom_toTopOf="@+id/unit_back_btn"
         app:layout_constraintEnd_toEndOf="@+id/unit_back_btn"
@@ -155,7 +156,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/unit_upgrade_num_title"
         app:layout_constraintEnd_toEndOf="@+id/unit_to_spinner"
         app:layout_constraintStart_toEndOf="@+id/unit_num_text"
-        app:layout_constraintStarttoEndOf="@+id/unit_num_text"
         app:layout_constraintTop_toTopOf="@+id/unit_upgrade_num_title" />
 
     <TextView

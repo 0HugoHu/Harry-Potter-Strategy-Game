@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/inflate_prop"
-    android:layout_width="match_parent"
+    android:layout_width="0dp"
     android:layout_height="match_parent"
     android:layout_weight="1"
     android:background="@drawable/purple_bg_edge_protrait"
@@ -48,7 +48,7 @@
         android:id="@+id/prop_owner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/gumela"
         android:textColor="@color/order_text_white"
         android:textSize="@dimen/order_text_small"
@@ -60,7 +60,7 @@
         android:id="@+id/prop_type"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/gumela"
         android:textColor="@color/order_text_white"
         android:textSize="@dimen/order_text_small"
@@ -75,20 +75,21 @@
         android:layout_marginTop="16dp"
         android:fontFamily="@font/gumela"
         android:textColor="@color/order_text_white"
-        android:textSize="@dimen/order_text_small"
-        app:layout_constraintEnd_toEndOf="@+id/prop_owner"
+        android:textSize="@dimen/order_text_extra_small"
+        app:layout_constraintEnd_toEndOf="@+id/prop_back_btn"
         app:layout_constraintStart_toStartOf="@+id/prop_owner"
         app:layout_constraintTop_toBottomOf="@+id/prop_img" />
 
     <ImageView
         android:id="@+id/prop_img"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        app:layout_constraintEnd_toEndOf="@+id/prop_type"
+        android:layout_height="120dp"
+        android:layout_marginTop="16dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/terr_forest_test"
+        app:layout_constraintEnd_toEndOf="@id/prop_back_btn"
         app:layout_constraintStart_toStartOf="@+id/prop_type"
-        app:layout_constraintTop_toBottomOf="@+id/prop_type"
-        app:src="@tools:sample/backgrounds/scenic" />
+        app:layout_constraintTop_toBottomOf="@+id/prop_type" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
