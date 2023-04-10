@@ -538,7 +538,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         unitAdapter.setCostListener(() -> {
             // TODO: implement the cost calculation
             int cost = unitAdapter.getTotalCost() * 15;
-            total_cost.setText(String.valueOf(cost));
+            String cost_s = cost + " coins";
+            total_cost.setText(cost_s);
             if (cost > mGame.getPlayer(mGame.getPlayerName()).getCoins()) {
                 total_cost.setTextColor(getResources().getColor(R.color.error_prompt));
                 commit_btn.setEnabled(false);
@@ -669,6 +670,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 orderTerrFrom = territoryName;
                 updateTerrInfo(territoryName);
                 updateUnitUpgradeInfo(territoryName);
+                System.out.println("Player name: " + mGame.getPlayerName() + ", Territory owner: " + mGame.getMap().getTerritory(territoryName).getOwner());
                 if (!mGame.getMap().getTerritory(territoryName).getOwner().equals(mGame.getPlayerName())) {
                     unit_upgrade_btn.setText(getResources().getString(R.string.tech_fault3));
                     unit_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
