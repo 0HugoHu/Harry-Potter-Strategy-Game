@@ -317,6 +317,20 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/ui_watching"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/harry_potter"
+                android:text="@string/you_are_watching"
+                android:textColor="@color/order_text_white"
+                android:textSize="@dimen/ui_text_size"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/wrold_level_group"
+                app:layout_constraintTop_toTopOf="@+id/wrold_level_group" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

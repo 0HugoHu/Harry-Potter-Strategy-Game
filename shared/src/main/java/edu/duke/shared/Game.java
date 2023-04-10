@@ -598,5 +598,12 @@ public class Game implements Serializable {
 
     }
 
+    public void forceEndGame() {
+        this.header.forceEndGame();
+    }
+
+    public boolean isForceEndGame() {
+        return this.header.isForceEndGame();
+    }
 
 }

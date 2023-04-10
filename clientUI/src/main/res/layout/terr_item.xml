@@ -23,10 +23,11 @@
         android:id="@+id/terr_item_num"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/gumela"
+        android:textAlignment="viewEnd"
         android:textColor="@color/text_white"
         android:textSize="@dimen/order_text_small"
-        android:fontFamily="@font/gumela"
-        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/terr_name"
         app:layout_constraintEnd_toStartOf="@+id/terr_seek_bar"
         app:layout_constraintTop_toTopOf="@+id/terr_name" />

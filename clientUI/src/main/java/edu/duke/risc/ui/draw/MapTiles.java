@@ -192,7 +192,7 @@ public class MapTiles {
                     mPaint.setTextSize((int) (size));
                     mPaint.setTypeface(plain);
                     int textWidth = (int) mPaint.measureText(territoryName);
-                    canvas.drawText(territoryName, this.paddingLeft + offsetX + x * size - (int) (textWidth / 2), this.paddingTop + offsetY + (y + 1) * size, mPaint);
+                    canvas.drawText(territoryName, this.paddingLeft + offsetX + (int)((x + 0.5) * size) - (int) (textWidth / 2), this.paddingTop + offsetY + (y + 1) * size, mPaint);
                     // Draw distance text
                     if (showAdjacentTerr(territorySelected, territorySelectedDouble)) {
                         Territory t = map.getTerritory(territoryName);
@@ -212,7 +212,7 @@ public class MapTiles {
                         if (distanceFlag) {
                             // Show distance between two territories
                             mPaint.setColor(0xFFF57F17);
-                            canvas.drawText(String.valueOf(map.getDistance(territoryName, territorySelected)), this.paddingLeft + offsetX + x * size, this.paddingTop + offsetY + (y - 1) * size, mPaint);
+                            canvas.drawText(String.valueOf(map.getDistance(territoryName, territorySelected)), this.paddingLeft + offsetX + x * size, this.paddingTop + offsetY + (y) * size, mPaint);
                         }
                     }
                 }
