@@ -87,6 +87,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     View inner_order_view;
 
     View init_view;
+    View winner_view;
     View ui_view;
 
 
@@ -97,6 +98,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     ViewGroup unit_init_view;
     ViewGroup tech_view;
     ViewGroup init_base_view;
+    ViewGroup winner_base_view;
 
     Spinner unit_from_spinner;
     Spinner unit_to_spinner;
@@ -197,7 +199,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     // TODO: Prompt next turn
                     break;
                 case GAME_OVER:
-                    // TODO: Prompt game over
+                    assignWinner(this.mGame.getWinnerId() == this.mGame.getPlayerId());
                     break;
             }
 
@@ -250,6 +252,10 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         // Load the init view
         LayoutInflater inflater_init = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         init_view = inflater_init.inflate(R.layout.init_view, nullParent, false);
+
+        // Load the end game view
+        LayoutInflater inflater_end = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        winner_view = inflater_end.inflate(R.layout.winner_view, nullParent, false);
 
         // Initialize the list view and adapter
         move_attack_listview = move_attack_view.findViewById(R.id.list);
@@ -307,6 +313,11 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         Button init_btn = init_view.findViewById(R.id.init_view_accept);
         init_base_view = init_view.findViewById(R.id.init_base);
         init_base_view.setVisibility(View.GONE);
+
+        // Initialize widgets in winner view
+        Button winner_btn = winner_view.findViewById(R.id.winner_btn);
+        winner_base_view = winner_view.findViewById(R.id.winner_base);
+        winner_base_view.setVisibility(View.GONE);
 
         // Initialize widgets in tech view
         TextView tech_error_prompt = tech_view.findViewById(R.id.tech_error_prompt);
@@ -401,6 +412,10 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             base_view.findViewById(R.id.inflate_init_unit).setVisibility(View.VISIBLE);
             base_view.findViewById(R.id.inflate_tech_view).setVisibility(View.GONE);
             base_view.findViewById(R.id.global_prompt).setVisibility(View.GONE);
+        });
+
+        winner_btn.setOnClickListener(v -> {
+            winner_base_view.setVisibility(View.GONE);
         });
 
         tech_btn.setOnClickListener(v -> {
@@ -703,6 +718,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         framelayout.addView(ui_view, params);
         framelayout.addView(order_view, params);
         framelayout.addView(init_view, params);
+        framelayout.addView(winner_view, params);
 
         showWaitTexts();
 
@@ -883,6 +899,54 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         }
         // Update the player values
         updatePlayerValues();
+    }
+
+    private void assignWinner(boolean isWin) {
+        ui_view.findViewById(R.id.end_turn).setEnabled(false);
+        winner_base_view.setVisibility(View.VISIBLE);
+        // Assign the text and image
+        TextView winner_player_name = winner_view.findViewById(R.id.winner_player_name);
+        TextView winner_house = winner_view.findViewById(R.id.winner_house);
+        TextView winner_text = winner_view.findViewById(R.id.winner_text1);
+        ImageView winner_house_img = init_view.findViewById(R.id.winner_house_img);
+
+        winner_player_name.setText(this.mGame.getPlayerName());
+        if (isWin) {
+            winner_text.setText(context.getResources().getString(R.string.winner_words));
+        } else {
+            winner_text.setText(context.getResources().getString(R.string.loser_words));
+            winner_house_img.setImageResource(R.drawable.triwizard_cup_example);
+        }
+        switch (this.mGame.getPlayerId()) {
+            case 0:
+                winner_house.setText(context.getResources().getString(R.string.ravenclaw));
+                winner_house.setTextColor(getResources().getColor(R.color.ui_ravenclaw));
+                if (isWin) {
+                    winner_house_img.setImageResource(R.drawable.triwizard_cup_ravenclaw);
+                }
+                break;
+            case 3:
+                winner_house.setText(context.getResources().getString(R.string.hufflepuff));
+                winner_house.setTextColor(getResources().getColor(R.color.ui_hufflepuff));
+                if (isWin) {
+                    winner_house_img.setImageResource(R.drawable.triwizard_cup_hufflepuff);
+                }
+                break;
+            case 1:
+                winner_house.setText(context.getResources().getString(R.string.gryffindor));
+                winner_house.setTextColor(getResources().getColor(R.color.ui_gryffindor));
+                if (isWin) {
+                    winner_house_img.setImageResource(R.drawable.triwizard_cup_gryffindor);
+                }
+                break;
+            case 2:
+                winner_house.setText(context.getResources().getString(R.string.slytherin));
+                winner_house.setTextColor(getResources().getColor(R.color.ui_slytherin));
+                if (isWin) {
+                    winner_house_img.setImageResource(R.drawable.triwizard_cup_slytherin);
+                }
+                break;
+        }
     }
 
     private void updatePlayerValues() {

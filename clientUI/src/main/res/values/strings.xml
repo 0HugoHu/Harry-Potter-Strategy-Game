@@ -85,4 +85,7 @@
     <string name="example_unit4">Werewolves</string>
 
     <string name="example_terr">The Great Lake</string>
+
+    <string name="winner_words">Magical prowess evades the feeble. Huzzah, brave wizard! Thou hast conquered the Triwizard Tournament for thine House! The annals of Hogwarts shall etch thy name in everlasting glory!</string>
+    <string name="loser_words">Thou hast been defeated. The Triwizard Tournament is over. The annals of Hogwarts shall not record thy name in everlasting glory.</string>
 </resources>
