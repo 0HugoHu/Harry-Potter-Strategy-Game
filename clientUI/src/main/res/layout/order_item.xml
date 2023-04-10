@@ -5,18 +5,31 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <cn.gavinliu.android.lib.shapedimageview.ShapedImageView
+        android:id="@+id/unit_img"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/gnome"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="16dp"
+        app:shape_mode="circle"
+        app:stroke_color="@color/text_white"
+        app:stroke_width="1dp" />
+
     <TextView
         android:id="@+id/unit_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="4dp"
         android:text="@string/example_unit"
         android:textColor="@color/order_text_white"
         android:textSize="@dimen/order_text_small"
         android:fontFamily="@font/gumela"
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/unit_img"
         app:layout_constraintTop_toTopOf="parent" />
 
     <SeekBar
@@ -51,7 +64,7 @@
         android:id="@+id/order_item_num"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="8dp"
         android:fontFamily="@font/gumela"
         android:textColor="@color/order_text_white"
         android:textSize="@dimen/order_text_small"

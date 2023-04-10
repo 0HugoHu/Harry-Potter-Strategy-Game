@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import cn.gavinliu.android.lib.shapedimageview.ShapedImageView;
 import edu.duke.risc.R;
 import edu.duke.risc.ui.model.UnitUpgradeDataModel;
 
@@ -21,6 +22,7 @@ public class UnitUpgradeDataAdapter extends ArrayAdapter<UnitUpgradeDataModel> i
     // View lookup cache
     private static class ViewHolder {
         TextView name;
+        ShapedImageView image;
         TextView number;
         TextView delta;
 
@@ -52,6 +54,7 @@ public class UnitUpgradeDataAdapter extends ArrayAdapter<UnitUpgradeDataModel> i
             viewHolder.name = convertView.findViewById(R.id.unit_upgrade_name);
             viewHolder.number = convertView.findViewById(R.id.unit_upgrade_num);
             viewHolder.delta = convertView.findViewById(R.id.unit_upgrade_delta);
+            viewHolder.image = convertView.findViewById(R.id.unit_upgrade_img);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -71,6 +74,33 @@ public class UnitUpgradeDataAdapter extends ArrayAdapter<UnitUpgradeDataModel> i
             viewHolder.delta.setTextColor(mContext.getResources().getColor(R.color.order_text_green));
         }
         viewHolder.delta.setText(String.valueOf(dataModel.getDelta()));
+
+        switch (dataModel.getName()) {
+            case "Gnome":
+                viewHolder.image.setImageResource(R.drawable.gnome);
+                break;
+            case "Dwarf":
+                viewHolder.image.setImageResource(R.drawable.dwarf);
+                break;
+            case "House-elf":
+                viewHolder.image.setImageResource(R.drawable.house_elf);
+                break;
+            case "Goblin":
+                viewHolder.image.setImageResource(R.drawable.goblin);
+                break;
+            case "Vampire":
+                viewHolder.image.setImageResource(R.drawable.vampire);
+                break;
+            case "Centaur":
+                viewHolder.image.setImageResource(R.drawable.centaur);
+                break;
+            case "Werewolf":
+                viewHolder.image.setImageResource(R.drawable.werewolf);
+                break;
+            default:
+                viewHolder.image.setImageResource(R.drawable.gnome);
+                break;
+        }
 
         // Return the completed view to render on screen
         return convertView;
