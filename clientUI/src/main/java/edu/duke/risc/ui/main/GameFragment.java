@@ -108,6 +108,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     // Spinner selected unit from
     String selected_from;
     String selected_to;
+    boolean isLost = false;
 
 
     private MoveTurn moveTurn;
@@ -194,10 +195,14 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     attackTurn = new AttackTurn(this.mGame.getMap(), this.mGame.getTurn(), this.mGame.getPlayerName());
                     mGameView.updateMap(this.mGame.getMap());
                     mGameView.updateGame(this.mGame);
+                    if (isLost) {
+                        commit();
+                    }
                     break;
                 case TURN_END:
-                    if (this.mGame.isLoser(this.mGame.getPlayerId())) {
+                    if (!this.isLost && this.mGame.isLoser(this.mGame.getPlayerId())) {
                         assignWinner(false);
+                        this.isLost = true;
                     }
                     break;
                 case GAME_OVER:
@@ -714,11 +719,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             }
             // Commit all moves and attacks
             this.mGame.addToTurnMap(this.mGame.getPlayerId(), moveTurn, attackTurn);
-            // Send the game object to ClientIntentService
-            Intent intent = new Intent();
-            intent.setAction("RISC_SEND_TO_SERVER");
-            intent.putExtra("game", this.mGame);
-            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+            commit();
         });
 
         // Add views to the layout
@@ -731,6 +732,14 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         showWaitTexts();
 
         return framelayout;
+    }
+
+    private void commit() {
+        // Send the game object to ClientIntentService
+        Intent intent = new Intent();
+        intent.setAction("RISC_SEND_TO_SERVER");
+        intent.putExtra("game", this.mGame);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
     // Update units when a move or attack is made
@@ -929,11 +938,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             winner_house_img.setImageResource(R.drawable.triwizard_cup_example);
             ui_view.findViewById(R.id.ui_watching).setVisibility(View.VISIBLE);
             ui_view.findViewById(R.id.ui_side_bar).setVisibility(View.GONE);
-            // Auto-commit
-            Intent intent = new Intent();
-            intent.setAction("RISC_SEND_TO_SERVER");
-            intent.putExtra("game", this.mGame);
-            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
         }
         switch (this.mGame.getPlayerId()) {
             case 0:

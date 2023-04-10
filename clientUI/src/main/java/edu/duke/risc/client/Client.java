@@ -219,7 +219,7 @@ public class Client {
     /*
      * Receive turn result
      */
-    public void receiveTurnResult() {
+    public State receiveTurnResult() {
         // Client receive game from the server
         this.game = getGame();
         if (this.game.getGameState() == State.GAME_OVER) {
@@ -229,6 +229,10 @@ public class Client {
             System.out.println("You have lost. Now you are watching the game.\n");
             isLoser = true;
         }
+        // Confirm turn
+        GameObject obj = new GameObject(this.clientSocket);
+        obj.encodeObj(this.game);
+        return this.game.getGameState();
     }
 
 

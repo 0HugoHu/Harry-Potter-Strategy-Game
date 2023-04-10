@@ -2,6 +2,7 @@ package edu.duke.risc.client;
 
 
 import edu.duke.shared.Game;
+import edu.duke.shared.helper.State;
 
 public class ClientAdapter {
     private static final String HOST = "vcm-30577.vm.duke.edu";
@@ -33,13 +34,13 @@ public class ClientAdapter {
         this.client.playOneTurn();
     }
 
-    public void playOneTurn(boolean isMock) {
+    public State playOneTurn(boolean isMock) {
         if (isMock) {
             this.client.playOneTurnMock();
         } else {
             this.client.playOneTurn();
         }
-        this.client.receiveTurnResult();
+        return this.client.receiveTurnResult();
     }
 
     public String getPlayerName() {

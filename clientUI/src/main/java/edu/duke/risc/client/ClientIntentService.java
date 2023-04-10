@@ -74,6 +74,7 @@ public class ClientIntentService extends IntentService {
             clientAdapter.updateGame(this.game);
             // Send action to server
             clientAdapter.playOneTurn(false);
+            fetchResult(clientAdapter, receiver);
         }
 
         // End Game

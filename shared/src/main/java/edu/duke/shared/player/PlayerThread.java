@@ -165,6 +165,7 @@ public class PlayerThread implements Runnable, Serializable {
 
                 break;
             case TURN_END:
+                System.out.println("Received player " + this.playerId + "'s turn end confirmation.");
             case GAME_OVER:
                 break;
         }
