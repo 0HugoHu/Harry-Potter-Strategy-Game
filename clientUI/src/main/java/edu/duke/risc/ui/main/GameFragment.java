@@ -196,7 +196,9 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     mGameView.updateGame(this.mGame);
                     break;
                 case TURN_END:
-                    // TODO: Prompt next turn
+                    if (this.mGame.isLoser(this.mGame.getPlayerId())) {
+                        assignWinner(false);
+                    }
                     break;
                 case GAME_OVER:
                     assignWinner(this.mGame.getWinnerId() == this.mGame.getPlayerId());
@@ -491,6 +493,12 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             Toast.makeText(context, "Upgrade will be completed in the next turn!", Toast.LENGTH_SHORT).show();
             this.isUpgradedWorldLevel = true;
             base_view.setVisibility(View.GONE);
+        });
+
+        // Clear all units
+        ui_view.findViewById(R.id.ui_player_name_label).setOnClickListener(v -> {
+            this.mGame.forceEndGame();
+            Toast.makeText(context, "You have surrendered.", Toast.LENGTH_SHORT).show();
         });
 
         unit_num.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -903,6 +911,9 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
     private void assignWinner(boolean isWin) {
         ui_view.findViewById(R.id.end_turn).setEnabled(false);
+        base_view.setVisibility(View.GONE);
+        inner_order_view.setVisibility(View.GONE);
+        global_prompt.setVisibility(View.GONE);
         winner_base_view.setVisibility(View.VISIBLE);
         // Assign the text and image
         TextView winner_player_name = winner_view.findViewById(R.id.winner_player_name);
@@ -916,34 +927,41 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         } else {
             winner_text.setText(context.getResources().getString(R.string.loser_words));
             winner_house_img.setImageResource(R.drawable.triwizard_cup_example);
+            ui_view.findViewById(R.id.ui_watching).setVisibility(View.VISIBLE);
+            ui_view.findViewById(R.id.ui_side_bar).setVisibility(View.GONE);
+            // Auto-commit
+            Intent intent = new Intent();
+            intent.setAction("RISC_SEND_TO_SERVER");
+            intent.putExtra("game", this.mGame);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         }
         switch (this.mGame.getPlayerId()) {
             case 0:
                 winner_house.setText(context.getResources().getString(R.string.ravenclaw));
                 winner_house.setTextColor(getResources().getColor(R.color.ui_ravenclaw));
                 if (isWin) {
-                    winner_house_img.setImageResource(R.drawable.triwizard_cup_ravenclaw);
+                    winner_house_img.setImageResource(R.drawable.triwizard_cup_b);
                 }
                 break;
             case 3:
                 winner_house.setText(context.getResources().getString(R.string.hufflepuff));
                 winner_house.setTextColor(getResources().getColor(R.color.ui_hufflepuff));
                 if (isWin) {
-                    winner_house_img.setImageResource(R.drawable.triwizard_cup_hufflepuff);
+                    winner_house_img.setImageResource(R.drawable.triwizard_cup_y);
                 }
                 break;
             case 1:
                 winner_house.setText(context.getResources().getString(R.string.gryffindor));
                 winner_house.setTextColor(getResources().getColor(R.color.ui_gryffindor));
                 if (isWin) {
-                    winner_house_img.setImageResource(R.drawable.triwizard_cup_gryffindor);
+                    winner_house_img.setImageResource(R.drawable.triwizard_cup_r);
                 }
                 break;
             case 2:
                 winner_house.setText(context.getResources().getString(R.string.slytherin));
                 winner_house.setTextColor(getResources().getColor(R.color.ui_slytherin));
                 if (isWin) {
-                    winner_house_img.setImageResource(R.drawable.triwizard_cup_slytherin);
+                    winner_house_img.setImageResource(R.drawable.triwizard_cup_g);
                 }
                 break;
         }
