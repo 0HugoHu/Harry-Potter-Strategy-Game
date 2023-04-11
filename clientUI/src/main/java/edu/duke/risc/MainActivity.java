@@ -3,6 +3,8 @@ package edu.duke.risc;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -18,6 +20,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         hideActionBar();
+
+        // Receive bundle from LoginActivity
+        Bundle bundle = getIntent().getExtras();
+
+        // Write bundle to SharedPreferences
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("edu.duke.risc", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("username", bundle.getString("username"));
+        editor.putString("password", bundle.getString("password"));
+        editor.putString("roomid", bundle.getString("roomid"));
+        editor.putBoolean("join", bundle.getBoolean("join"));
+        editor.apply();
+
 
         // Start the game fragment
         if (savedInstanceState == null) {

@@ -21,6 +21,13 @@
             android:keepScreenOn="true"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/Theme.RISC.NoActionBar">
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true"
+            android:keepScreenOn="true"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/Theme.RISC.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -30,6 +37,7 @@
             android:name=".client.ClientIntentService"
             android:enabled="true"
             android:exported="false" />
+        <service android:name=".audio.BackgroundSoundService" />
     </application>
 
 </manifest>

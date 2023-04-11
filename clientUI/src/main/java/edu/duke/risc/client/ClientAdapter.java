@@ -8,9 +8,9 @@ public class ClientAdapter {
     private static final String HOST = "vcm-30577.vm.duke.edu";
 
     private final Client client;
-    public ClientAdapter() {
+    public ClientAdapter(String username) {
         // Create new client
-        this.client = new Client(HOST);
+        this.client = new Client(HOST, username);
     }
 
 

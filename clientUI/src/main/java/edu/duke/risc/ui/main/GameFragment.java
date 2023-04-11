@@ -1,5 +1,8 @@
 package edu.duke.risc.ui.main;
 
+import static edu.duke.risc.ui.state.TouchEvent.ATTACK;
+import static edu.duke.risc.ui.state.TouchEvent.MOVE;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.content.Intent;
@@ -524,7 +527,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 unit_selected_num.setText(String.valueOf(i));
                 System.out.println("Upgrade in terr: " + orderTerrFrom);
                 int cost = mGame.getMap().getTerritory(orderTerrFrom).getUpdateValue(selected_from, selected_to) * i;
-                String cost_s = "Upgrade: " + cost + " coins";
+                String cost_s = "Upgrade: " + cost + " horns";
                 unit_upgrade_btn.setText(cost_s);
                 boolean flag = false;
                 if (mGame.getPlayer(mGame.getPlayerName()).getCoins() > cost) {
@@ -562,7 +565,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             assert selected_to != null;
             // Upgrade the unit
             int cost = this.mGame.getMap().getTerritory(orderTerrFrom).upgradeUnit(selected_from, selected_to, num);
-            this.mGame.getPlayer(mGame.getPlayerName()).setExpenses(cost);
+            this.mGame.getPlayer(mGame.getPlayerName()).setExpenseHorns(cost);
             // Update cost on top bar display
             updatePlayerValues();
             // Update the unit number
@@ -584,8 +587,11 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
         // Update the cost when the number of units change
         unitAdapter.setCostListener(() -> {
-            // TODO: implement the cost calculation
-            int cost = this.mGame.calculateOrderCost(unitAdapter.getTotalNumber(), this.mGame.getMap().getShortestDistance(orderTerrFrom, orderTerrTo));
+            int distance = this.mGame.getMap().getShortestDistance(orderTerrFrom, orderTerrTo);
+            if (distance == -1) {
+                distance = this.mGame.getMap().getDistance(orderTerrTo, orderTerrFrom);
+            }
+            int cost = this.mGame.calculateOrderCost(distance, unitAdapter.getTotalNumber());
             String cost_s = cost + " coins";
             total_cost.setText(cost_s);
             if (cost > mGame.getPlayer(mGame.getPlayerName()).getCoins()) {
@@ -601,7 +607,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
         // Commit move or attack orders
         commit_btn.setOnClickListener(v -> {
-            if (mTouchEvent == TouchEvent.MOVE) {
+            if (mTouchEvent == MOVE) {
                 for (UnitDataModel unit : unitDataModels) {
                     String name=unit.getName();
                     int number=unit.getNumber();
@@ -611,9 +617,10 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     if (number > 0) {
                         moveTurn.addMove(new Move(orderTerrFrom, orderTerrTo,list, this.mGame.getPlayerName()));
                         updateUnitMoveAttackMap(number, unit);
+                        this.mGame.getPlayer(mGame.getPlayerName()).setExpenseCoins(this.mGame.calculateOrderCost(this.mGame.getMap().getShortestDistance(orderTerrFrom, orderTerrTo), number));
                     }
                 }
-            } else if (mTouchEvent == TouchEvent.ATTACK) {
+            } else if (mTouchEvent == ATTACK) {
                 for (UnitDataModel unit : unitDataModels) {
                     String name=unit.getName();
                     int number=unit.getNumber();
@@ -623,6 +630,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     if (number > 0) {
                         attackTurn.addAttack(new Attack(orderTerrFrom, orderTerrTo, list, this.mGame.getPlayerName()));
                         updateUnitMoveAttackMap(number, unit);
+                        this.mGame.getPlayer(mGame.getPlayerName()).setExpenseCoins(this.mGame.calculateOrderCost(this.mGame.getMap().getShortestDistance(orderTerrFrom, orderTerrTo), number));
                     }
                 }
             } else {
@@ -639,6 +647,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         mGameView.setEventListener(new GameView.EventListener() {
             @Override
             public void onMoveOrder(String terrFrom, String terrTo) {
+                // Set touch event
+                mTouchEvent = MOVE;
                 // Update
                 move_attack_view.setVisibility(View.VISIBLE);
                 prop_view.setVisibility(View.GONE);
@@ -652,14 +662,13 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 String title = "Move from " + terrFrom + " to " + terrTo;
                 view_title.setText(title);
                 commit_btn.setText(context.getResources().getString(R.string.move));
-                // Set touch event
-                mTouchEvent = TouchEvent.MOVE;
             }
 
 
 
             @Override
             public void onAttackOrder(String terrFrom, String terrTo) {
+                mTouchEvent = ATTACK;
                 move_attack_view.setVisibility(View.VISIBLE);
                 prop_view.setVisibility(View.GONE);
                 unit_view.setVisibility(View.GONE);
@@ -672,11 +681,11 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 String title = "Attack from " + terrFrom + " to " + terrTo;
                 view_title.setText(title);
                 commit_btn.setText(context.getResources().getString(R.string.attack));
-                mTouchEvent = TouchEvent.ATTACK;
             }
 
             @Override
             public void onPropOrder(String territoryName) {
+                mTouchEvent = TouchEvent.PROP;
                 move_attack_view.setVisibility(View.GONE);
                 prop_view.setVisibility(View.VISIBLE);
                 unit_view.setVisibility(View.GONE);
@@ -714,11 +723,11 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     default:
                         break;
                 }
-                mTouchEvent = TouchEvent.PROP;
             }
 
             @Override
             public void onUnitOrder(String territoryName) {
+                mTouchEvent = TouchEvent.UNIT;
                 move_attack_view.setVisibility(View.GONE);
                 prop_view.setVisibility(View.GONE);
                 unit_view.setVisibility(View.VISIBLE);
@@ -737,7 +746,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 }
                 String title = "Unit in " + territoryName;
                 unit_title.setText(title);
-                mTouchEvent = TouchEvent.UNIT;
             }
         });
 
@@ -911,21 +919,19 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             }
         }
 
-        // TODO: Implement cost
-        int cost = 1 * 15;
-        if (unitDataModels.size() == 0) {
-            TextView error_view = move_attack_view.findViewById(R.id.cost_error_prompt);
-            error_view.setVisibility(View.VISIBLE);
-            error_view.setText(getResources().getString(R.string.no_unit));
-            cost = 0;
-        } else {
-            TextView error_view = move_attack_view.findViewById(R.id.cost_error_prompt);
-            error_view.setVisibility(View.INVISIBLE);
+        if (mTouchEvent == ATTACK || mTouchEvent == MOVE) {
+            if (unitDataModels.size() == 0) {
+                TextView error_view = move_attack_view.findViewById(R.id.cost_error_prompt);
+                error_view.setVisibility(View.VISIBLE);
+                error_view.setText(getResources().getString(R.string.no_unit));
+            } else {
+                TextView error_view = move_attack_view.findViewById(R.id.cost_error_prompt);
+                error_view.setVisibility(View.INVISIBLE);
+            }
+            String cost_s = 0 + " coins";
+            TextView total_cost = move_attack_view.findViewById(R.id.total_cost);
+            total_cost.setText(cost_s);
         }
-
-        String cost_s = cost + " horns";
-        TextView total_cost = move_attack_view.findViewById(R.id.total_cost);
-        total_cost.setText(cost_s);
 
         unitAdapter.notifyDataSetChanged();
         unitUpgradeAdapter.notifyDataSetChanged();
@@ -997,6 +1003,12 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     }
 
     private void assignWinner(boolean isWin) {
+        if (!this.isLost) {
+            // Send the game object to ClientIntentService
+            Intent intent = new Intent();
+            intent.setAction("RISC_GAME_END");
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        }
         ui_view.findViewById(R.id.end_turn).setEnabled(false);
         base_view.setVisibility(View.GONE);
         inner_order_view.setVisibility(View.GONE);

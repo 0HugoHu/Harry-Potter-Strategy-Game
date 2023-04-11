@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 
@@ -49,7 +50,15 @@ public class ClientIntentService extends IntentService {
         assert intent != null;
         final ResultReceiver receiver = intent.getParcelableExtra("RISC_FETCH_FROM_SERVER");
 
-        ClientAdapter clientAdapter = new ClientAdapter();
+        // Read from shared preference
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("edu.duke.risc", Context.MODE_PRIVATE);
+        String username = sharedPref.getString("username", "");
+        String password = sharedPref.getString("password", "");
+        String roomid = sharedPref.getString("roomid", "");
+        Boolean join = sharedPref.getBoolean("join", false);
+
+
+        ClientAdapter clientAdapter = new ClientAdapter(username);
         clientAdapter.init(false);
 
         // Initialize unit

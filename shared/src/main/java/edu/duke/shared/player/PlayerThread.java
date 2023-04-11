@@ -175,6 +175,7 @@ public class PlayerThread implements Runnable, Serializable {
 
                     // Copy the player's property
                     this.serverGame.getPlayerList().get(this.playerId).coins = this.currGame.getPlayerList().get(this.playerId).coins;
+                    this.serverGame.getPlayerList().get(this.playerId).horns = this.currGame.getPlayerList().get(this.playerId).horns;
 
                     // Copy the player's property
                     if (this.currGame.getPlayerList().get(this.playerId).willUpgradeWorldLevel) {

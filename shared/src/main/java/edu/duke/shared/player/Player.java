@@ -3,11 +3,9 @@ package edu.duke.shared.player;
 import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 
 import edu.duke.shared.Game;
-import edu.duke.shared.helper.State;
 import edu.duke.shared.map.Territory;
 
 public class Player implements Serializable {
@@ -26,7 +24,7 @@ public class Player implements Serializable {
 
     private int worldLevel;
     public int coins;
-    private int horns;
+    public int horns;
     public boolean willUpgradeWorldLevel = false;
 
 
@@ -233,8 +231,12 @@ public class Player implements Serializable {
         this.horns -= upgradeCost(this.worldLevel);
     }
 
-    public void setExpenses(int horns) {
+    public void setExpenseHorns(int horns) {
         this.horns -= horns;
+    }
+
+    public void setExpenseCoins(int coins) {
+        this.coins -= coins;
     }
 
 }
