@@ -188,8 +188,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     unitMoveAttackMap = new HashMap<>();
                     unitUpgradeMap = new HashMap<>();
                     // Update the game view
-                    ui_view.findViewById(R.id.ui_side_bar_init).setVisibility(View.GONE);
-                    ui_view.findViewById(R.id.ui_side_bar).setVisibility(View.VISIBLE);
                     moveTurn = new MoveTurn(this.mGame.getMap(), this.mGame.getTurn(), this.mGame.getPlayerName());
                     attackTurn = new AttackTurn(this.mGame.getMap(), this.mGame.getTurn(), this.mGame.getPlayerName());
                     mGameView.updateMap(this.mGame.getMap());
@@ -197,9 +195,14 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     if (isLost) {
                         commit();
                         this.ui_view.findViewById(R.id.ui_side_bar).setVisibility(View.GONE);
+                        TextView is_watching = this.ui_view.findViewById(R.id.ui_watching);
+                        String text = getResources().getString(R.string.you_are_watching) + " Turn: " + this.mGame.getTurn();
+                        is_watching.setText(text);
                     } else {
                         updatePlayerValues();
                     }
+                    ui_view.findViewById(R.id.ui_side_bar_init).setVisibility(View.GONE);
+                    ui_view.findViewById(R.id.ui_side_bar).setVisibility(View.VISIBLE);
                     break;
                 case TURN_END:
                     if (!this.isLost && this.mGame.isLoser(this.mGame.getPlayerId())) {
@@ -786,7 +789,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             unitSpinnerDataModels.add(new UnitSpinnerDataModel(unit.getName()));
         }
 
-
         if (unitSpinnerDataModels.size() != 0) {
             UnitSpinnerDataModel unitSpinnerDataModel = unitSpinnerDataModels.get(0);
             selected_from = unitSpinnerDataModel.getName();
@@ -801,7 +803,29 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             }
             unitSpinnerToAdapter.notifyDataSetChanged();
             if (unitSpinnerToDataModels.size() > 0) {
-                unit_to_spinner.setSelection(0);
+                UnitSpinnerDataModel unitSpinnerToDataModel = unitSpinnerToDataModels.get(0);
+                selected_to = unitSpinnerToDataModel.getName();
+                // Update seek bar range
+                for (int j = 0; j < unitDataModels.size(); j++) {
+                    if (unitDataModels.get(j).getName().equals(selected_from)) {
+                        unit_num.setMax(unitDataModels.get(j).getMax());
+                        unit_num.setMin(1);
+                        break;
+                    }
+                }
+                unit_num.setProgress(1);
+                int cost = mGame.getMap().getTerritory(orderTerrFrom).getUpdateValue(selected_from, selected_to);
+                String cost_s = "Upgrade: " + cost + " coins";
+                unit_upgrade_btn.setText(cost_s);
+                if (cost <= mGame.getPlayer(mGame.getPlayerName()).getCoins()) {
+                    unit_upgrade_btn.setEnabled(true);
+                    unit_num.setEnabled(true);
+                    unit_upgrade_btn.setTextColor(getResources().getColor(R.color.order_text));
+                } else {
+                    unit_upgrade_btn.setEnabled(false);
+                    unit_num.setEnabled(false);
+                    unit_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
+                }
             } else {
                 unit_upgrade_btn.setEnabled(false);
                 unit_num.setEnabled(false);
@@ -809,9 +833,12 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 unit_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
             }
         } else {
+            unitSpinnerToDataModels.clear();
+            unitSpinnerToAdapter.notifyDataSetChanged();
             unit_upgrade_btn.setEnabled(false);
             unit_num.setEnabled(false);
             unit_upgrade_btn.setText(getResources().getString(R.string.tech_fault3));
+            unit_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
         }
 
         unitSpinnerAdapter.notifyDataSetChanged();
