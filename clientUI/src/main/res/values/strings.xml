@@ -14,6 +14,7 @@
     <string name="six">6 (Max)</string>
 
     <string name="cost_fault">Your coins are not enough! Consider switching a destination or reducing the number of units!</string>
+    <string name="no_unit">No unit in this territory!</string>
     <string name="unit_placed">Unit Placed: </string>
     <string name="unit_placed_fault">You have not placed all the 24 units!</string>
     <string name="unit_placed_fault2">You have placed more than 24 units!</string>
