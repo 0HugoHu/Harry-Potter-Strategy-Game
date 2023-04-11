@@ -181,21 +181,15 @@ public class MapFactory {
                 }
             }
         //Setting distance attribute
-        for (int i = 0; i < numTerritories; i++)
-            for (int j = i; j < numTerritories; j++) {
-                if (i == j) {
-                    gameMap.putDistance(t[i].getName(), t[j].getName(), 0);
-                    continue;
-                }
+        for (int i = 0; i < numTerritories; i++) {
+            for (int j = i + 1; j < numTerritories; j++) {
                 if (t[i].isAdjacent(t[j].getName())) {
                     int dis = calDistance(t[i].getCentralPoint(), t[j].getCentralPoint()) + new Dice(10).getDice();
                     gameMap.putDistance(t[i].getName(), t[j].getName(), dis);
                     gameMap.putDistance(t[j].getName(), t[i].getName(), dis);
-                } else {
-                    gameMap.putDistance(t[i].getName(), t[j].getName(), -1);
-                    gameMap.putDistance(t[j].getName(), t[i].getName(), -1);
                 }
             }
+        }
 
 
         // Notify the map is generated

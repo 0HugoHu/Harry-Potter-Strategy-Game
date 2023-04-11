@@ -1,7 +1,6 @@
 package edu.duke.risc.ui.main;
 
 import android.content.Context;
-import android.media.Image;
 import android.os.Bundle;
 import android.content.Intent;
 
@@ -17,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -28,7 +26,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 import edu.duke.risc.R;
 import edu.duke.risc.client.ClientIntentService;
@@ -588,7 +585,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         // Update the cost when the number of units change
         unitAdapter.setCostListener(() -> {
             // TODO: implement the cost calculation
-            int cost = unitAdapter.getTotalCost() * 15;
+            int cost = this.mGame.calculateOrderCost(unitAdapter.getTotalNumber(), this.mGame.getMap().getDistance(orderTerrFrom, orderTerrTo));
             String cost_s = cost + " coins";
             total_cost.setText(cost_s);
             if (cost > mGame.getPlayer(mGame.getPlayerName()).getCoins()) {
@@ -615,7 +612,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                         moveTurn.addMove(new Move(orderTerrFrom, orderTerrTo,list, this.mGame.getPlayerName()));
                         updateUnitMoveAttackMap(number, unit);
                     }
-
                 }
             } else if (mTouchEvent == TouchEvent.ATTACK) {
                 for (UnitDataModel unit : unitDataModels) {

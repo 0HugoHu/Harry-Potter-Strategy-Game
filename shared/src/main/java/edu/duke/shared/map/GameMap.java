@@ -3,7 +3,11 @@ package edu.duke.shared.map;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
 
 
 public class GameMap implements Serializable {
@@ -27,6 +31,55 @@ public class GameMap implements Serializable {
     public void putDistance(String first, String second, int dis) {
         distances.put(first + "&" + second, dis);
     }
+
+    public int getShortestDistance(String first, String second){
+        HashMap<String, List<String>> graph = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : distances.entrySet()) {
+            String[] nodes = entry.getKey().split("&");
+            String from = nodes[0];
+            String to = nodes[1];
+            if (!getTerritory(from).getOwner().equals(getTerritory(first).getOwner())) continue;
+            if (!getTerritory(to).getOwner().equals(getTerritory(first).getOwner())) continue;
+            if (!graph.containsKey(from)) {
+                graph.put(from, new ArrayList<>());
+            }
+            graph.get(from).add(to);
+            if (!graph.containsKey(to)) {
+                graph.put(to, new ArrayList<>());
+            }
+            graph.get(to).add(from);
+        }
+
+        HashMap<String, Integer> dist = new HashMap<>();
+        for (String node : graph.keySet()) {
+            dist.put(node, Integer.MAX_VALUE);
+        }
+        dist.put(first, 0);
+
+        PriorityQueue<String> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(dist::get));
+        priorityQueue.offer(first);
+
+        while (!priorityQueue.isEmpty()) {
+            String node = priorityQueue.poll();
+            int distance = dist.get(node);
+            if (node.equals(second)) {
+                return distance;
+            }
+            if (distance == Integer.MAX_VALUE) {
+                break;
+            }
+            for (String neighbor : graph.get(node)) {
+                int newDistance = distance + distances.get(node + "&" + neighbor);
+                if (newDistance < dist.get(neighbor)) {
+                    dist.put(neighbor, newDistance);
+                    priorityQueue.offer(neighbor);
+                }
+            }
+        }
+
+        return -1;
+    }
+
 
 
     /**
