@@ -54,84 +54,135 @@ import edu.duke.shared.unit.Unit;
 import edu.duke.shared.unit.UnitType;
 
 public class GameFragment extends Fragment implements ClientResultReceiver.AppReceiver {
-
+    // GameView
     private GameView mGameView;
-
+    // Game
     private Game mGame;
-
+    // Context
     private Context context;
-
+    // TouchEvent
     private TouchEvent mTouchEvent;
-
+    // Units in territory data model
     ArrayList<UnitDataModel> unitDataModels;
+    // Territories data model
     ArrayList<TerrDataModel> terrDataModels;
+    // Unit upgrade data model
     ArrayList<UnitUpgradeDataModel> unitUpgradeDataModels;
+    // Unit spinner data model source territory
     ArrayList<UnitSpinnerDataModel> unitSpinnerDataModels;
+    // Unit spinner data model destination territory
     ArrayList<UnitSpinnerDataModel> unitSpinnerToDataModels;
+    // List of units to put in attack and move order
     ListView move_attack_listview;
+    // List of units to put in upgrade order
     ListView unit_listview;
+    // List of territories
     ListView unit_init_listview;
+    // Unit data adapter
     private UnitDataAdapter unitAdapter;
+    // Territory data adapter
     private TerrDataAdapter terrAdapter;
+    // Unit upgrade data adapter
     private UnitUpgradeDataAdapter unitUpgradeAdapter;
+    // Unit spinner adapter source
     private UnitSpinnerAdapter unitSpinnerAdapter;
+    // Unit spinner adapter destination
     private UnitSpinnerAdapter unitSpinnerToAdapter;
-
+    // Touch event source territory
     private String orderTerrFrom;
-
+    // Touch event destination territory
     private String orderTerrTo;
-
+    // Shadow view
     ConstraintLayout shadow_view;
+    // Base view
     ConstraintLayout base_view;
+    // Order view
     View order_view;
+    // Move attack view
     View inner_order_view;
-
+    // Init view
     View init_view;
+    // Winner view
     View winner_view;
+    // UI view
     View ui_view;
-
-
+    // Global prompt view
     ViewGroup global_prompt;
+    // Move attack view
     ViewGroup move_attack_view;
+    // Property view
     ViewGroup prop_view;
+    // Unit view
     ViewGroup unit_view;
+    // Unit init view
     ViewGroup unit_init_view;
+    // Technology view
     ViewGroup tech_view;
+    // Init base view
     ViewGroup init_base_view;
+    // Winner base view
     ViewGroup winner_base_view;
-
+    // Source territory spinner
     Spinner unit_from_spinner;
+    // Destination territory spinner
     Spinner unit_to_spinner;
+    // Number of unit selected
     SeekBar unit_num;
+    // Upgrade button
     Button unit_upgrade_btn;
-
     // Spinner selected unit from
     String selected_from;
+    // Spinner selected unit to
     String selected_to;
+    // If the player has lost
     boolean isLost = false;
+    // Current turn coins expense
     int currentCoinExpense = 0;
+    // Current turn horns expense
     int currentHornExpense = 0;
-
-
+    // Move turn list
     private MoveTurn moveTurn;
+    // Attack turn list
     private AttackTurn attackTurn;
-
+    // If the player has upgraded the world level
     private boolean isUpgradedWorldLevel = false;
-
+    // Move attack list
     private HashMap<String, HashMap<String, Integer>> unitMoveAttackMap;
+    // Upgrade list
     private HashMap<String, HashMap<String, Integer>> unitUpgradeMap;
 
-
+    /**
+     * Setup the frame layout
+     *
+     * @return FrameLayout
+     */
     public static GameFragment newInstance() {
         return new GameFragment();
     }
 
+    /**
+     * onCreate
+     *
+     * @param savedInstanceState If the fragment is being re-created from
+     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
 
+    /**
+     * onCreateView
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate
+     *                           any views in the fragment,
+     * @param container          If non-null, this is the parent view that the fragment's
+     *                           UI should be attached to.  The fragment should not add the view itself,
+     *                           but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     *                           from a previous saved state as given here.
+     * @return Return the View for the fragment's UI, or null.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -139,17 +190,30 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         return setupFrameLayout(requireActivity().getApplicationContext());
     }
 
+    /**
+     * onViewCreated
+     *
+     * @param view               The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     *                           from a previous saved state as given here.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         registerService();
     }
 
+    /**
+     * onPause
+     */
     @Override
     public void onPause() {
         super.onPause();
         mGameView.pause();
     }
 
+    /**
+     * onResume
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -232,11 +296,20 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         requireActivity().startService(intent);
     }
 
+    /**
+     * Close the intent service
+     */
     private void closeService() {
         Intent intent = new Intent(requireActivity().getApplicationContext(), ClientIntentService.class);
         requireActivity().stopService(intent);
     }
 
+    /**
+     * Setup the frame layout
+     *
+     * @param context The context
+     * @return The frame layout
+     */
     private FrameLayout setupFrameLayout(Context context) {
         this.context = context;
         // FrameLayout: Hold the game view and the UI
@@ -438,9 +511,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             base_view.findViewById(R.id.global_prompt).setVisibility(View.GONE);
         });
 
-        winner_btn.setOnClickListener(v -> {
-            winner_base_view.setVisibility(View.GONE);
-        });
+        winner_btn.setOnClickListener(v -> winner_base_view.setVisibility(View.GONE));
 
         tech_btn.setOnClickListener(v -> {
             move_attack_view.setVisibility(View.GONE);
@@ -507,9 +578,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             }
         });
 
-        tech_back_btn.setOnClickListener(v -> {
-            base_view.setVisibility(View.GONE);
-        });
+        tech_back_btn.setOnClickListener(v -> base_view.setVisibility(View.GONE));
 
         tech_upgrade_btn.setOnClickListener(v -> {
             Toast.makeText(context, "Upgrade will be completed in the next turn!", Toast.LENGTH_SHORT).show();
@@ -581,13 +650,9 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         });
 
 
-        prop_btn.setOnClickListener(v -> {
-            base_view.setVisibility(View.GONE);
-        });
+        prop_btn.setOnClickListener(v -> base_view.setVisibility(View.GONE));
 
-        unit_btn.setOnClickListener(v -> {
-            base_view.setVisibility(View.GONE);
-        });
+        unit_btn.setOnClickListener(v -> base_view.setVisibility(View.GONE));
 
 
         // Update the cost when the number of units change
@@ -778,6 +843,9 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         return framelayout;
     }
 
+    /**
+     * Commit all moves and attacks
+     */
     private void commit() {
         // Commit all moves and attacks
         this.mGame.addToTurnMap(this.mGame.getPlayerId(), moveTurn, attackTurn);
@@ -788,7 +856,12 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
-    // Update units when a move or attack is made
+    /**
+     * Update units when a move or attack is made
+     *
+     * @param number number of units
+     * @param unit   unit data model
+     */
     private void updateUnitMoveAttackMap(int number, UnitDataModel unit) {
         if (unitMoveAttackMap.containsKey(orderTerrFrom)) {
             HashMap<String, Integer> map = unitMoveAttackMap.get(orderTerrFrom);
@@ -804,7 +877,12 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         }
     }
 
-    // Update units upgrade map when a unit is upgraded
+    /**
+     * Update units when a unit is upgraded
+     *
+     * @param number   number of units
+     * @param unitName unit name
+     */
     private void updateUnitUpgradeMap(int number, String unitName) {
         if (unitUpgradeMap.containsKey(orderTerrFrom)) {
             HashMap<String, Integer> map = unitUpgradeMap.get(orderTerrFrom);
@@ -820,7 +898,11 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         }
     }
 
-    // Update spinners
+    /**
+     * Update spinner
+     *
+     * @param terrName territory name
+     */
     private void updateUnitUpgradeInfo(String terrName) {
         unitSpinnerDataModels.clear();
 
@@ -891,7 +973,11 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         unitSpinnerAdapter.notifyDataSetChanged();
     }
 
-    // Update unit listview
+    /**
+     * Update unit info
+     *
+     * @param terrName territory name
+     */
     private void updateTerrInfo(String terrName) {
         unitDataModels.clear();
         unitUpgradeDataModels.clear();
@@ -945,6 +1031,9 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         unitUpgradeAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Update unit info
+     */
     private void updateUnitInitInfo() {
         terrDataModels.clear();
 
@@ -957,12 +1046,18 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         terrAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Show the wait texts
+     */
     private void showWaitTexts() {
         base_view.setVisibility(View.VISIBLE);
         inner_order_view.setVisibility(View.GONE);
         global_prompt.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Assign values in init view
+     */
     private void assignText() {
         ui_view.findViewById(R.id.ui_side_bar_init).setVisibility(View.VISIBLE);
         init_base_view.setVisibility(View.VISIBLE);
@@ -1010,6 +1105,9 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         updatePlayerValues();
     }
 
+    /**
+     * Assign values in winner view
+     */
     private void assignWinner(boolean isWin) {
         if (!this.isLost) {
             // Send the game object to ClientIntentService
@@ -1077,6 +1175,9 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         winner_house.setText(house_text);
     }
 
+    /**
+     * Update the player values
+     */
     private void updatePlayerValues() {
         TextView ui_horn = ui_view.findViewById(R.id.ui_horn);
         TextView ui_coin = ui_view.findViewById(R.id.ui_coin);
@@ -1092,6 +1193,9 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         ui_world_level.setText(String.valueOf(player.getWorldLevel()));
     }
 
+    /**
+     * Update the unit initialization info
+     */
     private void assignUnits() {
         // Initialize the list view and adapter
         unit_init_listview = unit_init_view.findViewById(R.id.terr_list);
@@ -1127,13 +1231,9 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             }
         });
 
-        ui_view.findViewById(R.id.unit_init_btn).setOnClickListener(v -> {
-            base_view.setVisibility(View.VISIBLE);
-        });
+        ui_view.findViewById(R.id.unit_init_btn).setOnClickListener(v -> base_view.setVisibility(View.VISIBLE));
 
-        base_view.findViewById(R.id.inflate_init_unit).findViewById(R.id.init_unit_back_btn).setOnClickListener(v -> {
-            base_view.setVisibility(View.GONE);
-        });
+        base_view.findViewById(R.id.inflate_init_unit).findViewById(R.id.init_unit_back_btn).setOnClickListener(v -> base_view.setVisibility(View.GONE));
 
         commit_init_btn.setOnClickListener(v -> {
             // Check if the number of units placed is correct

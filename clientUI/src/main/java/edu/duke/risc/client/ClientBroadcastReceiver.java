@@ -10,6 +10,12 @@ import edu.duke.shared.Game;
 import edu.duke.shared.helper.GameObject;
 
 public class ClientBroadcastReceiver extends BroadcastReceiver {
+    /**
+     * This method is called when the BroadcastReceiver is receiving an Intent broadcast.
+     *
+     * @param context The Context in which the receiver is running.
+     * @param intent  The Intent being received.
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
         String log = "Action: " + intent.getAction() + "\n" +

@@ -4,7 +4,6 @@ import java.util.Random;
 
 public class Dice {
 
-
     // Dice's max point
     private final int maxPoint;
 

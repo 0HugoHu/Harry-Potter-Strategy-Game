@@ -56,10 +56,10 @@ public class DisplayMap {
         return sb.toString();
     }
 
-    public HashMap<UnitType,Integer> convertToMap(ArrayList<Unit> units){
-        HashMap<UnitType,Integer> map=new HashMap<>();
-        for(Unit unit:units){
-            map.put(unit.getType(),map.getOrDefault(unit.getType(),0)+1);
+    public HashMap<UnitType, Integer> convertToMap(ArrayList<Unit> units) {
+        HashMap<UnitType, Integer> map = new HashMap<>();
+        for (Unit unit : units) {
+            map.put(unit.getType(), map.getOrDefault(unit.getType(), 0) + 1);
         }
         return map;
     }
@@ -76,20 +76,21 @@ public class DisplayMap {
         for (Player p : this.game.getPlayerList()) {
             sb.append(p.getPlayerName()).append(":\n").append("------------------------------------\n");
             for (Territory t : this.game.getMap().getTerritoriesByOwner(p.getPlayerName())) {
-                int numUnits=Validation.numOfChangeUnits(moveTurn,attackTurn,t.getName());
-                sb.append(t.getNumUnits()+numUnits).append(" units in ").append(t.getName()).append(" (next to: ");
+                int numUnits = Validation.numOfChangeUnits(moveTurn, attackTurn, t.getName());
+                sb.append(t.getNumUnits() + numUnits).append(" units in ").append(t.getName()).append(" (next to: ");
                 for (String adjName : t.getAdjacents()) {
                     sb.append(adjName).append(", ");
                 }
                 sb.delete(sb.length() - 2, sb.length());
                 sb.append(")");
-                if(t.getUnits()!=null){
-                sb.append(" [ Units:  ");
-                HashMap<UnitType,Integer> map=convertToMap(t.getUnits());
-                for(Map.Entry<UnitType,Integer> entry:map.entrySet()){
-                    sb.append(entry.getKey().toString()).append(" : ").append(entry.getValue()).append(" ;");
+                if (t.getUnits() != null) {
+                    sb.append(" [ Units:  ");
+                    HashMap<UnitType, Integer> map = convertToMap(t.getUnits());
+                    for (Map.Entry<UnitType, Integer> entry : map.entrySet()) {
+                        sb.append(entry.getKey().toString()).append(" : ").append(entry.getValue()).append(" ;");
+                    }
+                    sb.append(" ]").append("\n");
                 }
-                sb.append(" ]").append("\n");}
 //                sb.append(" [ Type ").append(t.getType()).append("; ");
 //                sb.append("Unicorn Horns: ").append(t.getHorns()).append(", ");
 //                sb.append("Silver Coins: ").append(t.getCoins());

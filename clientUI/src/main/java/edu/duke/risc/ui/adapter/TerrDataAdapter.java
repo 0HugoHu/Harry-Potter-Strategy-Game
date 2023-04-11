@@ -15,26 +15,44 @@ import edu.duke.risc.R;
 import edu.duke.risc.ui.model.TerrDataModel;
 
 public class TerrDataAdapter extends ArrayAdapter<TerrDataModel> implements View.OnClickListener {
+    // data set
     private final ArrayList<TerrDataModel> dataSet;
-
+    // Context
     Context mContext;
+    // Total number of troops
     private TerrDataAdapter.TotalNumListener totalNumListener;
 
+    /**
+     * Set the total number listener
+     *
+     * @param totalNumListener the listener
+     */
     public void setTotalNumListener(TerrDataAdapter.TotalNumListener totalNumListener) {
         this.totalNumListener = totalNumListener;
     }
 
+    /**
+     * The listener for total number change
+     */
     public interface TotalNumListener {
         void onNumChange();
     }
 
-    // View lookup cache
+    /**
+     * Set the view holder
+     */
     private static class ViewHolder {
         TextView terrName;
         TextView number;
         SeekBar seekbar;
     }
 
+    /**
+     * Constructor
+     *
+     * @param data    the data
+     * @param context the context
+     */
     public TerrDataAdapter(ArrayList<TerrDataModel> data, Context context) {
         super(context, R.layout.terr_item, data);
         this.dataSet = data;
@@ -42,12 +60,24 @@ public class TerrDataAdapter extends ArrayAdapter<TerrDataModel> implements View
 
     }
 
+    /**
+     * On click
+     *
+     * @param v the view
+     */
     @Override
     public void onClick(View v) {
 
     }
 
-
+    /**
+     * Get the view
+     *
+     * @param position    the position
+     * @param convertView the view
+     * @param parent      the parent
+     * @return the view
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
@@ -96,6 +126,11 @@ public class TerrDataAdapter extends ArrayAdapter<TerrDataModel> implements View
         return convertView;
     }
 
+    /**
+     * Get the total number of troops
+     *
+     * @return the total number
+     */
     public int getTotalNum() {
         int total_num = 0;
         for (TerrDataModel dataModel : dataSet) {

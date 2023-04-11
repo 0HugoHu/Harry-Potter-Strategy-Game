@@ -11,7 +11,6 @@ import edu.duke.shared.unit.UnitType;
 public class MoveTurn extends Turn {
     // List of moves
     private final ArrayList<Move> moves = new ArrayList<>();
-    // List of attacks
 
     /**
      * Initialize MoveTurn
@@ -47,8 +46,8 @@ public class MoveTurn extends Turn {
      */
     public void doMovePhase() {
         for (Move move : moves) {
-            for(Map.Entry<UnitType,Integer> entry:move.getUnitList().entrySet()){
-                for(int i=0;i<entry.getValue();i++){
+            for (Map.Entry<UnitType, Integer> entry : move.getUnitList().entrySet()) {
+                for (int i = 0; i < entry.getValue(); i++) {
                     map.getTerritory(move.getFrom()).removeUnit(entry.getKey());
                     map.getTerritory(move.getTo()).addUnit(entry.getKey());
                 }

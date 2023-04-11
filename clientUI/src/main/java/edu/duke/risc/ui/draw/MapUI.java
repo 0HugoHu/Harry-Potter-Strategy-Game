@@ -22,10 +22,8 @@ public class MapUI {
     private final int mapViewWidth;
     private final int mapViewHeight;
     // Padding
-    private int paddingTop;
-    private int paddingBottom;
+    private final int paddingTop;
     private int paddingLeft = 64;
-    private int paddingRight = 64;
 
     // Map movement offset
     private float offsetX = 0.0f;
@@ -48,11 +46,11 @@ public class MapUI {
      */
     public MapUI(int viewWidth, int viewHeight, Bitmap selectionBubbleBitmap) {
         this.paddingLeft = Math.max(viewWidth / 10, this.paddingLeft);
-        this.paddingTop = Math.max(viewHeight / 10, this.paddingRight);
-        this.paddingRight = this.paddingLeft;
-        this.paddingBottom = this.paddingTop;
-        this.mapViewWidth = viewWidth - this.paddingLeft - this.paddingRight;
-        this.mapViewHeight = viewHeight - this.paddingTop - this.paddingBottom;
+        int paddingRight = 64;
+        this.paddingTop = Math.max(viewHeight / 10, paddingRight);
+        paddingRight = this.paddingLeft;
+        this.mapViewWidth = viewWidth - this.paddingLeft - paddingRight;
+        this.mapViewHeight = viewHeight - this.paddingTop - this.paddingTop;
         this.selectionBubbleBitmap = selectionBubbleBitmap;
     }
 
@@ -107,7 +105,7 @@ public class MapUI {
             Territory t;
             if (territorySelectedDouble == null) {
                 t = map.getTerritory(territorySelected);
-            } else if (territorySelectedDouble.equals(TouchEvent.OUTSIDE.name())){
+            } else if (territorySelectedDouble.equals(TouchEvent.OUTSIDE.name())) {
                 return;
             } else {
                 t = map.getTerritory(territorySelectedDouble);
@@ -121,16 +119,13 @@ public class MapUI {
                     int baseY = (int) (centerPoint[0] * size + offsetY + paddingTop);
                     Rect rectangle = new Rect(baseX - 4 * size, baseY - 9 * size, baseX + 4 * size, baseY);
                     // Update the selection panel center point with its radius
-                    assert(touchEventMapping.updateSelectionPanelMapping(TouchEvent.ORDER.name(), new int[] {baseY - 5 * size, baseX + 2 * size}, 2 * size));
-                    assert(touchEventMapping.updateSelectionPanelMapping(TouchEvent.UNIT.name(), new int[] {baseY - 5 * size, baseX - 2 * size}, 2 * size));
-                    assert(touchEventMapping.updateSelectionPanelMapping(TouchEvent.PROP.name(), new int[] {baseY - 2 * size, baseX}, 2 * size));
+                    assert (touchEventMapping.updateSelectionPanelMapping(TouchEvent.ORDER.name(), new int[]{baseY - 5 * size, baseX + 2 * size}, 2 * size));
+                    assert (touchEventMapping.updateSelectionPanelMapping(TouchEvent.UNIT.name(), new int[]{baseY - 5 * size, baseX - 2 * size}, 2 * size));
+                    assert (touchEventMapping.updateSelectionPanelMapping(TouchEvent.PROP.name(), new int[]{baseY - 2 * size, baseX}, 2 * size));
                     canvas.drawBitmap(this.selectionBubbleBitmap, null, rectangle, null);
                 }
             }
-
         }
-
-
     }
 
 }

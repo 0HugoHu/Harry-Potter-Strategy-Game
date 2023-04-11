@@ -5,7 +5,7 @@ import android.os.Handler;
 import android.os.ResultReceiver;
 
 public class ClientResultReceiver extends ResultReceiver {
-
+    // AppReceiver
     private final AppReceiver appReceiver;
 
     /*

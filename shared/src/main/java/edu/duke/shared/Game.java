@@ -41,11 +41,11 @@ public class Game implements Serializable {
 
     //map for recording all units that should be deducted after the battle
     //(which are units lost in the battle)
-    private final HashMap<Territory, HashMap<UnitType,Integer>> unitMinusMap;
+    private final HashMap<Territory, HashMap<UnitType, Integer>> unitMinusMap;
 
     //map for recording all units that should be added after the battle
     //(which are the winning units occupying the new land)
-    private final HashMap<Territory, HashMap<UnitType,Integer>> unitAddMap;
+    private final HashMap<Territory, HashMap<UnitType, Integer>> unitAddMap;
 
     //StringBuilder for recording the details of the battle
     private final StringBuilder attackDetailsSB;
@@ -89,8 +89,8 @@ public class Game implements Serializable {
     }
 
     // TODO: calculate cost
-    public int calculateOrderCost(int dis, int num){
-        return dis*num/2;
+    public int calculateOrderCost(int dis, int num) {
+        return dis * num / 2;
     }
 
     /**
@@ -133,8 +133,14 @@ public class Game implements Serializable {
         }
     }
 
-    public int getBonusFromType(UnitType type){
-        switch (type){
+    /**
+     * Get the bonus from the unit type
+     *
+     * @param type unit type
+     * @return bonus
+     */
+    public int getBonusFromType(UnitType type) {
+        switch (type) {
             case GNOME:
                 return 0;
             case DWARF:
@@ -154,17 +160,22 @@ public class Game implements Serializable {
         }
     }
 
-    public int compareUnitHigh(UnitType type1, UnitType type2){
-        int bonus1=getBonusFromType(type1);
-        int bonus2=getBonusFromType(type2);
-        if(bonus1>bonus2){
+    /**
+     * Compare the unit type and return the higher one
+     *
+     * @param type1 unit type 1
+     * @param type2 unit type 2
+     * @return 1 if type1 is higher, 0 if type2 is higher
+     */
+    public int compareUnitHigh(UnitType type1, UnitType type2) {
+        int bonus1 = getBonusFromType(type1);
+        int bonus2 = getBonusFromType(type2);
+        if (bonus1 > bonus2) {
             return 1;
-        }else{
+        } else {
             return 0;
         }
     }
-
-
 
     /**
      * This is the method for all the attacks on the attackList to be executed.
@@ -188,42 +199,42 @@ public class Game implements Serializable {
                     j = 0;
                 }
                 //This is the attacker on the list order
-                System.out.println("unlist: "+att.get(i).get(0).getFrom()+" "+att.get(i).get(0).getTo()+" "+att.get(i).get(0).getUnitList().size());
-                UnitType type1=att.get(i).get(0).getHighestType();
-                int index1=0;
-                for(int k=0;k<att.get(i).size();k++){
-                    int output=compareUnitHigh(att.get(i).get(k).getHighestType(),type1);
-                    if(output==1){
-                        index1=k;
-                        type1=att.get(i).get(k).getHighestType();
+                System.out.println("unlist: " + att.get(i).get(0).getFrom() + " " + att.get(i).get(0).getTo() + " " + att.get(i).get(0).getUnitList().size());
+                UnitType type1 = att.get(i).get(0).getHighestType();
+                int index1 = 0;
+                for (int k = 0; k < att.get(i).size(); k++) {
+                    int output = compareUnitHigh(att.get(i).get(k).getHighestType(), type1);
+                    if (output == 1) {
+                        index1 = k;
+                        type1 = att.get(i).get(k).getHighestType();
                     }
                 }
                 Territory attackTerr1 = gameMap.getTerritory(att.get(i).get(index1).getFrom());
-                int bonus1=att.get(i).get(0).getBonus(type1);
-                System.out.println("The highest unit level for attacker "+attackTerr1.getOwner()+" is "+type1);
+                int bonus1 = att.get(i).get(0).getBonus(type1);
+                System.out.println("The highest unit level for attacker " + attackTerr1.getOwner() + " is " + type1);
                 //This is the defender on the list order
 
 
-                UnitType type2=att.get(j).get(0).getLowestType();
-                int index2=0;
-                for(int k=0;k<att.get(j).size();k++){
-                    int output=compareUnitHigh(att.get(j).get(k).getHighestType(),type2);
-                    if(output==0){
-                        index2=k;
-                        type2=att.get(j).get(k).getHighestType();
+                UnitType type2 = att.get(j).get(0).getLowestType();
+                int index2 = 0;
+                for (int k = 0; k < att.get(j).size(); k++) {
+                    int output = compareUnitHigh(att.get(j).get(k).getHighestType(), type2);
+                    if (output == 0) {
+                        index2 = k;
+                        type2 = att.get(j).get(k).getHighestType();
                     }
                 }
                 Territory attackTerr2 = gameMap.getTerritory(att.get(j).get(index2).getFrom());
 
-                System.out.println("The lowest unit level for defender "+attackTerr2.getOwner()+" is "+type2);
-                int bonus2=att.get(j).get(0).getBonus(type2);
+                System.out.println("The lowest unit level for defender " + attackTerr2.getOwner() + " is " + type2);
+                int bonus2 = att.get(j).get(0).getBonus(type2);
 
-                int dice1 = new Dice(20+bonus1).getDice();
-                int dice2 = new Dice(20+bonus2).getDice();
+                int dice1 = new Dice(20 + bonus1).getDice();
+                int dice2 = new Dice(20 + bonus2).getDice();
                 if (dice1 > dice2) {
-                    battleStage(att, attackTerr2, i, j,index1,index2,type1,type2);
+                    battleStage(att, attackTerr2, i, j, index1, index2, type1, type2);
                 } else {
-                    battleStage(att, attackTerr1, j, i,index2,index1,type2,type1);
+                    battleStage(att, attackTerr1, j, i, index2, index1, type2, type1);
                 }
                 i++;
                 if (i >= att.size()) {
@@ -240,14 +251,19 @@ public class Game implements Serializable {
         this.unitMinusMap.clear();
     }
 
-    public HashMap<UnitType,Integer> convertToMap(ArrayList<Unit> units){
-        HashMap<UnitType,Integer> map=new HashMap<>();
-        for(Unit unit:units){
-            map.put(unit.getType(),map.getOrDefault(unit.getType(),0)+1);
+    /**
+     * Convert the unit list to a map
+     *
+     * @param units unit list
+     * @return unit map
+     */
+    public HashMap<UnitType, Integer> convertToMap(ArrayList<Unit> units) {
+        HashMap<UnitType, Integer> map = new HashMap<>();
+        for (Unit unit : units) {
+            map.put(unit.getType(), map.getOrDefault(unit.getType(), 0) + 1);
         }
         return map;
     }
-
 
     /**
      * This is the method for setting up defense forces for each defending territory.
@@ -259,16 +275,14 @@ public class Game implements Serializable {
      * @param att         attackList
      */
     public void setUpDefense(String destination, ArrayList<ArrayList<Attack>> att) {
-
         Territory desTerr = gameMap.getTerritory(destination);
         int desPlayerId = gameMap.getTerritory(destination).getPlayerOwner().getPlayerId();
         ArrayList<Turn> desTurn = turnList.get(getTurn()).get(desPlayerId);
         assert desTurn != null;
         AttackTurn attackTurn = (AttackTurn) (desTurn.get(1));
         ArrayList<Attack> atts = attackTurn.getAttacks();
-        HashMap<UnitType,Integer> defenseForces=convertToMap(desTerr.getUnits());
-        HashMap<UnitType,Integer> defenseForce=new HashMap<>();
-        defenseForce.putAll(defenseForces);
+        HashMap<UnitType, Integer> defenseForces = convertToMap(desTerr.getUnits());
+        HashMap<UnitType, Integer> defenseForce = new HashMap<>(defenseForces);
         //int defenseForce = desTerr.getNumUnits();
         String s = "Defend Territory: " + desTerr.getName() + "\n";
         attackDetailsSB.append(s);
@@ -277,18 +291,18 @@ public class Game implements Serializable {
         if (atts.size() > 0) {
             for (Attack desAtt : atts) {
                 if (desAtt.getFrom().equals(destination)) {
-                    for(Map.Entry<UnitType,Integer> entry: desAtt.getUnitList().entrySet()){
-                        UnitType type=entry.getKey();
-                        int nums=entry.getValue();
-                        defenseForce.put(type,defenseForce.get(type)-nums);
+                    for (Map.Entry<UnitType, Integer> entry : desAtt.getUnitList().entrySet()) {
+                        UnitType type = entry.getKey();
+                        int nums = entry.getValue();
+                        defenseForce.put(type, defenseForce.get(type) - nums);
                     }
                     //defenseForce = defenseForce - desAtt.getNumUnits();
                 }
             }
         }
-        int totalRemainForces=0;
-        for(Map.Entry<UnitType,Integer> entry:defenseForce.entrySet()){
-            totalRemainForces+=entry.getValue();
+        int totalRemainForces = 0;
+        for (Map.Entry<UnitType, Integer> entry : defenseForce.entrySet()) {
+            totalRemainForces += entry.getValue();
         }
         //If defender territory still has units to defend, put it on the attack list
         if (totalRemainForces > 0) {
@@ -299,60 +313,69 @@ public class Game implements Serializable {
         }
     }
 
-    public void printList(ArrayList<ArrayList<Attack>> att,int i, int j,int index1,int index2){
-        HashMap<UnitType,Integer> playerIList=new HashMap<>();
-        HashMap<UnitType,Integer> playerJList=new HashMap<>();
+    /**
+     * Print the attack list
+     *
+     * @param att    attack list
+     * @param i      player i
+     * @param j      player j
+     * @param index1 index1
+     * @param index2 index2
+     */
+    public void printList(ArrayList<ArrayList<Attack>> att, int i, int j, int index1, int index2) {
+        HashMap<UnitType, Integer> playerIList = new HashMap<>();
+        HashMap<UnitType, Integer> playerJList = new HashMap<>();
         for (int k = 0; k < att.get(i).size(); k++) {
-            for(Map.Entry<UnitType,Integer> entry:att.get(i).get(k).getUnitList().entrySet()){
-                playerIList.put(entry.getKey(),playerIList.getOrDefault(entry.getKey(),0)+ entry.getValue());
+            for (Map.Entry<UnitType, Integer> entry : att.get(i).get(k).getUnitList().entrySet()) {
+                playerIList.put(entry.getKey(), playerIList.getOrDefault(entry.getKey(), 0) + entry.getValue());
             }
         }
         for (int k = 0; k < att.get(j).size(); k++) {
-            for(Map.Entry<UnitType,Integer> entry:att.get(j).get(k).getUnitList().entrySet()){
-                playerJList.put(entry.getKey(),playerJList.getOrDefault(entry.getKey(),0)+ entry.getValue());
+            for (Map.Entry<UnitType, Integer> entry : att.get(j).get(k).getUnitList().entrySet()) {
+                playerJList.put(entry.getKey(), playerJList.getOrDefault(entry.getKey(), 0) + entry.getValue());
             }
         }
-        StringBuilder sb=new StringBuilder();
-        sb.append("Attack from " ).append(att.get(i).get(index1).getPlayerName()).append(" has the following units: [ ");
-        for(Map.Entry<UnitType,Integer> entry:playerIList.entrySet()){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Attack from ").append(att.get(i).get(index1).getPlayerName()).append(" has the following units: [ ");
+        for (Map.Entry<UnitType, Integer> entry : playerIList.entrySet()) {
             sb.append(entry.getKey()).append(": ").append(entry.getValue()).append("; ");
         }
         sb.append("]\n");
 
-        sb.append("Attack from " ).append(att.get(j).get(index2).getPlayerName()).append(" has the following units: [ ");
-        for(Map.Entry<UnitType,Integer> entry:playerJList.entrySet()){
+        sb.append("Attack from ").append(att.get(j).get(index2).getPlayerName()).append(" has the following units: [ ");
+        for (Map.Entry<UnitType, Integer> entry : playerJList.entrySet()) {
             sb.append(entry.getKey()).append(": ").append(entry.getValue()).append("; ");
         }
         sb.append("]\n");
-        System.out.print(sb.toString());
+        System.out.print(sb);
     }
 
 
     /**
      * This is method for the battle progress, which will record the deducting units in each fight,
      * and report winners as well as deleted failure attacks
-     *
-     *     private final HashMap<Territory, HashMap<UnitType,Integer>> unitAddMap;
+     * <p>
+     * private final HashMap<Territory, HashMap<UnitType,Integer>> unitAddMap;
      *
      * @param att        attackList
      * @param attackTerr the territory that lose in this unit fight
      * @param i          winner
      * @param j          loser
      */
-    public void battleStage(ArrayList<ArrayList<Attack>> att, Territory attackTerr, int i, int j,int index1, int index2,UnitType type1,UnitType type2) {
-        printList(att,i,j,index1,index2);
+    public void battleStage(ArrayList<ArrayList<Attack>> att, Territory attackTerr, int i, int j, int index1, int index2, UnitType type1, UnitType type2) {
+        printList(att, i, j, index1, index2);
         //If the lost attack still have more than one unit, it will not be deleted from the list,
         //only minus one unit
         if (att.get(j).get(index2).getAllUnitNums() > 1) {
             att.get(j).get(index2).removeUnit(type2);
-            if(unitMinusMap.containsKey(attackTerr)){
-                HashMap<UnitType,Integer> map=unitMinusMap.get(attackTerr);
-                map.put(type2,map.getOrDefault(type2,0)+1);
-                unitMinusMap.put(attackTerr,map);
-            }else{
-                HashMap<UnitType,Integer> map=new HashMap<>();
-                map.put(type2,1);
-                unitMinusMap.put(attackTerr,map);
+            if (unitMinusMap.containsKey(attackTerr)) {
+                HashMap<UnitType, Integer> map = unitMinusMap.get(attackTerr);
+                map.put(type2, map.getOrDefault(type2, 0) + 1);
+                unitMinusMap.put(attackTerr, map);
+            } else {
+                HashMap<UnitType, Integer> map = new HashMap<>();
+                map.put(type2, 1);
+                unitMinusMap.put(attackTerr, map);
             }
             //unitMinusMap.put(attackTerr, unitMinusMap.getOrDefault(attackTerr, 0) + 1);
             String announce1 = "Attacker " + att.get(i).get(index1).getPlayerName() + " wins in this turn!\n";
@@ -360,16 +383,16 @@ public class Game implements Serializable {
             System.out.print(announce1);
         }
         //If the lost attack now only have one unit, then it will be deleted after deducting this unit.
-        else if (att.get(j).get(index2).getAllUnitNums()== 1) {
+        else if (att.get(j).get(index2).getAllUnitNums() == 1) {
             att.get(j).get(index2).removeUnit(type2);
-            if(unitMinusMap.containsKey(attackTerr)){
-                HashMap<UnitType,Integer> map=unitMinusMap.get(attackTerr);
-                map.put(type2,map.getOrDefault(type2,0)+1);
-                unitMinusMap.put(attackTerr,map);
-            }else{
-                HashMap<UnitType,Integer> map=new HashMap<>();
-                map.put(type2,1);
-                unitMinusMap.put(attackTerr,map);
+            if (unitMinusMap.containsKey(attackTerr)) {
+                HashMap<UnitType, Integer> map = unitMinusMap.get(attackTerr);
+                map.put(type2, map.getOrDefault(type2, 0) + 1);
+                unitMinusMap.put(attackTerr, map);
+            } else {
+                HashMap<UnitType, Integer> map = new HashMap<>();
+                map.put(type2, 1);
+                unitMinusMap.put(attackTerr, map);
             }
             //unitMinusMap.put(attackTerr, unitMinusMap.getOrDefault(attackTerr, 0) + 1);
             if (att.get(j).size() == 1) {
@@ -398,7 +421,7 @@ public class Game implements Serializable {
     /**
      * This method announce the winner of this battle, change the destination owner after fights,
      * and counting the units that should be moving into the new land as winner.
-     *
+     * <p>
      * private final HashMap<Territory, HashMap<UnitType,Integer>> unitMinusMap;
      *
      * @param att     attackList
@@ -414,28 +437,28 @@ public class Game implements Serializable {
         Territory finalTerr = gameMap.getTerritory(att.get(0).get(0).getTo());
         //record all units that remains after the fight,
         //which are units that will occupy the new land.
-        HashMap<UnitType,Integer> remainAtt=new HashMap<>();
+        HashMap<UnitType, Integer> remainAtt = new HashMap<>();
         for (int k = 0; k < att.get(0).size(); k++) {
-            HashMap<UnitType,Integer> remains=att.get(0).get(k).getUnitList();
-            HashMap<UnitType,Integer> record=unitMinusMap.get(gameMap.getTerritory(att.get(0).get(k).getFrom()));
-            if(record==null){
-                record=new HashMap<>();
+            HashMap<UnitType, Integer> remains = att.get(0).get(k).getUnitList();
+            HashMap<UnitType, Integer> record = unitMinusMap.get(gameMap.getTerritory(att.get(0).get(k).getFrom()));
+            if (record == null) {
+                record = new HashMap<>();
             }
-            for(Map.Entry<UnitType,Integer> entry:remains.entrySet()){
-                record.put(entry.getKey(),record.getOrDefault(entry.getKey(),0)+ entry.getValue());
+            for (Map.Entry<UnitType, Integer> entry : remains.entrySet()) {
+                record.put(entry.getKey(), record.getOrDefault(entry.getKey(), 0) + entry.getValue());
             }
-            unitMinusMap.put(gameMap.getTerritory(att.get(0).get(k).getFrom()),record);
+            unitMinusMap.put(gameMap.getTerritory(att.get(0).get(k).getFrom()), record);
 
-            for(Map.Entry<UnitType,Integer> entry:remains.entrySet()){
-                int l=remainAtt.getOrDefault(entry.getKey(),0)+ entry.getValue();
-                remainAtt.put(entry.getKey(),remainAtt.getOrDefault(entry.getKey(),0)+ entry.getValue());
+            for (Map.Entry<UnitType, Integer> entry : remains.entrySet()) {
+                int l = remainAtt.getOrDefault(entry.getKey(), 0) + entry.getValue();
+                remainAtt.put(entry.getKey(), remainAtt.getOrDefault(entry.getKey(), 0) + entry.getValue());
             }
             //remainAtt += att.get(0).get(k).getNumUnits();
         }
         unitAddMap.put(finalTerr, remainAtt);
-        Player winner=getPlayer(att.get(0).get(0).getPlayerName());
+        Player winner = getPlayer(att.get(0).get(0).getPlayerName());
         winner.getPlayerTerrs().add(desTerr);
-        Player loser=desTerr.getPlayerOwner();
+        Player loser = desTerr.getPlayerOwner();
         loser.getPlayerTerrs().remove(desTerr);
         //change the owner of the territory
         desTerr.changePlayerOwner(getPlayer(att.get(0).get(0).getPlayerName()));
@@ -446,33 +469,32 @@ public class Game implements Serializable {
     /**
      * change the units number according to the hashMaps.
      * This stage should be executed after the fights, as all battles happen simultaneously
-     *
+     * <p>
      * HashMap<Territory, HashMap<UnitType,Integer>> unitMinusMap;
      */
     public void changeUnit() {
 
-        for(Map.Entry<Territory, HashMap<UnitType,Integer>> entry: unitMinusMap.entrySet()){
+        for (Map.Entry<Territory, HashMap<UnitType, Integer>> entry : unitMinusMap.entrySet()) {
             Territory currTerr = entry.getKey();
-            HashMap<UnitType,Integer> map=entry.getValue();
-            for(Map.Entry<UnitType,Integer> innerEntry:map.entrySet()){
-                for(int i=0;i<innerEntry.getValue();i++){
+            HashMap<UnitType, Integer> map = entry.getValue();
+            for (Map.Entry<UnitType, Integer> innerEntry : map.entrySet()) {
+                for (int i = 0; i < innerEntry.getValue(); i++) {
                     currTerr.removeUnit(innerEntry.getKey());
                 }
             }
         }
 
-        for(Map.Entry<Territory, HashMap<UnitType,Integer>> entry: unitAddMap.entrySet()){
+        for (Map.Entry<Territory, HashMap<UnitType, Integer>> entry : unitAddMap.entrySet()) {
             Territory currTerr = entry.getKey();
-            HashMap<UnitType,Integer> map=entry.getValue();
-            for(Map.Entry<UnitType,Integer> innerEntry:map.entrySet()){
-                for(int i=0;i<innerEntry.getValue();i++) {
+            HashMap<UnitType, Integer> map = entry.getValue();
+            for (Map.Entry<UnitType, Integer> innerEntry : map.entrySet()) {
+                for (int i = 0; i < innerEntry.getValue(); i++) {
                     currTerr.addUnit(innerEntry.getKey());
                 }
             }
         }
 
     }
-
 
 
     /**
@@ -615,6 +637,11 @@ public class Game implements Serializable {
         this.header.addLoserId(playerId);
     }
 
+    /**
+     * Get the loser id
+     *
+     * @return loser id
+     */
     public ArrayList<Integer> getLoserId() {
         return this.header.loserIds;
     }
@@ -664,74 +691,73 @@ public class Game implements Serializable {
     }
 
 
-
     /**
      * Allocate territories to players,
      * and allocate corresponding resources to each territory.
-     *
+     * <p>
      * Each territory could be one of these six types: Plain, Cliff, Canyon, Desert, Forest, Wetland;
      * With different type, they have different initial resources.
      * Each player will be equally assigned with various types of territories.
      */
-    public void allocateTerritories(){
+    public void allocateTerritories() {
         GameMap gameMap = this.getMap();
         int numTerrs = gameMap.getNumTerritories();
         int numPlayers = this.getNumPlayers();
         ArrayList<Territory> terrs = gameMap.getTerritories();
         ArrayList<Player> players = this.getPlayerList();
 
-        for (int i = 0; i < numTerrs; i++){
+        for (int i = 0; i < numTerrs; i++) {
             players.get(i / (numTerrs / numPlayers)).expandTerr(terrs.get(i));
             terrs.get(i).changePlayerOwner(players.get(i / (numTerrs / numPlayers)));
             terrs.get(i).changeOwner(players.get(i / (numTerrs / numPlayers)).getPlayerName());
         }
-        switch (numPlayers){
-            case(2):
-                ArrayList<String> typeNames1=new ArrayList<String>(Arrays.asList("plain", "plain", "cliff","cliff",
-                        "canyon","canyon","desert","desert","forest","forest","wetland","wetland"));
+        switch (numPlayers) {
+            case (2):
+                ArrayList<String> typeNames1 = new ArrayList<>(Arrays.asList("plain", "plain", "cliff", "cliff",
+                        "canyon", "canyon", "desert", "desert", "forest", "forest", "wetland", "wetland"));
                 Collections.shuffle(typeNames1);
-                for(int i = 0; i < 12; i++){
+                for (int i = 0; i < 12; i++) {
                     terrs.get(i).setType(typeNames1.get(i));
                 }
                 Collections.shuffle(typeNames1);
-                for(int i = 12; i < 24; i++){
-                    terrs.get(i).setType(typeNames1.get(i-12));
+                for (int i = 12; i < 24; i++) {
+                    terrs.get(i).setType(typeNames1.get(i - 12));
                 }
                 break;
-            case(3):
-                ArrayList<String> typeNames2=new ArrayList<String>(Arrays.asList("plain", "plain", "cliff",
-                        "canyon","desert","forest","forest","wetland"));
+            case (3):
+                ArrayList<String> typeNames2 = new ArrayList<>(Arrays.asList("plain", "plain", "cliff",
+                        "canyon", "desert", "forest", "forest", "wetland"));
                 Collections.shuffle(typeNames2);
-                for(int i = 0; i < 8; i++){
+                for (int i = 0; i < 8; i++) {
                     terrs.get(i).setType(typeNames2.get(i));
                 }
                 Collections.shuffle(typeNames2);
-                for(int i = 8; i < 16; i++){
-                    terrs.get(i).setType(typeNames2.get(i-8));
+                for (int i = 8; i < 16; i++) {
+                    terrs.get(i).setType(typeNames2.get(i - 8));
                 }
                 Collections.shuffle(typeNames2);
-                for(int i = 16; i < 24; i++){
-                    terrs.get(i).setType(typeNames2.get(i-16));
+                for (int i = 16; i < 24; i++) {
+                    terrs.get(i).setType(typeNames2.get(i - 16));
                 }
                 break;
-            case(4):
-                ArrayList<String> typeNames3=new ArrayList<String>(Arrays.asList("plain", "cliff",
-                        "canyon","desert","forest","wetland"));
+            case (4):
+                ArrayList<String> typeNames3 = new ArrayList<>(Arrays.asList("plain", "cliff",
+                        "canyon", "desert", "forest", "wetland"));
                 Collections.shuffle(typeNames3);
-                for(int i = 0; i < 6; i++){
+                for (int i = 0; i < 6; i++) {
                     terrs.get(i).setType(typeNames3.get(i));
                 }
                 Collections.shuffle(typeNames3);
-                for(int i = 6; i < 12; i++){
-                    terrs.get(i).setType(typeNames3.get(i-6));
+                for (int i = 6; i < 12; i++) {
+                    terrs.get(i).setType(typeNames3.get(i - 6));
                 }
                 Collections.shuffle(typeNames3);
-                for(int i = 12; i < 18; i++){
-                    terrs.get(i).setType(typeNames3.get(i-12));
+                for (int i = 12; i < 18; i++) {
+                    terrs.get(i).setType(typeNames3.get(i - 12));
                 }
                 Collections.shuffle(typeNames3);
-                for(int i = 18; i < 24; i++){
-                    terrs.get(i).setType(typeNames3.get(i-18));
+                for (int i = 18; i < 24; i++) {
+                    terrs.get(i).setType(typeNames3.get(i - 18));
                 }
                 break;
         }
@@ -739,10 +765,18 @@ public class Game implements Serializable {
 
     }
 
+    /**
+     * If force end game is true, end the game
+     */
     public void forceEndGame() {
         this.header.forceEndGame();
     }
 
+    /**
+     * Check if the game is forced to end
+     *
+     * @return true if the game is forced to end
+     */
     public boolean isForceEndGame() {
         return this.header.isForceEndGame();
     }

@@ -34,7 +34,7 @@ public class Server {
     private ServerSocket serverSocket;
     // Logger
     private static final Logger logger = Logger.getLogger("serverLog.txt");
-
+    // Server game lock
     private final ReentrantLock serverGameLock = new ReentrantLock();
 
     /**

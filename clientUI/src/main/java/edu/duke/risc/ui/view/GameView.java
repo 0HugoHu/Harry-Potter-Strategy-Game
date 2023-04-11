@@ -49,40 +49,49 @@ import edu.duke.shared.player.Player;
 
 @SuppressLint("ViewConstructor")
 public class GameView extends SurfaceView implements Runnable {
-
+    // Last touch position
     private float mLastTouchX;
     private float mLastTouchY;
+    // Active pointer ID
     private int mActivePointerId;
+    // Position of the image
     private float mPosX;
     private float mPosY;
-
+    // Update type
     private MapUpdateType mUpdateType = MapUpdateType.REFRESH;
+    // Animation type
     private MapAnimationType mAnimationType = MapAnimationType.NONE;
+    // Game state
     private boolean mRunning;
+    // Game thread
     private Thread mGameThread = null;
-
 
     // Map tiles Component
     private MapTiles mMapTiles;
     // Map UI Component
     private MapUI mMapUI;
-
+    // Paint
     private final Paint mPaint;
-
+    // Surface holder
     private final SurfaceHolder mSurfaceHolder;
-
+    // Game map
     private GameMap mGameMap = null;
+    // Map view offset
     private int offsetX = 0;
     private int offsetY = 0;
+    // Map view scale
     private float scale = 1.0f;
+    // Gesture detector
     private final ScaleGestureDetector mScaleGestureDetector;
+    // Handler
     private final Handler mHandler;
+    // Zoom in/out lock
     private boolean pinchToZoom;
-
+    // Touch event mapping
     private TouchEventMapping touchEventMapping;
-
+    // Touch event isClick
     private boolean isClick = true;
-
+    // Animation timer
     private boolean animationTimer500 = true;
     // Territory selected
     private String territorySelected = null;
@@ -95,19 +104,32 @@ public class GameView extends SurfaceView implements Runnable {
     // Background image
     private final Bitmap backgroundImageBitmap;
     private EventListener eventListener;
-
+    // Context
     private final Context mContext;
-
+    // Game
     private Game mGame;
-
+    // Rectangle for wallpaper
     private final Rect mRect = new Rect();
+    // Wallpaper bitmap
     private final Bitmap wallpaperBitmap;
 
-
+    /**
+     * Constructor
+     *
+     * @param context the context
+     * @param game    the game
+     */
     public GameView(Context context, Game game) {
         this(context, null, game);
     }
 
+    /**
+     * Constructor
+     *
+     * @param context the context
+     * @param attrs   the attributes
+     * @param game    the game
+     */
     public GameView(Context context, AttributeSet attrs, Game game) {
         super(context, attrs);
         this.mContext = context;
@@ -233,10 +255,21 @@ public class GameView extends SurfaceView implements Runnable {
         mUpdateType = MapUpdateType.REFRESH;
     }
 
+    /**
+     * Updates the game data.
+     * Sets new coordinates for the flashlight cone.
+     *
+     * @param game The game to be drawn.
+     */
     public void updateGame(Game game) {
         this.mGame = game;
     }
 
+    /**
+     * Initializes the color mapping for the players.
+     *
+     * @param players The players to be drawn.
+     */
     public void initColorMapping(ArrayList<Player> players) {
         mMapTiles.initColorMapping(players);
     }
@@ -402,10 +435,18 @@ public class GameView extends SurfaceView implements Runnable {
         return true;
     }
 
+    /**
+     * Called by MainActivity.onTouchEvent() to handle touch screen input.
+     *
+     * @param eventListener the event listener
+     */
     public void setEventListener(GameView.EventListener eventListener) {
         this.eventListener = eventListener;
     }
 
+    /**
+     * Called by MainActivity.onTouchEvent() to handle touch screen input.
+     */
     private void actionCallback() {
         // Callback function in GameFragment
         TouchEvent touchEvent = TouchEventMapping.getAction(territorySelected, territorySelectedDouble, territorySelectedPrevious, mGameMap);
@@ -456,15 +497,23 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 
+    /**
+     * Test if the touch is a click.
+     */
     private void testIfClick() {
         mHandler.postDelayed(() -> this.isClick = false, 500);
     }
 
+    /**
+     * Animation timer.
+     */
     private void animationTimer500() {
         mHandler.postDelayed(() -> this.animationTimer500 = true, 500);
     }
 
-
+    /**
+     * Event listener.
+     */
     public abstract static class EventListener {
 
         public abstract void onMoveOrder(String terrFrom, String terrTo);
