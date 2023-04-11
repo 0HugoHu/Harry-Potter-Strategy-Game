@@ -164,7 +164,7 @@ public class Player implements Serializable {
      * @param goal
      * @return
      */
-    public int upgradeCost(int goal){
+    public static int upgradeCost(int goal){
         switch (goal){
             case 2:
                 return 60;

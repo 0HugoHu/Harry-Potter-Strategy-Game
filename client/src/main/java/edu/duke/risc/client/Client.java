@@ -165,8 +165,8 @@ public class Client {
         if (isMock) {
             setupUnitsMock();
         } else {
-            BuiltInSetUpUnits();
-            //setupUnits();
+            //BuiltInSetUpUnits();
+            setupUnits();
         }
         //setupUnits();
 
