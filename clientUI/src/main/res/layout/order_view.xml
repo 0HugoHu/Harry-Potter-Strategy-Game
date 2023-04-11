@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/base_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/order_shadow"
+    android:visibility="invisible">
+
+    <LinearLayout
+        android:id="@+id/inner_order_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:weightSum="2.5"
+        android:background="@color/order_shadow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/shadow_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.5"
+            android:clickable="true" />
+
+
+        <include layout="@layout/move_attack_view"/>
+
+        <include layout="@layout/prop_view"/>
+
+        <include layout="@layout/unit_view"/>
+
+        <include layout="@layout/tech_view"/>
+
+        <include layout="@layout/init_unit_view"/>
+
+    </LinearLayout>
+
+    <include
+        android:id="@+id/global_prompt"
+        layout="@layout/global_prompt"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

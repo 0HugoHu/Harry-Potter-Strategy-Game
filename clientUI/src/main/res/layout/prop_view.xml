@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/inflate_prop"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:background="@drawable/purple_bg_edge_protrait"
+    android:clickable="true"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <TextView
+        android:id="@+id/prop_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/order_text_margin"
+        android:layout_marginTop="@dimen/order_text_margin"
+        android:layout_marginEnd="@dimen/order_text_margin"
+        android:fontFamily="@font/gumela"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/prop_back_btn"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/order_button_height"
+        android:layout_marginStart="@dimen/order_text_margin"
+        android:layout_marginEnd="@dimen/order_text_margin"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/btn_dark_brown"
+        android:fontFamily="@font/gumela"
+        android:text="@string/unit_init_back_btn"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/prop_owner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/gumela"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_small"
+        app:layout_constraintEnd_toEndOf="@+id/prop_title"
+        app:layout_constraintStart_toStartOf="@+id/prop_title"
+        app:layout_constraintTop_toBottomOf="@+id/prop_title" />
+
+    <TextView
+        android:id="@+id/prop_type"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/gumela"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_small"
+        app:layout_constraintEnd_toEndOf="@+id/prop_title"
+        app:layout_constraintStart_toStartOf="@+id/prop_title"
+        app:layout_constraintTop_toBottomOf="@+id/prop_owner" />
+
+    <TextView
+        android:id="@+id/prop_desc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/gumela"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_extra_small"
+        app:layout_constraintEnd_toEndOf="@+id/prop_back_btn"
+        app:layout_constraintStart_toStartOf="@+id/prop_owner"
+        app:layout_constraintTop_toBottomOf="@+id/prop_img" />
+
+    <ImageView
+        android:id="@+id/prop_img"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="16dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/terr_forest"
+        app:layout_constraintEnd_toEndOf="@id/prop_back_btn"
+        app:layout_constraintStart_toStartOf="@+id/prop_type"
+        app:layout_constraintTop_toBottomOf="@+id/prop_type" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

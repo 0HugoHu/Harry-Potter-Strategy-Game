@@ -1,11 +1,9 @@
 package edu.duke.shared.map;
 
-//import javafx.util.Pair;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-//import android.util.Pair;
 
 
 public class GameMap implements Serializable {
@@ -20,14 +18,14 @@ public class GameMap implements Serializable {
     // Territory border coordinates
     // byte pattern code: 0001: top, 0010: right, 0100: bottom, 1000: left
     private final HashMap<String, Byte> borderPoints;
-    private final HashMap<String[],Integer> distances;
-    public int getDistance(String first, String second){
-        String[] pair=new String[]{first,second};
-        return distances.get(pair);
+    private final HashMap<String, Integer> distances;
+
+    public int getDistance(String first, String second) {
+        return distances.get(first + "&" + second);
     }
-    public void putDistance(String first,String second,int dis) {
-        String[] pq=new String[]{first,second};
-        distances.put(pq,dis);
+
+    public void putDistance(String first, String second, int dis) {
+        distances.put(first + "&" + second, dis);
     }
 
 
@@ -56,7 +54,7 @@ public class GameMap implements Serializable {
         this.numTerritories = numTerritories;
         this.territories = territories;
         this.borderPoints = new HashMap<>();
-        this.distances=new HashMap<>();
+        this.distances = new HashMap<>();
     }
 
     /**
@@ -134,6 +132,14 @@ public class GameMap implements Serializable {
     public String getOwnerByCoord(int y, int x) {
         for (Territory t : this.territories) {
             if (t.contains(new int[]{y, x}))
+                return t.getOwner();
+        }
+        return null;
+    }
+
+    public String getOwnerByTerrName(String name) {
+        for (Territory t : this.territories) {
+            if (t.getName().equals(name))
                 return t.getOwner();
         }
         return null;

@@ -1,3 +1,92 @@
 <resources>
     <string name="app_name">RISC</string>
+
+    <string name="background_map">Backgroud Map</string>
+    <string name="you_are_watching">You are watching…</string>
+
+    <string name="cost">Cost: </string>
+    <string name="zero">0</string>
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+    <string name="four">4</string>
+    <string name="five">5</string>
+    <string name="six">6 (Max)</string>
+
+    <string name="cost_fault">Your coins are not enough! Consider switching a destination or reducing the number of units!</string>
+    <string name="unit_placed">Unit Placed: </string>
+    <string name="unit_placed_fault">You have not placed all the 24 units!</string>
+    <string name="unit_placed_fault2">You have placed more than 24 units!</string>
+    <string name="tech_level">World Tech Level</string>
+    <string name="tech_level_desc">The mystery of the Ancient Wand remains unsolved. Perform a sacred ritual with the Ancient Wand and a unicorn\'s horn, and perchance it shall bestow you advantage in the contest.</string>
+    <string name="tech_fault">You have no enough horns to upgrade!</string>
+    <string name="tech_fault2">You have already upgraded this turn!</string>
+    <string name="tech_fault3">Not Applicable</string>
+    <string name="tech_fault4">You have reached the maximum level!</string>
+    <string name="current_level">Current Level: </string>
+
+    <string name="tech_bonus_1">Now, esteemed sorcerer, you have liberated the GNOME and DWARF from its confinement. Anticipate, a newly-enchanted HOUSE ELF shall appear to bestow its unwavering loyalty and magical talents upon your noble quest.</string>
+    <string name="tech_bonus_2">Rejoice, esteemed spellcaster, for you have now summoned the devoted HOUSE ELF, a humble servant whose unwavering loyalty and magical support shall bolster you in times of need.</string>
+    <string name="tech_bonus_3">Tread cautiously, aspiring sorcerer, as you now unleash the cunning GOBLIN, a wily creature whose expertise in the shadowy arts shall serve you well in your mystical quest.</string>
+    <string name="tech_bonus_4">Beware, bold enchantress, for you have now awakened the enigmatic VAMPIRE, an immortal being whose dark powers and ancient wisdom shall grant you an edge in your magical pursuits.</string>
+    <string name="tech_bonus_5">With great honor, valiant conjurer, you have now beckoned the noble CENTAUR, a wise and majestic ally whose celestial knowledge and prowess in battle shall guide you through the unknown.</string>
+    <string name="tech_bonus_6">Huzzah, illustrious wizard! You have ascended to the pinnacle of arcane mastery, but always remember: the enigma of magic is boundless and ever-evolving, beckoning the insatiable curiosity of those who dare to explore its depths.</string>
+
+    <string name="upgrade">Upgrade</string>
+    <string name="upgrade_unit">Upgrade Unit:</string>
+    <string name="from">From:</string>
+    <string name="to">To:</string>
+    <string name="num">Number:</string>
+    <string name="plus1">+1</string>
+
+    <string name="gnome">Gnome</string>
+    <string name="spinner_title">Select unit</string>
+    <string name="unit_upgrade_success">Unit upgrade succeeds!</string>
+
+    <string name="attack">Attack</string>
+    <string name="move">Move</string>
+    <string name="back">Back</string>
+
+    <string name="waiting">Waiting for other players…</string>
+    <string name="turn_x">Turn %X Begins</string>
+    <string name="end_turn">End Turn</string>
+
+    <string name="terr_desc_example">The Great Lake, alternatively known as the Black Lake, was a large body of water. It was a landlocked freshwater lake located to the south of Hogwarts Castle. The castle stands on a cliff overlooking the water. It was about half a mile in diameter and the castle\'s plumbing network drained into it. The lake had a number of very unusual inhabitants, including a Giant Squid, a village of Merpeople, and many Grindylows.</string>
+    <string name="init_view_text1">With immense delight, we hereby inform you that your application to Hogwarts School of Witchcraft and Wizardry has been met with success. Following the Sorting Hat\'s scrupulous contemplation of your inherent qualities and potential, you have been assigned to the distinguished House of:</string>
+    <string name="chat">CHAT</string>
+    <string name="end_turn_btn">END</string>
+    <string name="tech_btn">TECH</string>
+    <string name="rank_btn">RANK</string>
+    <string name="unit_btn">UNIT</string>
+    <string name="player">PLAYER: </string>
+    <string name="player_name_example">Harry Potter</string>
+    <string name="house">HOUSE: </string>
+    <string name="house_name_example">RAVENCLAW</string>
+    <string name="house_name_example_s">Ravenclaw</string>
+    <string name="horn">HORN: </string>
+    <string name="horn_name_example">50</string>
+    <string name="coin">COIN: </string>
+    <string name="coin_name_example">100</string>
+    <string name="world_level">WORLD LEVEL: </string>
+    <string name="world_level_name_example">1</string>
+    <string name="accept_offer">I\'m Pleased to Accept My Offer</string>
+
+    <string name="unit_init_desc">You have 24 units in total. Put them across your territories.</string>
+    <string name="unit_init_title">Unit Placement</string>
+    <string name="unit_init_back_btn">Back To Map</string>
+
+    <string name="ravenclaw">Ravenclaw</string>
+    <string name="gryffindor">Gryffindor</string>
+    <string name="hufflepuff">Hufflepuff</string>
+    <string name="slytherin">Slytherin</string>
+
+    <string name="example_unit">Boggarts</string>
+    <string name="example_unit2">Dementors</string>
+    <string name="example_unit3">Goblins</string>
+    <string name="example_unit4">Werewolves</string>
+
+    <string name="example_terr">The Great Lake</string>
+
+    <string name="winner_words">Magical prowess evades the feeble. Huzzah, brave wizard! Thou hast conquered the Triwizard Tournament for thine House! The annals of Hogwarts shall etch thy name in everlasting glory!</string>
+    <string name="loser_words">Thou hast been defeated. The Triwizard Tournament is over. The annals of Hogwarts shall not record thy name in everlasting glory.</string>
 </resources>

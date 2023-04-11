@@ -1,23 +1,40 @@
 package edu.duke.risc.client;
 
 import android.app.IntentService;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import edu.duke.shared.Game;
+import edu.duke.shared.helper.State;
 
 public class ClientIntentService extends IntentService {
 
     // Status codes
-    public static final int STATUS_RUNNING = 0;
     public static final int STATUS_FINISHED = 1;
-    public static final int STATUS_ERROR = 2;
+
+    private Game game;
+    private static final Object receivedPlayerOrder = new Object();
+
+    BroadcastReceiver br = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            game = (Game) intent.getSerializableExtra("game");
+            synchronized (receivedPlayerOrder) {
+                receivedPlayerOrder.notifyAll();
+            }
+        }
+    };
 
     public ClientIntentService() {
         super(ClientIntentService.class.getName());
@@ -25,18 +42,70 @@ public class ClientIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        /*
-         * Step 1: We pass the ResultReceiver from the activity to the intent service via intent.
-         */
-        assert intent != null;
-        final ResultReceiver receiver = intent.getParcelableExtra("receiver");
+        // Register Broadcast Receiver
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(br, new IntentFilter("RISC_SEND_TO_SERVER"));
 
-        Game game = null;
-        Client client = new Client();
-        game = client.getGame();
-        Bundle b = new Bundle();
-        b.putSerializable("game", game);
-        receiver.send(STATUS_FINISHED, b);
-        client.safeClose();
+        // Fetch game from server
+        assert intent != null;
+        final ResultReceiver receiver = intent.getParcelableExtra("RISC_FETCH_FROM_SERVER");
+
+        ClientAdapter clientAdapter = new ClientAdapter();
+        clientAdapter.init(false);
+
+        // Initialize unit
+        initUnit(clientAdapter, receiver);
+
+        while (this.game.getGameState() != State.GAME_OVER) {
+            fetchResult(clientAdapter, receiver);
+            System.out.println("Start waiting for player order");
+            // Wait until action is committed
+            try {
+                synchronized (receivedPlayerOrder) {
+                    receivedPlayerOrder.wait();
+                }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println("Player order received");
+            clientAdapter.updateGame(this.game);
+            // Send action to server
+            this.game = clientAdapter.playOneTurn(false);
+            sendTurnEnd(receiver);
+        }
+
+        // End Game
+        System.out.println("Game End.\n");
+        clientAdapter.close();
     }
+
+    private void fetchResult(ClientAdapter clientAdapter, ResultReceiver receiver) {
+        this.game = clientAdapter.getNewGame();
+        this.game.setPlayerName(clientAdapter.getPlayerName());
+        System.out.println("Game received");
+        Bundle b = new Bundle();
+        b.putSerializable("game", this.game);
+        receiver.send(STATUS_FINISHED, b);
+    }
+
+    private void sendTurnEnd(ResultReceiver receiver) {
+        System.out.println("Turn End received");
+        Bundle b = new Bundle();
+        b.putSerializable("game", this.game);
+        receiver.send(STATUS_FINISHED, b);
+    }
+
+    private void initUnit(ClientAdapter clientAdapter, ResultReceiver receiver) {
+        fetchResult(clientAdapter, receiver);
+        try {
+            synchronized (receivedPlayerOrder) {
+                receivedPlayerOrder.wait();
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Player unit list received");
+        clientAdapter.updateGame(this.game);
+        clientAdapter.sendUnitInit();
+    }
+
 }
