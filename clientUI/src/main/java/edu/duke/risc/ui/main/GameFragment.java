@@ -544,7 +544,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                         flag = true;
                     }
                 } else {
-                   flag = true;
+                    flag = true;
                 }
                 if (flag) {
                     unit_upgrade_btn.setEnabled(false);
@@ -614,33 +614,31 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         commit_btn.setOnClickListener(v -> {
             if (mTouchEvent == MOVE) {
                 for (UnitDataModel unit : unitDataModels) {
-                    String name=unit.getName();
-                    int number=unit.getNumber();
-                    UnitType type=Unit.convertStringToUnitType(name);
-                    HashMap<UnitType,Integer> list=new HashMap<>();
-                    list.put(type,number);
+                    String name = unit.getName();
+                    int number = unit.getNumber();
+                    UnitType type = Unit.convertStringToUnitType(name);
+                    HashMap<UnitType, Integer> list = new HashMap<>();
+                    list.put(type, number);
                     if (number > 0) {
-                        moveTurn.addMove(new Move(orderTerrFrom, orderTerrTo,list, this.mGame.getPlayerName()));
+                        moveTurn.addMove(new Move(orderTerrFrom, orderTerrTo, list, this.mGame.getPlayerName()));
                         updateUnitMoveAttackMap(number, unit);
                         int cost = this.mGame.calculateOrderCost(this.mGame.getMap().getShortestDistance(orderTerrFrom, orderTerrTo), number);
                         this.mGame.getPlayer(mGame.getPlayerName()).setExpenseCoins(cost);
-                        this.currentCoinExpense += cost;
                         updatePlayerValues();
                     }
                 }
             } else if (mTouchEvent == ATTACK) {
                 for (UnitDataModel unit : unitDataModels) {
-                    String name=unit.getName();
-                    int number=unit.getNumber();
-                    UnitType type=Unit.convertStringToUnitType(name);
-                    HashMap<UnitType,Integer> list=new HashMap<>();
-                    list.put(type,number);
+                    String name = unit.getName();
+                    int number = unit.getNumber();
+                    UnitType type = Unit.convertStringToUnitType(name);
+                    HashMap<UnitType, Integer> list = new HashMap<>();
+                    list.put(type, number);
                     if (number > 0) {
                         attackTurn.addAttack(new Attack(orderTerrFrom, orderTerrTo, list, this.mGame.getPlayerName()));
                         updateUnitMoveAttackMap(number, unit);
                         int cost = this.mGame.calculateOrderCost(this.mGame.getMap().getShortestDistance(orderTerrFrom, orderTerrTo), number);
                         this.mGame.getPlayer(mGame.getPlayerName()).setExpenseCoins(cost);
-                        this.currentCoinExpense += cost;
                         updatePlayerValues();
                     }
                 }
@@ -674,7 +672,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 view_title.setText(title);
                 commit_btn.setText(context.getResources().getString(R.string.move));
             }
-
 
 
             @Override

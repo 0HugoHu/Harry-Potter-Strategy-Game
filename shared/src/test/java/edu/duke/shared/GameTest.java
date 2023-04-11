@@ -25,7 +25,7 @@ public class GameTest {
     @Test
     public void testCal(){
         Game newGame = new Game(3,24);
-        assertEquals(2,newGame.calculateDis(2,2));
+        assertEquals(2,newGame.calculateOrderCost(2,2));
     }
 
     @Test
