@@ -3,6 +3,7 @@ package edu.duke.shared.turn;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import edu.duke.shared.player.Player;
 import edu.duke.shared.unit.Unit;
@@ -70,8 +71,13 @@ public abstract class Order implements Serializable {
         return numUnits;
     }
 
-    public int getUnitListSize(){
-        return unitList.size();
+
+    public int getAllUnitNums(){
+        int totalNums=0;
+        for(Map.Entry<UnitType,Integer> entry:unitList.entrySet()){
+            totalNums+=entry.getValue();
+        }
+        return totalNums;
     }
 
     public HashMap<UnitType,Integer> getUnitList(){

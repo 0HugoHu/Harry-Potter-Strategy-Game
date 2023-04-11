@@ -1,9 +1,12 @@
 package edu.duke.shared.turn;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import edu.duke.shared.map.GameMap;
 import edu.duke.shared.unit.Unit;
+import edu.duke.shared.unit.UnitType;
 
 public class MoveTurn extends Turn {
     // List of moves
@@ -44,9 +47,11 @@ public class MoveTurn extends Turn {
      */
     public void doMovePhase() {
         for (Move move : moves) {
-            for (int i = 0; i < move.getNumUnits(); i++) {
-                map.getTerritory(move.getFrom()).removeUnit();
-                map.getTerritory(move.getTo()).addUnit(new Unit("Gnome"));
+            for(Map.Entry<UnitType,Integer> entry:move.getUnitList().entrySet()){
+                for(int i=0;i<entry.getValue();i++){
+                    map.getTerritory(move.getFrom()).removeUnit(entry.getKey());
+                    map.getTerritory(move.getTo()).addUnit(entry.getKey());
+                }
             }
         }
     }

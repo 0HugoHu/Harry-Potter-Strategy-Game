@@ -1,8 +1,11 @@
 package edu.duke.shared.map;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import edu.duke.shared.player.Player;
 import edu.duke.shared.unit.Unit;
@@ -72,8 +75,8 @@ public class Territory implements Serializable {
      * @param coords      Coordinates inside this territory
      * @param adjs        Adjacent territories
      */
-    public Territory(String name, Player playerOwner, String owner, ArrayList<Unit> units, HashSet<int[]> coords,
-                     HashSet<String> adjs, String details, String type) {
+    public Territory(String name, Player playerOwner, String owner,ArrayList<Unit> units, HashSet<int[]> coords,
+                     HashSet<String> adjs,String details,String type) {
         this.playerOwner = playerOwner;
         this.name = name;
         this.owner = owner;
@@ -155,13 +158,20 @@ public class Territory implements Serializable {
     /**
      * Add a unit to this territory
      *
-     * @param unit Unit to be added
      * @return true if successfully added
      */
-    public boolean addUnit(Unit unit) {
+    public boolean addUnit(UnitType type) {
+        this.units.add(new Unit(convertUnitTypeToString(type)));
+        return true;
+    }
+
+    public boolean addUnit(Unit unit){
         this.units.add(unit);
         return true;
     }
+
+
+
 
     /**
      * Remove a unit from this territory
@@ -275,11 +285,33 @@ public class Territory implements Serializable {
     }
 
 
+
     /**
      * Remove all units from this territory
      */
     public void removeAllUnits() {
         this.units.clear();
+    }
+
+    public String convertUnitTypeToString(UnitType type){
+        switch (type){
+            case GNOME:
+                return "Gnome";
+            case DWARF:
+                return "Dwarf";
+            case HOUSE_ELF:
+                return "House-elf";
+            case GOBLIN:
+                return "Goblin";
+            case VAMPIRE:
+                return "Vampire";
+            case CENTAUR:
+                return "Centaur";
+            case WEREWOLF:
+                return "Werewolf";
+            default:
+                return "Gnome";
+        }
     }
 
 
@@ -328,6 +360,7 @@ public class Territory implements Serializable {
     }
 
 
+
     /**
      * Test if a territory is adjacent to this territory
      *
@@ -337,6 +370,8 @@ public class Territory implements Serializable {
     public boolean isAdjacent(String adj) {
         return this.adjs.contains(adj);
     }
+
+
 
 
     /**
@@ -350,7 +385,6 @@ public class Territory implements Serializable {
 
     /**
      * set territory details
-     *
      * @param details
      */
     public void addDetails(String details) {
@@ -359,10 +393,9 @@ public class Territory implements Serializable {
 
     /**
      * return the details of a territory
-     *
      * @return
      */
-    public String getDetails() {
+    public String getDetails(){
         return details;
     }
 
@@ -371,11 +404,11 @@ public class Territory implements Serializable {
     }
 
     public void addCoins(int coins) {
-        this.coins += coins;
+        this.coins +=coins;
     }
 
     public void minusCoins(int coins) {
-        this.coins -= coins;
+        this.coins -=coins;
     }
 
 
@@ -384,44 +417,43 @@ public class Territory implements Serializable {
     }
 
     public void addHorns(int horns) {
-        this.horns += horns;
+        this.horns +=horns;
     }
 
     public void minusHorns(int horns) {
-        this.horns -= horns;
+        this.horns -=horns;
     }
 
-    public boolean[] getReources() {
+    public boolean[] getReources(){
         return this.ResourcePro;
     }
 
     /**
      * set the land to be able to produce unicorn horns
      */
-    public void setUnicornLand() {
-        ResourcePro[0] = true;
+    public void setUnicornLand(){
+        ResourcePro[0]=true;
     }
 
     /**
      * set the land to be able to produce silver coins
      */
-    public void setNifflerLand() {
-        ResourcePro[1] = true;
+    public void setNifflerLand(){
+        ResourcePro[1]=true;
     }
 
     /**
      * check if this land produces Unicorn horn
-     *
      * @return
      */
-    public boolean checkUnicornLand() {
-        if (ResourcePro[0]) {
+    public boolean checkUnicornLand(){
+        if(ResourcePro[0]){
             return true;
         }
         return false;
     }
 
-    public String getType() {
+    public String getType(){
         return this.type;
     }
 
@@ -447,7 +479,6 @@ public class Territory implements Serializable {
 
     /**
      * set different and assign initial resources to different territories
-     *
      * @param typeName
      */
     public void setType(String typeName) {
@@ -456,19 +487,19 @@ public class Territory implements Serializable {
                 this.type = "plain";
                 setUnicornLand();
                 setNifflerLand();
-                addHorns(50);
+                addHorns(5);
                 addCoins(50);
                 break;
             case "cliff":
                 this.type = "cliff";
                 setUnicornLand();
-                addHorns(100);
+                addHorns(10);
                 break;
             case "canyon":
                 this.type = "canyon";
                 setUnicornLand();
                 setNifflerLand();
-                addHorns(25);
+                addHorns(7);
                 addCoins(75);
                 break;
             case "desert":
@@ -480,21 +511,21 @@ public class Territory implements Serializable {
                 this.type = "forest";
                 setUnicornLand();
                 setNifflerLand();
-                addHorns(125);
+                addHorns(7);
                 addCoins(125);
                 break;
             case "wetland":
                 this.type = "wetland";
                 setUnicornLand();
                 setNifflerLand();
-                addHorns(75);
+                addHorns(35);
                 addCoins(15);
                 break;
             default:
                 this.type = "plain";
                 setUnicornLand();
                 setNifflerLand();
-                addHorns(50);
+                addHorns(5);
                 addCoins(50);
                 break;
         }
@@ -555,7 +586,6 @@ public class Territory implements Serializable {
     /**
      * If the player want to upgrade from one type to another,
      * this function will return the corresponding costs
-     *
      * @param type1
      * @param type2
      * @return
@@ -572,7 +602,7 @@ public class Territory implements Serializable {
      *
      * @param type1 The unit type that the player want to upgrade from
      * @param type2 The unit type that the player want to upgrade to
-     * @param num   The number of units that the player want to upgrade
+     * @param num The number of units that the player want to upgrade
      * @return 1 if the player has enough coins to upgrade, 0 otherwise
      */
     public int upgradeUnit(String type1, String type2, int num) {
@@ -593,6 +623,7 @@ public class Territory implements Serializable {
         }
         return getUpdateValue(type1, type2) * num;
     }
+
 
 
 }
