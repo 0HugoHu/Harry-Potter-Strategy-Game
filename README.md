@@ -52,6 +52,9 @@ Wait for players to connect to the server. You will see the prompt: **"Waiting f
 
 ### 4.2. Start the Clients
 
+<img src="assets/Evo2/a1.png" width="350" />
+
+
 ✅ Run the client by command line. You need to input your **"HOST NAME"** as an argument in the command. For example, if your host name is "0.0.0.0" (such as you are running the server on your local machine), you should ues this command: 
 ```bash
 ./gradlew :client:run --args="0.0.0.0"
