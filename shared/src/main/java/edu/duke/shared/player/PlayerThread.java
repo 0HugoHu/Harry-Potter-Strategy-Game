@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
 
 import edu.duke.shared.Game;
@@ -174,7 +173,7 @@ public class PlayerThread implements Runnable, Serializable {
                     }
 
                     // Copy the player's property
-                    this.serverGame.getPlayerList().get(this.playerId).coins = this.currGame.getPlayerList().get(this.playerId).coins;
+                    this.serverGame.getPlayerList().get(this.playerId).setCoins(this.currGame.getPlayerList().get(this.playerId).getCoins());
 
                     // Copy the player's property
                     if (this.currGame.getPlayerList().get(this.playerId).willUpgradeWorldLevel) {

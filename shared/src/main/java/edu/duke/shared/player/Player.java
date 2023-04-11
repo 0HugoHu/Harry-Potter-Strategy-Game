@@ -3,11 +3,9 @@ package edu.duke.shared.player;
 import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 
 import edu.duke.shared.Game;
-import edu.duke.shared.helper.State;
 import edu.duke.shared.map.Territory;
 
 public class Player implements Serializable {
@@ -25,7 +23,7 @@ public class Player implements Serializable {
     public transient Thread thread;
 
     private int worldLevel;
-    public int coins;
+    private int coins;
     private int horns;
     public boolean willUpgradeWorldLevel = false;
 
@@ -44,8 +42,10 @@ public class Player implements Serializable {
         // Start the thread
         this.playerThread = new PlayerThread(this.socket, this.playerId);
         this.thread = new Thread(this.playerThread);
-        this.thread.start();
+        this.coins= 0;
+        this.horns = 0;
         this.worldLevel = 1;
+        this.thread.start();
     }
 
     /**
@@ -164,8 +164,8 @@ public class Player implements Serializable {
      * @param goal
      * @return
      */
-    public static int upgradeCost(int goal){
-        switch (goal){
+    public static int upgradeCost(int goal) {
+        switch (goal) {
             case 2:
                 return 60;
             case 3:
@@ -207,6 +207,7 @@ public class Player implements Serializable {
     /**
      * return the corresponding resources for this player, with the Integer[] array's
      * first index being coin resources, second index being horn resources.
+     *
      * @return
      */
     public void updateResources(ArrayList<Territory> territories) {
@@ -219,13 +220,19 @@ public class Player implements Serializable {
         this.coins += coins;
         this.horns += horns;
     }
-
     public int getCoins() {
         return this.coins;
+    }
+    public void setCoins(int coins) {
+        this.coins = coins;
     }
 
     public int getHorns() {
         return this.horns;
+    }
+
+    public void setHorns(int horns) {
+        this.horns = horns;
     }
 
     public void upgradeWorldLevel() {
@@ -236,5 +243,4 @@ public class Player implements Serializable {
     public void setExpenses(int horns) {
         this.horns -= horns;
     }
-
 }
