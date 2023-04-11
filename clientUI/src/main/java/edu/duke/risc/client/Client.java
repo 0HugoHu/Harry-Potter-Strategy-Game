@@ -135,7 +135,7 @@ public class Client {
 
         // TODO: always mock
         // Send player name
-        sendPlayerName(true);
+        sendPlayerName(false);
     }
 
 
@@ -153,8 +153,6 @@ public class Client {
         // Read player name
         if (isMock) {
             readPlayerNameMock();
-        } else {
-            readPlayerName();
         }
         this.game.setPlayerName(this.playerName);
         GameObject obj = new GameObject(this.clientSocket);
@@ -165,14 +163,7 @@ public class Client {
      * Read player name from console
      */
     private void readPlayerName() {
-        // Reading data using readLine
-        System.out.println("Please enter your player name:\n");
-        this.playerName = scanner.nextLine();
-        while (this.playerName == null || this.playerName.isEmpty()) {
-            System.out.println("Player name cannot be empty. Please enter again:");
-            this.playerName = scanner.nextLine();
-        }
-        System.out.println("Set player name to " + this.playerName + ".\nWaiting for other players...\n");
+
     }
 
     private void readPlayerNameMock() {
