@@ -11,6 +11,7 @@ import java.util.PriorityQueue;
 
 
 public class GameMap implements Serializable {
+    private static final long serialVersionUID = 2346246420757690L;
     // All territories on this map
     private final ArrayList<Territory> territories;
     // Number of territories on this map
