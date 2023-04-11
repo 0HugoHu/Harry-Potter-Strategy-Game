@@ -3,6 +3,7 @@ package edu.duke.shared;
 import static org.junit.Assert.*;
 
 import edu.duke.shared.player.Player;
+
 import org.junit.Test;
 
 import java.net.Socket;
@@ -153,11 +154,11 @@ public class GameMapTest {
         terrList.add(t1);
         GameMap gameMap = new GameMap(10, 10, 1, terrList);
         assertTrue(gameMap.completed());
-        assertEquals(11,gameMap.isBorderPoint(0,1));
-        assertEquals(13,gameMap.isBorderPoint(1,0));
-        assertEquals(7,gameMap.isBorderPoint(1,2));
-        assertEquals(14,gameMap.isBorderPoint(2,1));
-        assertEquals(0,gameMap.isBorderPoint(1,1));
+        assertEquals(11, gameMap.isBorderPoint(0, 1));
+        assertEquals(13, gameMap.isBorderPoint(1, 0));
+        assertEquals(7, gameMap.isBorderPoint(1, 2));
+        assertEquals(14, gameMap.isBorderPoint(2, 1));
+        assertEquals(0, gameMap.isBorderPoint(1, 1));
     }
 
 
@@ -182,7 +183,7 @@ public class GameMapTest {
 
 
     @Test
-    public void testGetResources(){
+    public void testGetResources() {
         ArrayList<Territory> terrList = new ArrayList<>();
         Territory t1 = new Territory("A");
         Player p1 = new Player(0, new Socket());
@@ -205,16 +206,34 @@ public class GameMapTest {
 //        assertEquals(100,(int)count[0]);
 //        assertEquals(40,(int)count[1]);
 
-        Integer[] count1=gameMap.getResources(0);
-        assertEquals(199,(int)count1[0]);
-        assertEquals(98,(int)count1[1]);
+        Integer[] count1 = gameMap.getResources(0);
+        assertEquals(199, (int) count1[0]);
+        assertEquals(98, (int) count1[1]);
 
         t2.addCoins(1);
-        Integer[] count2=gameMap.getResources(0);
-        assertEquals(200,(int)count2[0]);
+        Integer[] count2 = gameMap.getResources(0);
+        assertEquals(200, (int) count2[0]);
 
     }
 
+    @Test
+    public void getOwnerByTerrName() {
+        ArrayList<Territory> terrList = new ArrayList<>();
+        Territory t1 = new Territory("A");
+        String owner = "Alice";
+        t1.changeOwner(owner);
+        terrList.add(t1);
+        GameMap gameMap = new GameMap(10, 10, 1, terrList);
+        assertEquals(owner, gameMap.getOwnerByTerrName("A"));
+        assertNull(gameMap.getOwnerByTerrName("B"));
+    }
+
+    @Test
+    public void getDistance() {
+        GameMap gameMap = new GameMap(10, 10, 1, new ArrayList<>());
+        gameMap.putDistance("", "", 0);
+        gameMap.getDistance("", "");
+    }
 
 
 }

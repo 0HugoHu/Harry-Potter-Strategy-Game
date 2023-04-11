@@ -151,7 +151,7 @@ public class MapTiles {
                     // If this border is selected
                     if (showCurrentTerr(territoryName, territorySelected, territorySelectedDouble)) {
                         this.boarderSize = 6;
-                        mPaint.setColor(0xFFFFFFFF);
+                        mPaint.setColor(0xCCFFFFFF);
                     }
 
                     /* *****************
@@ -162,17 +162,17 @@ public class MapTiles {
                             this.boarderSize = 6;
                             // Self territory
                             if (owner.equals(selectedOwner)) {
-                                mPaint.setColor(0xFF29B6F6);
+                                mPaint.setColor(0xCC29B6F6);
                             }
                             // Other's territory
                             else {
-                                mPaint.setColor(0xFFEF5350);
+                                mPaint.setColor(0xCCEF5350);
                             }
                         }
                         // Also add border of the territory that can be visited by path
                         if (showSelfTerr(territoryName, territorySelected)) {
                             this.boarderSize = 6;
-                            mPaint.setColor(0xFF29B6F6);
+                            mPaint.setColor(0xCC29B6F6);
                         }
                     }
                     drawBorders(pattern, y, x, size, canvas, mPaint);
