@@ -481,6 +481,10 @@ public class Game implements Serializable {
         this.header.addLoserId(playerId);
     }
 
+    public ArrayList<Integer> getLoserId() {
+        return this.header.loserIds;
+    }
+
     /**
      * Get the loser id
      *

@@ -272,6 +272,16 @@ public class Server {
                 System.out.println("Player " + p.getPlayerName() + " has lost the game. Game continues.\n");
             }
         }
+        if (this.game.getLoserId().size() == this.game.getNumPlayers() - 1) {
+            this.game.setGameState(State.GAME_OVER);
+            for (Player p : this.game.getPlayerList()) {
+                if (!this.game.isLoser(p.getPlayerId())) {
+                    this.game.setWinnerId(p.getPlayerId());
+                    System.out.println("Game Over. Player " + p.getPlayerName() + " wins.\n");
+                    sendToAllPlayers();
+                }
+            }
+        }
     }
 
     /**
