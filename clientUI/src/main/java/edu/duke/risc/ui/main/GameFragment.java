@@ -585,7 +585,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         // Update the cost when the number of units change
         unitAdapter.setCostListener(() -> {
             // TODO: implement the cost calculation
-            int cost = this.mGame.calculateOrderCost(unitAdapter.getTotalNumber(), this.mGame.getMap().getDistance(orderTerrFrom, orderTerrTo));
+            int cost = this.mGame.calculateOrderCost(unitAdapter.getTotalNumber(), this.mGame.getMap().getShortestDistance(orderTerrFrom, orderTerrTo));
             String cost_s = cost + " coins";
             total_cost.setText(cost_s);
             if (cost > mGame.getPlayer(mGame.getPlayerName()).getCoins()) {
