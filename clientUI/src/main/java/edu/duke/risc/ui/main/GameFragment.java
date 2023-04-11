@@ -394,13 +394,21 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 }
                 unit_num.setProgress(1);
                 int cost = mGame.getMap().getTerritory(orderTerrFrom).getUpdateValue(selected_from, selected_to);
-                String cost_s = "Upgrade: " + cost + " coins";
+                String cost_s = "Upgrade: " + cost + " horns";
                 unit_upgrade_btn.setText(cost_s);
-                if (cost <= mGame.getPlayer(mGame.getPlayerName()).getCoins()) {
-                    unit_upgrade_btn.setEnabled(true);
-                    unit_num.setEnabled(true);
-                    unit_upgrade_btn.setTextColor(getResources().getColor(R.color.order_text));
+                boolean flag = false;
+                if (cost <= mGame.getPlayer(mGame.getPlayerName()).getHorns()) {
+                    if (mGame.getMap().getTerritory(orderTerrFrom).getOwner().equals(mGame.getPlayerName())) {
+                        unit_upgrade_btn.setEnabled(true);
+                        unit_num.setEnabled(true);
+                        unit_upgrade_btn.setTextColor(getResources().getColor(R.color.order_text));
+                    } else {
+                        flag = true;
+                    }
                 } else {
+                    flag = true;
+                }
+                if (flag) {
                     unit_upgrade_btn.setEnabled(false);
                     unit_num.setEnabled(false);
                     unit_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
@@ -521,11 +529,19 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 int cost = mGame.getMap().getTerritory(orderTerrFrom).getUpdateValue(selected_from, selected_to) * i;
                 String cost_s = "Upgrade: " + cost + " coins";
                 unit_upgrade_btn.setText(cost_s);
+                boolean flag = false;
                 if (mGame.getPlayer(mGame.getPlayerName()).getCoins() > cost) {
-                    unit_upgrade_btn.setEnabled(true);
-                    unit_num.setEnabled(true);
-                    unit_upgrade_btn.setTextColor(getResources().getColor(R.color.order_text));
+                    if (mGame.getMap().getTerritory(orderTerrFrom).getOwner().equals(mGame.getPlayerName())) {
+                        unit_upgrade_btn.setEnabled(true);
+                        unit_num.setEnabled(true);
+                        unit_upgrade_btn.setTextColor(getResources().getColor(R.color.order_text));
+                    } else {
+                        flag = true;
+                    }
                 } else {
+                   flag = true;
+                }
+                if (flag) {
                     unit_upgrade_btn.setEnabled(false);
                     unit_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
                 }
@@ -826,13 +842,21 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 }
                 unit_num.setProgress(1);
                 int cost = mGame.getMap().getTerritory(orderTerrFrom).getUpdateValue(selected_from, selected_to);
-                String cost_s = "Upgrade: " + cost + " coins";
+                String cost_s = "Upgrade: " + cost + " horns";
                 unit_upgrade_btn.setText(cost_s);
-                if (cost <= mGame.getPlayer(mGame.getPlayerName()).getCoins()) {
-                    unit_upgrade_btn.setEnabled(true);
-                    unit_num.setEnabled(true);
-                    unit_upgrade_btn.setTextColor(getResources().getColor(R.color.order_text));
+                boolean flag = false;
+                if (cost <= mGame.getPlayer(mGame.getPlayerName()).getHorns()) {
+                    if (mGame.getMap().getTerritory(terrName).getOwner().equals(mGame.getPlayerName())) {
+                        unit_upgrade_btn.setEnabled(true);
+                        unit_num.setEnabled(true);
+                        unit_upgrade_btn.setTextColor(getResources().getColor(R.color.order_text));
+                    } else {
+                        flag = true;
+                    }
                 } else {
+                    flag = true;
+                }
+                if (flag) {
                     unit_upgrade_btn.setEnabled(false);
                     unit_num.setEnabled(false);
                     unit_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
@@ -903,7 +927,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             error_view.setVisibility(View.INVISIBLE);
         }
 
-        String cost_s = cost + " coins";
+        String cost_s = cost + " horns";
         TextView total_cost = move_attack_view.findViewById(R.id.total_cost);
         total_cost.setText(cost_s);
 

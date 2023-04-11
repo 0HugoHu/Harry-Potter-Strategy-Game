@@ -233,8 +233,8 @@ public class Player implements Serializable {
         this.horns -= upgradeCost(this.worldLevel);
     }
 
-    public void setExpenses(int coins) {
-        this.coins -= coins;
+    public void setExpenses(int horns) {
+        this.horns -= horns;
     }
 
 }
