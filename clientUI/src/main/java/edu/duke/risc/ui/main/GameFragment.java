@@ -587,17 +587,26 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         commit_btn.setOnClickListener(v -> {
             if (mTouchEvent == TouchEvent.MOVE) {
                 for (UnitDataModel unit : unitDataModels) {
-                    int number = unit.getNumber();
+                    String name=unit.getName();
+                    int number=unit.getNumber();
+                    UnitType type=Unit.convertStringToUnitType(name);
+                    HashMap<UnitType,Integer> list=new HashMap<>();
+                    list.put(type,number);
                     if (number > 0) {
-                        moveTurn.addMove(new Move(orderTerrFrom, orderTerrTo, unit.getNumber(), this.mGame.getPlayerName()));
+                        moveTurn.addMove(new Move(orderTerrFrom, orderTerrTo,list, this.mGame.getPlayerName()));
                         updateUnitMoveAttackMap(number, unit);
                     }
+
                 }
             } else if (mTouchEvent == TouchEvent.ATTACK) {
                 for (UnitDataModel unit : unitDataModels) {
-                    int number = unit.getNumber();
+                    String name=unit.getName();
+                    int number=unit.getNumber();
+                    UnitType type=Unit.convertStringToUnitType(name);
+                    HashMap<UnitType,Integer> list=new HashMap<>();
+                    list.put(type,number);
                     if (number > 0) {
-                        attackTurn.addAttack(new Attack(orderTerrFrom, orderTerrTo, unit.getNumber(), this.mGame.getPlayerName()));
+                        attackTurn.addAttack(new Attack(orderTerrFrom, orderTerrTo, list, this.mGame.getPlayerName()));
                         updateUnitMoveAttackMap(number, unit);
                     }
                 }
@@ -631,6 +640,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 // Set touch event
                 mTouchEvent = TouchEvent.MOVE;
             }
+
+
 
             @Override
             public void onAttackOrder(String terrFrom, String terrTo) {

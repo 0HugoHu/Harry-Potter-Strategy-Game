@@ -172,16 +172,6 @@ public class Territory implements Serializable {
 
 
 
-    /**
-     * return the playerowner of this territory
-     *
-     * @return player
-     */
-    public Player getPlayerOwner() {
-        return playerOwner;
-    }
-
-
 
     /**
      * Remove a unit from this territory
@@ -615,18 +605,24 @@ public class Territory implements Serializable {
      * @param num The number of units that the player want to upgrade
      * @return 1 if the player has enough coins to upgrade, 0 otherwise
      */
-//    public int upgradeUnit(String type1, String type2, int num) {
-//        for (Unit unit : units) {
-//            if (unit.getType().equals(Unit.convertStringToUnitType(type1))) {
-//                removeUnit(unit);
-//                addUnit(new Unit(type2));
-//                num--;
-//            }
-//            if (num == 0) break;
-//        }
-//        assert num == 0;
-//        return getUpdateValue(type1, type2) * num;
-//    }
+    public int upgradeUnit(String type1, String type2, int num) {
+        ArrayList<Integer> deleteIndex = new ArrayList<>();
+        int i = 0;
+        for (Unit unit : units) {
+            if (unit.getType().equals(Unit.convertStringToUnitType(type1))) {
+                deleteIndex.add(i);
+                num--;
+            }
+            i++;
+            if (num == 0) break;
+        }
+        assert num == 0;
+        for (int index : deleteIndex) {
+            units.remove(index - num++);
+            units.add(new Unit(type2));
+        }
+        return getUpdateValue(type1, type2) * num;
+    }
 
 
 

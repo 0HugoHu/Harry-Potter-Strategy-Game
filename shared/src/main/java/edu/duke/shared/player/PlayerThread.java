@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -149,20 +150,16 @@ public class PlayerThread implements Runnable, Serializable {
                         System.out.println("The attack turn from player " + this.playerId + " is illegal.");
                     }
 
-                // Merge Unit
-                Player p = this.serverGame.getPlayerList().get(this.playerId);
-                for (Territory t : this.serverGame.getMap().getTerritories()) {
-                    if (t.getOwner().equals(p.getPlayerName())) {
-                        t.removeAllUnits();
-                        for(Map.Entry<UnitType,Integer> entry:convertToMap(this.currGame.getMap().getTerritory(t.getName()).getUnits()).entrySet()){
-                            for(int i=0;i<entry.getValue();i++){
-                                t.addUnit(entry.getKey());
+
+                    Player p = this.serverGame.getPlayerList().get(this.playerId);
+                    for (Territory t : this.serverGame.getMap().getTerritories()) {
+                        if (t.getOwner().equals(p.getPlayerName())) {
+                            t.removeAllUnits();
+                            for (Unit unit : this.currGame.getMap().getTerritory(t.getName()).getUnits()) {
+                                t.addUnit(unit);
                             }
                         }
-//                        for (int j = 0; j < this.currGame.getMap().getTerritory(t.getName()).getNumUnits(); j++)
-//                            t.addUnit(UnitType.GNOME);
                     }
-                }
 
 
                     // Merge all turns from different players

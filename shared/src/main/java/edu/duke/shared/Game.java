@@ -187,6 +187,7 @@ public class Game implements Serializable {
                     j = 0;
                 }
                 //This is the attacker on the list order
+                System.out.println("unlist: "+att.get(i).get(0).getFrom()+" "+att.get(i).get(0).getTo()+" "+att.get(i).get(0).getUnitList().size());
                 UnitType type1=att.get(i).get(0).getHighestType();
                 int index1=0;
                 for(int k=0;k<att.get(i).size();k++){
