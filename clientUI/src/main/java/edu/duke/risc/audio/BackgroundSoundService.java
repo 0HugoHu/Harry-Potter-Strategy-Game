@@ -14,10 +14,16 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import edu.duke.risc.R;
 
 public class BackgroundSoundService extends Service {
+    // Media Player
     MediaPlayer mediaPlayer;
+    // Media Player
     MediaPlayer mediaPlayer2;
+    // Context
     Context mContext;
 
+    /**
+     * Broadcast Receiver
+     */
     BroadcastReceiver br = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -29,12 +35,18 @@ public class BackgroundSoundService extends Service {
         }
     };
 
+    /**
+     * Constructor
+     */
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
 
+    /**
+     * On Create
+     */
     @Override
     public void onCreate() {
         super.onCreate();
@@ -46,20 +58,32 @@ public class BackgroundSoundService extends Service {
         mediaPlayer.setVolume(100, 100);
     }
 
+    /**
+     * When the service is started
+     */
     public int onStartCommand(Intent intent, int flags, int startId) {
         mediaPlayer.start();
         return startId;
     }
 
+    /**
+     * Start
+     */
     public void onStart(Intent intent, int startId) {
     }
 
+    /**
+     * On Destroy
+     */
     @Override
     public void onDestroy() {
         mediaPlayer.stop();
         mediaPlayer.release();
     }
 
+    /**
+     * On Low Memory
+     */
     @Override
     public void onLowMemory() {
     }

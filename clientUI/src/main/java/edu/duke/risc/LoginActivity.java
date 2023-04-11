@@ -19,6 +19,11 @@ import edu.duke.risc.audio.BackgroundSoundService;
 
 public class LoginActivity extends AppCompatActivity {
 
+    /**
+     * onCreate
+     *
+     * @param savedInstanceState saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,19 +96,29 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * onResume
+     */
     @Override
     protected void onResume() {
         super.onResume();
         hideActionBar();
     }
 
+    /**
+     * onWindowFocusChanged
+     *
+     * @param hasFocus has focus
+     */
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         hideActionBar();
     }
 
+    /**
+     * hideActionBar
+     */
     private void hideActionBar() {
         View decorView = getWindow().getDecorView();
         // Hide the status bar.
@@ -117,6 +132,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * PlayBackgroundSound
+     */
     public void PlayBackgroundSound() {
         Intent intent = new Intent(LoginActivity.this, BackgroundSoundService.class);
         startService(intent);

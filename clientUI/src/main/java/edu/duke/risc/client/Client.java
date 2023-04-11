@@ -2,19 +2,13 @@ package edu.duke.risc.client;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.HashSet;
 import java.util.Random;
 import java.util.Scanner;
 
 import edu.duke.shared.Game;
-import edu.duke.shared.helper.DisplayMap;
 import edu.duke.shared.helper.GameObject;
 import edu.duke.shared.helper.State;
-import edu.duke.shared.helper.Validation;
-import edu.duke.shared.map.Territory;
-import edu.duke.shared.turn.Attack;
 import edu.duke.shared.turn.AttackTurn;
-import edu.duke.shared.turn.Move;
 import edu.duke.shared.turn.MoveTurn;
 import edu.duke.shared.unit.Unit;
 
@@ -38,9 +32,6 @@ public class Client {
     // Scanner
     Scanner scanner = new Scanner(System.in);
 
-    // Flag for client who lost the game
-    private boolean isLoser = false;
-
     /*
      * Initialize Client
      */
@@ -60,6 +51,12 @@ public class Client {
         this.game = new Game(0, 24);
     }
 
+    /*
+     * Connect to server
+     * @param HOST Host name
+     * @param PORT Port number
+     * @return Client socket
+     */
     public Socket connectSocket(String HOST, int PORT) {
         try {
             return new Socket(HOST, PORT);
@@ -138,7 +135,9 @@ public class Client {
         sendPlayerName(false);
     }
 
-
+    /*
+     * Initialize client
+     */
     private void setupUnitsMock() {
         for (int i = 0; i < numUnits; i++)
             this.game.getMap().getTerritoriesByOwner(this.playerName).get(0).addUnit(new Unit("Normal"));
@@ -166,6 +165,9 @@ public class Client {
 
     }
 
+    /*
+     * Read player name from console
+     */
     private void readPlayerNameMock() {
         this.playerName = "Player" + (int) (Math.random() * 10000);
     }
@@ -189,7 +191,9 @@ public class Client {
         System.out.println("Game object sent to server.\n");
     }
 
-
+    /*
+     * Play one turn
+     */
     public void playOneTurnMock() {
         // Read instructions
         MoveTurn moveTurn = new MoveTurn(this.game.getMap(), this.game.getTurn(), this.playerName);
@@ -218,7 +222,6 @@ public class Client {
             System.out.println("Game over. The winner is " + winner + ".\n");
         } else if (this.game.isLoser(this.playerID)) {
             System.out.println("You have lost. Now you are watching the game.\n");
-            isLoser = true;
         }
         // Confirm turn
         GameObject obj = new GameObject(this.clientSocket);

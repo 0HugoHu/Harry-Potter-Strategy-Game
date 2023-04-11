@@ -16,7 +16,7 @@ public class Header implements Serializable {
     private int winnerId;
     // Losers' id
     public final ArrayList<Integer> loserIds;
-
+    // Force end game
     private boolean FORCE_END_GAME = false;
 
     /**
@@ -133,10 +133,18 @@ public class Header implements Serializable {
         return this.turnIndex;
     }
 
+    /**
+     * Force end game
+     */
     public void forceEndGame() {
         this.FORCE_END_GAME = true;
     }
 
+    /**
+     * Check if the game is forced to end
+     *
+     * @return True if the game is forced to end, false otherwise
+     */
     public boolean isForceEndGame() {
         return this.FORCE_END_GAME;
     }

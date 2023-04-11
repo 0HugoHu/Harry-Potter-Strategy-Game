@@ -11,15 +11,17 @@ public class MapFactory {
     // Number of territories on this map
     private final int numTerritories;
 
+    // Territory names
     private final String[] territoryNames =
             {"Hogwarts", "Godric's Hollow", "Grimmauld Place", "Diagon Alley",
-            "Spinner's End", "Hogsmeade", "Azkaban", "Durmstrang",
-            "Beauxbatons", "Forbidden Forest", "Albania", "Little Hangleton",
-            "Malfoy Manor", "Knockturn Alley", "Nurmengard", "St Mungo",
-            "Little Whinging", "Shell Cottage", "Gringotts", "Ministry of Magic",
-            "Uagadou", "Castelobruxo", "Ilvermorny", "Mahoutokoro"};
+                    "Spinner's End", "Hogsmeade", "Azkaban", "Durmstrang",
+                    "Beauxbatons", "Forbidden Forest", "Albania", "Little Hangleton",
+                    "Malfoy Manor", "Knockturn Alley", "Nurmengard", "St Mungo",
+                    "Little Whinging", "Shell Cottage", "Gringotts", "Ministry of Magic",
+                    "Uagadou", "Castelobruxo", "Ilvermorny", "Mahoutokoro"};
 
-    private final String[] territoryDetails={
+    // Territory details
+    private final String[] territoryDetails = {
             "Hogwarts: A British school of magic for students aged eleven to seventeen, founded around the 9th century and 10th century.",
             "Godric's Hollow: A village in the West Country of England, which was inhabited by a number of notable wizarding families.",
             "Grimmauld Place: The ancestral home of the Black family, which was protected by a Fidelius Charm.",
@@ -45,7 +47,6 @@ public class MapFactory {
             "Ilvermorny: an American school of magic, which serves as the school for the North American continent.",
             "Mahoutokoro: Mahoutokoro is the smallest wizarding school, and is situated in Japan. "
     };
-
 
 
     /**
@@ -197,6 +198,13 @@ public class MapFactory {
         return this.gameMap;
     }
 
+    /**
+     * Calculate the distance between two territories
+     *
+     * @param fir the first territory
+     * @param sec the second territory
+     * @return the distance between two territories
+     */
     public int calDistance(int[] fir, int[] sec) {
         return (int) Math.sqrt((fir[0] - sec[0]) * (fir[0] - sec[0]) + (fir[1] - sec[1]) * (fir[1] - sec[1]));
     }

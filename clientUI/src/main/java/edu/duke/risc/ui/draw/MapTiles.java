@@ -26,10 +26,8 @@ public class MapTiles {
     private final int mapViewWidth;
     private final int mapViewHeight;
     // Padding
-    private int paddingTop;
-    private int paddingBottom;
+    private final int paddingTop;
     private int paddingLeft = 64;
-    private int paddingRight = 64;
 
     // Map movement offset
     private float offsetX = 0.0f;
@@ -49,9 +47,8 @@ public class MapTiles {
     Map<String, Integer> ownerColor = new HashMap<>();
     // Background image
     private final Bitmap backgroundImageBitmap;
-
+    // Background image rect
     private Typeface plain;
-
 
     /**
      * Constructor
@@ -61,16 +58,21 @@ public class MapTiles {
      */
     public MapTiles(Context mContext, int viewWidth, int viewHeight, Bitmap backgroundImageBitmap) {
         this.paddingLeft = Math.max(viewWidth / 10, this.paddingLeft);
-        this.paddingTop = Math.max(viewHeight / 10, this.paddingRight);
-        this.paddingRight = this.paddingLeft;
-        this.paddingBottom = this.paddingTop;
-        this.mapViewWidth = viewWidth - this.paddingLeft - this.paddingRight;
-        this.mapViewHeight = viewHeight - this.paddingTop - this.paddingBottom;
+        int paddingRight = 64;
+        this.paddingTop = Math.max(viewHeight / 10, paddingRight);
+        paddingRight = this.paddingLeft;
+        this.mapViewWidth = viewWidth - this.paddingLeft - paddingRight;
+        this.mapViewHeight = viewHeight - this.paddingTop - this.paddingTop;
         this.backgroundImageBitmap = backgroundImageBitmap;
         plain = mContext.getResources().getFont(R.font.harry_potter);
         plain = Typeface.create(plain, Typeface.ITALIC);
     }
 
+    /**
+     * Initialize the color mapping
+     *
+     * @param players players
+     */
     public void initColorMapping(ArrayList<Player> players) {
         int[] colors = new int[]{0x66003366, 0x55660000, 0x66003300, 0x55CC9900};
         for (Player player : players) {
@@ -189,10 +191,10 @@ public class MapTiles {
                     assert (touchEventMapping.updateTerritoryMapping(map.getTerritoryNameByCoord(y, x), new int[]{(int) (this.paddingTop + offsetY + y * size + size / 2), (int) (this.paddingLeft + offsetX + x * size + size / 2)}));
                     // show center point
                     mPaint.setColor(0xDD000000);
-                    mPaint.setTextSize((int) (size));
+                    mPaint.setTextSize(size);
                     mPaint.setTypeface(plain);
                     int textWidth = (int) mPaint.measureText(territoryName);
-                    canvas.drawText(territoryName, this.paddingLeft + offsetX + (int)((x + 0.5) * size) - (int) (textWidth / 2), this.paddingTop + offsetY + (y + 1) * size, mPaint);
+                    canvas.drawText(territoryName, this.paddingLeft + offsetX + (int) ((x + 0.5) * size) - (textWidth / 2), this.paddingTop + offsetY + (y + 1) * size, mPaint);
                     // Draw distance text
                     if (showAdjacentTerr(territorySelected, territorySelectedDouble)) {
                         Territory t = map.getTerritory(territoryName);
@@ -226,6 +228,16 @@ public class MapTiles {
         touchEventMapping.updateBoundary(new int[]{(int) (this.paddingTop + offsetY), (int) (this.paddingLeft + offsetX + width * size), (int) (this.paddingTop + offsetY + height * size), (int) (this.paddingLeft + offsetX)});
     }
 
+    /**
+     * Draw borders of the territory
+     *
+     * @param pattern 1: top, 2: right, 4: bottom, 8: left
+     * @param y       y coordinate
+     * @param x       x coordinate
+     * @param size    size of the territory
+     * @param canvas  canvas
+     * @param mPaint  paint
+     */
     private void drawBorders(byte pattern, int y, int x, int size, Canvas canvas, Paint mPaint) {
         // Draw top border
         if ((pattern & 1) != 0) {
@@ -264,11 +276,25 @@ public class MapTiles {
         return !TouchEventMapping.checkIsAction(selected1) && territoryName.equals(selected1) && selected2 != null && selected2.equals(TouchEvent.ORDER.name());
     }
 
+    /**
+     * Check if the territory been selected should display its adjacent territories
+     *
+     * @param selected1 the first selected event
+     * @param selected2 the second selected event
+     * @return true if the territory should display its adjacent territories
+     */
     private boolean showAdjacentTerr(String selected1, String selected2) {
         // If "order" action is selected
         return selected1 != null && selected2 != null && selected2.equals(TouchEvent.ORDER.name());
     }
 
+    /**
+     * Check if the territory been selected should display its adjacent territories
+     *
+     * @param territoryName the territory name been checked
+     * @param selected1     the first selected event
+     * @return true if the territory should display its adjacent territories
+     */
     private boolean showSelfTerr(String territoryName, String selected1) {
         // If "order" action is selected
         return !TouchEventMapping.checkIsAction(selected1) && !selected1.equals(territoryName) && Validation.checkPathExist(this.mGameMap, selected1, territoryName);

@@ -13,6 +13,11 @@ import edu.duke.risc.ui.main.GameFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * onCreate
+     *
+     * @param savedInstanceState saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,33 +48,53 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * onStop
+     */
     @Override
     protected void onStop() {
         super.onStop();
     }
 
+    /**
+     * onDestroy
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
 
+    /**
+     * onPause
+     */
     @Override
     protected void onPause() {
         super.onPause();
     }
 
+    /**
+     * onResume
+     */
     @Override
     protected void onResume() {
         super.onResume();
         hideActionBar();
     }
 
+    /**
+     * onWindowFocusChanged
+     *
+     * @param hasFocus has focus
+     */
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         hideActionBar();
     }
 
+    /**
+     * hideActionBar
+     */
     private void hideActionBar() {
         View decorView = getWindow().getDecorView();
         // Hide the status bar.

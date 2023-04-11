@@ -21,10 +21,13 @@ public class Player implements Serializable {
     public transient PlayerThread playerThread;
     // Player's thread
     public transient Thread thread;
-
+    // World level
     private int worldLevel;
+    // Coins
     public int coins;
+    // Horns
     public int horns;
+    // Will upgrade world level
     public boolean willUpgradeWorldLevel = false;
 
 
@@ -159,11 +162,11 @@ public class Player implements Serializable {
     /**
      * This function return the cost for each level of upgrade goal
      *
-     * @param goal
-     * @return
+     * @param goal the level of upgrade goal
+     * @return the cost for each level of upgrade goal
      */
-    public static int upgradeCost(int goal){
-        switch (goal){
+    public static int upgradeCost(int goal) {
+        switch (goal) {
             case 2:
                 return 60;
             case 3:
@@ -179,6 +182,11 @@ public class Player implements Serializable {
         }
     }
 
+    /**
+     * return world level of this player
+     *
+     * @return world level
+     */
     public int getWorldLevel() {
         return worldLevel;
     }
@@ -205,7 +213,6 @@ public class Player implements Serializable {
     /**
      * return the corresponding resources for this player, with the Integer[] array's
      * first index being coin resources, second index being horn resources.
-     * @return
      */
     public void updateResources(ArrayList<Territory> territories) {
         int coins = 0;
@@ -218,23 +225,46 @@ public class Player implements Serializable {
         this.horns += horns;
     }
 
+    /**
+     * Get coins
+     *
+     * @return coins
+     */
     public int getCoins() {
         return this.coins;
     }
 
+    /**
+     * Get horns
+     *
+     * @return horns
+     */
     public int getHorns() {
         return this.horns;
     }
 
+    /**
+     * Upgrade world level
+     */
     public void upgradeWorldLevel() {
         this.worldLevel++;
         this.horns -= upgradeCost(this.worldLevel);
     }
 
+    /**
+     * Set horns expense
+     *
+     * @param horns horns
+     */
     public void setExpenseHorns(int horns) {
         this.horns -= horns;
     }
 
+    /**
+     * Set coins expense
+     *
+     * @param coins coins
+     */
     public void setExpenseCoins(int coins) {
         this.coins -= coins;
     }

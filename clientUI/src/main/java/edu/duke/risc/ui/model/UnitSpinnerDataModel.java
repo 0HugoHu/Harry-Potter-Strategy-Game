@@ -4,9 +4,16 @@ import edu.duke.risc.R;
 import edu.duke.shared.unit.UnitType;
 
 public class UnitSpinnerDataModel {
+    // Unit name
     String unitName;
+    // Unit image
     int drawableId;
 
+    /**
+     * Constructor
+     *
+     * @param unitName unit name
+     */
     public UnitSpinnerDataModel(String unitName) {
         this.unitName = unitName;
         switch (unitName) {
@@ -37,10 +44,20 @@ public class UnitSpinnerDataModel {
         }
     }
 
+    /**
+     * Get unit name
+     *
+     * @return unit name
+     */
     public String getName() {
         return unitName;
     }
 
+    /**
+     * Get unit image
+     *
+     * @return unit image
+     */
     public int getDrawableId() {
         return drawableId;
     }

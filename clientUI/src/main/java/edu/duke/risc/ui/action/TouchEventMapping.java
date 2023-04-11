@@ -177,7 +177,12 @@ public class TouchEventMapping {
         return y < this.mapBorder[0] || y > this.mapBorder[2] || x < this.mapBorder[3] || x > this.mapBorder[1];
     }
 
-
+    /**
+     * Check if the string is a valid action
+     *
+     * @param string string to be checked
+     * @return if the string is a valid action
+     */
     public static boolean checkIsAction(String string) {
         for (TouchEvent event : TouchEvent.values()) {
             if (event.name().equals(string)) {
@@ -187,6 +192,15 @@ public class TouchEventMapping {
         return false;
     }
 
+    /**
+     * Get the touch event based on the selected territories
+     *
+     * @param selected1 selected territory 1
+     * @param selected2 selected territory 2
+     * @param terrFrom  territory from
+     * @param map       game map
+     * @return the touch event based on the selected territories
+     */
     public static TouchEvent getAction(String selected1, String selected2, String terrFrom, GameMap map) {
         if (selected1 == null || selected2 == null) return null;
         // Property and Unit info

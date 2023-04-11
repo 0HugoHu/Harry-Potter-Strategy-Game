@@ -15,20 +15,32 @@ import edu.duke.risc.R;
 import edu.duke.risc.ui.model.UnitDataModel;
 
 public class UnitDataAdapter extends ArrayAdapter<UnitDataModel> implements View.OnClickListener {
+    // data set
     private final ArrayList<UnitDataModel> dataSet;
-
+    // Context
     Context mContext;
+    // CostListener
     private UnitDataAdapter.CostListener costListener;
 
+    /**
+     * Set the cost listener
+     *
+     * @param costListener the cost listener
+     */
     public void setCostListener(UnitDataAdapter.CostListener costListener) {
         this.costListener = costListener;
     }
 
+    /**
+     * The cost listener
+     */
     public interface CostListener {
         void onCostChange();
     }
 
-    // View lookup cache
+    /**
+     * Set the view holder
+     */
     private static class ViewHolder {
         TextView name;
         ShapedImageView image;
@@ -37,18 +49,36 @@ public class UnitDataAdapter extends ArrayAdapter<UnitDataModel> implements View
         TextView textView;
     }
 
+    /**
+     * Constructor
+     *
+     * @param data    the data
+     * @param context the context
+     */
     public UnitDataAdapter(ArrayList<UnitDataModel> data, Context context) {
         super(context, R.layout.order_item, data);
         this.dataSet = data;
         this.mContext = context;
     }
 
+    /**
+     * On click
+     *
+     * @param v the view
+     */
     @Override
     public void onClick(View v) {
 
     }
 
-
+    /**
+     * Get the view
+     *
+     * @param position    the position
+     * @param convertView the convert view
+     * @param parent      the parent
+     * @return the view
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
@@ -128,6 +158,11 @@ public class UnitDataAdapter extends ArrayAdapter<UnitDataModel> implements View
         return convertView;
     }
 
+    /**
+     * Get the total number
+     *
+     * @return the total number
+     */
     public int getTotalNumber() {
         int total_cost = 0;
         for (UnitDataModel dataModel : dataSet) {

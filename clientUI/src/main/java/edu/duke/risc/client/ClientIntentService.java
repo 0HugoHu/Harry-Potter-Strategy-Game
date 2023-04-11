@@ -20,13 +20,14 @@ import edu.duke.shared.Game;
 import edu.duke.shared.helper.State;
 
 public class ClientIntentService extends IntentService {
-
     // Status codes
     public static final int STATUS_FINISHED = 1;
-
+    // Result codes
     private Game game;
+    // Lock for player order
     private static final Object receivedPlayerOrder = new Object();
 
+    // Broadcast Receiver
     BroadcastReceiver br = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -37,10 +38,18 @@ public class ClientIntentService extends IntentService {
         }
     };
 
+    /**
+     * Creates an IntentService.  Invoked by your subclass's constructor.
+     */
     public ClientIntentService() {
         super(ClientIntentService.class.getName());
     }
 
+    /**
+     * onHandleIntent
+     *
+     * @param intent intent
+     */
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         // Register Broadcast Receiver
@@ -87,6 +96,12 @@ public class ClientIntentService extends IntentService {
         clientAdapter.close();
     }
 
+    /**
+     * Fetch result from server
+     *
+     * @param clientAdapter clientAdapter
+     * @param receiver      receiver
+     */
     private void fetchResult(ClientAdapter clientAdapter, ResultReceiver receiver) {
         this.game = clientAdapter.getNewGame();
         this.game.setPlayerName(clientAdapter.getPlayerName());
@@ -96,6 +111,11 @@ public class ClientIntentService extends IntentService {
         receiver.send(STATUS_FINISHED, b);
     }
 
+    /**
+     * Send turn end to server
+     *
+     * @param receiver receiver
+     */
     private void sendTurnEnd(ResultReceiver receiver) {
         System.out.println("Turn End received");
         Bundle b = new Bundle();
@@ -103,6 +123,12 @@ public class ClientIntentService extends IntentService {
         receiver.send(STATUS_FINISHED, b);
     }
 
+    /**
+     * Initialize unit
+     *
+     * @param clientAdapter clientAdapter
+     * @param receiver      receiver
+     */
     private void initUnit(ClientAdapter clientAdapter, ResultReceiver receiver) {
         fetchResult(clientAdapter, receiver);
         try {

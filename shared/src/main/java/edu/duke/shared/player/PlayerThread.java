@@ -31,9 +31,9 @@ public class PlayerThread implements Runnable, Serializable {
     private Game serverGame;
     // Player's id
     private final int playerId;
-
+    // For testing
     public int forTesting;
-
+    // Lock for server game
     private final ReentrantLock serverGameLock = new ReentrantLock();
 
     /**
@@ -76,10 +76,10 @@ public class PlayerThread implements Runnable, Serializable {
         this.serverGame = serverGame;
     }
 
-    public HashMap<UnitType,Integer> convertToMap(ArrayList<Unit> units){
-        HashMap<UnitType,Integer> map=new HashMap<>();
-        for(Unit unit:units){
-            map.put(unit.getType(),map.getOrDefault(unit.getType(),0)+1);
+    public HashMap<UnitType, Integer> convertToMap(ArrayList<Unit> units) {
+        HashMap<UnitType, Integer> map = new HashMap<>();
+        for (Unit unit : units) {
+            map.put(unit.getType(), map.getOrDefault(unit.getType(), 0) + 1);
         }
         return map;
     }
@@ -89,7 +89,7 @@ public class PlayerThread implements Runnable, Serializable {
      */
     @Override
     public void run() {
-        if (state != State.WAITING_TO_JOIN  && state != State.GAME_OVER && forTesting == 0) {
+        if (state != State.WAITING_TO_JOIN && state != State.GAME_OVER && forTesting == 0) {
             GameObject obj = new GameObject(this.socket);
             this.currGame = (Game) obj.decodeObj();
         }
@@ -111,8 +111,8 @@ public class PlayerThread implements Runnable, Serializable {
                 int totalUnits = 0;
                 for (Territory t : terr_set) {
                     this.serverGame.getMap().getTerritory(t.getName()).removeAllUnits();
-                    for(Map.Entry<UnitType,Integer> entry:convertToMap(this.currGame.getMap().getTerritory(t.getName()).getUnits()).entrySet()){
-                        for(int i=0;i<entry.getValue();i++){
+                    for (Map.Entry<UnitType, Integer> entry : convertToMap(this.currGame.getMap().getTerritory(t.getName()).getUnits()).entrySet()) {
+                        for (int i = 0; i < entry.getValue(); i++) {
                             this.serverGame.getMap().getTerritory(t.getName()).addUnit(entry.getKey());
                         }
                     }
@@ -129,7 +129,7 @@ public class PlayerThread implements Runnable, Serializable {
                 System.out.println("Received player " + this.playerId + "'s action list.");
 
                 if (this.currGame.isForceEndGame()) {
-                    for (Territory t: this.serverGame.getMap().getTerritories()) {
+                    for (Territory t : this.serverGame.getMap().getTerritories()) {
                         if (t.getOwner().equals(this.serverGame.getPlayerList().get(this.playerId).getPlayerName())) {
                             t.removeAllUnits();
                         }
@@ -182,7 +182,6 @@ public class PlayerThread implements Runnable, Serializable {
                         this.serverGame.getPlayerList().get(this.playerId).upgradeWorldLevel();
                     }
                 }
-
                 break;
             case TURN_END:
                 System.out.println("Received player " + this.playerId + "'s turn end confirmation.");

@@ -9,6 +9,7 @@ public class Unit implements Serializable {
     private final UnitType type;
     // Unit attack power
     private final int bonus;
+    // Unit cost
     private final int cost;
 
     /**
@@ -22,36 +23,36 @@ public class Unit implements Serializable {
         // Switch case for different types of units
         switch (type) {
             case GNOME:
-                this.bonus=0;
-                this.cost=0;
+                this.bonus = 0;
+                this.cost = 0;
                 break;
             case DWARF:
-                this.bonus=1;
-                this.cost=3;
+                this.bonus = 1;
+                this.cost = 3;
                 break;
             case HOUSE_ELF:
-                this.bonus=3;
-                this.cost=11;
+                this.bonus = 3;
+                this.cost = 11;
                 break;
             case GOBLIN:
-                this.bonus=5;
-                this.cost=30;
+                this.bonus = 5;
+                this.cost = 30;
                 break;
             case VAMPIRE:
-                this.bonus=8;
-                this.cost=55;
+                this.bonus = 8;
+                this.cost = 55;
                 break;
             case CENTAUR:
-                this.bonus=11;
-                this.cost=90;
+                this.bonus = 11;
+                this.cost = 90;
                 break;
             case WEREWOLF:
-                this.bonus=15;
-                this.cost=140;
+                this.bonus = 15;
+                this.cost = 140;
                 break;
             default:
-                this.bonus=0;
-                this.cost=0;
+                this.bonus = 0;
+                this.cost = 0;
                 break;
         }
     }
@@ -59,13 +60,13 @@ public class Unit implements Serializable {
     /**
      * Initialize Unit by name and attack/defense/hit point power
      *
-     * @param name    Unit name
-     * @param bonus   Unit attack/defense/hit point power
+     * @param name  Unit name
+     * @param bonus Unit attack/defense/hit point power
      */
-    public Unit(String name,int bonus) {
+    public Unit(String name, int bonus) {
         this.type = convertStringToUnitType(name);
-        this.bonus=bonus;
-        this.cost=0;
+        this.bonus = bonus;
+        this.cost = 0;
     }
 
     /**
@@ -77,17 +78,32 @@ public class Unit implements Serializable {
         return this.type;
     }
 
-
-    public int getBonus(){
+    /**
+     * Get unit attack/defense/hit point power
+     *
+     * @return unit attack/defense/hit point power
+     */
+    public int getBonus() {
         return this.bonus;
     }
 
-    public int getCost(){
+    /**
+     * Get unit cost
+     *
+     * @return unit cost
+     */
+    public int getCost() {
         return this.cost;
     }
 
-    public String convertUnitTypeToString(UnitType type){
-        switch (type){
+    /**
+     * Convert UnitType to string
+     *
+     * @param type UnitType
+     * @return String
+     */
+    public String convertUnitTypeToString(UnitType type) {
+        switch (type) {
             case GNOME:
                 return "Gnome";
             case DWARF:
@@ -106,7 +122,6 @@ public class Unit implements Serializable {
                 return "Gnome";
         }
     }
-
 
     /**
      * Convert string to UnitType
@@ -135,6 +150,12 @@ public class Unit implements Serializable {
         }
     }
 
+    /**
+     * Get unit name
+     *
+     * @param type UnitType
+     * @return unit name
+     */
     public static String getName(UnitType type) {
         switch (type) {
             case GNOME:
@@ -156,6 +177,12 @@ public class Unit implements Serializable {
         }
     }
 
+    /**
+     * Get unit attack/defense/hit point power
+     *
+     * @param type UnitType
+     * @return unit attack/defense/hit point power
+     */
     public static ArrayList<String> getNextLevel(UnitType type, int level) {
         ArrayList<String> nextLevel = new ArrayList<>();
         switch (type) {

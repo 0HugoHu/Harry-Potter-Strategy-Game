@@ -16,10 +16,12 @@ import edu.duke.risc.R;
 import edu.duke.risc.ui.model.UnitUpgradeDataModel;
 
 public class UnitUpgradeDataAdapter extends ArrayAdapter<UnitUpgradeDataModel> implements View.OnClickListener {
-
+    // Context
     Context mContext;
 
-    // View lookup cache
+    /**
+     * Set the view holder
+     */
     private static class ViewHolder {
         TextView name;
         ShapedImageView image;
@@ -28,18 +30,36 @@ public class UnitUpgradeDataAdapter extends ArrayAdapter<UnitUpgradeDataModel> i
 
     }
 
+    /**
+     * Constructor
+     *
+     * @param data    the data
+     * @param context the context
+     */
     public UnitUpgradeDataAdapter(ArrayList<UnitUpgradeDataModel> data, Context context) {
         super(context, R.layout.order_item, data);
         this.mContext = context;
 
     }
 
+    /**
+     * On click
+     *
+     * @param v the view
+     */
     @Override
     public void onClick(View v) {
 
     }
 
-
+    /**
+     * Get the view
+     *
+     * @param position    the position
+     * @param convertView the convert view
+     * @param parent      the parent
+     * @return the view
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
