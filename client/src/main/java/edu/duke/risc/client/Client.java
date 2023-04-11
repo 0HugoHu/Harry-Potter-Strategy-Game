@@ -5,6 +5,7 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Scanner;
 
 import edu.duke.shared.Game;
@@ -39,6 +40,8 @@ public class Client {
     private final Socket clientSocket;
     // Scanner
     Scanner scanner = new Scanner(System.in);
+    // Flag for mock client
+    private boolean isMock = false;
 
     // Flag for client who lost the game
     private boolean isLoser = false;
@@ -51,13 +54,18 @@ public class Client {
     public static void main(String[] args) {
         // Create new client
         Client client = new Client(args[0]);
+        client.isMock = args[1].equals("mock");
 
         // Init client
-        client.initClient();
+        client.initClient(client.isMock);
 
         // Start game
         while (client.game.getGameState() != State.GAME_OVER) {
-            client.playOneTurn();
+            if (client.isMock) {
+                client.playOneTurnMock();
+            } else {
+                client.playOneTurn();
+            }
         }
 
         // End Game
@@ -69,15 +77,15 @@ public class Client {
      * Initialize Client
      */
     public Client(String HOST) {
-        this(HOST,null);
+        this(HOST, null);
     }
 
     /*
      * Initialize Client by player name
      * @param playerName Player name
      */
-    public Client(String HOST,String playerName) {
-        this.HOST=HOST;
+    public Client(String HOST, String playerName) {
+        this.HOST = HOST;
         this.playerName = playerName;
         System.out.println("Created a player.\n");
         this.clientSocket = connectSocket(HOST, PORT);
@@ -137,13 +145,13 @@ public class Client {
     /*
      * Initialize client
      */
-    private void initClient() {
+    private void initClient(boolean isMock) {
         System.out.println("Currently waiting for other players...");
         // Wait until all players have joined the game
         waitForPlayers();
 
         // Send player name
-        sendPlayerName();
+        sendPlayerName(isMock);
 
         // Client receive game from the server
         Game currGame = getGame();
@@ -154,8 +162,14 @@ public class Client {
         System.out.println("Your game ID is: " + this.playerID + "\n");
 
         // Units initialization
+        if (isMock) {
+            setupUnitsMock();
+        } else {
+            BuiltInSetUpUnits();
+            //setupUnits();
+        }
         //setupUnits();
-        BuiltInSetUpUnits();
+
     }
 
     /*
@@ -164,7 +178,7 @@ public class Client {
     private void setupUnits() {
         DisplayMap displayMap = new DisplayMap(this.game, this.playerID);
         System.out.println(displayMap.showMap());
-        System.out.println(displayMap.showUnits(true,null,null));
+        System.out.println(displayMap.showUnits(true, null, null));
 
         System.out.println("Please set up your units. You have " + numUnits + " units in total.\n");
         int totalUnits = 0;
@@ -212,12 +226,23 @@ public class Client {
 
     }
 
+    private void setupUnitsMock() {
+        for (int i = 0; i < numUnits; i++)
+            this.game.getMap().getTerritoriesByOwner(this.playerName).get(0).addUnit(new Unit("Normal"));
+        GameObject obj = new GameObject(this.clientSocket);
+        obj.encodeObj(this.game);
+    }
+
     /*
      * Send player name to server
      */
-    private void sendPlayerName() {
+    private void sendPlayerName(boolean isMock) {
         // Read player name
-        readPlayerName();
+        if (isMock) {
+            readPlayerNameMock();
+        } else {
+            readPlayerName();
+        }
         this.game.setPlayerName(this.playerName);
         GameObject obj = new GameObject(this.clientSocket);
         obj.encodeObj(this.game);
@@ -235,6 +260,10 @@ public class Client {
             this.playerName = scanner.nextLine();
         }
         System.out.println("Set player name to " + this.playerName + ".\nWaiting for other players...\n");
+    }
+
+    private void readPlayerNameMock() {
+        this.playerName = "Player" + (int) (Math.random() * 10000);
     }
 
     /*
@@ -263,7 +292,7 @@ public class Client {
         if (!this.isLoser) {
             String order;
             while (true) {
-                System.out.println(displayMap.showUnits(false,moveTurn,attackTurn));
+                System.out.println(displayMap.showUnits(false, moveTurn, attackTurn));
                 order = scanner.nextLine();
                 if (order.equals("D"))
                     break;
@@ -275,7 +304,7 @@ public class Client {
                     break;
                 switch (order) {
                     case "M":
-                        orderMove(moveTurn,attackTurn);
+                        orderMove(moveTurn, attackTurn);
                         break;
                     case "A":
                         orderAttack2(attackTurn,moveTurn);
@@ -295,6 +324,30 @@ public class Client {
         receiveTurnResult();
     }
 
+    public void playOneTurnMock() {
+        // Client receive game from the server
+        this.game = getGame();
+
+        // Read instructions
+        MoveTurn moveTurn = new MoveTurn(this.game.getMap(), this.game.getTurn(), this.playerName);
+        AttackTurn attackTurn = new AttackTurn(this.game.getMap(), this.game.getTurn(), this.playerName);
+
+        Random random = new Random();
+        try {
+            Thread.sleep(random.nextInt(5000));
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Done
+        this.game.addToTurnMap(this.playerID, moveTurn, attackTurn);
+        GameObject obj = new GameObject(this.clientSocket);
+        obj.encodeObj(this.game);
+
+        // Receive turn result
+        receiveTurnResult();
+    }
+
     /*
      * Receive turn result
      */
@@ -308,12 +361,15 @@ public class Client {
             System.out.println("You have lost. Now you are watching the game.\n");
             isLoser = true;
         }
+        // Confirm turn
+        GameObject obj = new GameObject(this.clientSocket);
+        obj.encodeObj(this.game);
     }
 
     /*
      * Order move from player's console
      */
-    private void orderMove(MoveTurn moveTurn,AttackTurn attackTurn) {
+    private void orderMove(MoveTurn moveTurn, AttackTurn attackTurn) {
         System.out.println("Please enter the name of the territory you want to move from:\n");
         String from = scanner.nextLine();
         System.out.println("Please enter the name of the territory you want to move to:\n");
@@ -330,14 +386,17 @@ public class Client {
                 String operation = scanner.nextLine();
                 if (operation.equals("X")) return;
                 if (operation.equals("C")) {
-                    orderMove(moveTurn,attackTurn);
+                    orderMove(moveTurn, attackTurn);
                     break;
                 }
             }
         }
     }
 
-    private void orderAttack(AttackTurn attackTurn,MoveTurn moveTurn) {
+    /*
+     * Order attack from player's console
+     */
+    private void orderAttack(AttackTurn attackTurn, MoveTurn moveTurn) {
         System.out.println("Please enter the name of the territory you want to attack from:\n");
         String from = scanner.nextLine();
         System.out.println("Please enter the name of the territory you want to attack to:\n");
@@ -354,7 +413,7 @@ public class Client {
                 String operation = scanner.nextLine();
                 if (operation.equals("X")) return;
                 if (operation.equals("C")) {
-                    orderAttack(attackTurn,moveTurn);
+                    orderAttack(attackTurn, moveTurn);
                     break;
                 }
             }

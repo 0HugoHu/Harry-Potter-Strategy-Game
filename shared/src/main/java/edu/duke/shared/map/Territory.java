@@ -230,8 +230,6 @@ public class Territory implements Serializable {
         return false;
     }
 
-
-
     /**
      * Get the name of this territory
      *
@@ -274,6 +272,16 @@ public class Territory implements Serializable {
             return false;
         this.playerOwner = player;
         return true;
+    }
+
+
+    /**
+     * return the playerowner of this territory
+     *
+     * @return player
+     */
+    public Player getPlayerOwner() {
+        return playerOwner;
     }
 
 
@@ -362,6 +370,7 @@ public class Territory implements Serializable {
     }
 
 
+
     /**
      * Test if a territory is adjacent to this territory
      *
@@ -394,10 +403,9 @@ public class Territory implements Serializable {
 
     /**
      * return the details of a territory
-     *
      * @return
      */
-    public String getDetails() {
+    public String getDetails(){
         return details;
     }
 
@@ -406,11 +414,11 @@ public class Territory implements Serializable {
     }
 
     public void addCoins(int coins) {
-        this.coins += coins;
+        this.coins +=coins;
     }
 
     public void minusCoins(int coins) {
-        this.coins -= coins;
+        this.coins -=coins;
     }
 
 
@@ -419,50 +427,68 @@ public class Territory implements Serializable {
     }
 
     public void addHorns(int horns) {
-        this.horns += horns;
+        this.horns +=horns;
     }
 
     public void minusHorns(int horns) {
-        this.horns -= horns;
+        this.horns -=horns;
     }
 
-    public boolean[] getReources() {
+    public boolean[] getReources(){
         return this.ResourcePro;
     }
 
     /**
      * set the land to be able to produce unicorn horns
      */
-    public void setUnicornLand() {
-        ResourcePro[0] = true;
+    public void setUnicornLand(){
+        ResourcePro[0]=true;
     }
 
     /**
      * set the land to be able to produce silver coins
      */
-    public void setNifflerLand() {
-        ResourcePro[1] = true;
+    public void setNifflerLand(){
+        ResourcePro[1]=true;
     }
 
     /**
      * check if this land produces Unicorn horn
-     *
      * @return
      */
-    public boolean checkUnicornLand() {
-        if (ResourcePro[0]) {
+    public boolean checkUnicornLand(){
+        if(ResourcePro[0]){
             return true;
         }
         return false;
     }
 
-    public String getType() {
+    public String getType(){
         return this.type;
     }
 
+    public String getType_HPStyle() {
+        switch (this.type) {
+            case "plain":
+                return "Enchanted Plain";
+            case "cliff":
+                return "Spellbound Cliff";
+            case "canyon":
+                return "Arcane Canyon";
+            case "desert":
+                return "Bewitched Desert";
+            case "forest":
+                return "Forbidden Forest";
+            case "mountain":
+                return "Enchanted Wetland";
+            default:
+                return "Not Defined";
+        }
+    }
+
+
     /**
      * set different and assign initial resources to different territories
-     *
      * @param typeName
      */
     public void setType(String typeName) {
@@ -515,6 +541,27 @@ public class Territory implements Serializable {
         }
     }
 
+    public String getDetails_HPStyle() {
+        switch (this.type) {
+            case "plain":
+                return "The grass would sway and whisper ancient secrets, occasionally concealing rare magical creatures and hidden portals to other realms. The plain would be the site of ancient magical battles, with the possibility of discovering enchanted artifacts.";
+            case "cliff":
+                return "These towering cliffs would have an almost magnetic pull, enticing daring magical creatures to live on the cliff face. Flying broomsticks and magical transportation methods would be necessary for access, and the cliffs might even change shape or location to prevent trespassers.";
+            case "canyon":
+                return "A vast, mysterious canyon that contains peculiar magical ecosystems and is home to an array of magical creatures. The canyon walls might be etched with ancient runes, while the wind carries the faint echoes of long-forgotten spells.";
+            case "desert":
+                return "A seemingly endless expanse of sand with magical mirages, hidden oases, and rare magical flora that can survive the harsh conditions. Sandstorms in this desert are not only natural but could also be the result of ancient magical curses or protective enchantments.";
+            case "forest":
+                return "An already magical terrain in the Harry Potter universe, the Forbidden Forest is a dense and dangerous place filled with magical creatures, some friendly and others hostile. Dark magic, ancient secrets, and hidden paths abound, making it a place of wonder and fear.";
+            case "mountain":
+                return "A magical wetland where the water's surface shimmers with an otherworldly glow, hiding countless magical creatures below. The flora would have magical properties, and the area would be a haven for potion ingredients and rare creatures like magical amphibians and insects.";
+            case "wetland":
+                return "";
+            default:
+                return "Not Defined";
+        }
+    }
+
     /**
      * check if this land produces silver coin
      *
@@ -543,7 +590,7 @@ public class Territory implements Serializable {
             s1 += coord[0];
             s2 += coord[1];
         }
-        return new int[]{s1/coords.size(),s2/coords.size()};
+        return new int[]{s1 / coords.size(), s2 / coords.size()};
     }
 
     /**

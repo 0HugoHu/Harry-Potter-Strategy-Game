@@ -2,9 +2,11 @@ package edu.duke.shared.player;
 
 import java.io.Serializable;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import edu.duke.shared.Game;
 import edu.duke.shared.helper.State;
 import edu.duke.shared.map.Territory;
 
@@ -23,8 +25,9 @@ public class Player implements Serializable {
     public transient Thread thread;
 
     private int worldLevel;
-    private int coins;
+    public int coins;
     private int horns;
+    public boolean willUpgradeWorldLevel = false;
 
 
     /**
@@ -42,18 +45,20 @@ public class Player implements Serializable {
         this.playerThread = new PlayerThread(this.socket, this.playerId);
         this.thread = new Thread(this.playerThread);
         this.thread.start();
-        this.worldLevel=1;
-        this.coins=0;
-        this.horns=0;
+        this.worldLevel = 1;
     }
 
     /**
      * Initialize the Player by name
      *
-     * @param state game state
+     * @param serverGame server game
      */
-    public void start(State state) {
-        this.playerThread = new PlayerThread(state, this.socket, this.playerId);
+    public void start(Game serverGame) {
+        this.playerThread = new PlayerThread(serverGame.getGameState(), this.socket, this.playerId);
+        this.playerThread.setServerGame(serverGame);
+        if (this.thread != null) {
+            this.thread.interrupt();
+        }
         this.thread = new Thread(this.playerThread);
         this.thread.start();
     }
@@ -155,6 +160,7 @@ public class Player implements Serializable {
 
     /**
      * This function return the cost for each level of upgrade goal
+     *
      * @param goal
      * @return
      */
@@ -175,8 +181,8 @@ public class Player implements Serializable {
         }
     }
 
-    public int getWorldLevel(){
-        return  worldLevel;
+    public int getWorldLevel() {
+        return worldLevel;
     }
 
     /**
@@ -203,32 +209,32 @@ public class Player implements Serializable {
      * first index being coin resources, second index being horn resources.
      * @return
      */
-    public Integer[] getAllRes(){
-        Integer[] count=new Integer[]{0,0};
-        for(Territory terr:playerTerrs){
-            count[0]+=terr.getCoins();
-            count[1]+= terr.getHorns();
+    public void updateResources(ArrayList<Territory> territories) {
+        int coins = 0;
+        int horns = 0;
+        for (Territory t : territories) {
+            coins += t.getCoins();
+            horns += t.getHorns();
         }
         this.coins += coins;
         this.horns += horns;
-        return count;
     }
 
-    public int getCoins(){
-        return getAllRes()[0];
+    public int getCoins() {
+        return this.coins;
     }
 
-    public int getHorns(){
-        return getAllRes()[1];
+    public int getHorns() {
+        return this.horns;
     }
 
-    public void setCoins(){
-        this.coins=getCoins();
+    public void upgradeWorldLevel() {
+        this.worldLevel++;
+        this.horns -= upgradeCost(this.worldLevel);
     }
 
-    public void setHorns(){
-        this.horns=getHorns();
+    public void setExpenses(int coins) {
+        this.coins -= coins;
     }
-
 
 }

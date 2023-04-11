@@ -2,7 +2,11 @@ package edu.duke.shared.player;
 
 import java.io.Serializable;
 import java.net.Socket;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.concurrent.locks.ReentrantLock;
 
 import edu.duke.shared.Game;
 import edu.duke.shared.helper.GameObject;
@@ -28,6 +32,8 @@ public class PlayerThread implements Runnable, Serializable {
     private final int playerId;
 
     public int forTesting;
+
+    private final ReentrantLock serverGameLock = new ReentrantLock();
 
     /**
      * Initialize the PlayerThread
@@ -82,7 +88,7 @@ public class PlayerThread implements Runnable, Serializable {
      */
     @Override
     public void run() {
-        if (state != State.WAITING_TO_JOIN && state != State.TURN_END && state != State.GAME_OVER && forTesting == 0) {
+        if (state != State.WAITING_TO_JOIN  && state != State.GAME_OVER && forTesting == 0) {
             GameObject obj = new GameObject(this.socket);
             this.currGame = (Game) obj.decodeObj();
         }
@@ -121,18 +127,27 @@ public class PlayerThread implements Runnable, Serializable {
             case TURN_BEGIN:
                 System.out.println("Received player " + this.playerId + "'s action list.");
 
-                int turnIndex = this.currGame.getTurn();
-                MoveTurn moveTurn = (MoveTurn) Objects.requireNonNull(this.currGame.getTurnList().get(turnIndex).get(this.playerId)).get(0);
-                AttackTurn attackTurn = (AttackTurn) Objects.requireNonNull(this.currGame.getTurnList().get(turnIndex).get(this.playerId)).get(1);
-                if (!Validation.checkMoves(moveTurn)) {
-                    System.out.println("The move turn from player " + this.playerId + " is illegal.");
-                }
-                moveTurn.doMovePhase();
-                if (!Validation.checkAttacks(attackTurn)) {
-                    System.out.println("The attack turn from player " + this.playerId + " is illegal.");
-                }
-                //TODO: actions if move or attack validation on server fail
-
+                if (this.currGame.isForceEndGame()) {
+                    for (Territory t: this.serverGame.getMap().getTerritories()) {
+                        if (t.getOwner().equals(this.serverGame.getPlayerList().get(this.playerId).getPlayerName())) {
+                            t.removeAllUnits();
+                        }
+                    }
+                    this.serverGame.addLoserId(this.playerId);
+                } else {
+                    int turnIndex = this.currGame.getTurn();
+                    MoveTurn moveTurn = (MoveTurn) this.currGame.getTurnList().get(turnIndex).get(this.playerId).get(0);
+                    AttackTurn attackTurn = (AttackTurn) this.currGame.getTurnList().get(turnIndex).get(this.playerId).get(1);
+                    if (moveTurn == null || attackTurn == null) {
+                        System.out.println("The move turn or attack turn from player " + this.playerId + " is null.");
+                    }
+                    if (!Validation.checkMoves(moveTurn)) {
+                        System.out.println("The move turn from player " + this.playerId + " is illegal.");
+                    }
+                    moveTurn.doMovePhase();
+                    if (!Validation.checkAttacks(attackTurn)) {
+                        System.out.println("The attack turn from player " + this.playerId + " is illegal.");
+                    }
 
                 // Merge Unit
                 Player p = this.serverGame.getPlayerList().get(this.playerId);
@@ -150,20 +165,29 @@ public class PlayerThread implements Runnable, Serializable {
                 }
 
 
-                // Merge all turns from different players
-                ArrayList<Turn> newTurns = this.currGame.getTurnList().get(turnIndex).get(this.playerId);
-                // For the first player, add a new turn
-                if (this.serverGame.getTurnList().size() == turnIndex || forTesting == 2) {
-                    HashMap<Integer, ArrayList<Turn>> newTurnsMap = new HashMap<>();
-                    newTurnsMap.put(this.playerId, newTurns);
-                    this.serverGame.getTurnList().add(newTurnsMap);
-                } else {
-                    this.serverGame.getTurnList().get(turnIndex).put(this.playerId, newTurns);
+                    // Merge all turns from different players
+                    ArrayList<Turn> newTurns = this.currGame.getTurnList().get(turnIndex).get(this.playerId);
+                    // For the first player, add a new turn
+                    if (this.serverGame.getTurnList().size() == turnIndex || forTesting == 2) {
+                        HashMap<Integer, ArrayList<Turn>> newTurnsMap = new HashMap<>();
+                        newTurnsMap.put(this.playerId, newTurns);
+                        this.serverGame.getTurnList().add(newTurnsMap);
+                    } else {
+                        this.serverGame.getTurnList().get(turnIndex).put(this.playerId, newTurns);
+                    }
+
+                    // Copy the player's property
+                    this.serverGame.getPlayerList().get(this.playerId).coins = this.currGame.getPlayerList().get(this.playerId).coins;
+
+                    // Copy the player's property
+                    if (this.currGame.getPlayerList().get(this.playerId).willUpgradeWorldLevel) {
+                        this.serverGame.getPlayerList().get(this.playerId).upgradeWorldLevel();
+                    }
                 }
 
-                // Attack cannot be done here
                 break;
             case TURN_END:
+                System.out.println("Received player " + this.playerId + "'s turn end confirmation.");
             case GAME_OVER:
                 break;
         }

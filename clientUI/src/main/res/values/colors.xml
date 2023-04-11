@@ -7,4 +7,37 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="global_prompt_shadow">#88000000</color>
+    <color name="global_prompt_text">#FFEEEEEE</color>
+
+    <color name="transparent">#00000000</color>
+
+    <color name="text_white">#FFFEFEFE</color>
+
+    <color name="ui_gold">#FFEABE62</color>
+    <color name="ui_silver">#FFC0C0C0</color>
+    <color name="ui_bronze">#FFCD7F32</color>
+    <color name="ui_blue_light">#FF87CEEB</color>
+
+    <color name="ui_ravenclaw">#0070E1</color>
+    <color name="ui_gryffindor">#DC0000</color>
+    <color name="ui_hufflepuff">#DDA600</color>
+    <color name="ui_slytherin">#009700</color>
+
+    <color name="map_ravenclaw">#44003366</color>
+    <color name="map_gryffindor">#44660000</color>
+    <color name="map_hufflepuff">#44CC9900</color>
+    <color name="map_slytherin">#44003300</color>
+
+
+    <color name="order_background">#FFEEEEEE</color>
+    <color name="order_shadow">#55000000</color>
+    <color name="order_title">#FF000000</color>
+    <color name="order_text">#FF000000</color>
+    <color name="order_text_gray">#AA000000</color>
+    <color name="error_prompt">#FFD32F2F</color>
+    <color name="order_text_green">#FF009700</color>
+    <color name="order_text_white">#EEFEFEFE</color>
+
 </resources>
