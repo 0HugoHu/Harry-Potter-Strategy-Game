@@ -81,6 +81,13 @@
     <string name="hufflepuff">Hufflepuff</string>
     <string name="slytherin">Slytherin</string>
 
+    <string name="new_game">New</string>
+    <string name="join_game">Join</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="roomid">RoomID</string>
+
+
     <string name="example_unit">Boggarts</string>
     <string name="example_unit2">Dementors</string>
     <string name="example_unit3">Goblins</string>

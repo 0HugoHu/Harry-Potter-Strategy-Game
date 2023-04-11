@@ -73,9 +73,9 @@ public class UnitDataAdapter extends ArrayAdapter<UnitDataModel> implements View
         viewHolder.name.setText(dataModel.getName());
         viewHolder.number.setText(String.valueOf(dataModel.getMax()));
         viewHolder.seekbar.setMax(dataModel.getMax());
-        viewHolder.seekbar.setMin(1);
+        viewHolder.seekbar.setMin(0);
         viewHolder.textView.setText("1");
-        viewHolder.seekbar.setProgress(1);
+        viewHolder.seekbar.setProgress(0);
         viewHolder.seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {

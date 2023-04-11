@@ -9,6 +9,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="global_prompt_shadow">#88000000</color>
+    <color name="login_shadow">#22000000</color>
     <color name="global_prompt_text">#FFEEEEEE</color>
 
     <color name="transparent">#00000000</color>

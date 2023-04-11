@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/login_shadow">
+
+    <VideoView
+        android:id="@+id/videoView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/login_shadow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/username_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="-8dp"
+        android:backgroundTint="@color/order_text_white"
+        android:ems="10"
+        android:fontFamily="@font/gumela"
+        android:hint="@string/username"
+        android:inputType="textPersonName"
+        android:textColor="@color/order_text_white"
+        android:textColorHint="@color/order_text_white"
+        android:textSize="@dimen/order_text"
+        app:layout_constraintBottom_toTopOf="@+id/password_input"
+        app:layout_constraintEnd_toEndOf="@+id/join_btn"
+        app:layout_constraintStart_toStartOf="@+id/create_btn" />
+
+    <EditText
+        android:id="@+id/password_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="-8dp"
+        android:backgroundTint="@color/order_text_white"
+        android:ems="10"
+        android:fontFamily="@font/gumela"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:textColor="@color/order_text_white"
+        android:textColorHint="@color/order_text_white"
+        android:textSize="@dimen/order_text"
+        app:layout_constraintBottom_toTopOf="@+id/roomid_input"
+        app:layout_constraintEnd_toEndOf="@+id/join_btn"
+        app:layout_constraintStart_toStartOf="@+id/create_btn" />
+
+    <EditText
+        android:id="@+id/roomid_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/order_text_white"
+        android:ems="10"
+        android:fontFamily="@font/gumela"
+        android:hint="@string/roomid"
+        android:inputType="numberSigned"
+        android:textColor="@color/order_text_white"
+        android:textColorHint="@color/order_text_white"
+        android:textSize="@dimen/order_text"
+        app:layout_constraintBottom_toTopOf="@+id/create_btn"
+        app:layout_constraintEnd_toEndOf="@+id/join_btn"
+        app:layout_constraintStart_toStartOf="@+id/create_btn" />
+
+    <Button
+        android:id="@+id/create_btn"
+        android:layout_width="@dimen/login_btn_width"
+        android:layout_height="@dimen/order_button_height"
+        android:layout_marginStart="350dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/btn_dark_brown"
+        android:fontFamily="@font/gumela"
+        android:gravity="center"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        android:text="@string/new_game"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/join_btn"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/join_btn"
+        android:layout_width="@dimen/login_btn_width"
+        android:layout_height="@dimen/order_button_height"
+        android:layout_marginEnd="350dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/btn_dark_brown"
+        android:fontFamily="@font/gumela"
+        android:gravity="center"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        android:text="@string/join_game"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/create_btn" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="450dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="48dp"
+        android:src="@drawable/title_gold"
+        app:layout_constraintBottom_toTopOf="@+id/username_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

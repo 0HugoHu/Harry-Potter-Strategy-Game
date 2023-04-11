@@ -212,7 +212,12 @@ public class MapTiles {
                         if (distanceFlag) {
                             // Show distance between two territories
                             mPaint.setColor(0xFFF57F17);
-                            canvas.drawText(String.valueOf(map.getShortestDistance(territoryName, territorySelected)), this.paddingLeft + offsetX + x * size, this.paddingTop + offsetY + (y) * size, mPaint);
+                            // If the territory is owned by the player, show the distance
+                            if (owner.equals(selectedOwner)) {
+                                canvas.drawText(String.valueOf(map.getShortestDistance(territoryName, territorySelected)), this.paddingLeft + offsetX + x * size, this.paddingTop + offsetY + (y) * size, mPaint);
+                            } else {
+                                canvas.drawText(String.valueOf(map.getDistance(territoryName, territorySelected)), this.paddingLeft + offsetX + x * size, this.paddingTop + offsetY + (y) * size, mPaint);
+                            }
                         }
                     }
                 }
