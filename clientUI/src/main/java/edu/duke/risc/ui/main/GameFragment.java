@@ -185,7 +185,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     assignUnits();
                     break;
                 case TURN_BEGIN:
-                    updatePlayerValues();
                     unitMoveAttackMap = new HashMap<>();
                     unitUpgradeMap = new HashMap<>();
                     // Update the game view
@@ -197,6 +196,9 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     mGameView.updateGame(this.mGame);
                     if (isLost) {
                         commit();
+                        this.ui_view.findViewById(R.id.ui_side_bar).setVisibility(View.GONE);
+                    } else {
+                        updatePlayerValues();
                     }
                     break;
                 case TURN_END:
@@ -497,10 +499,12 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         tech_upgrade_btn.setOnClickListener(v -> {
             Toast.makeText(context, "Upgrade will be completed in the next turn!", Toast.LENGTH_SHORT).show();
             this.isUpgradedWorldLevel = true;
+            TextView ui_horn = ui_view.findViewById(R.id.ui_horn);
+            ui_horn.setText(String.valueOf(mGame.getPlayer(mGame.getPlayerName()).getHorns() - Player.upgradeCost(this.mGame.getPlayer(mGame.getPlayerName()).getWorldLevel() + 1)));
             base_view.setVisibility(View.GONE);
         });
 
-        // Clear all units
+        // Force end game
         ui_view.findViewById(R.id.ui_player_name_label).setOnClickListener(v -> {
             this.mGame.forceEndGame();
             Toast.makeText(context, "You have surrendered.", Toast.LENGTH_SHORT).show();
@@ -717,8 +721,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             if (this.isUpgradedWorldLevel) {
                 mGame.getPlayer(mGame.getPlayerName()).willUpgradeWorldLevel = true;
             }
-            // Commit all moves and attacks
-            this.mGame.addToTurnMap(this.mGame.getPlayerId(), moveTurn, attackTurn);
             commit();
         });
 
@@ -735,6 +737,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     }
 
     private void commit() {
+        // Commit all moves and attacks
+        this.mGame.addToTurnMap(this.mGame.getPlayerId(), moveTurn, attackTurn);
         // Send the game object to ClientIntentService
         Intent intent = new Intent();
         intent.setAction("RISC_SEND_TO_SERVER");
@@ -928,48 +932,55 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         TextView winner_player_name = winner_view.findViewById(R.id.winner_player_name);
         TextView winner_house = winner_view.findViewById(R.id.winner_house);
         TextView winner_text = winner_view.findViewById(R.id.winner_text1);
-        ImageView winner_house_img = init_view.findViewById(R.id.winner_house_img);
+        ImageView winner_house_img = winner_view.findViewById(R.id.winner_house_img);
 
         winner_player_name.setText(this.mGame.getPlayerName());
+        String house_text = "";
         if (isWin) {
             winner_text.setText(context.getResources().getString(R.string.winner_words));
         } else {
             winner_text.setText(context.getResources().getString(R.string.loser_words));
-            winner_house_img.setImageResource(R.drawable.triwizard_cup_example);
+            winner_house_img.setImageResource(R.drawable.triwizard_cup_lost);
             ui_view.findViewById(R.id.ui_watching).setVisibility(View.VISIBLE);
             ui_view.findViewById(R.id.ui_side_bar).setVisibility(View.GONE);
-
         }
+
         switch (this.mGame.getPlayerId()) {
             case 0:
-                winner_house.setText(context.getResources().getString(R.string.ravenclaw));
+                house_text = context.getResources().getString(R.string.ravenclaw);
                 winner_house.setTextColor(getResources().getColor(R.color.ui_ravenclaw));
                 if (isWin) {
                     winner_house_img.setImageResource(R.drawable.triwizard_cup_b);
                 }
                 break;
             case 3:
-                winner_house.setText(context.getResources().getString(R.string.hufflepuff));
+                house_text = context.getResources().getString(R.string.hufflepuff);
                 winner_house.setTextColor(getResources().getColor(R.color.ui_hufflepuff));
                 if (isWin) {
                     winner_house_img.setImageResource(R.drawable.triwizard_cup_y);
                 }
                 break;
             case 1:
-                winner_house.setText(context.getResources().getString(R.string.gryffindor));
+                house_text = context.getResources().getString(R.string.gryffindor);
                 winner_house.setTextColor(getResources().getColor(R.color.ui_gryffindor));
                 if (isWin) {
                     winner_house_img.setImageResource(R.drawable.triwizard_cup_r);
                 }
                 break;
             case 2:
-                winner_house.setText(context.getResources().getString(R.string.slytherin));
+                house_text = context.getResources().getString(R.string.slytherin);
                 winner_house.setTextColor(getResources().getColor(R.color.ui_slytherin));
                 if (isWin) {
                     winner_house_img.setImageResource(R.drawable.triwizard_cup_g);
                 }
                 break;
         }
+        if (isWin) {
+            house_text += "Wins!";
+        } else {
+            house_text += "Loses!";
+        }
+        winner_house.setText(house_text);
     }
 
     private void updatePlayerValues() {

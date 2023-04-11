@@ -29,10 +29,6 @@ public class ClientIntentService extends IntentService {
     BroadcastReceiver br = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String log = "Action: " + intent.getAction() + "\n" +
-                    "URI: " + intent.toUri(Intent.URI_INTENT_SCHEME) + "\n";
-            System.out.println(log);
-
             game = (Game) intent.getSerializableExtra("game");
             synchronized (receivedPlayerOrder) {
                 receivedPlayerOrder.notifyAll();
@@ -73,8 +69,8 @@ public class ClientIntentService extends IntentService {
             System.out.println("Player order received");
             clientAdapter.updateGame(this.game);
             // Send action to server
-            clientAdapter.playOneTurn(false);
-            fetchResult(clientAdapter, receiver);
+            this.game = clientAdapter.playOneTurn(false);
+            sendTurnEnd(receiver);
         }
 
         // End Game
@@ -86,6 +82,13 @@ public class ClientIntentService extends IntentService {
         this.game = clientAdapter.getNewGame();
         this.game.setPlayerName(clientAdapter.getPlayerName());
         System.out.println("Game received");
+        Bundle b = new Bundle();
+        b.putSerializable("game", this.game);
+        receiver.send(STATUS_FINISHED, b);
+    }
+
+    private void sendTurnEnd(ResultReceiver receiver) {
+        System.out.println("Turn End received");
         Bundle b = new Bundle();
         b.putSerializable("game", this.game);
         receiver.send(STATUS_FINISHED, b);

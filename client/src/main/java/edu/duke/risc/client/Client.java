@@ -336,6 +336,9 @@ public class Client {
             System.out.println("You have lost. Now you are watching the game.\n");
             isLoser = true;
         }
+        // Confirm turn
+        GameObject obj = new GameObject(this.clientSocket);
+        obj.encodeObj(this.game);
     }
 
     /*
