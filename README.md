@@ -48,7 +48,7 @@
 
 Wait for players to connect to the server. You will see the prompt: **"Waiting for players to join..."**.
 
-<img src="assets/Evo1/1.png" />
+<img src="assets/Evo1/1.png" width="400"  />
 
 ### 4.2. Start the Clients
 
