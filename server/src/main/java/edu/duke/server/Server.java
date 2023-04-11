@@ -27,7 +27,7 @@ public class Server {
     // Number of players
     private final static int numPlayers = 4;
     // Number of units at the beginning
-    private final static int numUnits = 24;
+    private final static int numUnits = 48;
     // Gameplay controller
     private final Game game;
     // Server socket

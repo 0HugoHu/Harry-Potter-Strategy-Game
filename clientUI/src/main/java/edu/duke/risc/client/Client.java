@@ -26,7 +26,7 @@ public class Client {
     // Port number
     private final static int PORT = 5410;
     // Number of units at the beginning
-    private final static int numUnits = 24;
+    private final static int numUnits = 48;
     // Player Id on server
     private int playerID;
     // Player name
