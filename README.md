@@ -56,7 +56,7 @@ Wait for players to connect to the server. You will see the prompt: **"Waiting f
 <img src="assets/Evo2/a1.png" width="350" />
 
 ✅ If it runs smoothly, you will see this waiting page here:
-<img src="assets/Evo2/a1.png" width="400" />
+<img src="assets/Evo2/a2.png" width="400" />
 
 ✅ Run the client by command line. You need to input your **"HOST NAME"** as an argument in the command. For example, if your host name is "0.0.0.0" (such as you are running the server on your local machine), you should ues this command: 
 ```bash
