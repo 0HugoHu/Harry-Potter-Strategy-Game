@@ -101,8 +101,6 @@ public class Attack extends Order {
         unitList.put(type,unitList.get(type)-1);
     }
 
-    public void removeUnit(){
-        numUnits--;
-    }
+
 
 }

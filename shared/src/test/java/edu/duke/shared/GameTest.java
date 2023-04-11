@@ -22,6 +22,31 @@ import edu.duke.shared.player.Player;
 
 public class GameTest {
 
+    @Test
+    public void testCal(){
+        Game newGame = new Game(3,24);
+        assertEquals(2,newGame.calculateDis(2,2));
+    }
+
+    @Test
+    public void getBonusFromType(){
+        Game newGame = new Game(3,24);
+        assertEquals(0,newGame.getBonusFromType(UnitType.GNOME));
+        assertEquals(1,newGame.getBonusFromType(UnitType.DWARF));
+        assertEquals(3,newGame.getBonusFromType(UnitType.HOUSE_ELF));
+        assertEquals(5,newGame.getBonusFromType(UnitType.GOBLIN));
+        assertEquals(8,newGame.getBonusFromType(UnitType.VAMPIRE));
+        assertEquals(11,newGame.getBonusFromType(UnitType.CENTAUR));
+        assertEquals(15,newGame.getBonusFromType(UnitType.WEREWOLF));
+    }
+
+    @Test
+    public void testCompare(){
+        Game newGame = new Game(3,24);
+        assertEquals(1,newGame.compareUnitHigh(UnitType.WEREWOLF,UnitType.DWARF));
+    }
+
+
     /**
      * test method for getNumPlayers
      */
@@ -84,6 +109,18 @@ public class GameTest {
         assertTrue(newGame.isLoser(0));
     }
 
+    @Test
+    public void addPlayer(){
+        Game newGame=new Game(2,24);
+        Player p1 = new Player(0, new Socket());
+        p1.setPlayerName("A");
+        newGame.addPlayer(p1);
+        Player p2 = new Player(1, new Socket());
+        p2.setPlayerName("B");
+        newGame.addPlayer(p2);
+        assertEquals(2,newGame.getNumPlayers());
+    }
+
 
 
     @Test
@@ -117,7 +154,9 @@ public class GameTest {
 
         AttackTurn attTurn1=new AttackTurn(m,0,"A");
         MoveTurn moveTurn1=new MoveTurn(m,0,"A");
-        Attack attack3=new Attack("Hogwarts","Beauxbatons",2,"A");
+        HashMap<UnitType,Integer> unitlist1=new HashMap<>();
+        unitlist1.put(UnitType.GNOME,2);
+        Attack attack3=new Attack("Hogwarts","Beauxbatons",unitlist1,"A");
         attTurn1.addAttack(attack3);
         ArrayList<Turn> newTurn1 = new ArrayList<>();
         newTurn1.add(moveTurn1);
@@ -125,7 +164,9 @@ public class GameTest {
 
         AttackTurn attTurn2=new AttackTurn(m,0,"B");
         MoveTurn moveTurn2=new MoveTurn(m,0,"B");
-        Attack attack4=new Attack("Beauxbatons","Grimmauld Place",2,"B");
+        HashMap<UnitType,Integer> unitlist2=new HashMap<>();
+        unitlist2.put(UnitType.GNOME,2);
+        Attack attack4=new Attack("Beauxbatons","Grimmauld Place",unitlist2,"B");
         attTurn2.addAttack(attack4);
         ArrayList<Turn> newTurn2 = new ArrayList<>();
         newTurn2.add(moveTurn2);
@@ -133,8 +174,12 @@ public class GameTest {
 
         AttackTurn attTurn3=new AttackTurn(m,0,"C");
         MoveTurn moveTurn3=new MoveTurn(m,0,"C");
-        Attack attack1=new Attack("Little Whinging","Beauxbatons",2,"C");
-        Attack attack2=new Attack("Ministry of Magic","Beauxbatons",1,"C");
+        HashMap<UnitType,Integer> unitlist3=new HashMap<>();
+        unitlist3.put(UnitType.GNOME,2);
+        HashMap<UnitType,Integer> unitlist4=new HashMap<>();
+        unitlist4.put(UnitType.GNOME,2);
+        Attack attack1=new Attack("Little Whinging","Beauxbatons",unitlist3,"C");
+        Attack attack2=new Attack("Ministry of Magic","Beauxbatons",unitlist4,"C");
         attTurn3.addAttack(attack1);
         attTurn3.addAttack(attack2);
         ArrayList<Turn> newTurn3 = new ArrayList<>();
@@ -152,9 +197,12 @@ public class GameTest {
         newGame.makeAttackList(attTurn1);
         newGame.makeAttackList(attTurn2);
         newGame.makeAttackList(attTurn3);
-//        newGame.doAttack();
-//        newGame.getString();
-//        newGame.printUnit();
+
+        ArrayList<HashMap<Integer, ArrayList<Turn>>> turnlist=newGame.getTurnList();
+        newGame.doAttack();
+        newGame.getString();
+
+
     }
 
 

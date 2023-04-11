@@ -84,6 +84,38 @@ public class ValidationTest {
     }
 
     @Test
+    public void testAllocateTwo(){
+        Game game = new Game(2, 24);
+        GameMap map = game.getMap();
+        Player p1 = new Player(0, new Socket());
+        p1.setPlayerName("A");
+        Player p2 = new Player(1, new Socket());
+        p2.setPlayerName("B");
+        game.addPlayer(p1);
+        game.addPlayer(p2);
+        game.allocateTerritories();
+    }
+
+    @Test
+    public void testAllocateFour(){
+        Game game = new Game(4, 24);
+        GameMap map = game.getMap();
+        Player p1 = new Player(0, new Socket());
+        p1.setPlayerName("A");
+        Player p2 = new Player(1, new Socket());
+        p2.setPlayerName("B");
+        Player p3 = new Player(2, new Socket());
+        p3.setPlayerName("C");
+        Player p4 = new Player(3, new Socket());
+        p3.setPlayerName("D");
+        game.addPlayer(p1);
+        game.addPlayer(p2);
+        game.addPlayer(p3);
+        game.addPlayer(p4);
+        game.allocateTerritories();
+    }
+
+    @Test
     public void checkMove() {
         Game game = new Game(3, 24);
         GameMap map = game.getMap();
