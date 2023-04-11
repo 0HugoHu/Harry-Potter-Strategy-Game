@@ -1,8 +1,10 @@
 package edu.duke.shared.map;
 
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 
 public class GameMap implements Serializable {
     // All territories on this map
@@ -16,6 +18,16 @@ public class GameMap implements Serializable {
     // Territory border coordinates
     // byte pattern code: 0001: top, 0010: right, 0100: bottom, 1000: left
     private final HashMap<String, Byte> borderPoints;
+    private final HashMap<String, Integer> distances;
+
+    public int getDistance(String first, String second) {
+        return distances.get(first + "&" + second);
+    }
+
+    public void putDistance(String first, String second, int dis) {
+        distances.put(first + "&" + second, dis);
+    }
+
 
     /**
      * Initialize Map by height and width
@@ -42,6 +54,7 @@ public class GameMap implements Serializable {
         this.numTerritories = numTerritories;
         this.territories = territories;
         this.borderPoints = new HashMap<>();
+        this.distances = new HashMap<>();
     }
 
     /**
@@ -119,6 +132,14 @@ public class GameMap implements Serializable {
     public String getOwnerByCoord(int y, int x) {
         for (Territory t : this.territories) {
             if (t.contains(new int[]{y, x}))
+                return t.getOwner();
+        }
+        return null;
+    }
+
+    public String getOwnerByTerrName(String name) {
+        for (Territory t : this.territories) {
+            if (t.getName().equals(name))
                 return t.getOwner();
         }
         return null;
@@ -218,8 +239,25 @@ public class GameMap implements Serializable {
                 this.borderPoints.put(y * 100000 + x + "", pattern);
             }
         }
-
         return true;
     }
+
+    /**
+     * return the corresponding resources for the certain player, with the Integer[] array's
+     * first index being coin resources, second index being horn resources.
+     * @param playerID
+     * @return
+     */
+    public Integer[] getResources(int playerID){
+        Integer[] count=new Integer[]{0,0};
+        for(Territory terr:territories){
+            if(terr.getPlayerOwner().getPlayerId()==playerID){
+                count[0]+=terr.getCoins();
+                count[1]+=terr.getHorns();
+            }
+        }
+        return count;
+    }
+
 
 }

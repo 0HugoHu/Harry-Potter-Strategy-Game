@@ -12,6 +12,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import edu.duke.shared.helper.State;
@@ -110,6 +111,41 @@ public class PlayerTest {
         }
         p.start(State.WAITING_TO_JOIN);
         player.threadJoin();
+    }
+
+    @Test
+    public void testWorldLevel(){
+        Player p = new Player(0, new Socket());
+        assertEquals(1,p.getWorldLevel());
+    }
+
+    @Test
+    public void TestupgradeCost(){
+        Player p = new Player(0, new Socket());
+        assertEquals(20,p.upgradeCost(2));
+        assertEquals(40,p.upgradeCost(3));
+        assertEquals(80,p.upgradeCost(4));
+        assertEquals(160,p.upgradeCost(5));
+        assertEquals(320,p.upgradeCost(6));
+    }
+
+    @Test
+    public void testGetResources(){
+        Territory t1 = new Territory("A");
+        Player p1 = new Player(0, new Socket());
+        p1.setPlayerName("Alice");
+
+        t1.changePlayerOwner(p1);
+        t1.addCoins(100);
+        t1.addHorns(40);
+
+        p1.expandTerr(t1);
+
+        assertEquals(100,(int)p1.getAllRes()[0]);
+        assertEquals(40,(int)p1.getAllRes()[1]);
+
+        t1.addCoins(20);
+        assertEquals(120,(int)p1.getAllRes()[0]);
     }
 
 }

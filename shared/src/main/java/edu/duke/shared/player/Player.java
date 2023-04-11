@@ -2,8 +2,11 @@ package edu.duke.shared.player;
 
 import java.io.Serializable;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
+import edu.duke.shared.Game;
 import edu.duke.shared.helper.State;
 import edu.duke.shared.map.Territory;
 
@@ -21,6 +24,11 @@ public class Player implements Serializable {
     // Player's thread
     public transient Thread thread;
 
+    private int worldLevel;
+    public int coins;
+    private int horns;
+    public boolean willUpgradeWorldLevel = false;
+
 
     /**
      * Initialize the Player by name
@@ -37,15 +45,20 @@ public class Player implements Serializable {
         this.playerThread = new PlayerThread(this.socket, this.playerId);
         this.thread = new Thread(this.playerThread);
         this.thread.start();
+        this.worldLevel = 1;
     }
 
     /**
      * Initialize the Player by name
      *
-     * @param state game state
+     * @param serverGame server game
      */
-    public void start(State state) {
-        this.playerThread = new PlayerThread(state, this.socket, this.playerId);
+    public void start(Game serverGame) {
+        this.playerThread = new PlayerThread(serverGame.getGameState(), this.socket, this.playerId);
+        this.playerThread.setServerGame(serverGame);
+        if (this.thread != null) {
+            this.thread.interrupt();
+        }
         this.thread = new Thread(this.playerThread);
         this.thread.start();
     }
@@ -144,6 +157,34 @@ public class Player implements Serializable {
         return playerTerrs;
     }
 
+
+    /**
+     * This function return the cost for each level of upgrade goal
+     *
+     * @param goal
+     * @return
+     */
+    public static int upgradeCost(int goal){
+        switch (goal){
+            case 2:
+                return 60;
+            case 3:
+                return 100;
+            case 4:
+                return 200;
+            case 5:
+                return 300;
+            case 6:
+                return 400;
+            default:
+                return 60;
+        }
+    }
+
+    public int getWorldLevel() {
+        return worldLevel;
+    }
+
     /**
      * return connection socket of this player
      *
@@ -162,5 +203,38 @@ public class Player implements Serializable {
         this.socket = socket;
     }
 
+
+    /**
+     * return the corresponding resources for this player, with the Integer[] array's
+     * first index being coin resources, second index being horn resources.
+     * @return
+     */
+    public void updateResources(ArrayList<Territory> territories) {
+        int coins = 0;
+        int horns = 0;
+        for (Territory t : territories) {
+            coins += t.getCoins();
+            horns += t.getHorns();
+        }
+        this.coins += coins;
+        this.horns += horns;
+    }
+
+    public int getCoins() {
+        return this.coins;
+    }
+
+    public int getHorns() {
+        return this.horns;
+    }
+
+    public void upgradeWorldLevel() {
+        this.worldLevel++;
+        this.horns -= upgradeCost(this.worldLevel);
+    }
+
+    public void setExpenses(int coins) {
+        this.coins -= coins;
+    }
 
 }

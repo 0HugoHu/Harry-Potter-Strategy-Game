@@ -11,6 +11,43 @@ public class MapFactory {
     // Number of territories on this map
     private final int numTerritories;
 
+    private final String[] territoryNames =
+            {"Hogwarts", "Godric's Hollow", "Grimmauld Place", "Diagon Alley",
+            "Spinner's End", "Hogsmeade", "Azkaban", "Durmstrang",
+            "Beauxbatons", "Forbidden Forest", "Albania", "Little Hangleton",
+            "Malfoy Manor", "Knockturn Alley", "Nurmengard", "St Mungo",
+            "Little Whinging", "Shell Cottage", "Gringotts", "Ministry of Magic",
+            "Uagadou", "Castelobruxo", "Ilvermorny", "Mahoutokoro"};
+
+    private final String[] territoryDetails={
+            "Hogwarts: A British school of magic for students aged eleven to seventeen, founded around the 9th century and 10th century.",
+            "Godric's Hollow: A village in the West Country of England, which was inhabited by a number of notable wizarding families.",
+            "Grimmauld Place: The ancestral home of the Black family, which was protected by a Fidelius Charm.",
+            "Diagon Alley: A wizarding alley and shopping area located in London, hidden from the Muggle world.",
+            "Spinner's End: The place where the childhood home of Severus Snape was located.",
+            "Hogsmeade: A picturesque little village of cottages and shops, also the only all-wizarding village in Britain.",
+            "Azkaban: A fortress on an island in the middle of the North Sea, guarded by Dementors.",
+            "Durmstrang: A magic school known for placing an emphasis on the study of the Dark Arts, located in North.",
+            "Beauxbatons: A boarding school located in the Pyrenees mountains of southern France full of ice sculptures and forest nymphs.",
+            "Forbidden Forest: A forest that bordered the edges of the grounds of Hogwarts School of Witchcraft and Wizardry.",
+            "Albania: The place where Lord Voldemort used to hide, also where Helena Ravenclaw chose to hide her mother's stolen diadem.",
+            "Little Hangleton: A Muggle village some 200 miles from Little Whinging, notable as the place of origin of Voldemort's maternal and paternal ancestors.",
+            "Malfoy Manor: The home of the wealthy pure-blood Malfoy family, located in Wiltshire, England.",
+            "Knockturn Alley: A dark and seedy alleyway diagonal to Diagon Alley, frequently populated by Dark Wizards.",
+            "Nurmengard: The prison that Gellert Grindelwald built to keep his enemies and Muggles in, with entrance marked with the symbol of the Deathly Hallows.",
+            "St Mungo: A hospital established to treat magical maladies, injuries or illnesses endemic to the Wizarding World.",
+            "Little Whinging: A small town located to the south of London, where Harry Potter used to live before going to Hogwarts.",
+            "Shell Cottage: The home of Bill Weasley and Fleur Delacour after they get married in Deathly Hallows.",
+            "Gringotts: The well-known bank of the wizarding world and it is operated primarily by goblins.",
+            "Ministry of Magic: The government of the Magical community of Britain, requires special code to get in.",
+            "Uagadou: The oldest of several African wizarding schools, and the largest in the entire world.",
+            "Castelobruxo: The South American school of magic, based in Brazil, which resembles a golden temple.",
+            "Ilvermorny: an American school of magic, which serves as the school for the North American continent.",
+            "Mahoutokoro: Mahoutokoro is the smallest wizarding school, and is situated in Japan. "
+    };
+
+
+
     /**
      * Initialize Map by height and width
      *
@@ -97,8 +134,9 @@ public class MapFactory {
         //Initialize the array of territories
         Territory[] t = new Territory[this.numTerritories];
         for (int i = 0; i < this.numTerritories; i++) {
-            char name = (char) ('A' + i);
-            t[i] = new Territory(Character.toString(name));
+            //char name = (char) ('A' + i);
+            t[i] = new Territory(territoryNames[i]);
+            t[i].addDetails(territoryDetails[i]);
             int coord_1d = gameMap.getHeight() * gameMap.getWidth() / this.numTerritories * i;
             int[] coord = new int[]{coord_1d / gameMap.getWidth(), coord_1d % gameMap.getWidth()};
             q[i].add(coord);
@@ -142,9 +180,30 @@ public class MapFactory {
                     }
                 }
             }
+        //Setting distance attribute
+        for (int i = 0; i < numTerritories; i++)
+            for (int j = i; j < numTerritories; j++) {
+                if (i == j) {
+                    gameMap.putDistance(t[i].getName(), t[j].getName(), 0);
+                    continue;
+                }
+                if (t[i].isAdjacent(t[j].getName())) {
+                    int dis = calDistance(t[i].getCentralPoint(), t[j].getCentralPoint()) + new Dice(10).getDice();
+                    gameMap.putDistance(t[i].getName(), t[j].getName(), dis);
+                    gameMap.putDistance(t[j].getName(), t[i].getName(), dis);
+                } else {
+                    gameMap.putDistance(t[i].getName(), t[j].getName(), -1);
+                    gameMap.putDistance(t[j].getName(), t[i].getName(), -1);
+                }
+            }
+
+
         // Notify the map is generated
         this.gameMap.completed();
         return this.gameMap;
     }
 
+    public int calDistance(int[] fir, int[] sec) {
+        return (int) Math.sqrt((fir[0] - sec[0]) * (fir[0] - sec[0]) + (fir[1] - sec[1]) * (fir[1] - sec[1]));
+    }
 }

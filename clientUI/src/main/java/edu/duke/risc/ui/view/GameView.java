@@ -2,10 +2,13 @@ package edu.duke.risc.ui.view;
 
 import static android.view.MotionEvent.INVALID_POINTER_ID;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -15,11 +18,20 @@ import android.view.SurfaceView;
 
 import androidx.core.view.MotionEventCompat;
 
-import edu.duke.risc.display.draw.MapTiles;
+import java.util.ArrayList;
+import java.util.Random;
+
+import edu.duke.risc.R;
+import edu.duke.risc.ui.draw.MapTiles;
+import edu.duke.risc.ui.draw.MapUI;
 import edu.duke.risc.ui.action.TouchEventMapping;
 import edu.duke.risc.ui.state.MapAnimationType;
 import edu.duke.risc.ui.state.MapUpdateType;
+import edu.duke.risc.ui.state.TouchEvent;
+import edu.duke.shared.Game;
+import edu.duke.shared.helper.State;
 import edu.duke.shared.map.GameMap;
+import edu.duke.shared.player.Player;
 
 /**
  * This class demonstrates the following interactive game basics:
@@ -35,6 +47,7 @@ import edu.duke.shared.map.GameMap;
  * Additional thread management would otherwise be necessary. See code comments.
  */
 
+@SuppressLint("ViewConstructor")
 public class GameView extends SurfaceView implements Runnable {
 
     private float mLastTouchX;
@@ -48,14 +61,14 @@ public class GameView extends SurfaceView implements Runnable {
     private boolean mRunning;
     private Thread mGameThread = null;
 
-    private Context mContext;
 
+    // Map tiles Component
     private MapTiles mMapTiles;
+    // Map UI Component
+    private MapUI mMapUI;
 
-    private Paint mPaint;
+    private final Paint mPaint;
 
-    private int mViewWidth;
-    private int mViewHeight;
     private final SurfaceHolder mSurfaceHolder;
 
     private GameMap mGameMap = null;
@@ -71,22 +84,70 @@ public class GameView extends SurfaceView implements Runnable {
     private boolean isClick = true;
 
     private boolean animationTimer500 = true;
+    // Territory selected
     private String territorySelected = null;
+    // Second time territory selected
+    private String territorySelectedDouble = null;
+    // Store the previous clicked territory
+    private String territorySelectedPrevious = null;
+    // Selection bubble bitmap
+    private final Bitmap selectionBubbleBitmap;
+    // Background image
+    private final Bitmap backgroundImageBitmap;
+    private EventListener eventListener;
+
+    private final Context mContext;
+
+    private Game mGame;
+
+    private final Rect mRect = new Rect();
+    private final Bitmap wallpaperBitmap;
 
 
-    public GameView(Context context) {
-        this(context, null);
+    public GameView(Context context, Game game) {
+        this(context, null, game);
     }
 
-    public GameView(Context context, AttributeSet attrs) {
+    public GameView(Context context, AttributeSet attrs, Game game) {
         super(context, attrs);
-        mContext = context;
-        mSurfaceHolder = getHolder();
-        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaint.setFilterBitmap(true);
-        mPaint.setStrokeWidth(1);
-        mHandler = new Handler();
-        mScaleGestureDetector = new ScaleGestureDetector(context, new ScaleListener());
+        this.mContext = context;
+        this.mSurfaceHolder = getHolder();
+        this.mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        this.mPaint.setFilterBitmap(true);
+        this.mPaint.setStrokeWidth(1);
+        this.mHandler = new Handler();
+        this.mScaleGestureDetector = new ScaleGestureDetector(context, new ScaleListener());
+        this.selectionBubbleBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.selection_bubble_bold);
+        this.backgroundImageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background_map_opt);
+        this.mGame = game;
+        Random rand = new Random();
+        int wallpaperId = rand.nextInt(8) + 1;
+        switch (wallpaperId) {
+            case 1:
+                this.wallpaperBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background_1);
+                break;
+            case 2:
+                this.wallpaperBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background_2);
+                break;
+            case 3:
+                this.wallpaperBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background_3);
+                break;
+            case 4:
+                this.wallpaperBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background_4);
+                break;
+            case 5:
+                this.wallpaperBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background_5);
+                break;
+            case 6:
+                this.wallpaperBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background_6);
+                break;
+            case 7:
+                this.wallpaperBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background_7);
+                break;
+            default:
+                this.wallpaperBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background_8);
+                break;
+        }
     }
 
     /**
@@ -101,9 +162,10 @@ public class GameView extends SurfaceView implements Runnable {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        mViewWidth = w;
-        mViewHeight = h;
-        mMapTiles = new MapTiles(mViewWidth, mViewHeight);
+        mMapTiles = new MapTiles(mContext, w, h, backgroundImageBitmap);
+        mMapUI = new MapUI(w, h, selectionBubbleBitmap);
+        this.mRect.set(0, 0, w, h);
+        mUpdateType = MapUpdateType.REFRESH;
     }
 
     /**
@@ -119,16 +181,18 @@ public class GameView extends SurfaceView implements Runnable {
             if (mSurfaceHolder.getSurface().isValid()) {
                 if (mUpdateType != MapUpdateType.NONE) {
                     canvas = mSurfaceHolder.lockCanvas();
-
-                    canvas.drawColor(Color.WHITE);
+                    // Draw background image
+                    canvas.drawBitmap(wallpaperBitmap, null, mRect, null);
                     canvas.scale(scale, scale);
                     switch (mUpdateType) {
                         case REFRESH:
                         case ZOOM:
                             mMapTiles.update(canvas, this.mPaint, this.mGameMap, this.touchEventMapping);
+                            mMapUI.update(canvas, this.mPaint, this.mGameMap, this.touchEventMapping);
                             break;
                         case MOVE:
                             mMapTiles.move(canvas, this.mPaint, this.touchEventMapping, this.offsetX, this.offsetY);
+                            mMapUI.move(canvas, this.mPaint, this.touchEventMapping, this.offsetX, this.offsetY);
                             break;
                     }
 
@@ -137,12 +201,13 @@ public class GameView extends SurfaceView implements Runnable {
                 }
                 if (mAnimationType != MapAnimationType.NONE) {
                     canvas = mSurfaceHolder.lockCanvas();
-                    canvas.drawColor(Color.WHITE);
+                    canvas.drawBitmap(wallpaperBitmap, null, mRect, null);
                     canvas.scale(scale, scale);
                     if (animationTimer500) {
                         switch (mAnimationType) {
                             case TERRITORY_SELECTED:
-                                mMapTiles.selected(canvas, this.mPaint, this.touchEventMapping, this.territorySelected);
+                                mMapTiles.selected(canvas, this.mPaint, this.touchEventMapping, this.territorySelected, this.territorySelectedDouble);
+                                mMapUI.selected(canvas, this.mPaint, this.touchEventMapping, this.territorySelected, this.territorySelectedDouble);
                                 break;
                             default:
                                 break;
@@ -168,8 +233,17 @@ public class GameView extends SurfaceView implements Runnable {
         mUpdateType = MapUpdateType.REFRESH;
     }
 
+    public void updateGame(Game game) {
+        this.mGame = game;
+    }
+
+    public void initColorMapping(ArrayList<Player> players) {
+        mMapTiles.initColorMapping(players);
+    }
+
     /**
      * Move the map to a new position.
+     *
      * @param x offset in x direction
      * @param y offset in y direction
      */
@@ -181,6 +255,7 @@ public class GameView extends SurfaceView implements Runnable {
 
     /**
      * Zoom the map to a new scale.
+     *
      * @param scale the canvas
      */
     private void zoomMap(float scale) {
@@ -217,6 +292,7 @@ public class GameView extends SurfaceView implements Runnable {
      * @param event The MotionEvent object.
      * @return True if the event was handled, false otherwise.
      */
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Let the ScaleGestureDetector read possible gestures and
@@ -266,12 +342,32 @@ public class GameView extends SurfaceView implements Runnable {
             }
 
             case MotionEvent.ACTION_UP: {
-                if (this.isClick) {
-                    this.isClick = false;
-                    if (this.touchEventMapping != null) {
-                        mAnimationType = MapAnimationType.TERRITORY_SELECTED;
+                if (mGame.getGameState() != State.READY_TO_INIT_UNITS) {
+                    if (this.isClick) {
+                        this.isClick = false;
+                        if (this.touchEventMapping != null) {
+                            mAnimationType = MapAnimationType.TERRITORY_SELECTED;
 //                        animationTimer500();
-                        territorySelected = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX());
+                            // Record the last touch territory
+                            if (territorySelected == null) {
+                                territorySelected = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX(), territorySelected, mGame);
+                            } else if (territorySelectedDouble == null) {
+                                territorySelectedDouble = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX(), territorySelected, mGame);
+                                // When the first touch is a territory, and the second touch is an
+                                // action, the first territory will be recorded.
+                                if (!TouchEventMapping.checkIsAction(territorySelected) && territorySelectedDouble.equals(TouchEvent.ORDER.name())) {
+                                    territorySelectedPrevious = territorySelected;
+                                }
+                                actionCallback();
+                            } else {
+                                if (!TouchEventMapping.checkIsAction(territorySelected) && territorySelectedDouble.equals(TouchEvent.ORDER.name())) {
+                                    territorySelectedPrevious = territorySelected;
+                                }
+                                territorySelected = territorySelectedDouble;
+                                territorySelectedDouble = this.touchEventMapping.getOnTouchObject((int) event.getY(), (int) event.getX(), territorySelected, mGame);
+                                actionCallback();
+                            }
+                        }
                     }
                 }
 
@@ -304,6 +400,36 @@ public class GameView extends SurfaceView implements Runnable {
             }
         }
         return true;
+    }
+
+    public void setEventListener(GameView.EventListener eventListener) {
+        this.eventListener = eventListener;
+    }
+
+    private void actionCallback() {
+        // Callback function in GameFragment
+        TouchEvent touchEvent = TouchEventMapping.getAction(territorySelected, territorySelectedDouble, territorySelectedPrevious, mGameMap);
+        if (touchEvent != null) {
+            switch (touchEvent) {
+                case UNIT:
+                    System.out.println("UNIT ORDER");
+                    eventListener.onUnitOrder(territorySelected);
+                    break;
+                case PROP:
+                    System.out.println("PROP ORDER");
+                    eventListener.onPropOrder(territorySelected);
+                    break;
+                case ATTACK:
+                    System.out.println("ATTACK ORDER");
+                    eventListener.onAttackOrder(territorySelectedPrevious, territorySelectedDouble);
+                    break;
+                case MOVE:
+                    System.out.println("MOVE ORDER");
+                    eventListener.onMoveOrder(territorySelectedPrevious, territorySelectedDouble);
+                default:
+                    break;
+            }
+        }
     }
 
     /**
@@ -339,4 +465,14 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
 
+    public abstract static class EventListener {
+
+        public abstract void onMoveOrder(String terrFrom, String terrTo);
+
+        public abstract void onAttackOrder(String terrFrom, String terrTo);
+
+        public abstract void onPropOrder(String territoryName);
+
+        public abstract void onUnitOrder(String territoryName);
+    }
 }

@@ -6,6 +6,12 @@ import edu.duke.shared.player.Player;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Move;
 import edu.duke.shared.turn.MoveTurn;
+import edu.duke.shared.unit.Unit;
+import edu.duke.shared.unit.UnitType;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DisplayMap {
     // Map
@@ -50,6 +56,14 @@ public class DisplayMap {
         return sb.toString();
     }
 
+    public HashMap<UnitType,Integer> convertToMap(ArrayList<Unit> units){
+        HashMap<UnitType,Integer> map=new HashMap<>();
+        for(Unit unit:units){
+            map.put(unit.getType(),map.getOrDefault(unit.getType(),0)+1);
+        }
+        return map;
+    }
+
     /*
      * Get String representation of units
      * @param isSetup Whether it is setup phase
@@ -68,7 +82,18 @@ public class DisplayMap {
                     sb.append(adjName).append(", ");
                 }
                 sb.delete(sb.length() - 2, sb.length());
-                sb.append(")\n");
+                sb.append(")");
+                if(t.getUnits()!=null){
+                sb.append(" [ Units:  ");
+                HashMap<UnitType,Integer> map=convertToMap(t.getUnits());
+                for(Map.Entry<UnitType,Integer> entry:map.entrySet()){
+                    sb.append(entry.getKey().toString()).append(" : ").append(entry.getValue()).append(" ;");
+                }
+                sb.append(" ]").append("\n");}
+//                sb.append(" [ Type ").append(t.getType()).append("; ");
+//                sb.append("Unicorn Horns: ").append(t.getHorns()).append(", ");
+//                sb.append("Silver Coins: ").append(t.getCoins());
+//                sb.append("]\n");
             }
             sb.append("\n\n");
         }

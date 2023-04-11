@@ -1,16 +1,15 @@
 package edu.duke.shared.unit;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class Unit implements Serializable {
     // Unit name
     private final UnitType type;
     // Unit attack power
-    private final int attack;
-    // Unit defense power
-    private final int defense;
-    // Unit hit points
-    private final int hp;
+    private final int bonus;
+    private final int cost;
 
     /**
      * Initialize Unit by name
@@ -22,20 +21,37 @@ public class Unit implements Serializable {
         this.type = type;
         // Switch case for different types of units
         switch (type) {
-            case NORMAL:
-                this.attack = 2;
-                this.defense = 1;
-                this.hp = 2;
+            case GNOME:
+                this.bonus=0;
+                this.cost=0;
                 break;
-            case DEFENSE:
-                this.attack = 1;
-                this.defense = 3;
-                this.hp = 3;
+            case DWARF:
+                this.bonus=1;
+                this.cost=3;
+                break;
+            case HOUSE_ELF:
+                this.bonus=3;
+                this.cost=11;
+                break;
+            case GOBLIN:
+                this.bonus=5;
+                this.cost=30;
+                break;
+            case VAMPIRE:
+                this.bonus=8;
+                this.cost=55;
+                break;
+            case CENTAUR:
+                this.bonus=11;
+                this.cost=90;
+                break;
+            case WEREWOLF:
+                this.bonus=15;
+                this.cost=140;
                 break;
             default:
-                this.attack = 0;
-                this.defense = 0;
-                this.hp = 0;
+                this.bonus=0;
+                this.cost=0;
                 break;
         }
     }
@@ -47,11 +63,10 @@ public class Unit implements Serializable {
      * @param attack  Unit attack power
      * @param defense Unit defense power
      */
-    public Unit(String name, int attack, int defense, int hp) {
+    public Unit(String name,int bonus) {
         this.type = convertStringToUnitType(name);
-        this.attack = attack;
-        this.defense = defense;
-        this.hp = hp;
+        this.bonus=bonus;
+        this.cost=0;
     }
 
     /**
@@ -63,32 +78,36 @@ public class Unit implements Serializable {
         return this.type;
     }
 
-    /**
-     * Get unit attack power
-     *
-     * @return unit attack power
-     */
-    public int getAttack() {
-        return this.attack;
+
+    public int getBonus(){
+        return this.bonus;
     }
 
-    /**
-     * Get unit defense power
-     *
-     * @return unit defense power
-     */
-    public int getDefense() {
-        return this.defense;
+    public int getCost(){
+        return this.cost;
     }
 
-    /**
-     * Get unit hp value
-     *
-     * @return unit hp value
-     */
-    public int getHp() {
-        return this.hp;
+    public String convertUnitTypeToString(UnitType type){
+        switch (type){
+            case GNOME:
+                return "Gnome";
+            case DWARF:
+                return "Dwarf";
+            case HOUSE_ELF:
+                return "House-elf";
+            case GOBLIN:
+                return "Goblin";
+            case VAMPIRE:
+                return "Vampire";
+            case CENTAUR:
+                return "Centaur";
+            case WEREWOLF:
+                return "Werewolf";
+            default:
+                return "Gnome";
+        }
     }
+
 
     /**
      * Convert string to UnitType
@@ -98,14 +117,70 @@ public class Unit implements Serializable {
      */
     public static UnitType convertStringToUnitType(String name) {
         switch (name) {
-            case "Normal":
-                return UnitType.NORMAL;
-            case "Defense":
-                return UnitType.DEFENSE;
-            case "Basic":
-                return UnitType.BASIC;
+            case "Gnome":
+                return UnitType.GNOME;
+            case "Dwarf":
+                return UnitType.DWARF;
+            case "House-elf":
+                return UnitType.HOUSE_ELF;
+            case "Goblin":
+                return UnitType.GOBLIN;
+            case "Vampire":
+                return UnitType.VAMPIRE;
+            case "Centaur":
+                return UnitType.CENTAUR;
+            case "Werewolf":
+                return UnitType.WEREWOLF;
             default:
-                return UnitType.NORMAL;
+                return UnitType.GNOME;
         }
+    }
+
+    public static String getName(UnitType type) {
+        switch (type) {
+            case GNOME:
+                return "Gnome";
+            case DWARF:
+                return "Dwarf";
+            case HOUSE_ELF:
+                return "House-elf";
+            case GOBLIN:
+                return "Goblin";
+            case VAMPIRE:
+                return "Vampire";
+            case CENTAUR:
+                return "Centaur";
+            case WEREWOLF:
+                return "Werewolf";
+            default:
+                return "Gnome";
+        }
+    }
+
+    public static ArrayList<String> getNextLevel(UnitType type, int level) {
+        ArrayList<String> nextLevel = new ArrayList<>();
+        switch (type) {
+            case GNOME:
+                nextLevel.add("Dwarf");
+            case DWARF:
+                if (level >= 2)
+                    nextLevel.add("House-elf");
+            case HOUSE_ELF:
+                if (level >= 3)
+                    nextLevel.add("Goblin");
+            case GOBLIN:
+                if (level >= 4)
+                    nextLevel.add("Vampire");
+            case VAMPIRE:
+                if (level >= 5)
+                    nextLevel.add("Centaur");
+            case CENTAUR:
+                if (level >= 6)
+                    nextLevel.add("Werewolf");
+                break;
+            case WEREWOLF:
+                return null;
+        }
+        return nextLevel;
     }
 }

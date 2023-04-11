@@ -62,7 +62,7 @@ public class Validation {
      * @param territoryName2 Destination territory name
      * @param numUnits       Number of units
      */
-    public static void checkMove(MoveTurn moveTurn, AttackTurn attackTurn,String territoryName1, String territoryName2, int numUnits) throws IllegalArgumentException {
+    public static void checkMove(MoveTurn moveTurn, AttackTurn attackTurn, String territoryName1, String territoryName2, int numUnits) throws IllegalArgumentException {
         GameMap map = moveTurn.getMap();
         checkIllegalOrderInput(map, territoryName1, territoryName2, numUnits, moveTurn.getPlayerName());
         int totalUnits = map.getTerritory(territoryName1).getUnits().size();
@@ -72,7 +72,7 @@ public class Validation {
             if (m.getTo().equals(territoryName1)) totalUnits += m.getNumUnits();
         }
         */
-        totalUnits+=numOfChangeUnits(moveTurn,attackTurn,territoryName1);
+        totalUnits += numOfChangeUnits(moveTurn, attackTurn, territoryName1);
         if (totalUnits < numUnits)
             throw new IllegalArgumentException("The usable units in source are only " + totalUnits + " units\n");
         if (!checkPathExist(map, territoryName1, territoryName2))
@@ -117,7 +117,7 @@ public class Validation {
             if (m.getFrom().equals(territoryName1)) totalUnits -= m.getNumUnits();
         }
         */
-        totalUnits+=numOfChangeUnits(moveTurn,attackTurn,territoryName1);
+        totalUnits += numOfChangeUnits(moveTurn, attackTurn, territoryName1);
         if (totalUnits < numUnits)
             throw new IllegalArgumentException("The usable units in source are only " + totalUnits + " units\n");
         if (!checkAdjacent(map, territoryName1, territoryName2))
@@ -207,23 +207,24 @@ public class Validation {
         }
         return numUnits;
     }
+
     /**
      * Return the changing units on territory
      *
-     * @param moveTurn          moveTurn
-     * @param attackTurn        attackTurn
-     * @param territoryName     Name of territory
+     * @param moveTurn      moveTurn
+     * @param attackTurn    attackTurn
+     * @param territoryName Name of territory
      * @return an integer of changing units
      */
-    public static int numOfChangeUnits(MoveTurn moveTurn,AttackTurn attackTurn,String territoryName){
-        int totalUnits=0;
-        if (moveTurn!=null) {
+    public static int numOfChangeUnits(MoveTurn moveTurn, AttackTurn attackTurn, String territoryName) {
+        int totalUnits = 0;
+        if (moveTurn != null) {
             for (Move m : moveTurn.getMoves()) {
                 if (m.getFrom().equals(territoryName)) totalUnits -= m.getNumUnits();
                 if (m.getTo().equals(territoryName)) totalUnits += m.getNumUnits();
             }
         }
-        if (attackTurn!=null) {
+        if (attackTurn != null) {
             for (Attack m : attackTurn.getAttacks()) {
                 if (m.getFrom().equals(territoryName)) totalUnits -= m.getNumUnits();
             }

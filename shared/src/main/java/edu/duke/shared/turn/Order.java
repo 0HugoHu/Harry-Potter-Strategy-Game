@@ -1,8 +1,13 @@
 package edu.duke.shared.turn;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import edu.duke.shared.player.Player;
+import edu.duke.shared.unit.Unit;
+import edu.duke.shared.unit.UnitType;
 
 public abstract class Order implements Serializable {
     // Source territory
@@ -10,6 +15,8 @@ public abstract class Order implements Serializable {
     // Destination territory
     protected final String to;
     // Number of units
+    protected HashMap<UnitType,Integer> unitList;
+
     protected int numUnits;
     // Player name
     protected final String playerName;
@@ -19,13 +26,21 @@ public abstract class Order implements Serializable {
      *
      * @param from       Territory name
      * @param to         Territory name
-     * @param numUnits   Number of units
+     * @param numUnits  Number of units
      * @param playerName Player name
      */
     public Order(String from, String to, int numUnits, String playerName) {
         this.from = from;
         this.to = to;
-        this.numUnits = numUnits;
+        this.numUnits=numUnits;
+        this.playerName = playerName;
+    }
+
+
+    public Order(String from, String to, HashMap<UnitType,Integer> unitList, String playerName) {
+        this.from = from;
+        this.to = to;
+        this.unitList = unitList;
         this.playerName = playerName;
     }
 
@@ -54,6 +69,19 @@ public abstract class Order implements Serializable {
      */
     public int getNumUnits() {
         return numUnits;
+    }
+
+
+    public int getAllUnitNums(){
+        int totalNums=0;
+        for(Map.Entry<UnitType,Integer> entry:unitList.entrySet()){
+            totalNums+=entry.getValue();
+        }
+        return totalNums;
+    }
+
+    public HashMap<UnitType,Integer> getUnitList(){
+        return unitList;
     }
 
     /**
