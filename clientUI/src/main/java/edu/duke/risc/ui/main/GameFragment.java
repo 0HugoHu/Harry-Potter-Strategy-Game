@@ -109,6 +109,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     String selected_from;
     String selected_to;
     boolean isLost = false;
+    int currentCoinExpense = 0;
+    int currentHornExpense = 0;
 
 
     private MoveTurn moveTurn;
@@ -185,6 +187,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     assignUnits();
                     break;
                 case TURN_BEGIN:
+                    currentCoinExpense = 0;
+                    currentHornExpense = 0;
                     unitMoveAttackMap = new HashMap<>();
                     unitUpgradeMap = new HashMap<>();
                     // Update the game view
@@ -511,7 +515,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             Toast.makeText(context, "Upgrade will be completed in the next turn!", Toast.LENGTH_SHORT).show();
             this.isUpgradedWorldLevel = true;
             TextView ui_horn = ui_view.findViewById(R.id.ui_horn);
-            ui_horn.setText(String.valueOf(mGame.getPlayer(mGame.getPlayerName()).getHorns() - Player.upgradeCost(this.mGame.getPlayer(mGame.getPlayerName()).getWorldLevel() + 1)));
+            this.currentHornExpense += Player.upgradeCost(mGame.getPlayer(mGame.getPlayerName()).getWorldLevel() + 1);
+            updatePlayerValues();
             base_view.setVisibility(View.GONE);
         });
 
@@ -617,7 +622,10 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     if (number > 0) {
                         moveTurn.addMove(new Move(orderTerrFrom, orderTerrTo,list, this.mGame.getPlayerName()));
                         updateUnitMoveAttackMap(number, unit);
-                        this.mGame.getPlayer(mGame.getPlayerName()).setExpenseCoins(this.mGame.calculateOrderCost(this.mGame.getMap().getShortestDistance(orderTerrFrom, orderTerrTo), number));
+                        int cost = this.mGame.calculateOrderCost(this.mGame.getMap().getShortestDistance(orderTerrFrom, orderTerrTo), number);
+                        this.mGame.getPlayer(mGame.getPlayerName()).setExpenseCoins(cost);
+                        this.currentCoinExpense += cost;
+                        updatePlayerValues();
                     }
                 }
             } else if (mTouchEvent == ATTACK) {
@@ -630,7 +638,10 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     if (number > 0) {
                         attackTurn.addAttack(new Attack(orderTerrFrom, orderTerrTo, list, this.mGame.getPlayerName()));
                         updateUnitMoveAttackMap(number, unit);
-                        this.mGame.getPlayer(mGame.getPlayerName()).setExpenseCoins(this.mGame.calculateOrderCost(this.mGame.getMap().getShortestDistance(orderTerrFrom, orderTerrTo), number));
+                        int cost = this.mGame.calculateOrderCost(this.mGame.getMap().getShortestDistance(orderTerrFrom, orderTerrTo), number);
+                        this.mGame.getPlayer(mGame.getPlayerName()).setExpenseCoins(cost);
+                        this.currentCoinExpense += cost;
+                        updatePlayerValues();
                     }
                 }
             } else {
@@ -1076,8 +1087,11 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
         Player player = this.mGame.getPlayer(this.mGame.getPlayerName());
 
-        ui_coin.setText(String.valueOf(player.getCoins()));
-        ui_horn.setText(String.valueOf(player.getHorns()));
+        int shown_coins = player.getCoins() - this.currentCoinExpense;
+        int shown_horns = player.getHorns() - this.currentHornExpense;
+
+        ui_coin.setText(String.valueOf(shown_coins));
+        ui_horn.setText(String.valueOf(shown_horns));
         ui_world_level.setText(String.valueOf(player.getWorldLevel()));
     }
 
