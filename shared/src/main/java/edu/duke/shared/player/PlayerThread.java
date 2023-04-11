@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -17,6 +18,7 @@ import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.MoveTurn;
 import edu.duke.shared.turn.Turn;
 import edu.duke.shared.unit.Unit;
+import edu.duke.shared.unit.UnitType;
 
 public class PlayerThread implements Runnable, Serializable {
     // Global game state of the game
@@ -74,6 +76,14 @@ public class PlayerThread implements Runnable, Serializable {
         this.serverGame = serverGame;
     }
 
+    public HashMap<UnitType,Integer> convertToMap(ArrayList<Unit> units){
+        HashMap<UnitType,Integer> map=new HashMap<>();
+        for(Unit unit:units){
+            map.put(unit.getType(),map.getOrDefault(unit.getType(),0)+1);
+        }
+        return map;
+    }
+
     /**
      * Run thread to receive game object based on game state
      */
@@ -101,11 +111,19 @@ public class PlayerThread implements Runnable, Serializable {
                 int totalUnits = 0;
                 for (Territory t : terr_set) {
                     this.serverGame.getMap().getTerritory(t.getName()).removeAllUnits();
-                    for (int j = 0; j < p.getPlayerThread().getCurrGame().getMap().getTerritory(t.getName()).getNumUnits(); j++)
-                        this.serverGame.getMap().getTerritory(t.getName()).addUnit(new Unit("Gnome"));
+                    for(Map.Entry<UnitType,Integer> entry:convertToMap(this.currGame.getMap().getTerritory(t.getName()).getUnits()).entrySet()){
+                        for(int i=0;i<entry.getValue();i++){
+                            this.serverGame.getMap().getTerritory(t.getName()).addUnit(entry.getKey());
+                        }
+                    }
+//                    for (int j = 0; j < p.getPlayerThread().getCurrGame().getMap().getTerritory(t.getName()).getNumUnits(); j++)
+//                        this.serverGame.getMap().getTerritory(t.getName()).addUnit(UnitType.GNOME);
                     totalUnits += t.getNumUnits();
                 }
+
                 break;
+
+
             }
             case TURN_BEGIN:
                 System.out.println("Received player " + this.playerId + "'s action list.");
@@ -132,7 +150,7 @@ public class PlayerThread implements Runnable, Serializable {
                         System.out.println("The attack turn from player " + this.playerId + " is illegal.");
                     }
 
-                    // Merge Unit
+
                     Player p = this.serverGame.getPlayerList().get(this.playerId);
                     for (Territory t : this.serverGame.getMap().getTerritories()) {
                         if (t.getOwner().equals(p.getPlayerName())) {
@@ -142,6 +160,7 @@ public class PlayerThread implements Runnable, Serializable {
                             }
                         }
                     }
+
 
                     // Merge all turns from different players
                     ArrayList<Turn> newTurns = this.currGame.getTurnList().get(turnIndex).get(this.playerId);

@@ -2,6 +2,7 @@ package edu.duke.shared.helper;
 
 import static org.junit.Assert.*;
 
+import edu.duke.shared.unit.UnitType;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -68,7 +69,7 @@ public class ValidationTest {
         game.allocateTerritories();
         for (Territory t : map.getTerritories()) {
             for (int i = 0; i < 4; i++)
-                t.addUnit(new Unit("Gnome"));
+                t.addUnit(UnitType.GNOME);
         }
         MoveTurn mt = new MoveTurn(map, 0, p1.getPlayerName());
         String from = map.getTerritoriesByOwner(p1.getPlayerName()).get(0).getName();
@@ -98,7 +99,7 @@ public class ValidationTest {
         game.allocateTerritories();
         for (Territory t : map.getTerritories()) {
             for (int i = 0; i < 4; i++)
-                t.addUnit(new Unit("Gnome"));
+                t.addUnit(UnitType.GNOME);
         }
         MoveTurn mt = new MoveTurn(map, 0, p1.getPlayerName());
         String from = map.getTerritoriesByOwner(p1.getPlayerName()).get(0).getName();
@@ -131,7 +132,7 @@ public class ValidationTest {
         game.allocateTerritories();
         for (Territory t : map.getTerritories()) {
             for (int i = 0; i < 4; i++)
-                t.addUnit(new Unit("Gnome"));
+                t.addUnit(UnitType.GNOME);
         }
         AttackTurn at = new AttackTurn(map, 0, p2.getPlayerName());
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> Validation.checkAttack(at, null, map.getTerritoriesByOwner(p2.getPlayerName()).get(0).getName(),
@@ -180,7 +181,7 @@ public class ValidationTest {
         game.allocateTerritories();
         for (Territory t : map.getTerritories()) {
             for (int i = 0; i < 4; i++)
-                t.addUnit(new Unit("Gnome"));
+                t.addUnit(UnitType.GNOME);
         }
         AttackTurn at = new AttackTurn(map, 0, p2.getPlayerName());
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> Validation.checkAttack(at, null, map.getTerritoriesByOwner(p2.getPlayerName()).get(0).getName(),

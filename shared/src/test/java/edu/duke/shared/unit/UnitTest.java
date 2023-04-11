@@ -9,7 +9,7 @@ public class UnitTest {
 
     @Test
     public void constructorFullProperties() {
-        Unit myunit1 = new Unit("Gnome", 2, 3, 4,0);
+        Unit myunit1 = new Unit("Gnome", 0);
         assertEquals(UnitType.GNOME, myunit1.getType());
     }
 

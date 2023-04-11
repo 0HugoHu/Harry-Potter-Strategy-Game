@@ -164,20 +164,20 @@ public class Player implements Serializable {
      * @param goal
      * @return
      */
-    public static int upgradeCost(int goal) {
-        switch (goal) {
+    public static int upgradeCost(int goal){
+        switch (goal){
             case 2:
-                return 20;
+                return 60;
             case 3:
-                return 40;
+                return 100;
             case 4:
-                return 80;
+                return 200;
             case 5:
-                return 160;
+                return 300;
             case 6:
-                return 320;
+                return 400;
             default:
-                return 20;
+                return 60;
         }
     }
 
@@ -203,10 +203,10 @@ public class Player implements Serializable {
         this.socket = socket;
     }
 
+
     /**
      * return the corresponding resources for this player, with the Integer[] array's
      * first index being coin resources, second index being horn resources.
-     *
      * @return
      */
     public void updateResources(ArrayList<Territory> territories) {
