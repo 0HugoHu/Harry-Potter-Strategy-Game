@@ -219,7 +219,7 @@ public class Client {
     /*
      * Receive turn result
      */
-    public State receiveTurnResult() {
+    public Game receiveTurnResult() {
         // Client receive game from the server
         this.game = getGame();
         if (this.game.getGameState() == State.GAME_OVER) {
@@ -232,7 +232,7 @@ public class Client {
         // Confirm turn
         GameObject obj = new GameObject(this.clientSocket);
         obj.encodeObj(this.game);
-        return this.game.getGameState();
+        return this.game;
     }
 
 

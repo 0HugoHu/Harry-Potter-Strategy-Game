@@ -34,7 +34,7 @@ public class ClientAdapter {
         this.client.playOneTurn();
     }
 
-    public State playOneTurn(boolean isMock) {
+    public Game playOneTurn(boolean isMock) {
         if (isMock) {
             this.client.playOneTurnMock();
         } else {
