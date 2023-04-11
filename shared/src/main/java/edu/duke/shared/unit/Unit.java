@@ -60,8 +60,7 @@ public class Unit implements Serializable {
      * Initialize Unit by name and attack/defense/hit point power
      *
      * @param name    Unit name
-     * @param attack  Unit attack power
-     * @param defense Unit defense power
+     * @param bonus   Unit attack/defense/hit point power
      */
     public Unit(String name,int bonus) {
         this.type = convertStringToUnitType(name);

@@ -4,12 +4,15 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import java.lang.reflect.Array;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import edu.duke.shared.Game;
 import edu.duke.shared.map.GameMap;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.player.Player;
+import edu.duke.shared.unit.Unit;
 
 public class DisplayMapTest {
 
@@ -78,5 +81,15 @@ public class DisplayMapTest {
 
     @Test
     public void showUnits() {
+    }
+
+    @Test
+    public void convertToMap() {
+        GameMap map = new GameMap(30, 30, 6);
+        Game game = new Game(5, 24, map);
+        DisplayMap displayMap = new DisplayMap(game,0);
+        ArrayList<Unit> units = new ArrayList<>();
+        units.add(new Unit("A"));
+        displayMap.convertToMap(units);
     }
 }

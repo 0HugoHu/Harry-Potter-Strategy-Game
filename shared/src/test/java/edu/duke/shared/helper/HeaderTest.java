@@ -72,4 +72,10 @@ public class HeaderTest {
     @Test
     public void getTurn() {
     }
+
+    @Test
+    public void forceEndGame() {
+        Header header = new Header();
+        header.forceEndGame();
+    }
 }
