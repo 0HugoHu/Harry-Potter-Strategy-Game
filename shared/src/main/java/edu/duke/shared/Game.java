@@ -473,18 +473,6 @@ public class Game implements Serializable {
 
     }
 
-    /**
-     * print the current situation of territories, owners, and units
-     */
-    public void printUnit() {
-        for (Territory terr : gameMap.getTerritories()) {
-            System.out.println("----------------");
-            System.out.println(terr.getName());
-            System.out.println("Owner: " + terr.getOwner());
-            System.out.println("Units: " + terr.getNumUnits());
-            System.out.println("----------------");
-        }
-    }
 
 
     /**
@@ -674,20 +662,6 @@ public class Game implements Serializable {
     public ArrayList<HashMap<Integer, ArrayList<Turn>>> getTurnList() {
         return this.turnList;
     }
-
-
-//    public void allocateTerritories() {
-//        GameMap gameMap = this.getMap();
-//        int numTerrs = gameMap.getNumTerritories();
-//        int numPlayers = this.getNumPlayers();
-//        ArrayList<Territory> terrs = gameMap.getTerritories();
-//        ArrayList<Player> players = this.getPlayerList();
-//        for (int i = 0; i < numTerrs; i++) {
-//            players.get(i / (numTerrs / numPlayers)).expandTerr(terrs.get(i));
-//            terrs.get(i).changePlayerOwner(players.get(i / (numTerrs / numPlayers)));
-//            terrs.get(i).changeOwner(players.get(i / (numTerrs / numPlayers)).getPlayerName());
-//        }
-//    }
 
 
 

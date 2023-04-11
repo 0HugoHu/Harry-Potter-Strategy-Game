@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import edu.duke.shared.Game;
+
 public class HeaderTest {
 
     @Test
@@ -77,5 +79,7 @@ public class HeaderTest {
     public void forceEndGame() {
         Header header = new Header();
         header.forceEndGame();
+        assertEquals(true,header.isForceEndGame());
+
     }
 }
