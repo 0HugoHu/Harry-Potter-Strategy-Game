@@ -2,6 +2,7 @@ package edu.duke.server;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -18,6 +19,7 @@ import edu.duke.shared.map.Territory;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Turn;
 import edu.duke.shared.unit.Unit;
+import edu.duke.shared.unit.UnitType;
 
 public class Server {
     // Port number
@@ -25,13 +27,15 @@ public class Server {
     // Number of players
     private final static int numPlayers = 3;
     // Number of units at the beginning
-    private final static int numUnits = 24;
+    private final static int numUnits = 48;
     // Gameplay controller
     private final Game game;
     // Server socket
     private ServerSocket serverSocket;
     // Logger
     private static final Logger logger = Logger.getLogger("serverLog.txt");
+
+    private final ReentrantLock serverGameLock = new ReentrantLock();
 
     /**
      * Main method
@@ -96,12 +100,15 @@ public class Server {
 
         // Send message to all players
         this.game.setGameState(State.READY_TO_INIT_UNITS);
-        sendToAllPlayers();
         System.out.println("Message sent to all players.\n");
+        sendToAllPlayers();
 
         // Receive Units setup from all players
         waitForThreadJoin();
         System.out.println("Received all units info.\n");
+
+        // Initialize default resources
+        growResources();
     }
 
     /**
@@ -112,6 +119,7 @@ public class Server {
      */
     public Server(int numOfPlayers, int numUnits) {
         this.game = new Game(numOfPlayers, numUnits);
+
         try {
             this.serverSocket = new ServerSocket(PORT);
         } catch (Exception e) {
@@ -159,9 +167,7 @@ public class Server {
     public void sendToAllPlayers() {
         for (int i = 0; i < this.getNumOfPlayers(); i++) {
             // Start thread for each player
-            this.game.getPlayerList().get(i).start(this.game.getGameState());
-            // Also send server game to player thread
-            this.game.getPlayerList().get(i).getPlayerThread().setServerGame(this.game);
+            this.game.getPlayerList().get(i).start(this.game);
 
             // Send message to client
             Socket clientSocket = this.game.getPlayerList().get(i).getSocket();
@@ -169,6 +175,11 @@ public class Server {
             // Encode player specific Id to client
             this.game.setPlayerId(i);
             obj.encodeObj(this.game);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -198,8 +209,8 @@ public class Server {
      */
     private void startOneTurn() {
         this.game.setGameState(State.TURN_BEGIN);
-        sendToAllPlayers();
         System.out.println("Start turn " + this.game.getTurn() + ".\n");
+        sendToAllPlayers();
 
         // Receive action list from all players
         waitForThreadJoin();
@@ -211,6 +222,7 @@ public class Server {
             return;
         }
         growUnits();
+        growResources();
         this.game.setGameState(State.TURN_END);
         sendToAllPlayers();
 
@@ -232,18 +244,6 @@ public class Server {
      */
     public void allocateTerritories() {
         this.game.allocateTerritories();
-        /*
-        GameMap gameMap = this.game.getMap();
-        int numTerrs = gameMap.getNumTerritories();
-        int numPlayers = this.game.getNumPlayers();
-        ArrayList<Territory> terrs = gameMap.getTerritories();
-        ArrayList<Player> players = game.getPlayerList();
-        for (int i = 0; i < numTerrs; i++) {
-            players.get(i / (numTerrs / numPlayers)).expandTerr(terrs.get(i));
-            terrs.get(i).changePlayerOwner(players.get(i / (numTerrs / numPlayers)));
-            terrs.get(i).changeOwner(players.get(i / (numTerrs / numPlayers)).getPlayerName());
-        }
-        */
     }
 
     /**
@@ -273,6 +273,16 @@ public class Server {
                 System.out.println("Player " + p.getPlayerName() + " has lost the game. Game continues.\n");
             }
         }
+        if (this.game.getLoserId().size() == this.game.getNumPlayers() - 1) {
+            this.game.setGameState(State.GAME_OVER);
+            for (Player p : this.game.getPlayerList()) {
+                if (!this.game.isLoser(p.getPlayerId())) {
+                    this.game.setWinnerId(p.getPlayerId());
+                    System.out.println("Game Over. Player " + p.getPlayerName() + " wins.\n");
+                    sendToAllPlayers();
+                }
+            }
+        }
     }
 
     /**
@@ -281,7 +291,17 @@ public class Server {
     public void growUnits() {
         //After each turn, all territories should add one new unit
         for (Territory t : this.game.getMap().getTerritories()) {
-            t.addUnit(new Unit("Normal"));
+            t.addUnit(UnitType.GNOME);
+        }
+    }
+
+    /**
+     * Grow resources for each corresponding territory
+     */
+    public void growResources() {
+        for (Player p : this.game.getPlayerList()) {
+            // Update the player's resources
+            p.updateResources(this.game.getMap().getTerritoriesByOwner(p.getPlayerName()));
         }
     }
 
