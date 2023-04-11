@@ -69,6 +69,14 @@ public class PlayerThread implements Runnable, Serializable {
         this.serverGame = serverGame;
     }
 
+    public HashMap<UnitType,Integer> convertToMap(ArrayList<Unit> units){
+        HashMap<UnitType,Integer> map=new HashMap<>();
+        for(Unit unit:units){
+            map.put(unit.getType(),map.getOrDefault(unit.getType(),0)+1);
+        }
+        return map;
+    }
+
     /**
      * Run thread to receive game object based on game state
      */
@@ -96,7 +104,7 @@ public class PlayerThread implements Runnable, Serializable {
                 int totalUnits = 0;
                 for (Territory t : terr_set) {
                     this.serverGame.getMap().getTerritory(t.getName()).removeAllUnits();
-                    for(Map.Entry<UnitType,Integer> entry:this.currGame.getMap().getTerritory(t.getName()).getUnits().entrySet()){
+                    for(Map.Entry<UnitType,Integer> entry:convertToMap(this.currGame.getMap().getTerritory(t.getName()).getUnits()).entrySet()){
                         for(int i=0;i<entry.getValue();i++){
                             this.serverGame.getMap().getTerritory(t.getName()).addUnit(entry.getKey());
                         }
@@ -107,6 +115,8 @@ public class PlayerThread implements Runnable, Serializable {
                 }
 
                 break;
+
+
             }
             case TURN_BEGIN:
                 System.out.println("Received player " + this.playerId + "'s action list.");
@@ -129,7 +139,7 @@ public class PlayerThread implements Runnable, Serializable {
                 for (Territory t : this.serverGame.getMap().getTerritories()) {
                     if (t.getOwner().equals(p.getPlayerName())) {
                         t.removeAllUnits();
-                        for(Map.Entry<UnitType,Integer> entry:this.currGame.getMap().getTerritory(t.getName()).getUnits().entrySet()){
+                        for(Map.Entry<UnitType,Integer> entry:convertToMap(this.currGame.getMap().getTerritory(t.getName()).getUnits()).entrySet()){
                             for(int i=0;i<entry.getValue();i++){
                                 t.addUnit(entry.getKey());
                             }
@@ -138,6 +148,7 @@ public class PlayerThread implements Runnable, Serializable {
 //                            t.addUnit(UnitType.GNOME);
                     }
                 }
+
 
                 // Merge all turns from different players
                 ArrayList<Turn> newTurns = this.currGame.getTurnList().get(turnIndex).get(this.playerId);

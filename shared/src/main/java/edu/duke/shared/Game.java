@@ -82,6 +82,9 @@ public class Game implements Serializable {
         return attackDetailsSB.toString();
     }
 
+    public int calculateDis(int dis,int num){
+        return dis*num/2;
+    }
 
     /**
      * Build the attackList of the structure HashMap<String, ArrayList<ArrayList<Attack>>>
@@ -229,6 +232,14 @@ public class Game implements Serializable {
         this.unitMinusMap.clear();
     }
 
+    public HashMap<UnitType,Integer> convertToMap(ArrayList<Unit> units){
+        HashMap<UnitType,Integer> map=new HashMap<>();
+        for(Unit unit:units){
+            map.put(unit.getType(),map.getOrDefault(unit.getType(),0)+1);
+        }
+        return map;
+    }
+
 
     /**
      * This is the method for setting up defense forces for each defending territory.
@@ -247,7 +258,7 @@ public class Game implements Serializable {
         assert desTurn != null;
         AttackTurn attackTurn = (AttackTurn) (desTurn.get(1));
         ArrayList<Attack> atts = attackTurn.getAttacks();
-        HashMap<UnitType,Integer> defenseForces=desTerr.getUnits();
+        HashMap<UnitType,Integer> defenseForces=convertToMap(desTerr.getUnits());
         HashMap<UnitType,Integer> defenseForce=new HashMap<>();
         defenseForce.putAll(defenseForces);
         //int defenseForce = desTerr.getNumUnits();

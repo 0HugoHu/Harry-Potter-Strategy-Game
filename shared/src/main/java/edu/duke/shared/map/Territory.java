@@ -23,7 +23,7 @@ public class Territory implements Serializable {
         For extendability, as units can have different attack and defense
         abilities in the following evolutions.
      */
-    private final HashMap<UnitType,Integer> units;
+    private final ArrayList<Unit> units;
     // Coordinates inside this territory
     private final HashSet<int[]> coords;
     // Adjacent Territory name
@@ -55,7 +55,7 @@ public class Territory implements Serializable {
         this.name = name;
         this.owner = "";
         this.playerOwner = null;
-        this.units = new HashMap<>();
+        this.units = new ArrayList<>();
         this.coords = new HashSet<>();
         this.adjs = new HashSet<>();
         this.coins = 0;
@@ -75,7 +75,7 @@ public class Territory implements Serializable {
      * @param coords      Coordinates inside this territory
      * @param adjs        Adjacent territories
      */
-    public Territory(String name, Player playerOwner, String owner, HashMap<UnitType,Integer> units, HashSet<int[]> coords,
+    public Territory(String name, Player playerOwner, String owner,ArrayList<Unit> units, HashSet<int[]> coords,
                      HashSet<String> adjs,String details,String type) {
         this.playerOwner = playerOwner;
         this.name = name;
@@ -158,18 +158,30 @@ public class Territory implements Serializable {
     /**
      * Add a unit to this territory
      *
-     * @param unit Unit to be added
      * @return true if successfully added
      */
     public boolean addUnit(UnitType type) {
-        this.units.put(type, units.getOrDefault(type,0)+1);
+        this.units.add(new Unit(convertUnitTypeToString(type)));
         return true;
     }
 
     public boolean addUnit(Unit unit){
-        this.units.put(unit.getType(), units.getOrDefault(type,0)+1);
+        this.units.add(unit);
         return true;
     }
+
+
+
+    /**
+     * return the playerowner of this territory
+     *
+     * @return player
+     */
+    public Player getPlayerOwner() {
+        return playerOwner;
+    }
+
+
 
     /**
      * Remove a unit from this territory
@@ -178,9 +190,9 @@ public class Territory implements Serializable {
      * @return true if successfully removed
      */
     public boolean removeUnit(Unit unit) {
-        for (Map.Entry<UnitType,Integer> entry:units.entrySet()) {
-            if (entry.getKey().equals(unit.getType())) {
-                units.put(entry.getKey(),entry.getValue()-1);
+        for (Unit u : this.units) {
+            if (u.getType().equals(unit.getType())) {
+                this.units.remove(u);
                 return true;
             }
         }
@@ -194,9 +206,9 @@ public class Territory implements Serializable {
      * @return true if successfully removed
      */
     public boolean removeUnit(UnitType unitType) {
-        for (Map.Entry<UnitType,Integer> entry:units.entrySet()) {
-            if (entry.getKey().equals(unitType)) {
-                units.put(entry.getKey(),entry.getValue()-1);
+        for (Unit u : this.units) {
+            if (u.getType().equals(unitType)) {
+                this.units.remove(u);
                 return true;
             }
         }
@@ -209,14 +221,16 @@ public class Territory implements Serializable {
      * @return true if successfully removed
      */
     public boolean removeUnit() {
-        for (Map.Entry<UnitType,Integer> entry:units.entrySet()) {
-            if (entry.getKey().equals(UnitType.GNOME)) {
-                units.put(entry.getKey(),entry.getValue()-1);
+        for (Unit u : this.units) {
+            if (u.getType().equals(UnitType.GNOME)) {
+                this.units.remove(u);
                 return true;
             }
         }
         return false;
     }
+
+
 
     /**
      * Get the name of this territory
@@ -262,34 +276,16 @@ public class Territory implements Serializable {
         return true;
     }
 
-    public void printUnits(){
-        System.out.print("For territory"+this.getName());
-        for(Map.Entry<UnitType,Integer> entry:units.entrySet()){
-            System.out.print(" Unittype: "+entry.getKey()+" , ");
-            System.out.print("Num: "+entry.getValue()+" ; ");
-        }
-        System.out.println();
-    }
-
-
-    /**
-     * return the playerowner of this territory
-     *
-     * @return player
-     */
-    public Player getPlayerOwner() {
-        return playerOwner;
-    }
-
 
     /**
      * Get the units of this territory
      *
      * @return units of this territory
      */
-    public HashMap<UnitType, Integer> getUnits() {
+    public ArrayList<Unit> getUnits() {
         return this.units;
     }
+
 
 
     /**
@@ -297,6 +293,27 @@ public class Territory implements Serializable {
      */
     public void removeAllUnits() {
         this.units.clear();
+    }
+
+    public String convertUnitTypeToString(UnitType type){
+        switch (type){
+            case GNOME:
+                return "Gnome";
+            case DWARF:
+                return "Dwarf";
+            case HOUSE_ELF:
+                return "House-elf";
+            case GOBLIN:
+                return "Goblin";
+            case VAMPIRE:
+                return "Vampire";
+            case CENTAUR:
+                return "Centaur";
+            case WEREWOLF:
+                return "Werewolf";
+            default:
+                return "Gnome";
+        }
     }
 
 
@@ -307,9 +324,9 @@ public class Territory implements Serializable {
      */
     public boolean removeUnitByName(String name) {
         UnitType unitType = Unit.convertStringToUnitType(name);
-        for (Map.Entry<UnitType,Integer> entry:units.entrySet()) {
-            if (entry.getKey().equals(unitType)) {
-                units.put(entry.getKey(),entry.getValue()-1);
+        for (Unit unit : this.units) {
+            if (unit.getType() == unitType) {
+                this.units.remove(unit);
                 return true;
             }
         }
@@ -364,11 +381,7 @@ public class Territory implements Serializable {
      * @return number of units on this territory
      */
     public int getNumUnits() {
-        int total=0;
-        for(Map.Entry<UnitType,Integer> entry:units.entrySet()){
-            total+=entry.getValue();
-        }
-        return total;
+        return this.units.size();
     }
 
     /**

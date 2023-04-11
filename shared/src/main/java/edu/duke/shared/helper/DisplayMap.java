@@ -6,8 +6,11 @@ import edu.duke.shared.player.Player;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Move;
 import edu.duke.shared.turn.MoveTurn;
+import edu.duke.shared.unit.Unit;
 import edu.duke.shared.unit.UnitType;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class DisplayMap {
@@ -53,6 +56,14 @@ public class DisplayMap {
         return sb.toString();
     }
 
+    public HashMap<UnitType,Integer> convertToMap(ArrayList<Unit> units){
+        HashMap<UnitType,Integer> map=new HashMap<>();
+        for(Unit unit:units){
+            map.put(unit.getType(),map.getOrDefault(unit.getType(),0)+1);
+        }
+        return map;
+    }
+
     /*
      * Get String representation of units
      * @param isSetup Whether it is setup phase
@@ -74,7 +85,8 @@ public class DisplayMap {
                 sb.append(")");
                 if(t.getUnits()!=null){
                 sb.append(" [ Units:  ");
-                for(Map.Entry<UnitType,Integer> entry:t.getUnits().entrySet()){
+                HashMap<UnitType,Integer> map=convertToMap(t.getUnits());
+                for(Map.Entry<UnitType,Integer> entry:map.entrySet()){
                     sb.append(entry.getKey().toString()).append(" : ").append(entry.getValue()).append(" ;");
                 }
                 sb.append(" ]").append("\n");}
