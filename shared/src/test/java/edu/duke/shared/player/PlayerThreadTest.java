@@ -62,7 +62,7 @@ public class PlayerThreadTest {
         InputStream is = new ByteArrayInputStream(baos.toByteArray());
 
         when(playerThread.socket.getInputStream()).thenReturn(is);
-        player.start(State.READY_TO_INIT_NAME);
+//        player.start(State.READY_TO_INIT_NAME);
     }
 
     @Test

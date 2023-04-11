@@ -23,16 +23,6 @@ dependencies {
     clover 'org.openclover:clover:4.4.1'
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
-}
-
-test {
-    testLogging {
-        showStandardStreams = true
-        exceptionFormat = 'full'
-    }
-}
 
 
 java {

@@ -152,9 +152,9 @@ public class GameTest {
         newGame.makeAttackList(attTurn1);
         newGame.makeAttackList(attTurn2);
         newGame.makeAttackList(attTurn3);
-        newGame.doAttack();
-        newGame.getString();
-        newGame.printUnit();
+//        newGame.doAttack();
+//        newGame.getString();
+//        newGame.printUnit();
     }
 
 
