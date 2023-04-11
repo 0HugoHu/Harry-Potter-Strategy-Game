@@ -180,11 +180,9 @@ public class Player implements Serializable {
                 return 60;
         }
     }
-
     public int getWorldLevel() {
         return worldLevel;
     }
-
     /**
      * return connection socket of this player
      *

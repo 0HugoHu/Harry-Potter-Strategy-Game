@@ -1,6 +1,8 @@
 package edu.duke.shared.player;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -77,5 +79,31 @@ public class PlayerTest {
         Player p = new Player(0,new Socket());
         p.setHorns(100);
         assertEquals(100,p.getHorns());
+    }
+
+    @Test
+    public void expandTerr() {
+        Player p = new Player(0,new Socket());
+        Territory t1 = new Territory("terr1");
+        Territory t2 = new Territory("terr2");
+        assertTrue(p.expandTerr(t1));
+        assertFalse(p.expandTerr(t1));
+        assertTrue(p.expandTerr(t2));
+        assertFalse(p.expandTerr(t2));
+    }
+
+    @Test
+    public void removeTerr() {
+        Player p = new Player(0,new Socket());
+        Territory t1 = new Territory("terr1");
+        Territory t2 = new Territory("terr2");
+        assertTrue(p.expandTerr(t1));
+        assertFalse(p.expandTerr(t1));
+        assertTrue(p.expandTerr(t2));
+        assertFalse(p.expandTerr(t2));
+        assertTrue(p.removeTerr(t1));
+        assertFalse(p.removeTerr(t1));
+        assertTrue(p.removeTerr(t2));
+        assertFalse(p.removeTerr(t2));
     }
 }
