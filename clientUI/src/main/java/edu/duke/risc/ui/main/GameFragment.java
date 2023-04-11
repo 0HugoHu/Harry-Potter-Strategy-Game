@@ -880,6 +880,22 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             }
         }
 
+        // TODO: Implement cost
+        int cost = 1 * 15;
+        if (unitDataModels.size() == 0) {
+            TextView error_view = move_attack_view.findViewById(R.id.cost_error_prompt);
+            error_view.setVisibility(View.VISIBLE);
+            error_view.setText(getResources().getString(R.string.no_unit));
+            cost = 0;
+        } else {
+            TextView error_view = move_attack_view.findViewById(R.id.cost_error_prompt);
+            error_view.setVisibility(View.INVISIBLE);
+        }
+
+        String cost_s = cost + " coins";
+        TextView total_cost = move_attack_view.findViewById(R.id.total_cost);
+        total_cost.setText(cost_s);
+
         unitAdapter.notifyDataSetChanged();
         unitUpgradeAdapter.notifyDataSetChanged();
     }
