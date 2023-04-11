@@ -128,7 +128,7 @@ public class UnitDataAdapter extends ArrayAdapter<UnitDataModel> implements View
         return convertView;
     }
 
-    public int getTotalCost() {
+    public int getTotalNumber() {
         int total_cost = 0;
         for (UnitDataModel dataModel : dataSet) {
             total_cost += dataModel.getNumber();

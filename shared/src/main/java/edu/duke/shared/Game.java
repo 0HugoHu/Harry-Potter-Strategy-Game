@@ -88,7 +88,8 @@ public class Game implements Serializable {
         return attackDetailsSB.toString();
     }
 
-    public int calculateDis(int dis,int num){
+    // TODO: calculate cost
+    public int calculateOrderCost(int dis, int num){
         return dis*num/2;
     }
 
