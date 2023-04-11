@@ -48,6 +48,6 @@ RUN chmod +x gradlew
 RUN chmod +x scripts/*
 
 # compile the code
-RUN ./gradlew assemble
-
-
+RUN ./gradlew :client:assemble
+RUN ./gradlew :shared:assemble
+RUN ./gradlew :server:assemble
