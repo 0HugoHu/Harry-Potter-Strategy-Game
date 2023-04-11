@@ -13,7 +13,6 @@ public class Move extends Order {
      *
      * @param from       Territory name
      * @param to         Territory name
-     * @param numUnits   Number of units
      * @param playerName Player name
      */
     public Move(String from, String to, HashMap<UnitType,Integer> unitList, String playerName) {

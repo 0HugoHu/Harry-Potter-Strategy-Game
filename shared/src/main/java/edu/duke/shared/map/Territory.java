@@ -488,7 +488,7 @@ public class Territory implements Serializable {
                 setUnicornLand();
                 setNifflerLand();
                 addHorns(5);
-                addCoins(50);
+                addCoins(20);
                 break;
             case "cliff":
                 this.type = "cliff";
@@ -500,19 +500,19 @@ public class Territory implements Serializable {
                 setUnicornLand();
                 setNifflerLand();
                 addHorns(7);
-                addCoins(75);
+                addCoins(15);
                 break;
             case "desert":
                 this.type = "desert";
                 setNifflerLand();
-                addCoins(95);
+                addCoins(5);
                 break;
             case "forest":
                 this.type = "forest";
                 setUnicornLand();
                 setNifflerLand();
                 addHorns(7);
-                addCoins(125);
+                addCoins(15);
                 break;
             case "wetland":
                 this.type = "wetland";
@@ -526,7 +526,7 @@ public class Territory implements Serializable {
                 setUnicornLand();
                 setNifflerLand();
                 addHorns(5);
-                addCoins(50);
+                addCoins(20);
                 break;
         }
     }
