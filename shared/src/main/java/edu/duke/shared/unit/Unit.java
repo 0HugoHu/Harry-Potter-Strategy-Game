@@ -1,7 +1,6 @@
 package edu.duke.shared.unit;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Unit implements Serializable {
@@ -22,10 +21,6 @@ public class Unit implements Serializable {
         this.type = type;
         // Switch case for different types of units
         switch (type) {
-            case GNOME:
-                this.bonus = 0;
-                this.cost = 0;
-                break;
             case DWARF:
                 this.bonus = 1;
                 this.cost = 3;
@@ -102,10 +97,8 @@ public class Unit implements Serializable {
      * @param type UnitType
      * @return String
      */
-    public String convertUnitTypeToString(UnitType type) {
+    public static String convertUnitTypeToString(UnitType type) {
         switch (type) {
-            case GNOME:
-                return "Gnome";
             case DWARF:
                 return "Dwarf";
             case HOUSE_ELF:
@@ -131,8 +124,6 @@ public class Unit implements Serializable {
      */
     public static UnitType convertStringToUnitType(String name) {
         switch (name) {
-            case "Gnome":
-                return UnitType.GNOME;
             case "Dwarf":
                 return UnitType.DWARF;
             case "House-elf":
@@ -158,8 +149,6 @@ public class Unit implements Serializable {
      */
     public static String getName(UnitType type) {
         switch (type) {
-            case GNOME:
-                return "Gnome";
             case DWARF:
                 return "Dwarf";
             case HOUSE_ELF:
