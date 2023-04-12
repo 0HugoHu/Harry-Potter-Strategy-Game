@@ -53,7 +53,9 @@ Wait for players to connect to the server.
 
 <img src="assets/Evo2/a1.png" width="350" />
 
-✅ If it runs smoothly, you will see this waiting page here:
+If you want to change the virtual machine address, go to ClientAdapter.java and change the Host field.
+
+✅ If it runs smoothly, you will see one of the waiting page here:
 
 <img src="assets/Evo2/loading.png" width="600" />
 
@@ -63,9 +65,6 @@ by running the command:
 ./client_mock.sh
 # Notice: In the file client_mock.sh, change "vcm-xxxxx.vm.duke.edu" to your own virtual machine name.
 ```
-
-
-You then should see the prompt: **"Currently waiting for other players..."**.
 
 <img src="assets/Evo1/2.png" width="350" />
 
