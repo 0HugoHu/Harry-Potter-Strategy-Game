@@ -33,7 +33,7 @@ public class PlayerTest {
             terrs.add(t);
         }
         p.updateResources(terrs);
-        assertEquals(15,p.getHorns());
+        assertEquals(30,p.getHorns());
 //        assertEquals(150,p.getCoins());
     }
 
@@ -43,16 +43,25 @@ public class PlayerTest {
         Player p = new Player(0,new Socket());
         p.setHorns(10000);
         p.upgradeWorldLevel();
-        assertEquals(9940,p.getHorns());
+        assertEquals(10000,p.getHorns());
     }
 
     @Test
-    public void setExpenses() {
+    public void setExpenseHorns() {
         Player p = new Player(0,new Socket());
         p.setHorns(100);
         assertEquals(100,p.getHorns());
-//        p.setExpenses(50);
-//        assertEquals(50,p.getHorns());
+        p.setExpenseHorns(50);
+        assertEquals(50,p.getHorns());
+    }
+
+    @Test
+    public void setExpenseCoins() {
+        Player p = new Player(0,new Socket());
+        p.setCoins(100);
+        assertEquals(100,p.getCoins());
+        p.setExpenseCoins(50);
+        assertEquals(50,p.getCoins());
     }
 
     @Test

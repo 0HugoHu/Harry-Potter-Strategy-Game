@@ -112,7 +112,7 @@ public class Territory implements Serializable {
      * @return true if inside
      */
     public boolean checkInsideBorders(int y, int x) {
-        return y < this.borders[0] || y > this.borders[1] || x > this.borders[2] || x < this.borders[3];
+        return y > this.borders[0] && y < this.borders[1] && x < this.borders[2] && x > this.borders[3];
     }
 
 
@@ -158,7 +158,7 @@ public class Territory implements Serializable {
      * @return true if successfully added
      */
     public boolean addUnit(UnitType type) {
-        this.units.add(new Unit(convertUnitTypeToString(type)));
+        this.units.add(new Unit(Unit.convertUnitTypeToString(type)));
         return true;
     }
 
@@ -172,21 +172,6 @@ public class Territory implements Serializable {
         return true;
     }
 
-    /**
-     * Remove a unit from this territory
-     *
-     * @param unit Unit to be removed
-     * @return true if successfully removed
-     */
-    public boolean removeUnit(Unit unit) {
-        for (Unit u : this.units) {
-            if (u.getType().equals(unit.getType())) {
-                this.units.remove(u);
-                return true;
-            }
-        }
-        return false;
-    }
 
     /**
      * Remove a unit from this territory
@@ -275,27 +260,6 @@ public class Territory implements Serializable {
         this.units.clear();
     }
 
-    public String convertUnitTypeToString(UnitType type) {
-        switch (type) {
-            case GNOME:
-                return "Gnome";
-            case DWARF:
-                return "Dwarf";
-            case HOUSE_ELF:
-                return "House-elf";
-            case GOBLIN:
-                return "Goblin";
-            case VAMPIRE:
-                return "Vampire";
-            case CENTAUR:
-                return "Centaur";
-            case WEREWOLF:
-                return "Werewolf";
-            default:
-                return "Gnome";
-        }
-    }
-
 
     /**
      * Remove one unit by name from this territory
@@ -304,13 +268,7 @@ public class Territory implements Serializable {
      */
     public boolean removeUnitByName(String name) {
         UnitType unitType = Unit.convertStringToUnitType(name);
-        for (Unit unit : this.units) {
-            if (unit.getType() == unitType) {
-                this.units.remove(unit);
-                return true;
-            }
-        }
-        return false;
+        return removeUnit(unitType);
     }
 
 
@@ -323,20 +281,6 @@ public class Territory implements Serializable {
     public boolean contains(int[] coord) {
         for (int[] c : coords) {
             if (c[0] == coord[0] && c[1] == coord[1]) return true;
-        }
-        return false;
-    }
-
-    /**
-     * Test if a coordinate is in this territory
-     *
-     * @param y y coordinate
-     * @param x x coordinate
-     * @return territory contains the coordinate
-     */
-    public boolean contains(int y, int x) {
-        for (int[] c : coords) {
-            if (c[0] == y && c[1] == x) return true;
         }
         return false;
     }
@@ -507,13 +451,6 @@ public class Territory implements Serializable {
      */
     public void setType(String typeName) {
         switch (typeName) {
-            case "plain":
-                this.type = "plain";
-                setUnicornLand();
-                setNifflerLand();
-                addHorns(10);
-                addCoins(20);
-                break;
             case "cliff":
                 this.type = "cliff";
                 setUnicornLand();
