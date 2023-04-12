@@ -37,7 +37,7 @@
 
 ## 4. Tutorials
 
-💡 For this evolution 1, you need to run **1 server** and **3 clients** (this is a fixed number at present). The order to run the server and clients does not matter.
+💡 For this evolution 2, you need to run **1 server** and **4 clients** (this is a fixed number at present). Each client will be assigned to one house according to the Harry Potter world setting: Gryffindor, Hufflepuff, Ravenclaw or Slytherin.
 
 ### 4.1. Start the Server
 
@@ -45,10 +45,7 @@
 ```bash
 ./gradlew :server:run
 ```
-
-Wait for players to connect to the server. You will see the prompt: **"Waiting for players to join..."**.
-
-<img src="assets/Evo1/1.png" width="400"  />
+Wait for players to connect to the server. 
 
 ### 4.2. Start the Clients
 
@@ -58,13 +55,15 @@ Wait for players to connect to the server. You will see the prompt: **"Waiting f
 
 ✅ If it runs smoothly, you will see this waiting page here:
 
-<img src="assets/Evo2/a2.png" width="600" />
+<img src="assets/Evo2/loading.png" width="600" />
 
-✅ Run the client by command line. You need to input your **"HOST NAME"** as an argument in the command. For example, if your host name is "0.0.0.0" (such as you are running the server on your local machine), you should ues this command: 
+✅ Next, you can choose to play with your three other friends(let them run the clientUI as well), or play with the mock client
+by running the command: 
 ```bash
-./gradlew :client:run --args="0.0.0.0"
-# Change "0.0.0.0" to "vcm-xxxxx.vm.duke.edu" if you are running the server on the VM.
+./client_mock.sh
+# Notice: In the file client_mock.sh, change "vcm-xxxxx.vm.duke.edu" to your own virtual machine name.
 ```
+
 
 You then should see the prompt: **"Currently waiting for other players..."**.
 
