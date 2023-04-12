@@ -6,7 +6,7 @@ import edu.duke.shared.helper.State;
 
 public class ClientAdapter {
     // Host
-    private static final String HOST = "127.0.0.1";
+    private static final String HOST = "vcm-30577.vm.duke.edu";
     // Client
     private final Client client;
 

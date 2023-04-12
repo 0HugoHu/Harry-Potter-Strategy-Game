@@ -583,7 +583,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         tech_upgrade_btn.setOnClickListener(v -> {
             Toast.makeText(context, "Upgrade will be completed in the next turn!", Toast.LENGTH_SHORT).show();
             this.isUpgradedWorldLevel = true;
-            TextView ui_horn = ui_view.findViewById(R.id.ui_horn);
             this.currentHornExpense += Player.upgradeCost(mGame.getPlayer(mGame.getPlayerName()).getWorldLevel() + 1);
             updatePlayerValues();
             base_view.setVisibility(View.GONE);
@@ -689,9 +688,9 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                         updateUnitMoveAttackMap(number, unit);
                         int cost = this.mGame.calculateOrderCost(this.mGame.getMap().getShortestDistance(orderTerrFrom, orderTerrTo), number);
                         this.mGame.getPlayer(mGame.getPlayerName()).setExpenseCoins(cost);
-                        updatePlayerValues();
                     }
                 }
+                updatePlayerValues();
             } else if (mTouchEvent == ATTACK) {
                 for (UnitDataModel unit : unitDataModels) {
                     String name = unit.getName();
@@ -702,11 +701,11 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     if (number > 0) {
                         attackTurn.addAttack(new Attack(orderTerrFrom, orderTerrTo, list, this.mGame.getPlayerName()));
                         updateUnitMoveAttackMap(number, unit);
-                        int cost = this.mGame.calculateOrderCost(this.mGame.getMap().getShortestDistance(orderTerrFrom, orderTerrTo), number);
+                        int cost = this.mGame.calculateOrderCost(this.mGame.getMap().getDistance(orderTerrFrom, orderTerrTo), number);
                         this.mGame.getPlayer(mGame.getPlayerName()).setExpenseCoins(cost);
-                        updatePlayerValues();
                     }
                 }
+                updatePlayerValues();
             } else {
                 return;
             }
