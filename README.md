@@ -28,11 +28,13 @@
 <img src="assets/UML/UML-final.png" alt="umlgraph" width="75%" />
 
 
-## 3. Coverage Report
+## 3. Coverage Report & Statics
 
 📃 **Click [here](https://hugo.pages.oit.duke.edu/ece651-sp23-group1) for three submodules coverage reports.**
 
 <img src="assets/Evo1/pages.png" alt="coverage" width="75%" />
+
+<img src="assets/Evo2/static.png" alt="statics" width="75%" />
 
 
 ## 4. Tutorials
