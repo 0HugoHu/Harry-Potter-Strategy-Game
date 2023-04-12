@@ -107,7 +107,7 @@ Each player can choose to attack or move or upgrade, and they can do as many ord
 
 <img src="assets/Evo2/type.png" width="600" />
 
-🔱 4.5.5. The user can also upgrade the world tech level using horns, as the following screen shots shown:
+🔱 4.5.5. By clicking the "Tech" button on the right, the user can also upgrade the world tech level using horns, as the following screen shots shown:
 
 <img src="assets/Evo2/upgrade.png" width="600" />
 
