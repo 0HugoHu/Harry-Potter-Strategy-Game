@@ -1,11 +1,8 @@
 package edu.duke.shared.map;
 
 import java.io.Serializable;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 import edu.duke.shared.player.Player;
 import edu.duke.shared.unit.Unit;
@@ -206,22 +203,6 @@ public class Territory implements Serializable {
         }
         return false;
     }
-
-    /**
-     * Remove a normal unit from this territory
-     *
-     * @return true if successfully removed
-     */
-    public boolean removeUnit() {
-        for (Unit u : this.units) {
-            if (u.getType().equals(UnitType.GNOME)) {
-                this.units.remove(u);
-                return true;
-            }
-        }
-        return false;
-    }
-
     /**
      * Get the name of this territory
      *
