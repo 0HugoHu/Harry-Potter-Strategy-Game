@@ -639,6 +639,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             // Upgrade the unit
             int cost = this.mGame.getMap().getTerritory(orderTerrFrom).upgradeUnit(selected_from, selected_to, num);
             this.mGame.getPlayer(mGame.getPlayerName()).setExpenseHorns(cost);
+
             // Update cost on top bar display
             updatePlayerValues();
             // Update the unit number
