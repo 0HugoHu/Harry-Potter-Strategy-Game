@@ -1,11 +1,12 @@
 package edu.duke.shared;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -37,6 +38,7 @@ public class TerritoryTest {
         Territory t = new Territory("Terr0");
         Unit u = new Unit("Gnome");
         assertTrue(t.addUnit(UnitType.GNOME));
+        assertTrue(t.addUnit(u));
     }
 
     @Test
@@ -45,6 +47,8 @@ public class TerritoryTest {
         Unit u = new Unit("Gnome");
         assertTrue(t.addUnit(UnitType.GNOME));
         assertTrue(t.removeUnit(UnitType.GNOME));
+        t.addUnit(UnitType.WEREWOLF);
+        assertFalse(t.removeUnit(UnitType.GNOME));
     }
 
     @Test
