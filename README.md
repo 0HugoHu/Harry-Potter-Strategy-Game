@@ -97,7 +97,7 @@ randomly assigned to one of the four harry potter houses: Gryffindor, Hufflepuff
 
 <img src="assets/Evo2/land.png" width="600" />
 
-Each player can choose to attack or move or commit orders, and they can do as many orders as they want in one turn as long as they have enough units.
+Each player can choose to attack or move or upgrade, and they can do as many orders as they want in one turn as long as they have enough units. After all is done, click the "End" button on the right.
 
 🔱 4.5.3. The following screen shots are for Unit upgrade and Move:
 
