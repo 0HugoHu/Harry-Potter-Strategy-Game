@@ -262,7 +262,6 @@ public class Player implements Serializable {
 
     public void upgradeWorldLevel() {
         this.worldLevel++;
-        this.horns -= upgradeCost(this.worldLevel);
     }
 
     /**
