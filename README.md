@@ -77,7 +77,7 @@ by running the command:
 <img src="assets/Evo2/login.png" width="600" />
 
 
-🔱 4.3.2.  Wait for other clients to finish login. You will then automatically be assigned your house. Each player could be
+🔱 4.3.2.  After all others have login, you will then automatically be assigned your house. Each player could be
 randomly assigned to one of the four harry potter houses: Gryffindor, Hufflepuff, Ravenclaw or Slytheri, whose color is aligned with the territory color. After clicking the "I'm pleased to accept my offer", user will go into next stage.
 
 <img src="assets/Evo2/house.png" width="600" />
@@ -85,41 +85,41 @@ randomly assigned to one of the four harry potter houses: Gryffindor, Hufflepuff
 
 ### 4.4. Players' Unit Allocations
 
-🔱 4.4.1. After all players input their names, there will be a display of game map as well as the text descriptions. There will be a prompt: **"Please enter the name of the territory you want to add units to:"**, and you should enter the alphabet representing the land you want to add units to; 
+🔱 4.4.1. After accepted the offer, you can allocate units according to your requirements. Use the sliding bar and place all 24 units, then click End button in the page.
 
-🔱 4.4.2. After that, there be a prompt of: **"Please enter the number of units you want to add(24 Remaining):"**, and you should just input a number for it. If you don't use up all 24 units, this prompt loop will keep going until you enter correctly.
-
-<img src="assets/Evo1/4.png" width="550" />
-
-🔱 4.4.3. After you finish all your territories' unit allocation, you will see the prompt: **"Total units placed: 24. You have placed exactly 24 units."** You should just wait for other clients to finish inputing their units.
+<img src="assets/Evo2/placement.png" width="600" />
 
 ### 4.5. Game Stage
 
-🔱 4.5.1. The server sends maps to all the players and the game begins! All players can see the current turn number, as well as each player's unit allocation in this turn. 
+🔱 4.5.1. The server sends maps to all the players and the game begins! All players can see the current turn number, and after the first turn, they can see each player's unit allocation in this turn. 
 
-🔱 4.5.2. There will be prompt: **"You: X(Your User Name), what would you like to do? (M)ove (A)ttack (D)one“**.
+🔱 4.5.2. The user can click one territory, and there'll be three choices: Units,Order and Property. Units allows user to upgrade unist, Order allows user to make a Move/Attack order, and Property allows user to check this territory's type and descriptions.
 
-<img src="assets/Evo1/5.png" width="450" />
+<img src="assets/Evo2/land.png" width="600" />
 
 Each player can choose to attack or move or commit orders, and they can do as many orders as they want in one turn as long as they have enough units.
 
-🔴 **Note: After each order is placed, the map will be updated automatically. But this doesn't mean you have successfully executes this order. All orders are finalized on the server side.**
+🔱 4.5.3. The following screen shots are for Unit upgrade and Move:
 
-🔱 4.5.3. If the player choose to **Move**, then he/she should type in **"M"**; then the player should enter the name of territory he/she wants to move from, the name of territory he/she wants to move to, and the number of units he/she wants to move. 
+<img src="assets/Evo2/unit.png" width="600" />
 
-🔱 4.5.4. If the player choose to **Attack**, then he/she should type in **"A"**; then the player should enter the name of territory he/she wants to attack from, the name of territory he/she wants to attack to, and the number of units he/she wants to use in attack. 
+🔱 4.5.4. The following screen shots are for territory type descriptions:
 
-🔱 4.5.5. If the player thinks he/she can **Place Orders** in this turn, then he/she should type **"D"**. There be a prompt: **"Waiting for other players..."** indicating the player is in the waiting stage.
+<img src="assets/Evo2/type.png" width="600" />
 
-🔱 4.5.6. After all players have finished, the server will show: **"Received all action lists."**, and start the battling stage. It will print each battle info, demonstrating who is the winner of this battle. Then, a new turn begins.
+🔱 4.5.5. The user can also upgrade the world tech level using horns, as the following screen shots shown:
 
-<img src="assets/Evo1/7.png" width="450" />
+<img src="assets/Evo2/upgrade.png" width="600" />
+
+🔱 4.5.6. After all players have finished placing order, this turn will end, and in the next turn all battles results will shown on the map, and the corresponding resources will be added to users based on the territories they have.
 
 ### 4.6. Game Over
 
-🔰 4.6.1. If one player has lost all his/her territories, then he/she lost. There will be prompt: **"Player X has lost the game. Game continues."** on the server side.
+🔰 4.6.1. If one player has lost all his/her territories, then he/she lost. If he/she hasn't lost, they can also click the "player" on the upper left and chose to surrender.
 
-🔰 4.6.2. If then, there is only one player left, he/she is the winner, both server side and client side show: **"Game Over. Player X wins!"**.
+🔰 4.6.2. If then, there is only one player left, he/she is the winner, and the following pis will be shown:
+
+<img src="assets/Evo2/win.png" width="600" />
 
 
 ## 5. Moreover
