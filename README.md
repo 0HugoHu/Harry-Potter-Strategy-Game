@@ -66,18 +66,20 @@ by running the command:
 # Notice: In the file client_mock.sh, change "vcm-xxxxx.vm.duke.edu" to your own virtual machine name.
 ```
 
-<img src="assets/Evo1/2.png" width="350" />
+### 4.3. Player login
 
-### 4.3. Players' Input Names
+🔱 4.3.1. When all **4 players** have joined the game, the game will switch to the login page, which is one of the follows:
 
-🔱 4.3.1. When all **3 players** have joined the game, there should be a prompt: **"Please enter your player name:"** on the client side. Type in your user's name 
+🔷 Note: We didn't actually implement the functions of login pages, so users can input whatever they want in it.
 
-🔷 Note: we suggest each player has a unique name, but it is not required.
-
-<img src="assets/Evo1/3.png" width="350" />
+<img src="assets/Evo2/login.png" width="600" />
 
 
-🔱 4.3.2.  Wait for other clients to finish input their names. You will then automatically be assigned your game ID.
+🔱 4.3.2.  Wait for other clients to finish login. You will then automatically be assigned your house. Each player could be
+randomly assigned to one of the four harry potter houses: Gryffindor, Hufflepuff, Ravenclaw or Slytheri, whose color is aligned with the territory color. After clicking the "I'm pleased to accept my offer", user will go into next stage.
+
+<img src="assets/Evo2/house.png" width="600" />
+
 
 ### 4.4. Players' Unit Allocations
 
