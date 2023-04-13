@@ -45,8 +45,10 @@ public class Player implements Serializable {
         // Start the thread
         this.playerThread = new PlayerThread(this.socket, this.playerId);
         this.thread = new Thread(this.playerThread);
-        this.thread.start();
+        this.coins= 0;
+        this.horns = 0;
         this.worldLevel = 1;
+        this.thread.start();
     }
 
     /**
@@ -235,6 +237,14 @@ public class Player implements Serializable {
     }
 
     /**
+     * Set coins
+     * @param coins coins
+     */
+    public void setCoins(int coins) {
+        this.coins = coins;
+    }
+
+    /**
      * Get horns
      *
      * @return horns
@@ -244,11 +254,14 @@ public class Player implements Serializable {
     }
 
     /**
-     * Upgrade world level
+     * Set horns
      */
+    public void setHorns(int horns) {
+        this.horns = horns;
+    }
+
     public void upgradeWorldLevel() {
         this.worldLevel++;
-        this.horns -= upgradeCost(this.worldLevel);
     }
 
     /**

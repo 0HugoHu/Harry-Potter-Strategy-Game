@@ -1,17 +1,19 @@
 package edu.duke.shared;
 
-import static org.junit.Assert.*;
-
-import edu.duke.shared.player.Player;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import edu.duke.shared.map.GameMap;
 import edu.duke.shared.map.Territory;
+import edu.duke.shared.player.Player;
 
 public class GameMapTest {
 
@@ -233,6 +235,21 @@ public class GameMapTest {
         GameMap gameMap = new GameMap(10, 10, 1, new ArrayList<>());
         gameMap.putDistance("", "", 0);
         gameMap.getDistance("", "");
+    }
+
+    @Test
+    public void getShortestDistance(){
+        Game g = new Game(2,24);
+        Player p1 = new Player(0,new Socket());
+        p1.setPlayerName("p1");
+        Player p2 = new Player(1, new Socket());
+        p2.setPlayerName("p2");
+        g.addPlayer(p1);
+        g.addPlayer(p2);
+        g.allocateTerritories();
+        ArrayList<Territory> ta = g.getMap().getTerritoriesByOwner(p1.getPlayerName());
+        g.getMap().getShortestDistance(ta.get(0).getName(),ta.get(ta.size()-1).getName());
+
     }
 
 
