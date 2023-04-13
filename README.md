@@ -1,10 +1,10 @@
 # ECE 651 RISC Project Group 1 
 
-![](https://img.shields.io/badge/java-88.3%25-blue)
+![](https://img.shields.io/badge/java-93.62%25-blue)
 ![](https://img.shields.io/badge/build-passing-brightgreen)
-![](https://img.shields.io/badge/coverage-99%25-green)
-![](https://img.shields.io/badge/issues-56%20closed-yellow)
-![](https://img.shields.io/badge/milestones-6-red)
+![](https://img.shields.io/badge/coverage-96%25-green)
+![](https://img.shields.io/badge/issues-61%20closed-yellow)
+![](https://img.shields.io/badge/milestones-11-red)
 
 ## 0. Group Members
 - 👧 **Xueyi Cheng** (xc187)
@@ -32,9 +32,9 @@
 
 📃 **Click [here](https://hugo.pages.oit.duke.edu/ece651-sp23-group1) for three submodules coverage reports.**
 
-<img src="assets/Evo2/coverage.png" alt="coverage" width="75%" />
+<img src="assets/Evo2/coverage.png" alt="coverage" width="100%" />
 
-<img src="assets/Evo2/static.png" alt="statics" width="75%" />
+<img src="assets/Evo2/static.png" alt="statics" width="100%" />
 
 
 ## 4. Tutorials
