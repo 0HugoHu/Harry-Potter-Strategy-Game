@@ -32,7 +32,7 @@
 
 📃 **Click [here](https://hugo.pages.oit.duke.edu/ece651-sp23-group1) for three submodules coverage reports.**
 
-<img src="assets/Evo1/pages.png" alt="coverage" width="75%" />
+<img src="assets/Evo2/coverage.png" alt="coverage" width="75%" />
 
 <img src="assets/Evo2/static.png" alt="statics" width="75%" />
 
