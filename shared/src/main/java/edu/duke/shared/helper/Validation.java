@@ -140,7 +140,7 @@ public class Validation {
             String terrName = q.remove();
             Territory terr = map.getTerritory(terrName);
             if (terrName.equals(territoryName2)) return true;
-            for (String adjTerrName : terr.getAdjacent()) {
+            for (String adjTerrName : terr.getAdjacents()) {
                 Territory adjTerr = map.getTerritory(adjTerrName);
                 if (!terr.getOwner().equals(adjTerr.getOwner())) continue;
                 if (visited.contains(adjTerrName)) continue;

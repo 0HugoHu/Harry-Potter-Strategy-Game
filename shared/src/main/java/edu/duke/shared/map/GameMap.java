@@ -297,7 +297,7 @@ public class GameMap implements Serializable {
         for (Territory t : this.territories) {
             String tName = t.getName();
             // Traverse the territory and update border points
-            for (int[] coord : t.getCoordinates()) {
+            for (int[] coord : t.getCoords()) {
                 int x = coord[1];
                 int y = coord[0];
                 // Pattern code: 0001: top, 0010: right, 0100: bottom, 1000: left
