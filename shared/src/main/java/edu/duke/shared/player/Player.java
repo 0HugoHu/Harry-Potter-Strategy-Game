@@ -1,12 +1,18 @@
 package edu.duke.shared.player;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import java.io.Serializable;
 import java.net.Socket;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import edu.duke.shared.Game;
 import edu.duke.shared.map.Territory;
+import edu.duke.shared.unit.Unit;
+import jdk.internal.org.jline.reader.Buffer;
 
 public class Player implements Serializable {
     // Player's name
@@ -29,6 +35,20 @@ public class Player implements Serializable {
     public int horns;
     // Will upgrade world level
     public boolean willUpgradeWorldLevel = false;
+    // Horcrux storage
+    private final HashMap<Horcrux, Integer> horcruxes = new HashMap<>();
+    // Horcrux usage, <name, num>
+    private final HashMap<Horcrux, Integer> horcruxUsage = new HashMap<>();
+    // Horcrux usage target, <name, isTarget>
+    private final HashMap<Horcrux, Boolean> horcruxTarget = new HashMap<>();
+    // Previous 10 dead units
+    private ArrayList<Unit> deadUnits = new ArrayList<>();
+    // Player's house
+    private House house;
+    // Player's skill
+    private SkillState skillState = SkillState.NOT_USED;
+    // Skill's in-effect count down
+    private int skillCountDown = 3;
 
 
     /**
@@ -49,6 +69,18 @@ public class Player implements Serializable {
         this.horns = 0;
         this.worldLevel = 1;
         this.thread.start();
+        this.horcruxes.put(Horcrux.CUP, 0);
+        this.horcruxes.put(Horcrux.HAT, 0);
+        this.horcruxes.put(Horcrux.RING, 0);
+        this.horcruxes.put(Horcrux.SNAKE, 0);
+        this.horcruxes.put(Horcrux.LOCKET, 0);
+        this.horcruxes.put(Horcrux.DIARY, 0);
+        this.horcruxUsage.put(Horcrux.CUP, 0);
+        this.horcruxUsage.put(Horcrux.HAT, 0);
+        this.horcruxUsage.put(Horcrux.RING, 0);
+        this.horcruxUsage.put(Horcrux.SNAKE, 0);
+        this.horcruxUsage.put(Horcrux.LOCKET, 0);
+        this.horcruxUsage.put(Horcrux.DIARY, 0);
     }
 
     /**
@@ -281,5 +313,133 @@ public class Player implements Serializable {
     public void setExpenseCoins(int coins) {
         this.coins -= coins;
     }
+
+    /**
+     * Get horcrux storage
+     *
+     * @return horcrux storage
+     */
+    public int getHorcruxStorage(Horcrux horcrux) {
+        return this.horcruxes.get(horcrux);
+    }
+
+    /**
+     * Set horcrux storage
+     *
+     * @param horcrux horcrux
+     * @param amount  amount
+     */
+    public void addToHorcruxStorage(Horcrux horcrux, int amount) {
+        this.horcruxes.put(horcrux, this.horcruxes.getOrDefault(horcrux, 0) + amount);
+    }
+
+    /**
+     * Remove horcrux storage
+     */
+    public void removeFromHorcruxStorage(Horcrux horcrux, int amount) {
+        this.horcruxes.put(horcrux, this.horcruxes.get(horcrux) - amount);
+    }
+
+    /**
+     * Get horcrux usage
+     */
+    public int getHorcruxUsage(Horcrux horcrux) {
+        return this.horcruxUsage.get(horcrux);
+    }
+
+    /**
+     * Set horcrux usage
+     *
+     * @param horcrux horcrux
+     * @param amount  amount
+     */
+    public void addToHorcruxUsage(Horcrux horcrux, int amount) {
+        this.horcruxUsage.put(horcrux, this.horcruxUsage.getOrDefault(horcrux, 0) + amount);
+    }
+
+    /**
+     * Remove horcrux usage
+     */
+    public void removeFromHorcruxUsage(Horcrux horcrux, int amount) {
+        this.horcruxUsage.put(horcrux, this.horcruxUsage.get(horcrux) - amount);
+    }
+
+    /**
+     * If is diary target, return true
+     */
+    public boolean isDiaryTarget() {
+        return this.horcruxTarget.get(Horcrux.DIARY);
+    }
+
+    /**
+     * If is snake target, return true
+     */
+    public boolean isSnakeTarget() {
+        return this.horcruxTarget.get(Horcrux.SNAKE);
+    }
+
+    /**
+     * If is locket target, return true
+     */
+    public boolean isLocketTarget() {
+        return this.horcruxTarget.get(Horcrux.LOCKET);
+    }
+
+    /**
+     * If player buff Gryffindor, return true
+     */
+    public boolean buffGryffindor() {
+        return this.house == House.GRYFFINDOR;
+    }
+
+    /**
+     * If player buff Slytherin, return true
+     */
+    public boolean buffSlytherin() {
+        return this.house == House.SLYTHERIN;
+    }
+
+    /**
+     * If player buff Hufflepuff, return true
+     */
+    public boolean buffHufflepuff() {
+        return this.house == House.HUFFLEPUFF;
+    }
+
+    /**
+     * If player buff Ravenclaw, return true
+     */
+    public boolean buffRavenclaw() {
+        return this.house == House.RAVENCLAW;
+    }
+
+    /**
+     * If player skill Gryffindor, return true
+     */
+    public boolean skillGryffindor() {
+        return buffGryffindor() && this.skillState == SkillState.IN_EFFECT;
+    }
+
+    /**
+     * If player skill Slytherin, return true
+     */
+    public boolean skillSlytherin() {
+        return buffSlytherin() && this.skillState == SkillState.IN_EFFECT;
+    }
+
+    /**
+     * If player skill Hufflepuff, return true
+     */
+    public boolean skillHufflepuff() {
+        return buffHufflepuff() && this.skillState == SkillState.IN_EFFECT;
+    }
+
+    /**
+     * If player skill Ravenclaw, return true
+     */
+    public boolean skillRavenclaw() {
+        return buffRavenclaw() && this.skillState == SkillState.IN_EFFECT;
+    }
+
 
 }
