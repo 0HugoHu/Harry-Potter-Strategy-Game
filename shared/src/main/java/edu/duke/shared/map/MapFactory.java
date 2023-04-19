@@ -70,7 +70,7 @@ public class MapFactory {
     public boolean isFullfilledMap(GameMap m) {
         int num_coords = 0;
         for (Territory t : m.getTerritories()) {
-            num_coords += t.getCoordinates().size();
+            num_coords += t.getCoords().size();
         }
         return num_coords == (m.getHeight() * m.getWidth());
     }
