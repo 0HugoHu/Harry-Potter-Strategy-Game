@@ -1,7 +1,5 @@
 package edu.duke.risc.ui.action;
 
-import android.text.method.Touch;
-
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -46,9 +44,9 @@ public class TouchEventMapping {
     public int[] getCenterPoint(Territory t) {
         float minDistance = Float.MAX_VALUE;
         int[] centerPoint = new int[2];
-        for (int[] coord : t.getCoords()) {
+        for (int[] coord : t.getCoordinates()) {
             float distance = 0.0f;
-            for (int[] coord2 : t.getCoords()) {
+            for (int[] coord2 : t.getCoordinates()) {
                 distance += Math.sqrt(Math.pow(coord[0] - coord2[0], 2) + Math.pow(coord[1] - coord2[1], 2));
             }
             if (distance < minDistance) {

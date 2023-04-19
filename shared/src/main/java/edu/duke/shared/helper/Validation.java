@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import edu.duke.shared.Game;
 import edu.duke.shared.map.GameMap;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.turn.Attack;
@@ -141,7 +140,7 @@ public class Validation {
             String terrName = q.remove();
             Territory terr = map.getTerritory(terrName);
             if (terrName.equals(territoryName2)) return true;
-            for (String adjTerrName : terr.getAdjacents()) {
+            for (String adjTerrName : terr.getAdjacent()) {
                 Territory adjTerr = map.getTerritory(adjTerrName);
                 if (!terr.getOwner().equals(adjTerr.getOwner())) continue;
                 if (visited.contains(adjTerrName)) continue;

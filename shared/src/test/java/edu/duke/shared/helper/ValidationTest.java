@@ -5,21 +5,17 @@ import static org.junit.Assert.*;
 import edu.duke.shared.unit.UnitType;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.Socket;
 import java.util.Scanner;
 
 import edu.duke.shared.Game;
 import edu.duke.shared.map.GameMap;
-import edu.duke.shared.map.MapFactory;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.player.Player;
 import edu.duke.shared.turn.Attack;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Move;
 import edu.duke.shared.turn.MoveTurn;
-import edu.duke.shared.unit.Unit;
 
 public class ValidationTest {
 
@@ -176,7 +172,7 @@ public class ValidationTest {
         String to2=null;
         boolean first=true;
         for (Territory t : map.getTerritoriesByOwner(p2.getPlayerName())) {
-            for (String t2 : t.getAdjacents()) {
+            for (String t2 : t.getAdjacent()) {
                 if (!Validation.checkTerritory(map, t2, p2.getPlayerName())) {
                     if (first) {
                         from1 = t.getName();
@@ -222,7 +218,7 @@ public class ValidationTest {
         String from = null;
         String to = null;
         for (Territory t : map.getTerritoriesByOwner(p2.getPlayerName())) {
-            for (String t2 : t.getAdjacents()) {
+            for (String t2 : t.getAdjacent()) {
                 if (!Validation.checkTerritory(map, t2, p2.getPlayerName())) {
                     from = t.getName();
                     to = t2;
