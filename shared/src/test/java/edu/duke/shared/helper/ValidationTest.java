@@ -172,7 +172,7 @@ public class ValidationTest {
         String to2=null;
         boolean first=true;
         for (Territory t : map.getTerritoriesByOwner(p2.getPlayerName())) {
-            for (String t2 : t.getAdjacent()) {
+            for (String t2 : t.getAdjacents()) {
                 if (!Validation.checkTerritory(map, t2, p2.getPlayerName())) {
                     if (first) {
                         from1 = t.getName();
@@ -218,7 +218,7 @@ public class ValidationTest {
         String from = null;
         String to = null;
         for (Territory t : map.getTerritoriesByOwner(p2.getPlayerName())) {
-            for (String t2 : t.getAdjacent()) {
+            for (String t2 : t.getAdjacents()) {
                 if (!Validation.checkTerritory(map, t2, p2.getPlayerName())) {
                     from = t.getName();
                     to = t2;
