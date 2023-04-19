@@ -1,7 +1,9 @@
 package edu.duke.server;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 import java.io.IOException;
@@ -14,6 +16,7 @@ import edu.duke.shared.Game;
 import edu.duke.shared.helper.GameObject;
 import edu.duke.shared.helper.State;
 import edu.duke.shared.map.GameMap;
+import edu.duke.shared.player.House;
 import edu.duke.shared.player.Player;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.turn.AttackTurn;
@@ -36,6 +39,8 @@ public class Server {
     private static final Logger logger = Logger.getLogger("serverLog.txt");
     // Server game lock
     private final ReentrantLock serverGameLock = new ReentrantLock();
+    // Server house mapping
+    private final Map<Integer, House> serverHouseMapping = new HashMap<>();
 
     /**
      * Main method
@@ -129,6 +134,34 @@ public class Server {
     }
 
     /**
+     * House allocation
+     */
+    private void houseAllocation() {
+        Random random = new Random();
+        while (this.serverHouseMapping.size() < this.getNumOfPlayers()) {
+            int randomHouse = random.nextInt(4);
+            House house = null;
+            switch (randomHouse) {
+                case 0:
+                    house = House.GRYFFINDOR;
+                    break;
+                case 1:
+                    house = House.HUFFLEPUFF;
+                    break;
+                case 2:
+                    house = House.RAVENCLAW;
+                    break;
+                case 3:
+                    house = House.SLYTHERIN;
+                    break;
+            }
+            if (!this.serverHouseMapping.containsValue(house)) {
+                this.serverHouseMapping.put(this.serverHouseMapping.size(), house);
+            }
+        }
+    }
+
+    /**
      * Wait until all threads are finished
      */
     private void waitForThreadJoin() {
@@ -143,6 +176,8 @@ public class Server {
      * @param num number of players
      */
     public void acceptConnection(int num) {
+        // House allocation
+        houseAllocation();
         // Wait until all players have joined the game
         for (int i = 0; i < num; i++) {
             try {
@@ -150,7 +185,7 @@ public class Server {
                 Socket socket = this.serverSocket.accept();
                 // Add player to the game, i means player_id
                 // Create an object, and a thread is started
-                this.game.addPlayer(new Player(i, socket));
+                this.game.addPlayer(new Player(i, socket, this.serverHouseMapping.get(i)));
                 System.out.println("Player " + i + " has joined the game.");
             } catch (IOException e) {
                 e.printStackTrace();

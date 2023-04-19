@@ -52,7 +52,7 @@ public class Player implements Serializable {
 
 
     /**
-     * Initialize the Player by name
+     * Initialize the Player by id and socket
      *
      * @param playerId player id
      * @param socket   player socket
@@ -82,6 +82,18 @@ public class Player implements Serializable {
         this.horcruxUsage.put(Horcrux.LOCKET, 0);
         this.horcruxUsage.put(Horcrux.DIARY, 0);
     }
+
+    /**
+     * Initialize the Player by id, socket and house
+     * @param playerId player id
+     * @param socket player socket
+     * @param house player house
+     */
+    public Player(int playerId, Socket socket, House house) {
+        this(playerId, socket);
+        this.house = house;
+    }
+
 
     /**
      * Initialize the Player by name
@@ -439,6 +451,13 @@ public class Player implements Serializable {
      */
     public boolean skillRavenclaw() {
         return buffRavenclaw() && this.skillState == SkillState.IN_EFFECT;
+    }
+
+    /**
+     * Get player house
+     */
+    public House getHouse() {
+        return this.house;
     }
 
 

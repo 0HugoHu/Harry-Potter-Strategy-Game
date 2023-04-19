@@ -45,6 +45,7 @@ import edu.duke.risc.ui.state.TouchEvent;
 import edu.duke.risc.ui.view.GameView;
 import edu.duke.shared.Game;
 import edu.duke.shared.map.Territory;
+import edu.duke.shared.player.House;
 import edu.duke.shared.player.Player;
 import edu.duke.shared.turn.Attack;
 import edu.duke.shared.turn.AttackTurn;
@@ -58,6 +59,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     private GameView mGameView;
     // Game
     private Game mGame;
+    // Player
+    private Player mPlayer;
     // Context
     private Context context;
     // TouchEvent
@@ -232,6 +235,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             // Clear the flag
             this.isUpgradedWorldLevel = false;
             this.mGame = (Game) resultData.getSerializable("game");
+            this.mPlayer = mGame.getPlayer(mGame.getPlayerName());
             // update the game view
             global_prompt.setVisibility(View.GONE);
             inner_order_view.setVisibility(View.VISIBLE);
@@ -423,7 +427,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 selected_from = unitSpinnerDataModel.getName();
                 unitSpinnerToDataModels.clear();
 
-                int worldLevel = mGame.getPlayer(mGame.getPlayerName()).getWorldLevel();
+                int worldLevel = mPlayer.getWorldLevel();
                 ArrayList<String> nextLevel = Unit.getNextLevel(Unit.convertStringToUnitType(selected_from), worldLevel);
                 if (nextLevel != null) {
                     for (String next : nextLevel) {
@@ -474,7 +478,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 String cost_s = "Upgrade: " + cost + " horns";
                 unit_upgrade_btn.setText(cost_s);
                 boolean flag = false;
-                if (cost <= mGame.getPlayer(mGame.getPlayerName()).getHorns() - currentHornExpense) {
+                if (cost <= mPlayer.getHorns() - currentHornExpense) {
                     if (mGame.getMap().getTerritory(orderTerrFrom).getOwner().equals(mGame.getPlayerName())) {
                         unit_upgrade_btn.setEnabled(true);
                         unit_num.setEnabled(true);
@@ -520,10 +524,10 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             unit_init_view.setVisibility(View.GONE);
             tech_view.setVisibility(View.VISIBLE);
             base_view.setVisibility(View.VISIBLE);
-            int tech_level = mGame.getPlayer(mGame.getPlayerName()).getWorldLevel();
+            int tech_level = mPlayer.getWorldLevel();
             String upgrade = "Upgrade: " + Player.upgradeCost(tech_level + 1) + " horns";
             tech_upgrade_btn.setText(upgrade);
-            if ((Player.upgradeCost(tech_level + 1) > mGame.getPlayer(mGame.getPlayerName()).getHorns() - currentHornExpense) || this.isUpgradedWorldLevel) {
+            if ((Player.upgradeCost(tech_level + 1) > mPlayer.getHorns() - currentHornExpense) || this.isUpgradedWorldLevel) {
                 tech_error_prompt.setVisibility(View.VISIBLE);
                 tech_upgrade_btn.setEnabled(false);
                 tech_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
@@ -583,7 +587,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         tech_upgrade_btn.setOnClickListener(v -> {
             Toast.makeText(context, "Upgrade will be completed in the next turn!", Toast.LENGTH_SHORT).show();
             this.isUpgradedWorldLevel = true;
-            this.currentHornExpense += Player.upgradeCost(mGame.getPlayer(mGame.getPlayerName()).getWorldLevel() + 1);
+            this.currentHornExpense += Player.upgradeCost(mPlayer.getWorldLevel() + 1);
             updatePlayerValues();
             base_view.setVisibility(View.GONE);
         });
@@ -603,7 +607,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 String cost_s = "Upgrade: " + cost + " horns";
                 unit_upgrade_btn.setText(cost_s);
                 boolean flag = false;
-                if (mGame.getPlayer(mGame.getPlayerName()).getCoins() > cost) {
+                if (mPlayer.getCoins() > cost) {
                     if (mGame.getMap().getTerritory(orderTerrFrom).getOwner().equals(mGame.getPlayerName())) {
                         unit_upgrade_btn.setEnabled(true);
                         unit_num.setEnabled(true);
@@ -638,7 +642,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             assert selected_to != null;
             // Upgrade the unit
             int cost = this.mGame.getMap().getTerritory(orderTerrFrom).upgradeUnit(selected_from, selected_to, num);
-            this.mGame.getPlayer(mGame.getPlayerName()).setExpenseHorns(cost);
+            this.mPlayer.setExpenseHorns(cost);
 
             // Update cost on top bar display
             updatePlayerValues();
@@ -664,7 +668,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             int cost = this.mGame.calculateOrderCost(distance, unitAdapter.getTotalNumber());
             String cost_s = cost + " coins";
             total_cost.setText(cost_s);
-            if (cost > mGame.getPlayer(mGame.getPlayerName()).getCoins()) {
+            if (cost > mPlayer.getCoins()) {
                 total_cost.setTextColor(getResources().getColor(R.color.error_prompt));
                 commit_btn.setEnabled(false);
                 cost_error_prompt.setVisibility(View.VISIBLE);
@@ -688,7 +692,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                         moveTurn.addMove(new Move(orderTerrFrom, orderTerrTo, list, this.mGame.getPlayerName()));
                         updateUnitMoveAttackMap(number, unit);
                         int cost = this.mGame.calculateOrderCost(this.mGame.getMap().getShortestDistance(orderTerrFrom, orderTerrTo), number);
-                        this.mGame.getPlayer(mGame.getPlayerName()).setExpenseCoins(cost);
+                        this.mPlayer.setExpenseCoins(cost);
                     }
                 }
                 updatePlayerValues();
@@ -703,7 +707,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                         attackTurn.addAttack(new Attack(orderTerrFrom, orderTerrTo, list, this.mGame.getPlayerName()));
                         updateUnitMoveAttackMap(number, unit);
                         int cost = this.mGame.calculateOrderCost(this.mGame.getMap().getDistance(orderTerrFrom, orderTerrTo), number);
-                        this.mGame.getPlayer(mGame.getPlayerName()).setExpenseCoins(cost);
+                        this.mPlayer.setExpenseCoins(cost);
                     }
                 }
                 updatePlayerValues();
@@ -826,7 +830,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             showWaitTexts();
             // execute world level events
             if (this.isUpgradedWorldLevel) {
-                mGame.getPlayer(mGame.getPlayerName()).willUpgradeWorldLevel = true;
+                mPlayer.willUpgradeWorldLevel = true;
             }
             commit();
         });
@@ -915,7 +919,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             selected_from = unitSpinnerDataModel.getName();
             unitSpinnerToDataModels.clear();
 
-            int worldLevel = mGame.getPlayer(mGame.getPlayerName()).getWorldLevel();
+            int worldLevel = mPlayer.getWorldLevel();
             ArrayList<String> nextLevel = Unit.getNextLevel(Unit.convertStringToUnitType(selected_from), worldLevel);
             if (nextLevel != null) {
                 for (String next : nextLevel) {
@@ -939,7 +943,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 String cost_s = "Upgrade: " + cost + " horns";
                 unit_upgrade_btn.setText(cost_s);
                 boolean flag = false;
-                if (cost <= mGame.getPlayer(mGame.getPlayerName()).getHorns() - currentHornExpense) {
+                if (cost <= mPlayer.getHorns() - currentHornExpense) {
                     if (mGame.getMap().getTerritory(terrName).getOwner().equals(mGame.getPlayerName())) {
                         unit_upgrade_btn.setEnabled(true);
                         unit_num.setEnabled(true);
@@ -1071,29 +1075,30 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         init_player_name.setText(this.mGame.getPlayerName());
         ui_player_name.setText(this.mGame.getPlayerName());
         System.out.println("Player ID: " + this.mGame.getPlayerId());
-        switch (this.mGame.getPlayerId()) {
-            case 0:
+        System.out.println("Player House: " + mPlayer.getHouse() + "");
+        switch (mPlayer.getHouse()) {
+            case RAVENCLAW:
                 init_house.setText(context.getResources().getString(R.string.ravenclaw));
                 init_house.setTextColor(getResources().getColor(R.color.ui_ravenclaw));
                 init_house_img.setImageResource(R.drawable.house_rauenclaw);
                 ui_house.setText(context.getResources().getString(R.string.ravenclaw));
                 ui_house.setTextColor(getResources().getColor(R.color.ui_ravenclaw));
                 break;
-            case 3:
+            case HUFFLEPUFF:
                 init_house.setText(context.getResources().getString(R.string.hufflepuff));
                 init_house.setTextColor(getResources().getColor(R.color.ui_hufflepuff));
                 init_house_img.setImageResource(R.drawable.house_hufflepuff);
                 ui_house.setText(context.getResources().getString(R.string.hufflepuff));
                 ui_house.setTextColor(getResources().getColor(R.color.ui_hufflepuff));
                 break;
-            case 1:
+            case GRYFFINDOR:
                 init_house.setText(context.getResources().getString(R.string.gryffindor));
                 init_house.setTextColor(getResources().getColor(R.color.ui_gryffindor));
                 init_house_img.setImageResource(R.drawable.house_gryffindor);
                 ui_house.setText(context.getResources().getString(R.string.gryffindor));
                 ui_house.setTextColor(getResources().getColor(R.color.ui_gryffindor));
                 break;
-            case 2:
+            case SLYTHERIN:
                 init_house.setText(context.getResources().getString(R.string.slytherin));
                 init_house.setTextColor(getResources().getColor(R.color.ui_slytherin));
                 init_house_img.setImageResource(R.drawable.house_slytherin);
@@ -1137,29 +1142,29 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             ui_view.findViewById(R.id.ui_side_bar).setVisibility(View.GONE);
         }
 
-        switch (this.mGame.getPlayerId()) {
-            case 0:
+        switch (mPlayer.getHouse()) {
+            case RAVENCLAW:
                 house_text = context.getResources().getString(R.string.ravenclaw);
                 winner_house.setTextColor(getResources().getColor(R.color.ui_ravenclaw));
                 if (isWin) {
                     winner_house_img.setImageResource(R.drawable.triwizard_cup_b);
                 }
                 break;
-            case 3:
+            case HUFFLEPUFF:
                 house_text = context.getResources().getString(R.string.hufflepuff);
                 winner_house.setTextColor(getResources().getColor(R.color.ui_hufflepuff));
                 if (isWin) {
                     winner_house_img.setImageResource(R.drawable.triwizard_cup_y);
                 }
                 break;
-            case 1:
+            case GRYFFINDOR:
                 house_text = context.getResources().getString(R.string.gryffindor);
                 winner_house.setTextColor(getResources().getColor(R.color.ui_gryffindor));
                 if (isWin) {
                     winner_house_img.setImageResource(R.drawable.triwizard_cup_r);
                 }
                 break;
-            case 2:
+            case SLYTHERIN:
                 house_text = context.getResources().getString(R.string.slytherin);
                 winner_house.setTextColor(getResources().getColor(R.color.ui_slytherin));
                 if (isWin) {
