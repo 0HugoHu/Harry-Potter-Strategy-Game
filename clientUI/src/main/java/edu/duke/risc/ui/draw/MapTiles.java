@@ -74,9 +74,23 @@ public class MapTiles {
      * @param players players
      */
     public void initColorMapping(ArrayList<Player> players) {
-        int[] colors = new int[]{0x66003366, 0x55660000, 0x66003300, 0x55CC9900};
         for (Player player : players) {
-            this.ownerColor.put(player.getPlayerName(), colors[player.getPlayerId()]);
+            int color = 0x000000;
+            switch (player.getHouse()) {
+                case RAVENCLAW:
+                    color = 0x66003366;
+                    break;
+                case GRYFFINDOR:
+                    color = 0x55660000;
+                    break;
+                case HUFFLEPUFF:
+                    color = 0x55CC9900;
+                    break;
+                case SLYTHERIN:
+                    color = 0x66003300;
+                    break;
+            }
+            this.ownerColor.put(player.getPlayerName(), color);
         }
     }
 
