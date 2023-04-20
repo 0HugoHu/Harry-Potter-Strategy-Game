@@ -9,6 +9,7 @@ import edu.duke.shared.helper.State;
 import edu.duke.shared.map.GameMap;
 import edu.duke.shared.map.MapFactory;
 import edu.duke.shared.map.Territory;
+import edu.duke.shared.player.Horcrux;
 import edu.duke.shared.player.Player;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.MoveTurn;
@@ -779,6 +780,37 @@ public class Game implements Serializable {
      */
     public boolean isForceEndGame() {
         return this.header.isForceEndGame();
+    }
+
+    /**
+     * Set new horcrux
+     */
+    public void setNewHorcrux(Horcrux horcrux, int playerId) {
+        this.header.setNewHorcrux(horcrux, playerId);
+    }
+
+    /**
+     * Set no horcrux
+     */
+    public void setNoHorcrux() {
+        this.header.setNoHorcrux();
+    }
+
+    /**
+     * Get the horcrux
+     *
+     * @return horcrux
+     */
+    public String getNewHorcrux() {
+        return this.header.getNewHorcrux();
+    }
+
+    /**
+     * Get the horcrux affect
+     */
+    public String getHorcruxAffect() {
+        // TODO: Test
+        return null;
     }
 
 }

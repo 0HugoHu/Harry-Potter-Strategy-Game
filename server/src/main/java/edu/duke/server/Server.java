@@ -187,13 +187,6 @@ public class Server {
                 // Add player to the game, i means player_id
                 // Create an object, and a thread is started
                 Player player = new Player(i, socket, this.serverHouseMapping.get(i));
-                // TODO: test
-                player.addToHorcruxStorage(Horcrux.CUP, 1);
-                player.addToHorcruxStorage(Horcrux.HAT, 2);
-                player.addToHorcruxStorage(Horcrux.RING, 3);
-                player.addToHorcruxStorage(Horcrux.SNAKE, 4);
-                player.addToHorcruxStorage(Horcrux.DIARY, 5);
-                player.addToHorcruxStorage(Horcrux.LOCKET, 6);
                 this.game.addPlayer(player);
                 System.out.println("Player " + i + " has joined the game.");
             } catch (IOException e) {
@@ -254,6 +247,10 @@ public class Server {
     private void startOneTurn() {
         this.game.setGameState(State.TURN_BEGIN);
         System.out.println("Start turn " + this.game.getTurn() + ".\n");
+
+        // Send random horcrux to players
+        assignHorcrux();
+
         sendToAllPlayers();
 
         // Receive action list from all players
@@ -280,6 +277,42 @@ public class Server {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+        }
+    }
+
+    private void assignHorcrux() {
+        if (this.game.getTurn() % 2 == 0) {
+            Random random = new Random();
+            int randomPlayer = random.nextInt(this.game.getNumPlayers());
+            int randomHorcrux = random.nextInt(6);
+            switch (randomHorcrux) {
+                case 0:
+                    this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.LOCKET, 1);
+                    this.game.setNewHorcrux(Horcrux.LOCKET, randomPlayer);
+                    break;
+                case 1:
+                    this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.HAT, 1);
+                    this.game.setNewHorcrux(Horcrux.HAT, randomPlayer);
+                    break;
+                case 2:
+                    this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.DIARY, 1);
+                    this.game.setNewHorcrux(Horcrux.DIARY, randomPlayer);
+                    break;
+                case 3:
+                    this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.RING, 1);
+                    this.game.setNewHorcrux(Horcrux.RING, randomPlayer);
+                    break;
+                case 4:
+                    this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.CUP, 1);
+                    this.game.setNewHorcrux(Horcrux.CUP, randomPlayer);
+                    break;
+                case 5:
+                    this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.SNAKE, 1);
+                    this.game.setNewHorcrux(Horcrux.SNAKE, randomPlayer);
+                    break;
+            }
+        } else {
+            this.game.setNoHorcrux();
         }
     }
 

@@ -3,6 +3,8 @@ package edu.duke.shared.helper;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import edu.duke.shared.player.Horcrux;
+
 public class Header implements Serializable {
     // Player's id
     private int playerId;
@@ -18,6 +20,12 @@ public class Header implements Serializable {
     public final ArrayList<Integer> loserIds;
     // Force end game
     private boolean FORCE_END_GAME = false;
+    // New horcrux
+    private boolean NEW_HORCRUX = false;
+    // Horcrux assign to
+    private int HORCRUX_ASSIGN_TO = -1;
+    // Horcrux item
+    private Horcrux HORCRUX_ITEM;
 
     /**
      * Initialize Header
@@ -147,5 +155,46 @@ public class Header implements Serializable {
      */
     public boolean isForceEndGame() {
         return this.FORCE_END_GAME;
+    }
+
+    /**
+     * Set new horcrux
+     */
+    public void setNewHorcrux(Horcrux horcrux, int assignTo) {
+        this.NEW_HORCRUX = true;
+        this.HORCRUX_ITEM = horcrux;
+        this.HORCRUX_ASSIGN_TO = assignTo;
+    }
+
+    /**
+     * Set no horcrux
+     */
+    public void setNoHorcrux() {
+        this.NEW_HORCRUX = false;
+    }
+
+    /**
+     * Check if there is a new horcrux
+     *
+     * @return True if there is a new horcrux, false otherwise
+     */
+    public String getNewHorcrux() {
+        if (!this.NEW_HORCRUX) return null;
+        switch (this.HORCRUX_ITEM) {
+            case HAT:
+                return "Ravenclaw's Diadem" + "%" + this.HORCRUX_ASSIGN_TO;
+            case DIARY:
+                return "Riddle's Diary" + "%" + this.HORCRUX_ASSIGN_TO;
+            case LOCKET:
+                return "Slytherin's Locket" + "%" + this.HORCRUX_ASSIGN_TO;
+            case RING:
+                return "Resurrection Stone" + "%" + this.HORCRUX_ASSIGN_TO;
+            case CUP:
+                return "Hufflepuff's Cup" + "%" + this.HORCRUX_ASSIGN_TO;
+            case SNAKE:
+                return "Nagini" + "%" + this.HORCRUX_ASSIGN_TO;
+            default:
+                return null;
+        }
     }
 }
