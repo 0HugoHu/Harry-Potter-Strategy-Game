@@ -16,6 +16,7 @@ import edu.duke.shared.Game;
 import edu.duke.shared.helper.GameObject;
 import edu.duke.shared.helper.State;
 import edu.duke.shared.map.GameMap;
+import edu.duke.shared.player.Horcrux;
 import edu.duke.shared.player.House;
 import edu.duke.shared.player.Player;
 import edu.duke.shared.map.Territory;
@@ -185,7 +186,15 @@ public class Server {
                 Socket socket = this.serverSocket.accept();
                 // Add player to the game, i means player_id
                 // Create an object, and a thread is started
-                this.game.addPlayer(new Player(i, socket, this.serverHouseMapping.get(i)));
+                Player player = new Player(i, socket, this.serverHouseMapping.get(i));
+                // TODO: test
+                player.addToHorcruxStorage(Horcrux.CUP, 1);
+                player.addToHorcruxStorage(Horcrux.HAT, 2);
+                player.addToHorcruxStorage(Horcrux.RING, 3);
+                player.addToHorcruxStorage(Horcrux.SNAKE, 4);
+                player.addToHorcruxStorage(Horcrux.DIARY, 5);
+                player.addToHorcruxStorage(Horcrux.LOCKET, 6);
+                this.game.addPlayer(player);
                 System.out.println("Player " + i + " has joined the game.");
             } catch (IOException e) {
                 e.printStackTrace();

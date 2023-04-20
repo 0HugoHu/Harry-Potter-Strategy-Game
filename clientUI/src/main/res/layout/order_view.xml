@@ -36,11 +36,23 @@
 
         <include layout="@layout/init_unit_view"/>
 
+        <include layout="@layout/item_view"/>
+
     </LinearLayout>
 
     <include
         android:id="@+id/global_prompt"
         layout="@layout/global_prompt"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/global_dialog"
+        layout="@layout/global_dialog"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

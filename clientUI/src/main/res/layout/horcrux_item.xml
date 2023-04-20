@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <cn.gavinliu.android.lib.shapedimageview.ShapedImageView
+        android:id="@+id/horcrux_img"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/gnome"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shape_mode="circle"
+        app:stroke_color="@color/text_white"
+        app:stroke_width="1dp" />
+
+    <TextView
+        android:id="@+id/horcrux_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/gumela"
+        android:text="@string/example_unit"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_small"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toStartOf="@+id/horcrux_num"
+        app:layout_constraintStart_toEndOf="@id/horcrux_img"
+        app:layout_constraintTop_toTopOf="@+id/horcrux_img" />
+
+    <TextView
+        android:id="@+id/horcrux_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/gumela"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_small"
+        app:layout_constraintBottom_toBottomOf="@+id/horcrux_desc"
+        app:layout_constraintEnd_toStartOf="@+id/horcrux_btn"
+        app:layout_constraintTop_toTopOf="@+id/horcrux_name" />
+
+    <TextView
+        android:id="@+id/horcrux_desc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="4dp"
+        android:fontFamily="@font/gumela"
+        android:text="@string/example_unit"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_extra_extra_small"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/horcrux_num"
+        app:layout_constraintStart_toEndOf="@id/horcrux_img"
+        app:layout_constraintTop_toBottomOf="@id/horcrux_name" />
+
+    <Button
+        android:id="@+id/horcrux_btn"
+        android:layout_width="50dp"
+        android:layout_height="15dp"
+        android:background="@drawable/btn_white"
+        android:fontFamily="@font/gumela"
+        android:text="@string/use"
+        android:textColor="@color/order_text"
+        android:textSize="@dimen/order_text_extra_small"
+        app:layout_constraintBottom_toBottomOf="@+id/horcrux_num"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/horcrux_num" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

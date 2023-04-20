@@ -39,11 +39,17 @@ public class LoginActivity extends AppCompatActivity {
 
         join.setOnClickListener(v -> {
             boolean register = false;
-            if (username.getText().toString().equals("") || password.getText().toString().equals("") || roomid.getText().toString().equals("")) {
-                return;
-            }
+            // TODO: Testing
+//            if (username.getText().toString().equals("") || password.getText().toString().equals("") || roomid.getText().toString().equals("")) {
+//                return;
+//            }
+
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            intent.putExtra("username", username.getText().toString());
+            if (username.getText().toString().equals("")) {
+                intent.putExtra("username", "Test101");
+            } else {
+                intent.putExtra("username", username.getText().toString());
+            }
             intent.putExtra("password", password.getText().toString());
             intent.putExtra("roomid", roomid.getText().toString());
             intent.putExtra("join", true);

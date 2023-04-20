@@ -3,6 +3,10 @@ package edu.duke.risc.ui.main;
 import static edu.duke.risc.ui.state.TouchEvent.ATTACK;
 import static edu.duke.risc.ui.state.TouchEvent.MOVE;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.os.Bundle;
 import android.content.Intent;
@@ -25,7 +29,6 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,10 +36,12 @@ import java.util.HashMap;
 import edu.duke.risc.R;
 import edu.duke.risc.client.ClientIntentService;
 import edu.duke.risc.client.ClientResultReceiver;
+import edu.duke.risc.ui.adapter.HorcruxDataAdapter;
 import edu.duke.risc.ui.adapter.TerrDataAdapter;
 import edu.duke.risc.ui.adapter.UnitDataAdapter;
 import edu.duke.risc.ui.adapter.UnitSpinnerAdapter;
 import edu.duke.risc.ui.adapter.UnitUpgradeDataAdapter;
+import edu.duke.risc.ui.model.HorcruxDataModel;
 import edu.duke.risc.ui.model.TerrDataModel;
 import edu.duke.risc.ui.model.UnitDataModel;
 import edu.duke.risc.ui.model.UnitSpinnerDataModel;
@@ -45,7 +50,7 @@ import edu.duke.risc.ui.state.TouchEvent;
 import edu.duke.risc.ui.view.GameView;
 import edu.duke.shared.Game;
 import edu.duke.shared.map.Territory;
-import edu.duke.shared.player.House;
+import edu.duke.shared.player.Horcrux;
 import edu.duke.shared.player.Player;
 import edu.duke.shared.turn.Attack;
 import edu.duke.shared.turn.AttackTurn;
@@ -63,6 +68,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     private Player mPlayer;
     // Context
     private Context context;
+    // Player color
+    private int playerColor;
     // TouchEvent
     private TouchEvent mTouchEvent;
     // Units in territory data model
@@ -75,12 +82,16 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     ArrayList<UnitSpinnerDataModel> unitSpinnerDataModels;
     // Unit spinner data model destination territory
     ArrayList<UnitSpinnerDataModel> unitSpinnerToDataModels;
+    // Horcrux data model
+    ArrayList<HorcruxDataModel> horcruxDataModels;
     // List of units to put in attack and move order
     ListView move_attack_listview;
     // List of units to put in upgrade order
     ListView unit_listview;
     // List of territories
     ListView unit_init_listview;
+    // List of horcruxes
+    ListView horcrux_listview;
     // Unit data adapter
     private UnitDataAdapter unitAdapter;
     // Territory data adapter
@@ -91,6 +102,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     private UnitSpinnerAdapter unitSpinnerAdapter;
     // Unit spinner adapter destination
     private UnitSpinnerAdapter unitSpinnerToAdapter;
+    // Horcrux data adapter
+    private HorcruxDataAdapter horcruxAdapter;
     // Touch event source territory
     private String orderTerrFrom;
     // Touch event destination territory
@@ -111,6 +124,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     View ui_view;
     // Global prompt view
     ViewGroup global_prompt;
+    // Global prompt dialog view
+    ViewGroup global_dialog;
     // Move attack view
     ViewGroup move_attack_view;
     // Property view
@@ -121,6 +136,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     ViewGroup unit_init_view;
     // Technology view
     ViewGroup tech_view;
+    // Item view
+    ViewGroup item_view;
     // Init base view
     ViewGroup init_base_view;
     // Winner base view
@@ -236,16 +253,27 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             this.isUpgradedWorldLevel = false;
             this.mGame = (Game) resultData.getSerializable("game");
             this.mPlayer = mGame.getPlayer(mGame.getPlayerName());
-            // update the game view
-            global_prompt.setVisibility(View.GONE);
-            inner_order_view.setVisibility(View.VISIBLE);
-            base_view.setVisibility(View.GONE);
             System.out.println("Game state: " + mGame.getGameState());
             switch (mGame.getGameState()) {
                 // The first two states should be done in the login page
                 case WAITING_TO_JOIN:
                 case READY_TO_INIT_NAME:
                 case READY_TO_INIT_UNITS:
+                    // Set player's color
+                    switch (mPlayer.getHouse()) {
+                        case GRYFFINDOR:
+                            this.playerColor = getResources().getColor(R.color.ui_gryffindor);
+                            break;
+                        case HUFFLEPUFF:
+                            this.playerColor = getResources().getColor(R.color.ui_hufflepuff);
+                            break;
+                        case RAVENCLAW:
+                            this.playerColor = getResources().getColor(R.color.ui_ravenclaw);
+                            break;
+                        case SLYTHERIN:
+                            this.playerColor = getResources().getColor(R.color.ui_slytherin);
+                            break;
+                    }
                     mGameView.initColorMapping(this.mGame.getPlayerList());
                     mGameView.updateMap(this.mGame.getMap());
                     mGameView.updateGame(this.mGame);
@@ -253,6 +281,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     assignText();
                     // Assign units
                     assignUnits();
+                    global_prompt.setVisibility(View.GONE);
+                    global_dialog.setVisibility(View.GONE);
                     break;
                 case TURN_BEGIN:
                     currentCoinExpense = 0;
@@ -275,18 +305,19 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     }
                     ui_view.findViewById(R.id.ui_side_bar_init).setVisibility(View.GONE);
                     ui_view.findViewById(R.id.ui_side_bar).setVisibility(View.VISIBLE);
+                    showDialog(getResources().getString(R.string.turn), String.valueOf(this.mGame.getTurn()), getResources().getString(R.string.begins));
                     break;
                 case TURN_END:
                     if (!this.isLost && this.mGame.isLoser(this.mGame.getPlayerId())) {
                         assignWinner(false);
                         this.isLost = true;
                     }
+                    showDialog(getResources().getString(R.string.turn), String.valueOf(this.mGame.getTurn()), getResources().getString(R.string.ends));
                     break;
                 case GAME_OVER:
                     assignWinner(this.mGame.getWinnerId() == this.mGame.getPlayerId());
                     break;
             }
-
         }
     }
 
@@ -337,6 +368,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         unit_view = order_view.findViewById(R.id.inflate_unit);
         unit_init_view = order_view.findViewById(R.id.inflate_init_unit);
         tech_view = order_view.findViewById(R.id.inflate_tech_view);
+        item_view = order_view.findViewById(R.id.inflate_item_view);
 
         // Load the global prompt view
         LayoutInflater inflater_ui = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -353,12 +385,16 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         // Initialize the list view and adapter
         move_attack_listview = move_attack_view.findViewById(R.id.list);
         unit_listview = unit_view.findViewById(R.id.unit_list);
+        horcrux_listview = item_view.findViewById(R.id.item_view_list);
         unitDataModels = new ArrayList<>();
         unitUpgradeDataModels = new ArrayList<>();
+        horcruxDataModels = new ArrayList<>();
         unitAdapter = new UnitDataAdapter(unitDataModels, context);
         unitUpgradeAdapter = new UnitUpgradeDataAdapter(unitUpgradeDataModels, context);
+        horcruxAdapter = new HorcruxDataAdapter(horcruxDataModels, context);
         move_attack_listview.setAdapter(unitAdapter);
         unit_listview.setAdapter(unitUpgradeAdapter);
+        horcrux_listview.setAdapter(horcruxAdapter);
 
 
         // Initialize widgets in the move_attack view
@@ -393,12 +429,13 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         shadow_view = order_view.findViewById(R.id.shadow_view);
         base_view = order_view.findViewById(R.id.base_view);
         global_prompt = order_view.findViewById(R.id.global_prompt);
+        global_dialog = order_view.findViewById(R.id.global_dialog);
         inner_order_view = order_view.findViewById(R.id.inner_order_view);
 
         // Initialize widgets in ui surface
         Button chat_btn = ui_view.findViewById(R.id.ui_chat);
         Button end_turn_btn = ui_view.findViewById(R.id.end_turn);
-        Button rank_btn = ui_view.findViewById(R.id.rank);
+        Button item_btn = ui_view.findViewById(R.id.item);
         Button tech_btn = ui_view.findViewById(R.id.tech);
         ui_view.findViewById(R.id.ui_side_bar).setVisibility(View.GONE);
 
@@ -419,6 +456,9 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         Button tech_upgrade_btn = tech_view.findViewById(R.id.tech_upgrade_btn);
         Button tech_back_btn = tech_view.findViewById(R.id.tech_back_btn);
         ImageView tech_img = tech_view.findViewById(R.id.tech_img);
+
+        // Initialize widgets in item view
+        Button item_back_btn = item_view.findViewById(R.id.item_view_back_btn);
 
         unit_from_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -512,10 +552,31 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             base_view.findViewById(R.id.inflate_prop).setVisibility(View.GONE);
             base_view.findViewById(R.id.inflate_init_unit).setVisibility(View.VISIBLE);
             base_view.findViewById(R.id.inflate_tech_view).setVisibility(View.GONE);
+            base_view.findViewById(R.id.inflate_item_view).setVisibility(View.GONE);
             base_view.findViewById(R.id.global_prompt).setVisibility(View.GONE);
+            base_view.findViewById(R.id.global_dialog).setVisibility(View.GONE);
         });
 
         winner_btn.setOnClickListener(v -> winner_base_view.setVisibility(View.GONE));
+
+        item_btn.setOnClickListener(v -> {
+            move_attack_view.setVisibility(View.GONE);
+            prop_view.setVisibility(View.GONE);
+            unit_view.setVisibility(View.GONE);
+            unit_init_view.setVisibility(View.GONE);
+            tech_view.setVisibility(View.GONE);
+            item_view.setVisibility(View.VISIBLE);
+            base_view.setVisibility(View.VISIBLE);
+            // Traverse all items in the player
+            horcruxDataModels.clear();
+            for (Horcrux horcrux : Horcrux.values()) {
+                int num = mPlayer.getHorcruxStorage(horcrux);
+                if (num > 0) {
+                    horcruxDataModels.add(new HorcruxDataModel(horcrux, num));
+                }
+            }
+            horcruxAdapter.notifyDataSetChanged();
+        });
 
         tech_btn.setOnClickListener(v -> {
             move_attack_view.setVisibility(View.GONE);
@@ -523,6 +584,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             unit_view.setVisibility(View.GONE);
             unit_init_view.setVisibility(View.GONE);
             tech_view.setVisibility(View.VISIBLE);
+            item_view.setVisibility(View.GONE);
             base_view.setVisibility(View.VISIBLE);
             int tech_level = mPlayer.getWorldLevel();
             String upgrade = "Upgrade: " + Player.upgradeCost(tech_level + 1) + " horns";
@@ -584,18 +646,19 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
         tech_back_btn.setOnClickListener(v -> base_view.setVisibility(View.GONE));
 
+        item_back_btn.setOnClickListener(v -> base_view.setVisibility(View.GONE));
+
         tech_upgrade_btn.setOnClickListener(v -> {
-            Toast.makeText(context, "Upgrade will be completed in the next turn!", Toast.LENGTH_SHORT).show();
+            showDialog(getResources().getString(R.string.tech_upgrade_recorded), "", "");
             this.isUpgradedWorldLevel = true;
             this.currentHornExpense += Player.upgradeCost(mPlayer.getWorldLevel() + 1);
             updatePlayerValues();
-            base_view.setVisibility(View.GONE);
         });
 
         // Force end game
         ui_view.findViewById(R.id.ui_player_name_label).setOnClickListener(v -> {
             this.mGame.forceEndGame();
-            Toast.makeText(context, "You have surrendered.", Toast.LENGTH_SHORT).show();
+            showDialog(getResources().getString(R.string.surrendered), "", "");
         });
 
         unit_num.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -649,8 +712,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             // Update the unit number
             updateUnitUpgradeMap(-num, selected_from);
             updateUnitUpgradeMap(num, selected_to);
-            Toast.makeText(context, getResources().getString(R.string.unit_upgrade_success), Toast.LENGTH_SHORT).show();
-            base_view.setVisibility(View.GONE);
+            showDialog(getResources().getString(R.string.unit_upgrade_success), "", "");
         });
 
 
@@ -676,6 +738,42 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 total_cost.setTextColor(getResources().getColor(R.color.order_text_white));
                 commit_btn.setEnabled(true);
                 cost_error_prompt.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        // Update the item used listener
+        horcruxAdapter.setUseListener((item, num) -> {
+            switch (item) {
+                case HAT:
+                    showDialog(getResources().getString(R.string.use_diadem_p1), getResources().getString(R.string.use_diadem_p2), getResources().getString(R.string.use_diadem_p3));
+                    mPlayer.addToHorcruxUsage(Horcrux.HAT, 1);
+                    mPlayer.removeFromHorcruxStorage(Horcrux.HAT, 1);
+                    break;
+                case CUP:
+                    showDialog("", getResources().getString(R.string.use_cup_p1), getResources().getString(R.string.use_cup_p2));
+                    mPlayer.addToHorcruxUsage(Horcrux.CUP, 1);
+                    mPlayer.removeFromHorcruxStorage(Horcrux.CUP, 1);
+                    break;
+                case RING:
+                    showDialog(getResources().getString(R.string.use_stone_p1), getResources().getString(R.string.use_stone_p2), getResources().getString(R.string.use_stone_p3));
+                    mPlayer.addToHorcruxUsage(Horcrux.RING, 1);
+                    mPlayer.removeFromHorcruxStorage(Horcrux.RING, 1);
+                    break;
+                case DIARY:
+                    showDialog(getResources().getString(R.string.use_diary_p1), getResources().getString(R.string.use_diary_p2), "");
+                    mPlayer.addToHorcruxUsage(Horcrux.DIARY, 1);
+                    mPlayer.removeFromHorcruxStorage(Horcrux.DIARY, 1);
+                    break;
+                case LOCKET:
+                    showDialog("", getResources().getString(R.string.use_locket_p1), getResources().getString(R.string.use_locket_p2));
+                    mPlayer.addToHorcruxUsage(Horcrux.LOCKET, 1);
+                    mPlayer.removeFromHorcruxStorage(Horcrux.LOCKET, 1);
+                    break;
+                case SNAKE:
+                    showDialog(getResources().getString(R.string.use_snake_p1), getResources().getString(R.string.use_snake_p2), "");
+                    mPlayer.addToHorcruxUsage(Horcrux.SNAKE, 1);
+                    mPlayer.removeFromHorcruxStorage(Horcrux.SNAKE, 1);
+                    break;
             }
         });
 
@@ -715,8 +813,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 return;
             }
             // Done
-            base_view.setVisibility(View.GONE);
-            Toast.makeText(context, "Order recorded!", Toast.LENGTH_SHORT).show();
+            showDialog(getResources().getString(R.string.order_recorded), "", "");
         });
 
         // Click the shadow area to close the order view
@@ -733,6 +830,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 unit_view.setVisibility(View.GONE);
                 unit_init_view.setVisibility(View.GONE);
                 tech_view.setVisibility(View.GONE);
+                item_view.setVisibility(View.GONE);
                 base_view.setVisibility(View.VISIBLE);
                 orderTerrFrom = terrFrom;
                 orderTerrTo = terrTo;
@@ -751,6 +849,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 unit_view.setVisibility(View.GONE);
                 unit_init_view.setVisibility(View.GONE);
                 tech_view.setVisibility(View.GONE);
+                item_view.setVisibility(View.GONE);
                 base_view.setVisibility(View.VISIBLE);
                 orderTerrFrom = terrFrom;
                 orderTerrTo = terrTo;
@@ -768,6 +867,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 unit_view.setVisibility(View.GONE);
                 unit_init_view.setVisibility(View.GONE);
                 tech_view.setVisibility(View.GONE);
+                item_view.setVisibility(View.GONE);
                 base_view.setVisibility(View.VISIBLE);
                 orderTerrFrom = territoryName;
                 updateTerrInfo(territoryName);
@@ -810,6 +910,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 unit_view.setVisibility(View.VISIBLE);
                 unit_init_view.setVisibility(View.GONE);
                 tech_view.setVisibility(View.GONE);
+                item_view.setVisibility(View.GONE);
                 base_view.setVisibility(View.VISIBLE);
                 orderTerrFrom = territoryName;
                 updateTerrInfo(territoryName);
@@ -1057,6 +1158,90 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         base_view.setVisibility(View.VISIBLE);
         inner_order_view.setVisibility(View.GONE);
         global_prompt.setVisibility(View.VISIBLE);
+        global_dialog.setVisibility(View.GONE);
+    }
+
+    /**
+     * Show the dialog
+     */
+    private void showDialog(String text1, String text2, String text3) {
+        base_view.setVisibility(View.VISIBLE);
+        inner_order_view.setVisibility(View.GONE);
+        global_prompt.setVisibility(View.GONE);
+        global_dialog.setVisibility(View.VISIBLE);
+        final View shadow_view = global_dialog.findViewById(R.id.global_dialog_shadow);
+        final View text_group = global_dialog.findViewById(R.id.global_dialog_text_group);
+        final TextView text1_view = global_dialog.findViewById(R.id.global_dialog_text1);
+        final TextView text2_view = global_dialog.findViewById(R.id.global_dialog_text2);
+        final TextView text3_view = global_dialog.findViewById(R.id.global_dialog_text3);
+        text1_view.setText(text1);
+        text2_view.setText(text2);
+        text3_view.setText(text3);
+        shadow_view.setAlpha(0f);
+        text_group.setAlpha(0f);
+        text2_view.setTextColor(this.playerColor);
+        int window_width = requireActivity().getWindowManager().getDefaultDisplay().getWidth();
+
+        // Translation shadow
+        ObjectAnimator shadow_trans = ObjectAnimator.ofFloat(shadow_view, "translationX", -window_width, 0);
+        shadow_trans.setDuration(500);
+        // Alpha shadow
+        ObjectAnimator shadow_alpha = ObjectAnimator.ofFloat(shadow_view, "alpha", 0f, 1f);
+        shadow_alpha.setDuration(500);
+        // Translation text group
+        ObjectAnimator text_group_trans = ObjectAnimator.ofFloat(text_group, "translationX", -100, 0);
+        text_group_trans.setDuration(800);
+        text_group_trans.setStartDelay(200);
+        // Alpha text group
+        ObjectAnimator text_group_alpha = ObjectAnimator.ofFloat(text_group, "alpha", 0f, 1f);
+        text_group_alpha.setDuration(800);
+        text_group_alpha.setStartDelay(200);
+
+        // Start the animation
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.play(shadow_trans).with(shadow_alpha).with(text_group_trans).with(text_group_alpha);
+        animatorSet.start();
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                // Fade out animation
+                // Translation shadow
+                ObjectAnimator shadow_trans2 = ObjectAnimator.ofFloat(shadow_view, "translationX", 0, window_width);
+                shadow_trans2.setDuration(500);
+                shadow_trans2.setStartDelay(1500);
+                // Alpha shadow
+                ObjectAnimator shadow_alpha2 = ObjectAnimator.ofFloat(shadow_view, "alpha", 1f, 0f);
+                shadow_alpha2.setDuration(500);
+                shadow_alpha2.setStartDelay(1500);
+                // Translation text group
+                ObjectAnimator text_group_trans2 = ObjectAnimator.ofFloat(text_group, "translationX", 0, 100);
+                text_group_trans2.setDuration(700);
+                text_group_trans2.setStartDelay(1000);
+                // Alpha text group
+                ObjectAnimator text_group_alpha2 = ObjectAnimator.ofFloat(text_group, "alpha", 1f, 0f);
+                text_group_alpha2.setDuration(700);
+                text_group_alpha2.setStartDelay(1000);
+
+                // Start the animation
+                AnimatorSet animatorSet2 = new AnimatorSet();
+                animatorSet2.play(shadow_trans2).with(shadow_alpha2).with(text_group_trans2).with(text_group_alpha2);
+                animatorSet2.start();
+
+                animatorSet2.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        // update the game view
+                        global_prompt.setVisibility(View.GONE);
+                        global_dialog.setVisibility(View.GONE);
+                        inner_order_view.setVisibility(View.VISIBLE);
+                        base_view.setVisibility(View.GONE);
+                    }
+                });
+            }
+        });
+
     }
 
     /**
@@ -1124,6 +1309,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         base_view.setVisibility(View.GONE);
         inner_order_view.setVisibility(View.GONE);
         global_prompt.setVisibility(View.GONE);
+        global_dialog.setVisibility(View.GONE);
         winner_base_view.setVisibility(View.VISIBLE);
         // Assign the text and image
         TextView winner_player_name = winner_view.findViewById(R.id.winner_player_name);
@@ -1243,7 +1429,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         commit_init_btn.setOnClickListener(v -> {
             // Check if the number of units placed is correct
             if (terrAdapter.getTotalNum() != 24) {
-                Toast.makeText(context, context.getResources().getString(R.string.unit_placed_fault), Toast.LENGTH_SHORT).show();
+                showDialog(context.getResources().getString(R.string.unit_placed_fault_p1), context.getResources().getString(R.string.unit_placed_fault_p2), context.getResources().getString(R.string.unit_placed_fault_p3));
                 return;
             }
             for (TerrDataModel terr : terrDataModels) {
