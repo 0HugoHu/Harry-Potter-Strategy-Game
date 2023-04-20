@@ -149,7 +149,7 @@ public class PlayerThread implements Runnable, Serializable {
                         System.out.println("The attack turn from player " + this.playerId + " is illegal.");
                     }
 
-
+                    // Copy the units from the current game to the server game
                     Player p = this.serverGame.getPlayerList().get(this.playerId);
                     for (Territory t : this.serverGame.getMap().getTerritories()) {
                         if (t.getOwner().equals(p.getPlayerName())) {
@@ -159,7 +159,6 @@ public class PlayerThread implements Runnable, Serializable {
                             }
                         }
                     }
-
 
                     // Merge all turns from different players
                     ArrayList<Turn> newTurns = this.currGame.getTurnList().get(turnIndex).get(this.playerId);
