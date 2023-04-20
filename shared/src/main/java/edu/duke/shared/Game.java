@@ -1,7 +1,11 @@
 package edu.duke.shared;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import edu.duke.shared.helper.Dice;
 import edu.duke.shared.helper.Header;
@@ -10,9 +14,9 @@ import edu.duke.shared.map.GameMap;
 import edu.duke.shared.map.MapFactory;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.player.Player;
+import edu.duke.shared.turn.Attack;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.MoveTurn;
-import edu.duke.shared.turn.Attack;
 import edu.duke.shared.turn.Turn;
 import edu.duke.shared.unit.Unit;
 import edu.duke.shared.unit.UnitType;
@@ -690,7 +694,13 @@ public class Game implements Serializable {
         return this.turnList;
     }
 
-
+    public void expandPlayerTerrs(Player p, ArrayList<Territory> terrs, ArrayList<Integer> ids){
+        for (int i:ids){
+            p.expandTerr(terrs.get(i));
+            terrs.get(i).changePlayerOwner(p);
+            terrs.get(i).changeOwner(p.getPlayerName());
+        }
+    }
     /**
      * Allocate territories to players,
      * and allocate corresponding resources to each territory.
@@ -701,63 +711,91 @@ public class Game implements Serializable {
      */
     public void allocateTerritories() {
         GameMap gameMap = this.getMap();
-        int numTerrs = gameMap.getNumTerritories();
+        //int numTerrs = gameMap.getNumTerritories();
         int numPlayers = this.getNumPlayers();
         ArrayList<Territory> terrs = gameMap.getTerritories();
         ArrayList<Player> players = this.getPlayerList();
-
+        switch (numPlayers){
+            case (2):
+                expandPlayerTerrs(players.get(0),terrs,new ArrayList<>(Arrays.asList(0,1,4,5,8,9,12,13,16,17,20,21)));
+                expandPlayerTerrs(players.get(1),terrs,new ArrayList<>(Arrays.asList(2,3,6,7,10,11,14,15,18,19,22,23)));
+                break;
+            case (3):
+                expandPlayerTerrs(players.get(0),terrs,new ArrayList<>(Arrays.asList(0,1,2,3,4,5,6,7)));
+                expandPlayerTerrs(players.get(1),terrs,new ArrayList<>(Arrays.asList(8,9,12,13,16,17,20,21)));
+                expandPlayerTerrs(players.get(2),terrs,new ArrayList<>(Arrays.asList(10,11,14,15,18,19,22,23)));
+                break;
+            case (4):
+                expandPlayerTerrs(players.get(0),terrs,new ArrayList<>(Arrays.asList(0,1,4,5,8,9)));
+                expandPlayerTerrs(players.get(1),terrs,new ArrayList<>(Arrays.asList(2,3,6,7,10,11)));
+                expandPlayerTerrs(players.get(2),terrs,new ArrayList<>(Arrays.asList(12,13,16,17,20,21)));
+                expandPlayerTerrs(players.get(3),terrs,new ArrayList<>(Arrays.asList(14,15,18,19,22,23)));
+                break;
+        }
+        /*
         for (int i = 0; i < numTerrs; i++) {
             players.get(i / (numTerrs / numPlayers)).expandTerr(terrs.get(i));
             terrs.get(i).changePlayerOwner(players.get(i / (numTerrs / numPlayers)));
             terrs.get(i).changeOwner(players.get(i / (numTerrs / numPlayers)).getPlayerName());
         }
+        */
+        ArrayList<Territory> ts;
         switch (numPlayers) {
             case (2):
                 ArrayList<String> typeNames1 = new ArrayList<>(Arrays.asList("plain", "plain", "cliff", "cliff",
                         "canyon", "canyon", "desert", "desert", "forest", "forest", "wetland", "wetland"));
                 Collections.shuffle(typeNames1);
+                ts = new ArrayList<>(players.get(0).getPlayerTerrs());
                 for (int i = 0; i < 12; i++) {
-                    terrs.get(i).setType(typeNames1.get(i));
+                    ts.get(i).setType(typeNames1.get(i));
                 }
                 Collections.shuffle(typeNames1);
-                for (int i = 12; i < 24; i++) {
-                    terrs.get(i).setType(typeNames1.get(i - 12));
+                ts = new ArrayList<>(players.get(1).getPlayerTerrs());
+                for (int i = 0; i < 12; i++) {
+                    ts.get(i).setType(typeNames1.get(i));
                 }
                 break;
             case (3):
                 ArrayList<String> typeNames2 = new ArrayList<>(Arrays.asList("plain", "plain", "cliff",
                         "canyon", "desert", "forest", "forest", "wetland"));
                 Collections.shuffle(typeNames2);
+                ts = new ArrayList<>(players.get(0).getPlayerTerrs());
                 for (int i = 0; i < 8; i++) {
-                    terrs.get(i).setType(typeNames2.get(i));
+                    ts.get(i).setType(typeNames2.get(i));
                 }
                 Collections.shuffle(typeNames2);
-                for (int i = 8; i < 16; i++) {
-                    terrs.get(i).setType(typeNames2.get(i - 8));
+                ts = new ArrayList<>(players.get(1).getPlayerTerrs());
+                for (int i = 0; i < 8; i++) {
+                    ts.get(i).setType(typeNames2.get(i));
                 }
                 Collections.shuffle(typeNames2);
-                for (int i = 16; i < 24; i++) {
-                    terrs.get(i).setType(typeNames2.get(i - 16));
+                ts = new ArrayList<>(players.get(2).getPlayerTerrs());
+                for (int i = 0; i < 8; i++) {
+                    ts.get(i).setType(typeNames2.get(i));
                 }
                 break;
             case (4):
                 ArrayList<String> typeNames3 = new ArrayList<>(Arrays.asList("plain", "cliff",
                         "canyon", "desert", "forest", "wetland"));
                 Collections.shuffle(typeNames3);
+                ts = new ArrayList<>(players.get(0).getPlayerTerrs());
                 for (int i = 0; i < 6; i++) {
-                    terrs.get(i).setType(typeNames3.get(i));
+                    ts.get(i).setType(typeNames3.get(i));
                 }
                 Collections.shuffle(typeNames3);
-                for (int i = 6; i < 12; i++) {
-                    terrs.get(i).setType(typeNames3.get(i - 6));
+                ts = new ArrayList<>(players.get(1).getPlayerTerrs());
+                for (int i = 0; i < 6; i++) {
+                    ts.get(i).setType(typeNames3.get(i));
                 }
                 Collections.shuffle(typeNames3);
-                for (int i = 12; i < 18; i++) {
-                    terrs.get(i).setType(typeNames3.get(i - 12));
+                ts = new ArrayList<>(players.get(2).getPlayerTerrs());
+                for (int i = 0; i < 6; i++) {
+                    ts.get(i).setType(typeNames3.get(i));
                 }
                 Collections.shuffle(typeNames3);
-                for (int i = 18; i < 24; i++) {
-                    terrs.get(i).setType(typeNames3.get(i - 18));
+                ts = new ArrayList<>(players.get(3).getPlayerTerrs());
+                for (int i = 0; i < 6; i++) {
+                    ts.get(i).setType(typeNames3.get(i));
                 }
                 break;
         }
