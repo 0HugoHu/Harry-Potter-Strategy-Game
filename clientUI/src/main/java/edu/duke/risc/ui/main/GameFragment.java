@@ -170,6 +170,10 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     private HashMap<String, HashMap<String, Integer>> unitMoveAttackMap;
     // Upgrade list
     private HashMap<String, HashMap<String, Integer>> unitUpgradeMap;
+    // If has shown the horcrux result
+    private boolean hasHorcruxResult = false;
+    // If has shown the horcrux affect result
+    private boolean hasHorcruxAffectResult = false;
 
     /**
      * Setup the frame layout
@@ -251,6 +255,9 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         if (resultCode == ClientIntentService.STATUS_FINISHED) {
             // Clear the flag
             this.isUpgradedWorldLevel = false;
+            this.hasHorcruxResult = false;
+            this.hasHorcruxAffectResult = false;
+            // Get new game object
             this.mGame = (Game) resultData.getSerializable("game");
             this.mPlayer = mGame.getPlayer(mGame.getPlayerName());
             System.out.println("Game state: " + mGame.getGameState());
@@ -312,7 +319,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                         assignWinner(false);
                         this.isLost = true;
                     }
-                    showDialog(getResources().getString(R.string.turn), String.valueOf(this.mGame.getTurn()), getResources().getString(R.string.ends));
                     break;
                 case GAME_OVER:
                     assignWinner(this.mGame.getWinnerId() == this.mGame.getPlayerId());
@@ -1232,11 +1238,19 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
-                        // update the game view
-                        global_prompt.setVisibility(View.GONE);
-                        global_dialog.setVisibility(View.GONE);
-                        inner_order_view.setVisibility(View.VISIBLE);
-                        base_view.setVisibility(View.GONE);
+                        if (!hasHorcruxResult && mGame.getNewHorcrux() != null) {
+                            showDialog("Player: " + mGame.getPlayerList().get(Integer.parseInt(mGame.getNewHorcrux().split("%")[1])).getPlayerName() + " has found a new ", mGame.getNewHorcrux().split("%")[0], "");
+                            hasHorcruxResult = true;
+                        } else if (!hasHorcruxAffectResult && mGame.getHorcruxAffect() != null) {
+
+                            hasHorcruxAffectResult = true;
+                        } else {
+                            // update the game view
+                            global_prompt.setVisibility(View.GONE);
+                            global_dialog.setVisibility(View.GONE);
+                            inner_order_view.setVisibility(View.VISIBLE);
+                            base_view.setVisibility(View.GONE);
+                        }
                     }
                 });
             }
