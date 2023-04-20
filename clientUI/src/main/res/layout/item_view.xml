@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/inflate_item_view"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:background="@drawable/purple_bg_edge_protrait"
+    android:clickable="true"
+    android:visibility="visible"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <TextView
+        android:id="@+id/item_view_buff_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/order_text_margin"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="@dimen/order_text_margin"
+        android:fontFamily="@font/gumela"
+        android:text="@string/buff"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/item_view_buff_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/gumela"
+        android:text="@string/buff_b"
+        android:textColor="@color/ui_ravenclaw"
+        android:textSize="@dimen/order_text_extra_small"
+        app:layout_constraintStart_toStartOf="@+id/item_view_buff_title"
+        app:layout_constraintTop_toBottomOf="@+id/item_view_buff_title" />
+
+    <TextView
+        android:id="@+id/item_view_buff_desc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/gumela"
+        android:text="@string/buff_b_desc"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_extra_extra_small"
+        app:layout_constraintEnd_toEndOf="@+id/item_view_buff_title"
+        app:layout_constraintStart_toStartOf="@+id/item_view_buff_name"
+        app:layout_constraintTop_toBottomOf="@+id/item_view_buff_name" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/order_text_white"
+        app:layout_constraintEnd_toEndOf="@+id/item_view_buff_desc"
+        app:layout_constraintStart_toStartOf="@+id/item_view_buff_desc"
+        app:layout_constraintTop_toBottomOf="@+id/item_view_buff_desc" />
+
+
+    <TextView
+        android:id="@+id/item_view_skill_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/order_text_margin"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="@dimen/order_text_margin"
+        android:fontFamily="@font/gumela"
+        android:text="@string/skill"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+    <cn.gavinliu.android.lib.shapedimageview.ShapedImageView
+        android:id="@+id/item_view_skill_img"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/centaur"
+        app:layout_constraintStart_toStartOf="@+id/item_view_skill_title"
+        app:layout_constraintTop_toBottomOf="@+id/item_view_skill_name"
+        app:shape_mode="circle"
+        app:stroke_color="@color/text_white"
+        app:stroke_width="1dp" />
+
+    <TextView
+        android:id="@+id/item_view_skill_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/gumela"
+        android:text="@string/skill_b_p2"
+        android:textColor="@color/ui_ravenclaw"
+        android:textSize="@dimen/order_text_extra_small"
+        app:layout_constraintStart_toStartOf="@+id/item_view_skill_title"
+        app:layout_constraintTop_toBottomOf="@+id/item_view_skill_title" />
+
+    <TextView
+        android:id="@+id/item_view_skill_desc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/gumela"
+        android:text="@string/skill_b_desc"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_extra_extra_small"
+        app:layout_constraintBottom_toBottomOf="@+id/item_view_skill_img"
+        app:layout_constraintEnd_toStartOf="@+id/item_view_use_btn"
+        app:layout_constraintStart_toEndOf="@+id/item_view_skill_img"
+        app:layout_constraintTop_toTopOf="@+id/item_view_skill_img" />
+
+    <Button
+        android:id="@+id/item_view_use_btn"
+        android:layout_width="50dp"
+        android:layout_height="15dp"
+        android:background="@drawable/btn_white"
+        android:fontFamily="@font/gumela"
+        android:text="@string/use"
+        android:textColor="@color/order_text"
+        android:textSize="@dimen/order_text_extra_small"
+        app:layout_constraintBottom_toBottomOf="@+id/item_view_skill_img"
+        app:layout_constraintEnd_toEndOf="@+id/item_view_skill_title"
+        app:layout_constraintTop_toTopOf="@+id/item_view_skill_img" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/order_text_white"
+        app:layout_constraintEnd_toEndOf="@+id/item_view_use_btn"
+        app:layout_constraintStart_toStartOf="@+id/item_view_skill_img"
+        app:layout_constraintTop_toBottomOf="@+id/item_view_skill_img" />
+
+    <TextView
+        android:id="@+id/item_view_horcrux_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/order_text_margin"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="@dimen/order_text_margin"
+        android:fontFamily="@font/gumela"
+        android:text="@string/horcrux"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+    <ListView
+        android:id="@+id/item_view_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/item_view_back_btn"
+        app:layout_constraintEnd_toEndOf="@+id/item_view_horcrux_title"
+        app:layout_constraintStart_toStartOf="@+id/item_view_horcrux_title"
+        app:layout_constraintTop_toBottomOf="@+id/item_view_horcrux_title">
+
+    </ListView>
+
+    <Button
+        android:id="@+id/item_view_back_btn"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/order_button_height"
+        android:layout_marginStart="@dimen/order_text_margin"
+        android:layout_marginEnd="@dimen/order_text_margin"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/btn_dark_brown"
+        android:fontFamily="@font/gumela"
+        android:text="@string/unit_init_back_btn"
+        android:textColor="@color/order_text_white"
+        android:textSize="@dimen/order_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

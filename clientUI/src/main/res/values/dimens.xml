@@ -9,6 +9,7 @@
     <dimen name="login_btn_width">100dp</dimen>
 
     <dimen name="seekbar_width">100dp</dimen>
+    <dimen name="dialog_height">75dp</dimen>
 
     <dimen name="normal_text_size">14sp</dimen>
     <dimen name="normal_line_height">18sp</dimen>
@@ -19,6 +20,7 @@
     <dimen name="order_text">16sp</dimen>
     <dimen name="order_text_small">14sp</dimen>
     <dimen name="order_text_extra_small">12sp</dimen>
+    <dimen name="order_text_extra_extra_small">10sp</dimen>
     <dimen name="order_button_height">30dp</dimen>
 
     <dimen name="button_round_radius">8dp</dimen>
