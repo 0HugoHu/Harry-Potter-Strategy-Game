@@ -711,10 +711,12 @@ public class Game implements Serializable {
      */
     public void allocateTerritories() {
         GameMap gameMap = this.getMap();
-        //int numTerrs = gameMap.getNumTerritories();
+        int numTerrs = gameMap.getNumTerritories();
         int numPlayers = this.getNumPlayers();
         ArrayList<Territory> terrs = gameMap.getTerritories();
         ArrayList<Player> players = this.getPlayerList();
+        // Adjacent allocations
+
         switch (numPlayers){
             case (2):
                 expandPlayerTerrs(players.get(0),terrs,new ArrayList<>(Arrays.asList(0,1,4,5,8,9,12,13,16,17,20,21)));
@@ -732,6 +734,18 @@ public class Game implements Serializable {
                 expandPlayerTerrs(players.get(3),terrs,new ArrayList<>(Arrays.asList(14,15,18,19,22,23)));
                 break;
         }
+
+        //Random Allocations
+        /*
+        ArrayList<Integer> tarr= new ArrayList<>();
+        for (int i=0;i<24;i++) tarr.add(i);
+        Collections.shuffle(tarr);
+        for (int i=0;i<numPlayers;i++){
+            ArrayList<Integer> ti= new ArrayList<>();
+            for (int j=0;j<numTerrs/numPlayers;j++) ti.add(tarr.get(numTerrs/numPlayers*i+j));
+            expandPlayerTerrs(players.get(i),terrs,ti);
+        }
+        */
         /*
         for (int i = 0; i < numTerrs; i++) {
             players.get(i / (numTerrs / numPlayers)).expandTerr(terrs.get(i));

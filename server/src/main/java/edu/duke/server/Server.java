@@ -1,24 +1,22 @@
 package edu.duke.server;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 import edu.duke.shared.Game;
 import edu.duke.shared.helper.GameObject;
 import edu.duke.shared.helper.State;
-import edu.duke.shared.map.GameMap;
-import edu.duke.shared.player.Player;
 import edu.duke.shared.map.Territory;
+import edu.duke.shared.player.Player;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Turn;
-import edu.duke.shared.unit.Unit;
 import edu.duke.shared.unit.UnitType;
 
 public class Server {
