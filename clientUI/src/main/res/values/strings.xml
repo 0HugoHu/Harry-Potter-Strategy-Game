@@ -117,7 +117,7 @@
     <string name="skill_r_desc">In the next turn, 30 units of Gnome soldiers will be granted to thee in a random territory.</string>
     <string name="skill_b_desc">In the next turn, the unicorn horns required for upgrading all units will be halved.</string>
     <string name="skill_y_desc">For the next three turns, thou shalt be immune to attacks (attacking forces will be repelled).</string>
-    <string name="skill_g_desc">In the next turn, there will be a 20% chance of persuading a territory to switch sides during an attack (no attacking forces will be consumed).</string>
+    <string name="skill_g_desc">In the next turn, there will be a 20% chance of persuading a territory to switch sides.</string>
 
     <string name="skill_r_p2">Lion\'s Courage</string>
 
