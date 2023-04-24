@@ -1,17 +1,16 @@
 package edu.duke.shared.helper;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import edu.duke.shared.Game;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.player.Player;
 import edu.duke.shared.turn.AttackTurn;
-import edu.duke.shared.turn.Move;
 import edu.duke.shared.turn.MoveTurn;
 import edu.duke.shared.unit.Unit;
 import edu.duke.shared.unit.UnitType;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class DisplayMap {
     // Map

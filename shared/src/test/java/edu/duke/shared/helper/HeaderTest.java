@@ -1,10 +1,10 @@
 package edu.duke.shared.helper;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-
-import edu.duke.shared.Game;
 
 public class HeaderTest {
 
@@ -79,7 +79,7 @@ public class HeaderTest {
     public void forceEndGame() {
         Header header = new Header();
         header.forceEndGame();
-        assertEquals(true,header.isForceEndGame());
+        assertTrue(header.isForceEndGame());
 
     }
 }

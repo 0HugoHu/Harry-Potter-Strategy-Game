@@ -1,21 +1,21 @@
 package edu.duke.server;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 import edu.duke.shared.Game;
 import edu.duke.shared.helper.GameObject;
 import edu.duke.shared.helper.State;
+import edu.duke.shared.map.Territory;
 import edu.duke.shared.player.Horcrux;
 import edu.duke.shared.player.House;
-import edu.duke.shared.map.Territory;
 import edu.duke.shared.player.Player;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Turn;
@@ -30,10 +30,27 @@ public class Server {
     private final static int numUnits = 24;
     // Gameplay controller
     private final Game game;
-    // Server socket
-    private ServerSocket serverSocket;
     // Server house mapping
     private final Map<Integer, House> serverHouseMapping = new HashMap<>();
+    // Server socket
+    private ServerSocket serverSocket;
+
+    /**
+     * Initialize Server by number of players
+     *
+     * @param numOfPlayers Number of players
+     * @param numUnits     Number of units for each player
+     */
+    public Server(int numOfPlayers, int numUnits) {
+        this.game = new Game(numOfPlayers, numUnits);
+
+        try {
+            this.serverSocket = new ServerSocket(PORT);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("New Game Created.\n");
+    }
 
     /**
      * Main method
@@ -107,23 +124,6 @@ public class Server {
 
         // Initialize default resources
         growResources();
-    }
-
-    /**
-     * Initialize Server by number of players
-     *
-     * @param numOfPlayers Number of players
-     * @param numUnits     Number of units for each player
-     */
-    public Server(int numOfPlayers, int numUnits) {
-        this.game = new Game(numOfPlayers, numUnits);
-
-        try {
-            this.serverSocket = new ServerSocket(PORT);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println("New Game Created.\n");
     }
 
     /**

@@ -87,7 +87,7 @@ public class TerritoryTest {
     @Test
     public void removeAllUnits() {
         Territory t = new Territory("Terr0");
-        Unit u1 = new Unit("Gnome",0);
+        Unit u1 = new Unit("Gnome", 0);
 //        t.addUnit(UnitType.GNOME);
 //        HashMap<UnitType,Integer> units = t.getUnits();
 //        assertEquals(1, units.size());
@@ -98,7 +98,7 @@ public class TerritoryTest {
     @Test
     public void removeUnitByName() {
         Territory t = new Territory("Terr0");
-        Unit u1 = new Unit("Gnome",0);
+        Unit u1 = new Unit("Gnome", 0);
 //        t.addUnit(UnitType.GNOME);
 //        HashMap<UnitType,Integer> units = t.getUnits();
 //        assertEquals(1, units.size());
@@ -164,7 +164,7 @@ public class TerritoryTest {
         String owner = "Alice";
         Player p = new Player(0, new Socket());
         String name = "Terr0";
-        HashMap<UnitType,Integer> units = new HashMap<>();
+        HashMap<UnitType, Integer> units = new HashMap<>();
         HashSet<int[]> coords = new HashSet<>();
         HashSet<String> adjs = new HashSet<>();
         Unit u1 = new Unit("u1");
@@ -173,7 +173,7 @@ public class TerritoryTest {
         int[] c2 = new int[]{1, 1};
         String adj1 = "adj1";
         String adj2 = "adj2";
-        units.put(UnitType.GNOME,2);
+        units.put(UnitType.GNOME, 2);
         coords.add(c1);
         coords.add(c2);
 //        adjs.add(adj1);
@@ -189,7 +189,7 @@ public class TerritoryTest {
 //        assertEquals("plain",t.getType());
 
     }
-    
+
     @Test
     public void testAdjacent() {
         Territory t = new Territory("Terr0");

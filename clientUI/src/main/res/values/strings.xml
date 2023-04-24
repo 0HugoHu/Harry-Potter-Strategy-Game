@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">RISC</string>
 
-    <string name="background_map">Backgroud Map</string>
     <string name="you_are_watching">You are watching… </string>
 
     <string name="cost">Cost: </string>
@@ -45,19 +44,15 @@
     <string name="plus1">+1</string>
 
     <string name="gnome">Gnome</string>
-    <string name="spinner_title">Select unit</string>
     <string name="unit_upgrade_success">Your creature has been successfully upgraded</string>
     <string name="surrendered">You\'ve declared your surrender</string>
     <string name="tech_upgrade_recorded">Your technology level upgrade shall be completed in the following turn</string>
 
     <string name="attack">Attack</string>
     <string name="move">Move</string>
-    <string name="back">Back</string>
 
     <string name="waiting">Waiting for other players…</string>
-    <string name="end_turn">End Turn</string>
 
-    <string name="terr_desc_example">The Great Lake, alternatively known as the Black Lake, was a large body of water. It was a landlocked freshwater lake located to the south of Hogwarts Castle. The castle stands on a cliff overlooking the water. It was about half a mile in diameter and the castle\'s plumbing network drained into it. The lake had a number of very unusual inhabitants, including a Giant Squid, a village of Merpeople, and many Grindylows.</string>
     <string name="init_view_text1">With immense delight, we hereby inform you that your application to Hogwarts School of Witchcraft and Wizardry has been met with success. Following the Sorting Hat\'s scrupulous contemplation of your inherent qualities and potential, you have been assigned to the distinguished House of:</string>
     <string name="chat">CHAT</string>
     <string name="end_turn_btn">END</string>
@@ -81,7 +76,6 @@
     <string name="buff">Buff</string>
     <string name="use">Use</string>
 
-    <string name="not_use">Use</string>
     <string name="activate">In use</string>
     <string name="used">Used</string>
 
@@ -101,19 +95,14 @@
     <string name="roomid">RoomID</string>
 
     <string name="example_unit">Boggarts</string>
-    <string name="example_unit2">Dementors</string>
-    <string name="example_unit3">Goblins</string>
-    <string name="example_unit4">Werewolves</string>
 
     <string name="example_terr">The Great Lake</string>
 
     <string name="winner_words">Magical prowess evades the feeble. Huzzah, brave wizard! Thou hast conquered the Triwizard Tournament for thine House! The annals of Hogwarts shall etch thy name in everlasting glory!</string>
     <string name="loser_words">Thou hast been defeated. The Triwizard Tournament is over. The annals of Hogwarts shall not record thy name in everlasting glory.</string>
 
-    <string name="initialize">Initialize units… </string>
     <string name="turn">Turn&#160;</string>
     <string name="begins">&#160;begins</string>
-    <string name="ends">&#160;ends</string>
 
     <string name="buff_r">Heart of a Warrior</string>
     <string name="buff_b">Crown of Wisdom</string>
@@ -130,21 +119,13 @@
     <string name="skill_y_desc">For the next three turns, thou shalt be immune to attacks (attacking forces will be repelled).</string>
     <string name="skill_g_desc">In the next turn, there will be a 20% chance of persuading a territory to switch sides during an attack (no attacking forces will be consumed).</string>
 
-    <string name="skill_r_p1">Gryffindor skill:&#160;</string>
     <string name="skill_r_p2">Lion\'s Courage</string>
-    <string name="skill_r_p3">&#160;has been activated</string>
 
-    <string name="skill_b_p1">Ravenclaw skill:&#160;</string>
     <string name="skill_b_p2">Wings of Wisdom</string>
-    <string name="skill_b_p3">&#160;was employed</string>
 
-    <string name="skill_y_p1">Hufflepuff skill:&#160;</string>
     <string name="skill_y_p2">Steadfast Roots</string>
-    <string name="skill_y_p3">&#160;has been invoked</string>
 
-    <string name="skill_g_p1">Slytherin skill:&#160;</string>
     <string name="skill_g_p2">Serpent\'s Strategy</string>
-    <string name="skill_g_p3">&#160;was utilized</string>
 
     <string name="diary_effect_p1">Due to the power of&#160;</string>
     <string name="diary_effect_p2">Riddle\'s Diary</string>
@@ -173,22 +154,5 @@
     <string name="use_diadem_p3">, you\'ve gained 150 unicorn horns</string>
     <string name="use_snake_p1">You\'ve summoned the sinister creature&#160;</string>
     <string name="use_snake_p2">Nagini</string>
-
-    <string name="affect_diary_p1">Bewitched by&#160;</string>
-    <string name="affect_diary_p2">Riddle\'s Diary</string>
-    <string name="affect_diary_p3">, you are unable to act this turn</string>
-    <string name="affect_locket_p1">Influenced by&#160;</string>
-    <string name="affect_locket_p2">Slytherin\'s Locket</string>
-    <string name="affect_locket_p3">, you\'ve lost half of your Gnome forces</string>
-    <string name="affect_snake_p1">Under the dark creature&#160;</string>
-    <string name="affect_snake_p2">Nagini</string>
-    <string name="affect_snake_p3">\'s influence, a territory was lost</string>
-
-    <string name="diary_desc">Randomly disable one opponent\'s actions for their next turn.</string>
-    <string name="stone_desc">Instantly revive the last 10 fallen creatures.</string>
-    <string name="locket_desc">Halve the number of Gnome troops for a random opponent in their next turn.</string>
-    <string name="cup_desc">Instantly increase the number of gold coins by 300.</string>
-    <string name="diadem_desc">Immediately increase the number of unicorn horns by 150.</string>
-    <string name="snake_desc">Immediately randomly capture an adjacent enemy territory (troops on the territory become yours).</string>
 
 </resources>

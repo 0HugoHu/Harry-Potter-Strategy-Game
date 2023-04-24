@@ -1,11 +1,9 @@
 package edu.duke.shared.turn;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import edu.duke.shared.map.GameMap;
-import edu.duke.shared.unit.Unit;
 import edu.duke.shared.unit.UnitType;
 
 public class MoveTurn extends Turn {

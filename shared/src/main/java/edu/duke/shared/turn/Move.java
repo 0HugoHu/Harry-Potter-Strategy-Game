@@ -1,11 +1,9 @@
 package edu.duke.shared.turn;
 
 
-import edu.duke.shared.unit.Unit;
-import edu.duke.shared.unit.UnitType;
-
-import java.util.ArrayList;
 import java.util.HashMap;
+
+import edu.duke.shared.unit.UnitType;
 
 public class Move extends Order {
     /**

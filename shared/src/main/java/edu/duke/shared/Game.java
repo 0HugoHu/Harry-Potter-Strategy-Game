@@ -555,15 +555,6 @@ public class Game implements Serializable {
     }
 
     /**
-     * Set the player id
-     *
-     * @param id player id
-     */
-    public void setPlayerId(int id) {
-        this.header.setPlayerId(id);
-    }
-
-    /**
      * Get the player id
      *
      * @return player id
@@ -573,12 +564,12 @@ public class Game implements Serializable {
     }
 
     /**
-     * Set the player name
+     * Set the player id
      *
-     * @param name player name
+     * @param id player id
      */
-    public void setPlayerName(String name) {
-        this.header.setPlayerName(name);
+    public void setPlayerId(int id) {
+        this.header.setPlayerId(id);
     }
 
     /**
@@ -591,12 +582,12 @@ public class Game implements Serializable {
     }
 
     /**
-     * Set the game state
+     * Set the player name
      *
-     * @param state game state
+     * @param name player name
      */
-    public void setGameState(State state) {
-        this.header.setState(state);
+    public void setPlayerName(String name) {
+        this.header.setPlayerName(name);
     }
 
     /**
@@ -609,19 +600,19 @@ public class Game implements Serializable {
     }
 
     /**
+     * Set the game state
+     *
+     * @param state game state
+     */
+    public void setGameState(State state) {
+        this.header.setState(state);
+    }
+
+    /**
      * Increase the turn number by 1
      */
     public void turnComplete() {
         this.header.turnComplete();
-    }
-
-    /**
-     * Set the winner id
-     *
-     * @param playerId winner id
-     */
-    public void setWinnerId(int playerId) {
-        this.header.setWinnerId(playerId);
     }
 
     /**
@@ -631,6 +622,15 @@ public class Game implements Serializable {
      */
     public int getWinnerId() {
         return this.header.getWinnerId();
+    }
+
+    /**
+     * Set the winner id
+     *
+     * @param playerId winner id
+     */
+    public void setWinnerId(int playerId) {
+        this.header.setWinnerId(playerId);
     }
 
     /**
@@ -695,13 +695,14 @@ public class Game implements Serializable {
         return this.turnList;
     }
 
-    public void expandPlayerTerrs(Player p, ArrayList<Territory> terrs, ArrayList<Integer> ids){
-        for (int i:ids){
+    public void expandPlayerTerrs(Player p, ArrayList<Territory> terrs, ArrayList<Integer> ids) {
+        for (int i : ids) {
             p.expandTerr(terrs.get(i));
             terrs.get(i).changePlayerOwner(p);
             terrs.get(i).changeOwner(p.getPlayerName());
         }
     }
+
     /**
      * Allocate territories to players,
      * and allocate corresponding resources to each territory.
@@ -718,21 +719,21 @@ public class Game implements Serializable {
         ArrayList<Player> players = this.getPlayerList();
         // Adjacent allocations
 
-        switch (numPlayers){
+        switch (numPlayers) {
             case (2):
-                expandPlayerTerrs(players.get(0),terrs,new ArrayList<>(Arrays.asList(0,1,4,5,8,9,12,13,16,17,20,21)));
-                expandPlayerTerrs(players.get(1),terrs,new ArrayList<>(Arrays.asList(2,3,6,7,10,11,14,15,18,19,22,23)));
+                expandPlayerTerrs(players.get(0), terrs, new ArrayList<>(Arrays.asList(0, 1, 4, 5, 8, 9, 12, 13, 16, 17, 20, 21)));
+                expandPlayerTerrs(players.get(1), terrs, new ArrayList<>(Arrays.asList(2, 3, 6, 7, 10, 11, 14, 15, 18, 19, 22, 23)));
                 break;
             case (3):
-                expandPlayerTerrs(players.get(0),terrs,new ArrayList<>(Arrays.asList(0,1,2,3,4,5,6,7)));
-                expandPlayerTerrs(players.get(1),terrs,new ArrayList<>(Arrays.asList(8,9,12,13,16,17,20,21)));
-                expandPlayerTerrs(players.get(2),terrs,new ArrayList<>(Arrays.asList(10,11,14,15,18,19,22,23)));
+                expandPlayerTerrs(players.get(0), terrs, new ArrayList<>(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7)));
+                expandPlayerTerrs(players.get(1), terrs, new ArrayList<>(Arrays.asList(8, 9, 12, 13, 16, 17, 20, 21)));
+                expandPlayerTerrs(players.get(2), terrs, new ArrayList<>(Arrays.asList(10, 11, 14, 15, 18, 19, 22, 23)));
                 break;
             case (4):
-                expandPlayerTerrs(players.get(0),terrs,new ArrayList<>(Arrays.asList(0,1,4,5,8,9)));
-                expandPlayerTerrs(players.get(1),terrs,new ArrayList<>(Arrays.asList(2,3,6,7,10,11)));
-                expandPlayerTerrs(players.get(2),terrs,new ArrayList<>(Arrays.asList(12,13,16,17,20,21)));
-                expandPlayerTerrs(players.get(3),terrs,new ArrayList<>(Arrays.asList(14,15,18,19,22,23)));
+                expandPlayerTerrs(players.get(0), terrs, new ArrayList<>(Arrays.asList(0, 1, 4, 5, 8, 9)));
+                expandPlayerTerrs(players.get(1), terrs, new ArrayList<>(Arrays.asList(2, 3, 6, 7, 10, 11)));
+                expandPlayerTerrs(players.get(2), terrs, new ArrayList<>(Arrays.asList(12, 13, 16, 17, 20, 21)));
+                expandPlayerTerrs(players.get(3), terrs, new ArrayList<>(Arrays.asList(14, 15, 18, 19, 22, 23)));
                 break;
         }
 

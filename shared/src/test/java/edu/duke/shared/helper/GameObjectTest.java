@@ -1,6 +1,6 @@
 package edu.duke.shared.helper;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -22,7 +22,7 @@ public class GameObjectTest {
         GameObject gameObject = new GameObject(mock(Socket.class));
         assertNull(gameObject.decodeObj());
 
-        Game game = new Game(3,24);
+        Game game = new Game(3, 24);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
         oos.writeObject(game);
@@ -39,7 +39,7 @@ public class GameObjectTest {
         GameObject gameObject = new GameObject(mock(Socket.class));
         gameObject.encodeObj(new Object());
 
-        Game game = new Game(3,24);
+        Game game = new Game(3, 24);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
         oos.writeObject(game);

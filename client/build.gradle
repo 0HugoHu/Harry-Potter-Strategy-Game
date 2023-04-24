@@ -15,7 +15,6 @@ plugins {
 }
 
 
-
 application {
     // Define the main class for the application.
     mainClass = 'edu.duke.risc.client.Client'
@@ -41,12 +40,12 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
-clover{
+clover {
     compiler {
         additionalArgs = "-g:lines,source,vars"
     }
     report {
-        xml=true
+        xml = true
         html = true
     }
 }

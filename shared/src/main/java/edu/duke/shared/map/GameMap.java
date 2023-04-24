@@ -26,6 +26,34 @@ public class GameMap implements Serializable {
     private final HashMap<String, Integer> distances;
 
     /**
+     * Initialize Map by height and width
+     *
+     * @param height         Map height
+     * @param width          Map height
+     * @param numTerritories Number of territories on this map
+     */
+    public GameMap(int height, int width, int numTerritories) {
+        this(height, width, numTerritories, new ArrayList<>());
+    }
+
+    /**
+     * Initialize Map by height, width, and territories
+     *
+     * @param height         Map height
+     * @param width          Map width
+     * @param numTerritories Number of territories on this map
+     * @param territories    Territories on this map
+     */
+    public GameMap(int height, int width, int numTerritories, ArrayList<Territory> territories) {
+        this.height = height;
+        this.width = width;
+        this.numTerritories = numTerritories;
+        this.territories = territories;
+        this.borderPoints = new HashMap<>();
+        this.distances = new HashMap<>();
+    }
+
+    /**
      * Get distance between two territories
      *
      * @param first  first territory
@@ -100,35 +128,6 @@ public class GameMap implements Serializable {
         }
 
         return -1;
-    }
-
-
-    /**
-     * Initialize Map by height and width
-     *
-     * @param height         Map height
-     * @param width          Map height
-     * @param numTerritories Number of territories on this map
-     */
-    public GameMap(int height, int width, int numTerritories) {
-        this(height, width, numTerritories, new ArrayList<>());
-    }
-
-    /**
-     * Initialize Map by height, width, and territories
-     *
-     * @param height         Map height
-     * @param width          Map width
-     * @param numTerritories Number of territories on this map
-     * @param territories    Territories on this map
-     */
-    public GameMap(int height, int width, int numTerritories, ArrayList<Territory> territories) {
-        this.height = height;
-        this.width = width;
-        this.numTerritories = numTerritories;
-        this.territories = territories;
-        this.borderPoints = new HashMap<>();
-        this.distances = new HashMap<>();
     }
 
     /**

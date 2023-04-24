@@ -1,8 +1,10 @@
 package edu.duke.shared.helper;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
-import edu.duke.shared.unit.UnitType;
 import org.junit.Test;
 
 import java.net.Socket;
@@ -16,6 +18,7 @@ import edu.duke.shared.turn.Attack;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Move;
 import edu.duke.shared.turn.MoveTurn;
+import edu.duke.shared.unit.UnitType;
 
 public class ValidationTest {
 
@@ -80,7 +83,7 @@ public class ValidationTest {
     }
 
     @Test
-    public void testAllocateTwo(){
+    public void testAllocateTwo() {
         Game game = new Game(2, 24);
         GameMap map = game.getMap();
         Player p1 = new Player(0, new Socket());
@@ -93,7 +96,7 @@ public class ValidationTest {
     }
 
     @Test
-    public void testAllocateFour(){
+    public void testAllocateFour() {
         Game game = new Game(4, 24);
         GameMap map = game.getMap();
         Player p1 = new Player(0, new Socket());
@@ -168,18 +171,17 @@ public class ValidationTest {
         assertEquals("You should not attack your territory\n", thrown.getMessage());
         String from1 = null;
         String to1 = null;
-        String from2=null;
-        String to2=null;
-        boolean first=true;
+        String from2 = null;
+        String to2 = null;
+        boolean first = true;
         for (Territory t : map.getTerritoriesByOwner(p2.getPlayerName())) {
             for (String t2 : t.getAdjacents()) {
                 if (!Validation.checkTerritory(map, t2, p2.getPlayerName())) {
                     if (first) {
                         from1 = t.getName();
                         to1 = t2;
-                        first=false;
-                    }
-                    else{
+                        first = false;
+                    } else {
                         from2 = t.getName();
                         to2 = t2;
                     }
@@ -271,9 +273,9 @@ public class ValidationTest {
         game.addPlayer(p2);
         game.addPlayer(p3);
         game.allocateTerritories();
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> Validation.checkUnit(map,map.getTerritoriesByOwner(p1.getPlayerName()).get(0).getName(),3,2,p1.getPlayerName()));
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> Validation.checkUnit(map, map.getTerritoriesByOwner(p1.getPlayerName()).get(0).getName(), 3, 2, p1.getPlayerName()));
         assertEquals("You only have 2 units remaining\n", thrown.getMessage());
-        Validation.checkUnit(map,map.getTerritoriesByOwner(p1.getPlayerName()).get(0).getName(),2,3,p1.getPlayerName());
+        Validation.checkUnit(map, map.getTerritoriesByOwner(p1.getPlayerName()).get(0).getName(), 2, 3, p1.getPlayerName());
 
     }
 

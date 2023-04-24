@@ -1,10 +1,7 @@
 package edu.duke.shared.helper;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
-import java.lang.reflect.Array;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -61,22 +58,22 @@ public class DisplayMapTest {
         game.addPlayer(player4);
 
 
-        DisplayMap displayMap = new DisplayMap(game,0);
-        DisplayMap displayMap1 = new DisplayMap(game,1);
-        DisplayMap displayMap2 = new DisplayMap(game,2);
-        DisplayMap displayMap3 = new DisplayMap(game,3);
-        DisplayMap displayMap4 = new DisplayMap(game,4);
+        DisplayMap displayMap = new DisplayMap(game, 0);
+        DisplayMap displayMap1 = new DisplayMap(game, 1);
+        DisplayMap displayMap2 = new DisplayMap(game, 2);
+        DisplayMap displayMap3 = new DisplayMap(game, 3);
+        DisplayMap displayMap4 = new DisplayMap(game, 4);
         displayMap.showMap();
         displayMap1.showMap();
         displayMap2.showMap();
         displayMap3.showMap();
         displayMap4.showMap();
-        displayMap.showUnits(false,null,null);
-        displayMap.showUnits(true,null,null);
-        displayMap1.showUnits(true,null,null);
-        displayMap2.showUnits(true,null,null);
-        displayMap3.showUnits(true,null,null);
-        displayMap4.showUnits(true,null,null);
+        displayMap.showUnits(false, null, null);
+        displayMap.showUnits(true, null, null);
+        displayMap1.showUnits(true, null, null);
+        displayMap2.showUnits(true, null, null);
+        displayMap3.showUnits(true, null, null);
+        displayMap4.showUnits(true, null, null);
     }
 
     @Test
@@ -87,7 +84,7 @@ public class DisplayMapTest {
     public void convertToMap() {
         GameMap map = new GameMap(30, 30, 6);
         Game game = new Game(5, 24, map);
-        DisplayMap displayMap = new DisplayMap(game,0);
+        DisplayMap displayMap = new DisplayMap(game, 0);
         ArrayList<Unit> units = new ArrayList<>();
         units.add(new Unit("A"));
         displayMap.convertToMap(units);

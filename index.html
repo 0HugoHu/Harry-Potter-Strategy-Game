@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <style>
 .button {
   border-radius: 4px;
@@ -50,18 +50,29 @@
   cursor: pointer; /* Pointer/hand icon */
   float: left; /* Float the buttons side by side */
 }
-</style>
+
+    </style>
 </head>
 <body>
 
 
-<h2 style="margin-top:15vh;"><center>Group 1: Coverage Report</center></h2>
-<h4><center>Our project contains 3 submodules, and they are unit-tested separately.</center></h4>
+<h2 style="margin-top:15vh;">
+    <center>Group 1: Coverage Report</center>
+</h2>
+<h4>
+    <center>Our project contains 3 submodules, and they are unit-tested separately.</center>
+</h4>
 
 <div class="btn-group" style="width:60%;">
-    <button style="width:25%;" class="button" onclick="window.location.href='https://hugo.pages.oit.duke.edu/ece651-sp23-group1/client';"><span>Client </span></button>
-    <button style="width:25%;" class="button" onclick="window.location.href='https://hugo.pages.oit.duke.edu/ece651-sp23-group1/shared';"><span>Shared </span></button>
-    <button style="width:25%;" class="button" onclick="window.location.href='https://hugo.pages.oit.duke.edu/ece651-sp23-group1/server';"><span>Server </span></button>
+    <button class="button" onclick="window.location.href='https://hugo.pages.oit.duke.edu/ece651-sp23-group1/client';"
+            style="width:25%;">
+        <span>Client </span></button>
+    <button class="button" onclick="window.location.href='https://hugo.pages.oit.duke.edu/ece651-sp23-group1/shared';"
+            style="width:25%;">
+        <span>Shared </span></button>
+    <button class="button" onclick="window.location.href='https://hugo.pages.oit.duke.edu/ece651-sp23-group1/server';"
+            style="width:25%;">
+        <span>Server </span></button>
 </div>
 
 </body>

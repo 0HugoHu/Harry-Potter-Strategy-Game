@@ -11,40 +11,40 @@ import edu.duke.shared.map.Territory;
 import edu.duke.shared.unit.Unit;
 
 public class Player implements Serializable {
-    // Player's name
-    private String playerName;
     // Abandoned!! Territories owned by this player
     private final HashSet<Territory> playerTerrs;
-    // Player's id
-    private int playerId;
-    // Player's socket
-    private transient Socket socket;
-    // Player's thread
-    public transient PlayerThread playerThread;
-    // Player's thread
-    public transient Thread thread;
-    // World level
-    private int worldLevel;
-    // Coins
-    public int coins;
-    // Horns
-    public int horns;
-    // Will upgrade world level
-    public boolean willUpgradeWorldLevel = false;
     // Horcrux storage
     private final HashMap<Horcrux, Integer> horcruxes = new HashMap<>();
     // Horcrux usage, <name, num>
     private final HashMap<Horcrux, Integer> horcruxUsage = new HashMap<>();
     // Horcrux usage target, <name, isTarget>
     private final HashMap<Horcrux, Boolean> horcruxTarget = new HashMap<>();
+    // Player's thread
+    public transient PlayerThread playerThread;
+    // Player's thread
+    public transient Thread thread;
+    // Coins
+    public int coins;
+    // Horns
+    public int horns;
+    // Will upgrade world level
+    public boolean willUpgradeWorldLevel = false;
+    // Player's name
+    private String playerName;
+    // Player's id
+    private int playerId;
+    // Player's socket
+    private transient Socket socket;
+    // World level
+    private int worldLevel;
     // Previous 10 dead units
-    private ArrayList<Unit> deadUnits = new ArrayList<>();
+    private final ArrayList<Unit> deadUnits = new ArrayList<>();
     // Player's house
     private House house;
     // Player's skill
     private SkillState skillState = SkillState.NOT_USED;
     // Skill's in-effect count down
-    private int skillCountDown = 3;
+    private final int skillCountDown = 3;
 
 
     /**
@@ -91,6 +91,28 @@ public class Player implements Serializable {
         this.house = house;
     }
 
+    /**
+     * This function return the cost for each level of upgrade goal
+     *
+     * @param goal the level of upgrade goal
+     * @return the cost for each level of upgrade goal
+     */
+    public static int upgradeCost(int goal) {
+        switch (goal) {
+            case 2:
+                return 60;
+            case 3:
+                return 100;
+            case 4:
+                return 200;
+            case 5:
+                return 300;
+            case 6:
+                return 400;
+            default:
+                return 60;
+        }
+    }
 
     /**
      * Initialize the Player by name
@@ -126,7 +148,6 @@ public class Player implements Serializable {
             e.printStackTrace();
         }
     }
-
 
     /**
      * get player name
@@ -199,30 +220,6 @@ public class Player implements Serializable {
      */
     public HashSet<Territory> getPlayerTerrs() {
         return playerTerrs;
-    }
-
-
-    /**
-     * This function return the cost for each level of upgrade goal
-     *
-     * @param goal the level of upgrade goal
-     * @return the cost for each level of upgrade goal
-     */
-    public static int upgradeCost(int goal) {
-        switch (goal) {
-            case 2:
-                return 60;
-            case 3:
-                return 100;
-            case 4:
-                return 200;
-            case 5:
-                return 300;
-            case 6:
-                return 400;
-            default:
-                return 60;
-        }
     }
 
     /**

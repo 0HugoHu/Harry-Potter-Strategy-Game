@@ -1,10 +1,8 @@
 package edu.duke.shared.turn;
 
-import edu.duke.shared.map.GameMap;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
+import edu.duke.shared.map.GameMap;
 
 public class AttackTurn extends Turn {
     // List of attacks

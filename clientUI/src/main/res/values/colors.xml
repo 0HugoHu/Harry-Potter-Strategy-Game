@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
@@ -27,18 +26,7 @@
     <color name="ui_hufflepuff">#DDA600</color>
     <color name="ui_slytherin">#009700</color>
 
-    <color name="ui_ravenclaw_dark">#66003366</color>
-    <color name="ui_gryffindor_dark">#55660000</color>
-    <color name="ui_hufflepuff_dark">#55CC9900</color>
-    <color name="ui_slytherin_dark">#66003300</color>
 
-    <color name="map_ravenclaw">#44003366</color>
-    <color name="map_gryffindor">#44660000</color>
-    <color name="map_hufflepuff">#44CC9900</color>
-    <color name="map_slytherin">#44003300</color>
-
-
-    <color name="order_background">#FFEEEEEE</color>
     <color name="order_shadow">#55000000</color>
     <color name="order_title">#FF000000</color>
     <color name="order_text">#FF000000</color>

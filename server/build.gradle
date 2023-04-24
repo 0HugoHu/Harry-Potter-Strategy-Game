@@ -24,7 +24,6 @@ dependencies {
 }
 
 
-
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
@@ -34,12 +33,12 @@ application {
     mainClass = 'edu.duke.server.Server'
 }
 
-clover{
+clover {
     compiler {
         additionalArgs = "-g:lines,source,vars"
     }
     report {
-        xml=true
+        xml = true
         html = true
     }
 }

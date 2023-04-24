@@ -11,10 +11,6 @@ import edu.duke.shared.unit.UnitType;
 public class Territory implements Serializable {
     // Territory name
     private final String name;
-    // Player's name
-    private String owner;
-    // Player
-    private Player playerOwner;
     // All types of units on this territory
     /*
         For extendability, as units can have different attack and defense
@@ -25,9 +21,14 @@ public class Territory implements Serializable {
     private final HashSet<int[]> coords;
     // Adjacent Territory name
     private final HashSet<String> adjs;
+    // Resource production
+    private final boolean[] ResourcePro;
+    // Player's name
+    private String owner;
+    // Player
+    private Player playerOwner;
     // Territory borders, up, down, right, left
     private int[] borders;
-
     /**
      * This is the corresponding food resources in our design
      */
@@ -36,8 +37,6 @@ public class Territory implements Serializable {
      * This is the corresponding tech resources in our design
      */
     private int horns;
-    // Resource production
-    private final boolean[] ResourcePro;
     // Type of territory
     private String type;
     // Details of territory
@@ -188,6 +187,7 @@ public class Territory implements Serializable {
         }
         return false;
     }
+
     /**
      * Get the name of this territory
      *
@@ -420,31 +420,6 @@ public class Territory implements Serializable {
     }
 
     /**
-     * Get the type of this territory
-     *
-     * @return type in Harry Potter style
-     */
-    public String getType_HPStyle() {
-        switch (this.type) {
-            case "plain":
-                return "Enchanted Plain";
-            case "cliff":
-                return "Spellbound Cliff";
-            case "canyon":
-                return "Arcane Canyon";
-            case "desert":
-                return "Bewitched Desert";
-            case "forest":
-                return "Forbidden Forest";
-            case "mountain":
-                return "Enchanted Wetland";
-            default:
-                return "Not Defined";
-        }
-    }
-
-
-    /**
      * set different and assign initial resources to different territories
      *
      * @param typeName type of the territory
@@ -489,6 +464,30 @@ public class Territory implements Serializable {
                 addHorns(10);
                 addCoins(20);
                 break;
+        }
+    }
+
+    /**
+     * Get the type of this territory
+     *
+     * @return type in Harry Potter style
+     */
+    public String getType_HPStyle() {
+        switch (this.type) {
+            case "plain":
+                return "Enchanted Plain";
+            case "cliff":
+                return "Spellbound Cliff";
+            case "canyon":
+                return "Arcane Canyon";
+            case "desert":
+                return "Bewitched Desert";
+            case "forest":
+                return "Forbidden Forest";
+            case "mountain":
+                return "Enchanted Wetland";
+            default:
+                return "Not Defined";
         }
     }
 

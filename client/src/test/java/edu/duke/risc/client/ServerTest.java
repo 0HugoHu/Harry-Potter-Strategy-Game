@@ -16,7 +16,7 @@ public class ServerTest {
      */
     @Test
     public void serverTest() throws Exception {
-        Server newSer = new Server(1,24);
+        Server newSer = new Server(1, 24);
 
         //create the server thread
         Thread serverThread = new Thread(() -> {
@@ -60,7 +60,7 @@ public class ServerTest {
      */
     @Test
     public void server_multi_client_Test() throws Exception {
-        Server newSer = new Server(2,24);
+        Server newSer = new Server(2, 24);
         Thread serverThread = new Thread(() -> {
             try {
                 newSer.acceptConnection(2);

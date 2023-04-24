@@ -1,24 +1,19 @@
 package edu.duke.shared;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashSet;
 
-import edu.duke.shared.helper.State;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.player.Player;
-import edu.duke.shared.player.PlayerThread;
 
 @ExtendWith(MockitoExtension.class)
 public class PlayerTest {
@@ -114,13 +109,13 @@ public class PlayerTest {
     }
 
     @Test
-    public void testWorldLevel(){
+    public void testWorldLevel() {
         Player p = new Player(0, new Socket());
-        assertEquals(1,p.getWorldLevel());
+        assertEquals(1, p.getWorldLevel());
     }
 
     @Test
-    public void TestupgradeCost(){
+    public void TestupgradeCost() {
 //        Player p = new Player(0, new Socket());
 //        assertEquals(20,p.upgradeCost(2));
 //        assertEquals(40,p.upgradeCost(3));
@@ -130,7 +125,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testGetResources(){
+    public void testGetResources() {
         Territory t1 = new Territory("A");
         Player p1 = new Player(0, new Socket());
         p1.setPlayerName("Alice");
