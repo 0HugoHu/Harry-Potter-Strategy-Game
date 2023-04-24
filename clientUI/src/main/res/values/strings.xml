@@ -81,6 +81,10 @@
     <string name="buff">Buff</string>
     <string name="use">Use</string>
 
+    <string name="not_use">Use</string>
+    <string name="activate">In use</string>
+    <string name="used">Used</string>
+
     <string name="unit_init_desc">You have 24 units in total. Put them across your territories.</string>
     <string name="unit_init_title">Unit Placement</string>
     <string name="unit_init_back_btn">Back To Map</string>
@@ -141,6 +145,19 @@
     <string name="skill_g_p1">Slytherin skill:&#160;</string>
     <string name="skill_g_p2">Serpent\'s Strategy</string>
     <string name="skill_g_p3">&#160;was utilized</string>
+
+    <string name="diary_effect_p1">Due to the power of&#160;</string>
+    <string name="diary_effect_p2">Riddle\'s Diary</string>
+    <string name="diary_effect_p3">, you cannot move this turn!</string>
+
+    <string name="snake_effect_p1">Due to the power of&#160;</string>
+    <string name="snake_effect_p2">Nagini</string>
+    <string name="snake_effect_p3">, you lost one of your territories!</string>
+
+    <string name="locket_effect_p1">Due to the power of&#160;</string>
+    <string name="locket_effect_p2">Slytherin\'s Locket</string>
+    <string name="locket_effect_p3">, half of your Gnome were eliminated!</string>
+
 
     <string name="use_diary_p1">Thou hast wielded&#160;</string>
     <string name="use_diary_p2">Riddle\'s Diary</string>

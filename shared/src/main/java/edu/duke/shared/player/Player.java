@@ -61,7 +61,7 @@ public class Player implements Serializable {
         // Start the thread
         this.playerThread = new PlayerThread(this.socket, this.playerId);
         this.thread = new Thread(this.playerThread);
-        this.coins= 0;
+        this.coins = 0;
         this.horns = 0;
         this.worldLevel = 1;
         this.thread.start();
@@ -81,9 +81,10 @@ public class Player implements Serializable {
 
     /**
      * Initialize the Player by id, socket and house
+     *
      * @param playerId player id
-     * @param socket player socket
-     * @param house player house
+     * @param socket   player socket
+     * @param house    player house
      */
     public Player(int playerId, Socket socket, House house) {
         this(playerId, socket);
@@ -278,6 +279,7 @@ public class Player implements Serializable {
 
     /**
      * Set coins
+     *
      * @param coins coins
      */
     public void setCoins(int coins) {
@@ -376,21 +378,21 @@ public class Player implements Serializable {
      * If is diary target, return true
      */
     public boolean isDiaryTarget() {
-        return this.horcruxTarget.get(Horcrux.DIARY);
+        return this.horcruxTarget.getOrDefault(Horcrux.DIARY, false);
     }
 
     /**
      * If is snake target, return true
      */
     public boolean isSnakeTarget() {
-        return this.horcruxTarget.get(Horcrux.SNAKE);
+        return this.horcruxTarget.getOrDefault(Horcrux.SNAKE, false);
     }
 
     /**
      * If is locket target, return true
      */
     public boolean isLocketTarget() {
-        return this.horcruxTarget.get(Horcrux.LOCKET);
+        return this.horcruxTarget.getOrDefault(Horcrux.LOCKET, false);
     }
 
     /**
@@ -456,5 +458,36 @@ public class Player implements Serializable {
         return this.house;
     }
 
+    /**
+     * Get player's skill state
+     */
+    public SkillState getSkillState() {
+        return this.skillState;
+    }
+
+    /**
+     * Set player's skill state
+     */
+    public void setSkillState(SkillState skillState) {
+        this.skillState = skillState;
+    }
+
+    /**
+     * Get player's skill name
+     */
+    public String getSkillName() {
+        switch (this.house) {
+            case GRYFFINDOR:
+                return "Lion's Courage";
+            case SLYTHERIN:
+                return "Serpent's Strategy";
+            case HUFFLEPUFF:
+                return "Steadfast Roots";
+            case RAVENCLAW:
+                return "Wings of Wisdom";
+            default:
+                return "Unknown";
+        }
+    }
 
 }

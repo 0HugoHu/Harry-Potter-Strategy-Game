@@ -2,12 +2,14 @@ package edu.duke.risc.ui.main;
 
 import static edu.duke.risc.ui.state.TouchEvent.ATTACK;
 import static edu.duke.risc.ui.state.TouchEvent.MOVE;
+import static edu.duke.shared.player.SkillState.IN_EFFECT;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.media.Image;
 import android.os.Bundle;
 import android.content.Intent;
 
@@ -52,6 +54,7 @@ import edu.duke.shared.Game;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.player.Horcrux;
 import edu.duke.shared.player.Player;
+import edu.duke.shared.player.SkillState;
 import edu.duke.shared.turn.Attack;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Move;
@@ -301,6 +304,10 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     attackTurn = new AttackTurn(this.mGame.getMap(), this.mGame.getTurn(), this.mGame.getPlayerName());
                     mGameView.updateMap(this.mGame.getMap());
                     mGameView.updateGame(this.mGame);
+                    // If was used the diary
+                    if (this.mPlayer.isDiaryTarget()) {
+                        commit();
+                    }
                     if (isLost) {
                         commit();
                         this.ui_view.findViewById(R.id.ui_side_bar).setVisibility(View.GONE);
@@ -465,6 +472,25 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
 
         // Initialize widgets in item view
         Button item_back_btn = item_view.findViewById(R.id.item_view_back_btn);
+        Button item_use_btn = item_view.findViewById(R.id.item_view_use_btn);
+
+        item_use_btn.setOnClickListener(view -> {
+            switch (mPlayer.getSkillState()) {
+                case NOT_USED:
+                    mPlayer.setSkillState(IN_EFFECT);
+                    item_use_btn.setText(R.string.activate);
+                    item_use_btn.setEnabled(false);
+                    showDialog("You have activated the skill: ", mPlayer.getSkillName(), "");
+                    break;
+                case IN_EFFECT:
+                    item_use_btn.setText(R.string.used);
+                    item_use_btn.setTextColor(getResources().getColor(R.color.error_prompt));
+                    item_use_btn.setEnabled(false);
+                    break;
+                case USED:
+                    break;
+            }
+        });
 
         unit_from_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -495,7 +521,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 } else {
                     unit_upgrade_btn.setEnabled(false);
                     unit_num.setEnabled(false);
-                    unit_upgrade_btn.setText(getResources().getString(R.string.tech_fault3));
+                    unit_upgrade_btn.setText(R.string.tech_fault3);
                     unit_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
                 }
             }
@@ -521,6 +547,10 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 }
                 unit_num.setProgress(1);
                 int cost = mGame.getMap().getTerritory(orderTerrFrom).getUpdateValue(selected_from, selected_to);
+                // Check if player has ravenclaw skill
+                if (mPlayer.skillRavenclaw()) {
+                    cost = (int) (cost * 0.5);
+                }
                 String cost_s = "Upgrade: " + cost + " horns";
                 unit_upgrade_btn.setText(cost_s);
                 boolean flag = false;
@@ -600,12 +630,12 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 tech_upgrade_btn.setEnabled(false);
                 tech_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
                 if (this.isUpgradedWorldLevel) {
-                    tech_error_prompt.setText(getResources().getString(R.string.tech_fault2));
-                    tech_upgrade_btn.setText(getResources().getString(R.string.tech_fault3));
+                    tech_error_prompt.setText(R.string.tech_fault2);
+                    tech_upgrade_btn.setText(R.string.tech_fault3);
                 }
             } else if (tech_level == 6) {
-                tech_error_prompt.setText(getResources().getString(R.string.tech_fault4));
-                tech_upgrade_btn.setText(getResources().getString(R.string.tech_fault3));
+                tech_error_prompt.setText(R.string.tech_fault4);
+                tech_upgrade_btn.setText(R.string.tech_fault3);
                 tech_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
             } else {
                 tech_error_prompt.setVisibility(View.INVISIBLE);
@@ -614,37 +644,37 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             }
             switch (tech_level) {
                 case 1:
-                    tech_level_value.setText(getResources().getString(R.string.one));
+                    tech_level_value.setText(R.string.one);
                     tech_img.setImageResource(R.drawable.wand_1);
-                    tech_level_desc.setText(getResources().getString(R.string.tech_bonus_1));
+                    tech_level_desc.setText(R.string.tech_bonus_1);
                     break;
                 case 2:
-                    tech_level_value.setText(getResources().getString(R.string.two));
+                    tech_level_value.setText(R.string.two);
                     tech_img.setImageResource(R.drawable.wand_2);
-                    tech_level_desc.setText(getResources().getString(R.string.tech_bonus_2));
+                    tech_level_desc.setText(R.string.tech_bonus_2);
                     break;
                 case 3:
-                    tech_level_value.setText(getResources().getString(R.string.three));
+                    tech_level_value.setText(R.string.three);
                     tech_img.setImageResource(R.drawable.wand_3);
-                    tech_level_desc.setText(getResources().getString(R.string.tech_bonus_3));
+                    tech_level_desc.setText(R.string.tech_bonus_3);
                     break;
                 case 4:
-                    tech_level_value.setText(getResources().getString(R.string.four));
+                    tech_level_value.setText(R.string.four);
                     tech_img.setImageResource(R.drawable.wand_4);
-                    tech_level_desc.setText(getResources().getString(R.string.tech_bonus_4));
+                    tech_level_desc.setText(R.string.tech_bonus_4);
                     break;
                 case 5:
-                    tech_level_value.setText(getResources().getString(R.string.five));
+                    tech_level_value.setText(R.string.five);
                     tech_img.setImageResource(R.drawable.wand_5);
-                    tech_level_desc.setText(getResources().getString(R.string.tech_bonus_5));
+                    tech_level_desc.setText(R.string.tech_bonus_5);
                     break;
                 case 6:
-                    tech_level_value.setText(getResources().getString(R.string.six));
+                    tech_level_value.setText(R.string.six);
                     tech_img.setImageResource(R.drawable.wand_6);
-                    tech_level_desc.setText(getResources().getString(R.string.tech_bonus_6));
+                    tech_level_desc.setText(R.string.tech_bonus_6);
                     break;
                 default:
-                    tech_level_value.setText(getResources().getString(R.string.zero));
+                    tech_level_value.setText(R.string.zero);
                     tech_img.setImageResource(R.drawable.wand_101);
                     break;
             }
@@ -664,7 +694,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         // Force end game
         ui_view.findViewById(R.id.ui_player_name_label).setOnClickListener(v -> {
             this.mGame.forceEndGame();
-            showDialog(getResources().getString(R.string.surrendered), "", "");
+            showDialog("", getResources().getString(R.string.surrendered), "");
         });
 
         unit_num.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -673,6 +703,10 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 unit_selected_num.setText(String.valueOf(i));
                 System.out.println("Upgrade in terr: " + orderTerrFrom);
                 int cost = mGame.getMap().getTerritory(orderTerrFrom).getUpdateValue(selected_from, selected_to) * i;
+                // Check if player has ravenclaw skill
+                if (mPlayer.skillRavenclaw()) {
+                    cost = (int) (cost * 0.5);
+                }
                 String cost_s = "Upgrade: " + cost + " horns";
                 unit_upgrade_btn.setText(cost_s);
                 boolean flag = false;
@@ -711,6 +745,10 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             assert selected_to != null;
             // Upgrade the unit
             int cost = this.mGame.getMap().getTerritory(orderTerrFrom).upgradeUnit(selected_from, selected_to, num);
+            // Check if player has ravenclaw skill
+            if (mPlayer.skillRavenclaw()) {
+                cost = (int) (cost * 0.5);
+            }
             this.mPlayer.setExpenseHorns(cost);
 
             // Update cost on top bar display
@@ -734,6 +772,10 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 distance = this.mGame.getMap().getDistance(orderTerrTo, orderTerrFrom);
             }
             int cost = this.mGame.calculateOrderCost(distance, unitAdapter.getTotalNumber());
+            // Check if player has slytherin buff
+            if (mPlayer.buffSlytherin()) {
+                cost = (int) (cost * 0.8);
+            }
             String cost_s = cost + " coins";
             total_cost.setText(cost_s);
             if (cost > mPlayer.getCoins()) {
@@ -754,11 +796,15 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     showDialog(getResources().getString(R.string.use_diadem_p1), getResources().getString(R.string.use_diadem_p2), getResources().getString(R.string.use_diadem_p3));
                     mPlayer.addToHorcruxUsage(Horcrux.HAT, 1);
                     mPlayer.removeFromHorcruxStorage(Horcrux.HAT, 1);
+                    mPlayer.horns += 150;
+                    updatePlayerValues();
                     break;
                 case CUP:
                     showDialog("", getResources().getString(R.string.use_cup_p1), getResources().getString(R.string.use_cup_p2));
                     mPlayer.addToHorcruxUsage(Horcrux.CUP, 1);
                     mPlayer.removeFromHorcruxStorage(Horcrux.CUP, 1);
+                    mPlayer.coins += 300;
+                    updatePlayerValues();
                     break;
                 case RING:
                     showDialog(getResources().getString(R.string.use_stone_p1), getResources().getString(R.string.use_stone_p2), getResources().getString(R.string.use_stone_p3));
@@ -796,6 +842,10 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                         moveTurn.addMove(new Move(orderTerrFrom, orderTerrTo, list, this.mGame.getPlayerName()));
                         updateUnitMoveAttackMap(number, unit);
                         int cost = this.mGame.calculateOrderCost(this.mGame.getMap().getShortestDistance(orderTerrFrom, orderTerrTo), number);
+                        // Check if player has slytherin buff
+                        if (mPlayer.buffSlytherin()) {
+                            cost = (int) (cost * 0.8);
+                        }
                         this.mPlayer.setExpenseCoins(cost);
                     }
                 }
@@ -811,6 +861,10 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                         attackTurn.addAttack(new Attack(orderTerrFrom, orderTerrTo, list, this.mGame.getPlayerName()));
                         updateUnitMoveAttackMap(number, unit);
                         int cost = this.mGame.calculateOrderCost(this.mGame.getMap().getDistance(orderTerrFrom, orderTerrTo), number);
+                        // Check if player has slytherin buff
+                        if (mPlayer.buffSlytherin()) {
+                            cost = (int) (cost * 0.8);
+                        }
                         this.mPlayer.setExpenseCoins(cost);
                     }
                 }
@@ -923,7 +977,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 updateUnitUpgradeInfo(territoryName);
                 System.out.println("Player name: " + mGame.getPlayerName() + ", Territory owner: " + mGame.getMap().getTerritory(territoryName).getOwner());
                 if (!mGame.getMap().getTerritory(territoryName).getOwner().equals(mGame.getPlayerName())) {
-                    unit_upgrade_btn.setText(getResources().getString(R.string.tech_fault3));
+                    unit_upgrade_btn.setText(R.string.tech_fault3);
                     unit_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
                     unit_upgrade_btn.setEnabled(false);
                     unit_num.setEnabled(false);
@@ -1047,6 +1101,10 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 }
                 unit_num.setProgress(1);
                 int cost = mGame.getMap().getTerritory(orderTerrFrom).getUpdateValue(selected_from, selected_to);
+                // Check if player has ravenclaw skill
+                if (mPlayer.skillRavenclaw()) {
+                    cost = (int) (cost * 0.5);
+                }
                 String cost_s = "Upgrade: " + cost + " horns";
                 unit_upgrade_btn.setText(cost_s);
                 boolean flag = false;
@@ -1069,7 +1127,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             } else {
                 unit_upgrade_btn.setEnabled(false);
                 unit_num.setEnabled(false);
-                unit_upgrade_btn.setText(getResources().getString(R.string.tech_fault3));
+                unit_upgrade_btn.setText(R.string.tech_fault3);
                 unit_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
             }
         } else {
@@ -1077,7 +1135,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             unitSpinnerToAdapter.notifyDataSetChanged();
             unit_upgrade_btn.setEnabled(false);
             unit_num.setEnabled(false);
-            unit_upgrade_btn.setText(getResources().getString(R.string.tech_fault3));
+            unit_upgrade_btn.setText(R.string.tech_fault3);
             unit_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
         }
 
@@ -1128,7 +1186,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             if (unitDataModels.size() == 0) {
                 TextView error_view = move_attack_view.findViewById(R.id.cost_error_prompt);
                 error_view.setVisibility(View.VISIBLE);
-                error_view.setText(getResources().getString(R.string.no_unit));
+                error_view.setText(R.string.no_unit);
             } else {
                 TextView error_view = move_attack_view.findViewById(R.id.cost_error_prompt);
                 error_view.setVisibility(View.INVISIBLE);
@@ -1241,16 +1299,27 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                         if (!hasHorcruxResult && mGame.getNewHorcrux() != null) {
                             showDialog("Player: " + mGame.getPlayerList().get(Integer.parseInt(mGame.getNewHorcrux().split("%")[1])).getPlayerName() + " has found a new ", mGame.getNewHorcrux().split("%")[0], "");
                             hasHorcruxResult = true;
-                        } else if (!hasHorcruxAffectResult && mGame.getHorcruxAffect() != null) {
-
-                            hasHorcruxAffectResult = true;
-                        } else {
-                            // update the game view
-                            global_prompt.setVisibility(View.GONE);
-                            global_dialog.setVisibility(View.GONE);
-                            inner_order_view.setVisibility(View.VISIBLE);
-                            base_view.setVisibility(View.GONE);
+                            return;
+                        } else if (!hasHorcruxAffectResult && mPlayer != null) {
+                            if (mPlayer.isDiaryTarget()) {
+                                showDialog(getResources().getString(R.string.diary_effect_p1), getResources().getString(R.string.diary_effect_p2), getResources().getString(R.string.diary_effect_p3));
+                                hasHorcruxAffectResult = true;
+                                return;
+                            } else if (mPlayer.isLocketTarget()) {
+                                showDialog(getResources().getString(R.string.locket_effect_p1), getResources().getString(R.string.locket_effect_p2), getResources().getString(R.string.locket_effect_p3));
+                                hasHorcruxAffectResult = true;
+                                return;
+                            } else if (mPlayer.isSnakeTarget()) {
+                                showDialog(getResources().getString(R.string.snake_effect_p1), getResources().getString(R.string.snake_effect_p2), getResources().getString(R.string.snake_effect_p3));
+                                hasHorcruxAffectResult = true;
+                                return;
+                            }
                         }
+                        // update the game view
+                        global_prompt.setVisibility(View.GONE);
+                        global_dialog.setVisibility(View.GONE);
+                        inner_order_view.setVisibility(View.VISIBLE);
+                        base_view.setVisibility(View.GONE);
                     }
                 });
             }
@@ -1305,6 +1374,53 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 ui_house.setTextColor(getResources().getColor(R.color.ui_slytherin));
                 break;
         }
+
+        TextView buff_name = item_view.findViewById(R.id.item_view_buff_name);
+        TextView buff_desc = item_view.findViewById(R.id.item_view_buff_desc);
+        TextView skill_name = item_view.findViewById(R.id.item_view_skill_name);
+        TextView skill_desc = item_view.findViewById(R.id.item_view_skill_desc);
+        ImageView skill_img = item_view.findViewById(R.id.item_view_skill_img);
+
+        // item view
+        switch (mPlayer.getHouse()) {
+            case RAVENCLAW:
+                buff_name.setText(R.string.buff_r);
+                buff_name.setTextColor(getResources().getColor(R.color.ui_ravenclaw));
+                buff_desc.setText(R.string.buff_r_desc);
+                skill_name.setText(R.string.skill_b_p2);
+                skill_name.setTextColor(getResources().getColor(R.color.ui_ravenclaw));
+                skill_desc.setText(R.string.skill_b_desc);
+//                skill_img.setImageResource(R.drawable.skill_b);
+                break;
+            case HUFFLEPUFF:
+                buff_name.setText(R.string.buff_y);
+                buff_name.setTextColor(getResources().getColor(R.color.ui_hufflepuff));
+                buff_desc.setText(R.string.buff_y_desc);
+                skill_name.setText(R.string.skill_y_p2);
+                skill_name.setTextColor(getResources().getColor(R.color.ui_hufflepuff));
+                skill_desc.setText(R.string.skill_y_desc);
+//                skill_img.setImageResource(R.drawable.skill_y);
+                break;
+            case GRYFFINDOR:
+                buff_name.setText(R.string.buff_r);
+                buff_name.setTextColor(getResources().getColor(R.color.ui_gryffindor));
+                buff_desc.setText(R.string.buff_r_desc);
+                skill_name.setText(R.string.skill_r_p2);
+                skill_name.setTextColor(getResources().getColor(R.color.ui_gryffindor));
+                skill_desc.setText(R.string.skill_r_desc);
+//                skill_img.setImageResource(R.drawable.skill_r);
+                break;
+            case SLYTHERIN:
+                buff_name.setText(R.string.buff_g);
+                buff_name.setTextColor(getResources().getColor(R.color.ui_slytherin));
+                buff_desc.setText(R.string.buff_g_desc);
+                skill_name.setText(R.string.skill_g_p2);
+                skill_name.setTextColor(getResources().getColor(R.color.ui_slytherin));
+                skill_desc.setText(R.string.skill_g_desc);
+//                skill_img.setImageResource(R.drawable.skill_g);
+                break;
+        }
+
         // Update the player values
         updatePlayerValues();
     }
