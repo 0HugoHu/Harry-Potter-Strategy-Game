@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import edu.duke.risc.R;
+import edu.duke.risc.ui.action.TouchEventMapping;
 import edu.duke.risc.ui.draw.MapTiles;
 import edu.duke.risc.ui.draw.MapUI;
-import edu.duke.risc.ui.action.TouchEventMapping;
 import edu.duke.risc.ui.state.MapAnimationType;
 import edu.duke.risc.ui.state.MapUpdateType;
 import edu.duke.risc.ui.state.TouchEvent;
@@ -226,13 +226,9 @@ public class GameView extends SurfaceView implements Runnable {
                     canvas.drawBitmap(wallpaperBitmap, null, mRect, null);
                     canvas.scale(scale, scale);
                     if (animationTimer500) {
-                        switch (mAnimationType) {
-                            case TERRITORY_SELECTED:
-                                mMapTiles.selected(canvas, this.mPaint, this.touchEventMapping, this.territorySelected, this.territorySelectedDouble);
-                                mMapUI.selected(canvas, this.mPaint, this.touchEventMapping, this.territorySelected, this.territorySelectedDouble);
-                                break;
-                            default:
-                                break;
+                        if (mAnimationType == MapAnimationType.TERRITORY_SELECTED) {
+                            mMapTiles.selected(canvas, this.mPaint, this.touchEventMapping, this.territorySelected, this.territorySelectedDouble);
+                            mMapUI.selected(canvas, this.mPaint, this.touchEventMapping, this.territorySelected, this.territorySelectedDouble);
                         }
 //                        this.animationTimer500 = false;
                         this.mAnimationType = MapAnimationType.NONE;

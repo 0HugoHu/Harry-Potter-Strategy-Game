@@ -2,7 +2,6 @@ package edu.duke.risc.client;
 
 
 import edu.duke.shared.Game;
-import edu.duke.shared.helper.State;
 
 public class ClientAdapter {
     // Host

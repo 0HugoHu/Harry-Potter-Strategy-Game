@@ -1,7 +1,5 @@
 package edu.duke.risc;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 public class MainActivityTest {
