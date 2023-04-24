@@ -60,18 +60,6 @@ import edu.duke.shared.unit.Unit;
 import edu.duke.shared.unit.UnitType;
 
 public class GameFragment extends Fragment implements ClientResultReceiver.AppReceiver {
-    // GameView
-    private GameView mGameView;
-    // Game
-    private Game mGame;
-    // Player
-    private Player mPlayer;
-    // Context
-    private Context context;
-    // Player color
-    private int playerColor;
-    // TouchEvent
-    private TouchEvent mTouchEvent;
     // Units in territory data model
     ArrayList<UnitDataModel> unitDataModels;
     // Territories data model
@@ -92,22 +80,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     ListView unit_init_listview;
     // List of horcruxes
     ListView horcrux_listview;
-    // Unit data adapter
-    private UnitDataAdapter unitAdapter;
-    // Territory data adapter
-    private TerrDataAdapter terrAdapter;
-    // Unit upgrade data adapter
-    private UnitUpgradeDataAdapter unitUpgradeAdapter;
-    // Unit spinner adapter source
-    private UnitSpinnerAdapter unitSpinnerAdapter;
-    // Unit spinner adapter destination
-    private UnitSpinnerAdapter unitSpinnerToAdapter;
-    // Horcrux data adapter
-    private HorcruxDataAdapter horcruxAdapter;
-    // Touch event source territory
-    private String orderTerrFrom;
-    // Touch event destination territory
-    private String orderTerrTo;
     // Shadow view
     ConstraintLayout shadow_view;
     // Base view
@@ -160,6 +132,34 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     int currentCoinExpense = 0;
     // Current turn horns expense
     int currentHornExpense = 0;
+    // GameView
+    private GameView mGameView;
+    // Game
+    private Game mGame;
+    // Player
+    private Player mPlayer;
+    // Context
+    private Context context;
+    // Player color
+    private int playerColor;
+    // TouchEvent
+    private TouchEvent mTouchEvent;
+    // Unit data adapter
+    private UnitDataAdapter unitAdapter;
+    // Territory data adapter
+    private TerrDataAdapter terrAdapter;
+    // Unit upgrade data adapter
+    private UnitUpgradeDataAdapter unitUpgradeAdapter;
+    // Unit spinner adapter source
+    private UnitSpinnerAdapter unitSpinnerAdapter;
+    // Unit spinner adapter destination
+    private UnitSpinnerAdapter unitSpinnerToAdapter;
+    // Horcrux data adapter
+    private HorcruxDataAdapter horcruxAdapter;
+    // Touch event source territory
+    private String orderTerrFrom;
+    // Touch event destination territory
+    private String orderTerrTo;
     // Move turn list
     private MoveTurn moveTurn;
     // Attack turn list

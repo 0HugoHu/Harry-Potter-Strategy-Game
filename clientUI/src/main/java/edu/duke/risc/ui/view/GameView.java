@@ -49,6 +49,24 @@ import edu.duke.shared.player.Player;
 
 @SuppressLint("ViewConstructor")
 public class GameView extends SurfaceView implements Runnable {
+    // Paint
+    private final Paint mPaint;
+    // Surface holder
+    private final SurfaceHolder mSurfaceHolder;
+    // Gesture detector
+    private final ScaleGestureDetector mScaleGestureDetector;
+    // Handler
+    private final Handler mHandler;
+    // Selection bubble bitmap
+    private final Bitmap selectionBubbleBitmap;
+    // Background image
+    private final Bitmap backgroundImageBitmap;
+    // Context
+    private final Context mContext;
+    // Rectangle for wallpaper
+    private final Rect mRect = new Rect();
+    // Wallpaper bitmap
+    private final Bitmap wallpaperBitmap;
     // Last touch position
     private float mLastTouchX;
     private float mLastTouchY;
@@ -65,15 +83,10 @@ public class GameView extends SurfaceView implements Runnable {
     private boolean mRunning;
     // Game thread
     private Thread mGameThread = null;
-
     // Map tiles Component
     private MapTiles mMapTiles;
     // Map UI Component
     private MapUI mMapUI;
-    // Paint
-    private final Paint mPaint;
-    // Surface holder
-    private final SurfaceHolder mSurfaceHolder;
     // Game map
     private GameMap mGameMap = null;
     // Map view offset
@@ -81,10 +94,6 @@ public class GameView extends SurfaceView implements Runnable {
     private int offsetY = 0;
     // Map view scale
     private float scale = 1.0f;
-    // Gesture detector
-    private final ScaleGestureDetector mScaleGestureDetector;
-    // Handler
-    private final Handler mHandler;
     // Zoom in/out lock
     private boolean pinchToZoom;
     // Touch event mapping
@@ -99,19 +108,9 @@ public class GameView extends SurfaceView implements Runnable {
     private String territorySelectedDouble = null;
     // Store the previous clicked territory
     private String territorySelectedPrevious = null;
-    // Selection bubble bitmap
-    private final Bitmap selectionBubbleBitmap;
-    // Background image
-    private final Bitmap backgroundImageBitmap;
     private EventListener eventListener;
-    // Context
-    private final Context mContext;
     // Game
     private Game mGame;
-    // Rectangle for wallpaper
-    private final Rect mRect = new Rect();
-    // Wallpaper bitmap
-    private final Bitmap wallpaperBitmap;
 
     /**
      * Constructor
@@ -470,30 +469,6 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
     /**
-     * ScaleListener is used to detect pinch to zoom gestures.
-     */
-    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-        @Override
-        public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
-            scale *= scaleGestureDetector.getScaleFactor();
-            scale = Math.max(0.5f, Math.min(scale, 2.0f));
-            zoomMap(scale);
-            return true;
-        }
-
-        @Override
-        public boolean onScaleBegin(ScaleGestureDetector detector) {
-            pinchToZoom = true;
-            return super.onScaleBegin(detector);
-        }
-
-        @Override
-        public void onScaleEnd(ScaleGestureDetector detector) {
-            super.onScaleEnd(detector);
-        }
-    }
-
-    /**
      * Test if the touch is a click.
      */
     private void testIfClick() {
@@ -519,5 +494,29 @@ public class GameView extends SurfaceView implements Runnable {
         public abstract void onPropOrder(String territoryName);
 
         public abstract void onUnitOrder(String territoryName);
+    }
+
+    /**
+     * ScaleListener is used to detect pinch to zoom gestures.
+     */
+    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
+            scale *= scaleGestureDetector.getScaleFactor();
+            scale = Math.max(0.5f, Math.min(scale, 2.0f));
+            zoomMap(scale);
+            return true;
+        }
+
+        @Override
+        public boolean onScaleBegin(ScaleGestureDetector detector) {
+            pinchToZoom = true;
+            return super.onScaleBegin(detector);
+        }
+
+        @Override
+        public void onScaleEnd(ScaleGestureDetector detector) {
+            super.onScaleEnd(detector);
+        }
     }
 }

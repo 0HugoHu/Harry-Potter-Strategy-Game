@@ -25,26 +25,22 @@ public class MapTiles {
     private final int mapViewHeight;
     // Padding
     private final int paddingTop;
+    // Background image
+    private final Bitmap backgroundImageBitmap;
+    // Territory color mapping
+    Map<String, Integer> ownerColor = new HashMap<>();
     private int paddingLeft = 64;
-
     // Map movement offset
     private float offsetX = 0.0f;
     private float offsetY = 0.0f;
-
     // Boarder size
     private int boarderSize = 2;
-
     // Territory mapping
     private GameMap mGameMap = null;
     // Territory selected
     private String territorySelected = null;
     // Second time territory selected
     private String territorySelectedDouble = null;
-
-    // Territory color mapping
-    Map<String, Integer> ownerColor = new HashMap<>();
-    // Background image
-    private final Bitmap backgroundImageBitmap;
     // Background image rect
     private Typeface plain;
 

@@ -9,13 +9,13 @@
         android:layout_width="0dp"
         android:layout_height="25dp"
         android:layout_marginStart="16dp"
+        android:fontFamily="@font/gumela"
         android:text="@string/example_terr"
         android:textColor="@color/order_text_white"
         android:textSize="@dimen/order_text_small"
-        android:fontFamily="@font/gumela"
         android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="@id/terr_item_num"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/terr_item_num"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,13 +37,12 @@
         style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="@dimen/seekbar_width"
         android:layout_height="0dp"
+        android:layout_marginEnd="16dp"
         android:max="8"
         android:progress="3"
-        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -36,6 +36,57 @@ public class TouchEventMapping {
     }
 
     /**
+     * Check if the string is a valid action
+     *
+     * @param string string to be checked
+     * @return if the string is a valid action
+     */
+    public static boolean checkIsAction(String string) {
+        for (TouchEvent event : TouchEvent.values()) {
+            if (event.name().equals(string)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Get the touch event based on the selected territories
+     *
+     * @param selected1 selected territory 1
+     * @param selected2 selected territory 2
+     * @param terrFrom  territory from
+     * @param map       game map
+     * @return the touch event based on the selected territories
+     */
+    public static TouchEvent getAction(String selected1, String selected2, String terrFrom, GameMap map) {
+        if (selected1 == null || selected2 == null) return null;
+        // Property and Unit info
+        if (!TouchEventMapping.checkIsAction(selected1) && TouchEventMapping.checkIsAction(selected2)) {
+            switch (TouchEvent.valueOf(selected2)) {
+                case PROP:
+                    return TouchEvent.PROP;
+                case UNIT:
+                    return TouchEvent.UNIT;
+            }
+        }
+        // Attack or Move
+        if (TouchEventMapping.checkIsAction(selected1) && !TouchEventMapping.checkIsAction(selected2)) {
+            if (selected1.equals(TouchEvent.ORDER.name()) && terrFrom != null) {
+                // Target territory is not self
+                if (Validation.checkAdjacent(map, terrFrom, selected2) && !map.getOwnerByTerrName(selected2).equals(map.getOwnerByTerrName(terrFrom))) {
+                    return TouchEvent.ATTACK;
+                }
+                // Target territory is self's, but not itself
+                if (Validation.checkPathExist(map, terrFrom, selected2) && !terrFrom.equals(selected2)) {
+                    return TouchEvent.MOVE;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
      * Get the center point of a territory
      *
      * @param t Territory
@@ -173,56 +224,5 @@ public class TouchEventMapping {
      */
     private boolean isNotInsideMap(int y, int x) {
         return y < this.mapBorder[0] || y > this.mapBorder[2] || x < this.mapBorder[3] || x > this.mapBorder[1];
-    }
-
-    /**
-     * Check if the string is a valid action
-     *
-     * @param string string to be checked
-     * @return if the string is a valid action
-     */
-    public static boolean checkIsAction(String string) {
-        for (TouchEvent event : TouchEvent.values()) {
-            if (event.name().equals(string)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Get the touch event based on the selected territories
-     *
-     * @param selected1 selected territory 1
-     * @param selected2 selected territory 2
-     * @param terrFrom  territory from
-     * @param map       game map
-     * @return the touch event based on the selected territories
-     */
-    public static TouchEvent getAction(String selected1, String selected2, String terrFrom, GameMap map) {
-        if (selected1 == null || selected2 == null) return null;
-        // Property and Unit info
-        if (!TouchEventMapping.checkIsAction(selected1) && TouchEventMapping.checkIsAction(selected2)) {
-            switch (TouchEvent.valueOf(selected2)) {
-                case PROP:
-                    return TouchEvent.PROP;
-                case UNIT:
-                    return TouchEvent.UNIT;
-            }
-        }
-        // Attack or Move
-        if (TouchEventMapping.checkIsAction(selected1) && !TouchEventMapping.checkIsAction(selected2)) {
-            if (selected1.equals(TouchEvent.ORDER.name()) && terrFrom != null) {
-                // Target territory is not self
-                if (Validation.checkAdjacent(map, terrFrom, selected2) && !map.getOwnerByTerrName(selected2).equals(map.getOwnerByTerrName(terrFrom))) {
-                    return TouchEvent.ATTACK;
-                }
-                // Target territory is self's, but not itself
-                if (Validation.checkPathExist(map, terrFrom, selected2) && !terrFrom.equals(selected2)) {
-                    return TouchEvent.MOVE;
-                }
-            }
-        }
-        return null;
     }
 }
