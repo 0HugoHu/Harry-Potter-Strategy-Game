@@ -1,7 +1,6 @@
 package edu.duke.risc.ui.model;
 
 import edu.duke.risc.R;
-import edu.duke.shared.unit.UnitType;
 
 public class UnitSpinnerDataModel {
     // Unit name
