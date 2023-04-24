@@ -138,8 +138,12 @@ public class MapFactory {
             //char name = (char) ('A' + i);
             t[i] = new Territory(territoryNames[i]);
             t[i].addDetails(territoryDetails[i]);
-            int coord_1d = gameMap.getHeight() * gameMap.getWidth() / this.numTerritories * i;
-            int[] coord = new int[]{coord_1d / gameMap.getWidth(), coord_1d % gameMap.getWidth()};
+            //int coord_1d = gameMap.getHeight() * gameMap.getWidth() / this.numTerritories * i;
+            int w = gameMap.getWidth(),h= gameMap.getHeight();
+            //Divide map into 6*4 territories
+            int col = i%4,row = i/4;
+            int coord_col = (col*2+1)*w/4/2,coord_row= (row*2+1)*h/6/2;
+            int[] coord = new int[]{coord_row, coord_col};
             q[i].add(coord);
             visited[i][coord[0]][coord[1]] = true;
             gameMap.addTerritory(t[i]);

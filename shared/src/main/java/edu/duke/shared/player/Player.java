@@ -1,10 +1,7 @@
 package edu.duke.shared.player;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.io.Serializable;
 import java.net.Socket;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,7 +9,6 @@ import java.util.HashSet;
 import edu.duke.shared.Game;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.unit.Unit;
-import jdk.internal.org.jline.reader.Buffer;
 
 public class Player implements Serializable {
     // Player's name
