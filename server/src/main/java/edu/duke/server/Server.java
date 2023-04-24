@@ -4,25 +4,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Logger;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import edu.duke.shared.Game;
 import edu.duke.shared.helper.GameObject;
 import edu.duke.shared.helper.State;
-import edu.duke.shared.map.GameMap;
 import edu.duke.shared.player.Horcrux;
 import edu.duke.shared.player.House;
-import edu.duke.shared.player.Player;
 import edu.duke.shared.map.Territory;
+import edu.duke.shared.player.Player;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Turn;
-import edu.duke.shared.unit.Unit;
 import edu.duke.shared.unit.UnitType;
 
 public class Server {
@@ -31,15 +27,11 @@ public class Server {
     // Number of players
     private final static int numPlayers = 4;
     // Number of units at the beginning
-    private final static int numUnits = 48;
+    private final static int numUnits = 24;
     // Gameplay controller
     private final Game game;
     // Server socket
     private ServerSocket serverSocket;
-    // Logger
-    private static final Logger logger = Logger.getLogger("serverLog.txt");
-    // Server game lock
-    private final ReentrantLock serverGameLock = new ReentrantLock();
     // Server house mapping
     private final Map<Integer, House> serverHouseMapping = new HashMap<>();
 
