@@ -27,21 +27,39 @@ public class Client {
     private final static int PORT = 5410;
     // Number of units at the beginning
     private final static int numUnits = 24;
+    // Client socket
+    private final Socket clientSocket;
+    // Scanner
+    Scanner scanner = new Scanner(System.in);
     // Player Id on server
     private int playerID;
     // Player name
     private String playerName;
     // Gameplay controller
     private Game game;
-    // Client socket
-    private final Socket clientSocket;
-    // Scanner
-    Scanner scanner = new Scanner(System.in);
     // Flag for mock client
     private boolean isMock = false;
 
     // Flag for client who lost the game
     private boolean isLoser = false;
+
+    /*
+     * Initialize Client
+     */
+    public Client(String HOST) {
+        this(HOST, null);
+    }
+
+    /*
+     * Initialize Client by player name
+     * @param playerName Player name
+     */
+    public Client(String HOST, String playerName) {
+        this.playerName = playerName;
+        System.out.println("Created a player.\n");
+        this.clientSocket = connectSocket(HOST, PORT);
+        this.game = new Game(0, 48);
+    }
 
     /**
      * main method for the client
@@ -68,24 +86,6 @@ public class Client {
         // End Game
         System.out.println("Game End.\n");
         client.safeClose();
-    }
-
-    /*
-     * Initialize Client
-     */
-    public Client(String HOST) {
-        this(HOST, null);
-    }
-
-    /*
-     * Initialize Client by player name
-     * @param playerName Player name
-     */
-    public Client(String HOST, String playerName) {
-        this.playerName = playerName;
-        System.out.println("Created a player.\n");
-        this.clientSocket = connectSocket(HOST, PORT);
-        this.game = new Game(0, 48);
     }
 
     /*

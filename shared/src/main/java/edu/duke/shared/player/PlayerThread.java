@@ -22,18 +22,18 @@ import edu.duke.shared.unit.UnitType;
 public class PlayerThread implements Runnable, Serializable {
     // Global game state of the game
     private final State state;
+    // Player's id
+    private final int playerId;
+    // Lock for server game
+    private final ReentrantLock serverGameLock = new ReentrantLock();
     // Player's socket
     public Socket socket;
     // Player's game
     public Game currGame;
-    // Server's game
-    private Game serverGame;
-    // Player's id
-    private final int playerId;
     // For testing
     public int forTesting;
-    // Lock for server game
-    private final ReentrantLock serverGameLock = new ReentrantLock();
+    // Server's game
+    private Game serverGame;
 
     /**
      * Initialize the PlayerThread

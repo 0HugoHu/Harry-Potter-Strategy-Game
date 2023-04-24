@@ -65,33 +65,6 @@ public class Unit implements Serializable {
     }
 
     /**
-     * Get unit name
-     *
-     * @return unit name
-     */
-    public UnitType getType() {
-        return this.type;
-    }
-
-    /**
-     * Get unit attack/defense/hit point power
-     *
-     * @return unit attack/defense/hit point power
-     */
-    public int getBonus() {
-        return this.bonus;
-    }
-
-    /**
-     * Get unit cost
-     *
-     * @return unit cost
-     */
-    public int getCost() {
-        return this.cost;
-    }
-
-    /**
      * Convert UnitType to string
      *
      * @param type UnitType
@@ -197,5 +170,32 @@ public class Unit implements Serializable {
                 return null;
         }
         return nextLevel;
+    }
+
+    /**
+     * Get unit name
+     *
+     * @return unit name
+     */
+    public UnitType getType() {
+        return this.type;
+    }
+
+    /**
+     * Get unit attack/defense/hit point power
+     *
+     * @return unit attack/defense/hit point power
+     */
+    public int getBonus() {
+        return this.bonus;
+    }
+
+    /**
+     * Get unit cost
+     *
+     * @return unit cost
+     */
+    public int getCost() {
+        return this.cost;
     }
 }

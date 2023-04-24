@@ -1,10 +1,9 @@
 package edu.duke.shared.player;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import edu.duke.shared.unit.UnitType;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -15,15 +14,13 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import edu.duke.shared.Game;
-import edu.duke.shared.helper.GameObject;
 import edu.duke.shared.helper.State;
-import edu.duke.shared.map.GameMap;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.turn.Attack;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Move;
 import edu.duke.shared.turn.MoveTurn;
-import edu.duke.shared.unit.Unit;
+import edu.duke.shared.unit.UnitType;
 
 public class PlayerThreadTest {
 

@@ -94,14 +94,14 @@ public class UnitTest {
         Unit myunit6 = new Unit("Centaur");
         Unit myunit7 = new Unit("Werewolf");
         Unit myunit8 = new Unit("XXx");
-        String name = myunit1.convertUnitTypeToString(myunit1.getType());
-        String name2 = myunit2.convertUnitTypeToString(myunit2.getType());
-        String name3 = myunit3.convertUnitTypeToString(myunit3.getType());
-        String name4 = myunit4.convertUnitTypeToString(myunit4.getType());
-        String name5 = myunit5.convertUnitTypeToString(myunit5.getType());
-        String name6 = myunit6.convertUnitTypeToString(myunit6.getType());
-        String name7 = myunit7.convertUnitTypeToString(myunit7.getType());
-        String name8 = myunit8.convertUnitTypeToString(myunit8.getType());
+        String name = Unit.convertUnitTypeToString(myunit1.getType());
+        String name2 = Unit.convertUnitTypeToString(myunit2.getType());
+        String name3 = Unit.convertUnitTypeToString(myunit3.getType());
+        String name4 = Unit.convertUnitTypeToString(myunit4.getType());
+        String name5 = Unit.convertUnitTypeToString(myunit5.getType());
+        String name6 = Unit.convertUnitTypeToString(myunit6.getType());
+        String name7 = Unit.convertUnitTypeToString(myunit7.getType());
+        String name8 = Unit.convertUnitTypeToString(myunit8.getType());
     }
 
     @Test

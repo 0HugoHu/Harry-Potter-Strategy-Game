@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import edu.duke.shared.player.Horcrux;
 
 public class Header implements Serializable {
+    // Losers' id
+    public final ArrayList<Integer> loserIds;
     // Player's id
     private int playerId;
     // Player's name
@@ -16,8 +18,6 @@ public class Header implements Serializable {
     private int turnIndex;
     // Winner's id
     private int winnerId;
-    // Losers' id
-    public final ArrayList<Integer> loserIds;
     // Force end game
     private boolean FORCE_END_GAME = false;
     // New horcrux
@@ -37,21 +37,21 @@ public class Header implements Serializable {
     }
 
     /**
-     * Set winner id
-     *
-     * @param winnerId Winner's id
-     */
-    public void setWinnerId(int winnerId) {
-        this.winnerId = winnerId;
-    }
-
-    /**
      * Get winner id
      *
      * @return Winner's id
      */
     public int getWinnerId() {
         return this.winnerId;
+    }
+
+    /**
+     * Set winner id
+     *
+     * @param winnerId Winner's id
+     */
+    public void setWinnerId(int winnerId) {
+        this.winnerId = winnerId;
     }
 
     /**
@@ -73,15 +73,6 @@ public class Header implements Serializable {
         return this.loserIds.contains(playerId);
     }
 
-    /**
-     * Set player id
-     *
-     * @param playerId Player's id
-     */
-    public void setPlayerId(int playerId) {
-        this.playerId = playerId;
-    }
-
     /*  Get player id
      *  @return Player's id
      */
@@ -90,12 +81,12 @@ public class Header implements Serializable {
     }
 
     /**
-     * Set player name
+     * Set player id
      *
-     * @param playerName Player's name
+     * @param playerId Player's id
      */
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
+    public void setPlayerId(int playerId) {
+        this.playerId = playerId;
     }
 
     /**
@@ -108,12 +99,12 @@ public class Header implements Serializable {
     }
 
     /**
-     * Set game state
+     * Set player name
      *
-     * @param state Game state
+     * @param playerName Player's name
      */
-    public void setState(State state) {
-        this.state = state;
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
     }
 
     /**
@@ -123,6 +114,15 @@ public class Header implements Serializable {
      */
     public State getState() {
         return this.state;
+    }
+
+    /**
+     * Set game state
+     *
+     * @param state Game state
+     */
+    public void setState(State state) {
+        this.state = state;
     }
 
     /**

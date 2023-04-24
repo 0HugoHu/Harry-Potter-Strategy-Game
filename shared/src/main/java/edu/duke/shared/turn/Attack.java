@@ -1,13 +1,8 @@
 package edu.duke.shared.turn;
 
-import edu.duke.shared.player.Player;
-import edu.duke.shared.unit.Unit;
-import edu.duke.shared.unit.UnitType;
-
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+
+import edu.duke.shared.unit.UnitType;
 
 public class Attack extends Order {
     /**

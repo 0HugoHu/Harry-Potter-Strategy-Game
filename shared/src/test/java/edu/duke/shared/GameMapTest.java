@@ -238,9 +238,9 @@ public class GameMapTest {
     }
 
     @Test
-    public void getShortestDistance(){
-        Game g = new Game(2,24);
-        Player p1 = new Player(0,new Socket());
+    public void getShortestDistance() {
+        Game g = new Game(2, 24);
+        Player p1 = new Player(0, new Socket());
         p1.setPlayerName("p1");
         Player p2 = new Player(1, new Socket());
         p2.setPlayerName("p2");
@@ -248,7 +248,7 @@ public class GameMapTest {
         g.addPlayer(p2);
         g.allocateTerritories();
         ArrayList<Territory> ta = g.getMap().getTerritoriesByOwner(p1.getPlayerName());
-        g.getMap().getShortestDistance(ta.get(0).getName(),ta.get(ta.size()-1).getName());
+        g.getMap().getShortestDistance(ta.get(0).getName(), ta.get(ta.size() - 1).getName());
 
     }
 

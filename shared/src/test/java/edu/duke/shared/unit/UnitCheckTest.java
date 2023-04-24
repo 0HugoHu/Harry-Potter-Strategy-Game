@@ -1,7 +1,5 @@
 package edu.duke.shared.unit;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 

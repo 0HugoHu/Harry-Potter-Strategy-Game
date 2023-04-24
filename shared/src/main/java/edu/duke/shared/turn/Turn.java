@@ -1,18 +1,16 @@
 package edu.duke.shared.turn;
 
 import java.io.Serializable;
-import java.util.HashMap;
 
 import edu.duke.shared.map.GameMap;
-import edu.duke.shared.map.Territory;
 
 public abstract class Turn implements Serializable {
+    // Game map
+    protected final GameMap map;
     // Player's index
     protected int index;
     // Player name
     protected String playerName;
-    // Game map
-    protected final GameMap map;
     // Turn type
     protected String type;
 
