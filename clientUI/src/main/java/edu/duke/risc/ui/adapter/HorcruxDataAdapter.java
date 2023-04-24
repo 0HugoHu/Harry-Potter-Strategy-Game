@@ -24,33 +24,6 @@ public class HorcruxDataAdapter extends ArrayAdapter<HorcruxDataModel> implement
     private UseListener useListener;
 
     /**
-     * Set the cost listener
-     *
-     * @param useListener the cost listener
-     */
-    public void setUseListener(UseListener useListener) {
-        this.useListener = useListener;
-    }
-
-    /**
-     * The cost listener
-     */
-    public interface UseListener {
-        void onUseChange(Horcrux horcrux, int number);
-    }
-
-    /**
-     * Set the view holder
-     */
-    private static class ViewHolder {
-        TextView name;
-        ShapedImageView image;
-        TextView number;
-        TextView desc;
-        Button use;
-    }
-
-    /**
      * Constructor
      *
      * @param data    the data
@@ -60,6 +33,15 @@ public class HorcruxDataAdapter extends ArrayAdapter<HorcruxDataModel> implement
         super(context, R.layout.horcrux_item, data);
         this.dataSet = data;
         this.mContext = context;
+    }
+
+    /**
+     * Set the cost listener
+     *
+     * @param useListener the cost listener
+     */
+    public void setUseListener(UseListener useListener) {
+        this.useListener = useListener;
     }
 
     /**
@@ -135,6 +117,24 @@ public class HorcruxDataAdapter extends ArrayAdapter<HorcruxDataModel> implement
 
         // Return the completed view to render on screen
         return convertView;
+    }
+
+    /**
+     * The cost listener
+     */
+    public interface UseListener {
+        void onUseChange(Horcrux horcrux, int number);
+    }
+
+    /**
+     * Set the view holder
+     */
+    private static class ViewHolder {
+        TextView name;
+        ShapedImageView image;
+        TextView number;
+        TextView desc;
+        Button use;
     }
 
 }

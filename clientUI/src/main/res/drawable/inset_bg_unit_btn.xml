@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <inset xmlns:android="http://schemas.android.com/apk/res/android"
     android:drawable="@drawable/unit"
+    android:insetLeft="2dip"
     android:insetTop="2dip"
-    android:insetBottom="2dip"
     android:insetRight="2dip"
-    android:insetLeft="2dip">
-</inset>
+    android:insetBottom="2dip"></inset>

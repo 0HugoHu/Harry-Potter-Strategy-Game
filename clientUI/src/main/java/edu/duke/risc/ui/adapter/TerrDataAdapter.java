@@ -22,31 +22,6 @@ public class TerrDataAdapter extends ArrayAdapter<TerrDataModel> implements View
     private TerrDataAdapter.TotalNumListener totalNumListener;
 
     /**
-     * Set the total number listener
-     *
-     * @param totalNumListener the listener
-     */
-    public void setTotalNumListener(TerrDataAdapter.TotalNumListener totalNumListener) {
-        this.totalNumListener = totalNumListener;
-    }
-
-    /**
-     * The listener for total number change
-     */
-    public interface TotalNumListener {
-        void onNumChange();
-    }
-
-    /**
-     * Set the view holder
-     */
-    private static class ViewHolder {
-        TextView terrName;
-        TextView number;
-        SeekBar seekbar;
-    }
-
-    /**
      * Constructor
      *
      * @param data    the data
@@ -57,6 +32,15 @@ public class TerrDataAdapter extends ArrayAdapter<TerrDataModel> implements View
         this.dataSet = data;
         this.mContext = context;
 
+    }
+
+    /**
+     * Set the total number listener
+     *
+     * @param totalNumListener the listener
+     */
+    public void setTotalNumListener(TerrDataAdapter.TotalNumListener totalNumListener) {
+        this.totalNumListener = totalNumListener;
     }
 
     /**
@@ -136,5 +120,21 @@ public class TerrDataAdapter extends ArrayAdapter<TerrDataModel> implements View
             total_num += dataModel.getNumber();
         }
         return total_num;
+    }
+
+    /**
+     * The listener for total number change
+     */
+    public interface TotalNumListener {
+        void onNumChange();
+    }
+
+    /**
+     * Set the view holder
+     */
+    private static class ViewHolder {
+        TextView terrName;
+        TextView number;
+        SeekBar seekbar;
     }
 }

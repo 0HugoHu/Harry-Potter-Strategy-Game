@@ -23,33 +23,6 @@ public class UnitDataAdapter extends ArrayAdapter<UnitDataModel> implements View
     private UnitDataAdapter.CostListener costListener;
 
     /**
-     * Set the cost listener
-     *
-     * @param costListener the cost listener
-     */
-    public void setCostListener(UnitDataAdapter.CostListener costListener) {
-        this.costListener = costListener;
-    }
-
-    /**
-     * The cost listener
-     */
-    public interface CostListener {
-        void onCostChange();
-    }
-
-    /**
-     * Set the view holder
-     */
-    private static class ViewHolder {
-        TextView name;
-        ShapedImageView image;
-        TextView number;
-        SeekBar seekbar;
-        TextView textView;
-    }
-
-    /**
      * Constructor
      *
      * @param data    the data
@@ -59,6 +32,15 @@ public class UnitDataAdapter extends ArrayAdapter<UnitDataModel> implements View
         super(context, R.layout.order_item, data);
         this.dataSet = data;
         this.mContext = context;
+    }
+
+    /**
+     * Set the cost listener
+     *
+     * @param costListener the cost listener
+     */
+    public void setCostListener(UnitDataAdapter.CostListener costListener) {
+        this.costListener = costListener;
     }
 
     /**
@@ -169,5 +151,23 @@ public class UnitDataAdapter extends ArrayAdapter<UnitDataModel> implements View
             total_cost += dataModel.getNumber();
         }
         return total_cost;
+    }
+
+    /**
+     * The cost listener
+     */
+    public interface CostListener {
+        void onCostChange();
+    }
+
+    /**
+     * Set the view holder
+     */
+    private static class ViewHolder {
+        TextView name;
+        ShapedImageView image;
+        TextView number;
+        SeekBar seekbar;
+        TextView textView;
     }
 }

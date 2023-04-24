@@ -18,11 +18,10 @@ import edu.duke.shared.helper.State;
 public class ClientIntentService extends IntentService {
     // Status codes
     public static final int STATUS_FINISHED = 1;
-    // Result codes
-    private Game game;
     // Lock for player order
     private static final Object receivedPlayerOrder = new Object();
-
+    // Result codes
+    private Game game;
     // Broadcast Receiver
     BroadcastReceiver br = new BroadcastReceiver() {
         @Override

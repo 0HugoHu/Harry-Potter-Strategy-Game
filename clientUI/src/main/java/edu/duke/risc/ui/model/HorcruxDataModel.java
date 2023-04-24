@@ -32,7 +32,7 @@ public class HorcruxDataModel {
 
     /**
      * Get horcrux name
-     * 
+     *
      * @return horcrux name
      */
     public String getNameString() {
@@ -86,6 +86,15 @@ public class HorcruxDataModel {
     }
 
     /**
+     * Set max number of horcrux
+     *
+     * @param max max number of horcrux
+     */
+    public void setMax(int max) {
+        this.max_number = max;
+    }
+
+    /**
      * Get number of horcrux
      *
      * @return number of horcrux
@@ -96,19 +105,9 @@ public class HorcruxDataModel {
 
     /**
      * Set number of horcrux
-     *
      */
     public void addNumber() {
         this.number++;
-    }
-
-    /**
-     * Set max number of horcrux
-     *
-     * @param max max number of horcrux
-     */
-    public void setMax(int max) {
-        this.max_number = max;
     }
 
 }

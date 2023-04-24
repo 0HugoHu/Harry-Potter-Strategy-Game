@@ -20,8 +20,7 @@
             android:exported="true"
             android:keepScreenOn="true"
             android:screenOrientation="sensorLandscape"
-            android:theme="@style/Theme.RISC.NoActionBar">
-        </activity>
+            android:theme="@style/Theme.RISC.NoActionBar"></activity>
         <activity
             android:name=".LoginActivity"
             android:exported="true"
@@ -33,6 +32,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service
             android:name=".client.ClientIntentService"
             android:enabled="true"

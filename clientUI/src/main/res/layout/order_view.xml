@@ -11,10 +11,10 @@
         android:id="@+id/inner_order_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/order_shadow"
         android:baselineAligned="false"
         android:orientation="horizontal"
         android:weightSum="2.5"
-        android:background="@color/order_shadow"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -26,17 +26,17 @@
             android:clickable="true" />
 
 
-        <include layout="@layout/move_attack_view"/>
+        <include layout="@layout/move_attack_view" />
 
-        <include layout="@layout/prop_view"/>
+        <include layout="@layout/prop_view" />
 
-        <include layout="@layout/unit_view"/>
+        <include layout="@layout/unit_view" />
 
-        <include layout="@layout/tech_view"/>
+        <include layout="@layout/tech_view" />
 
-        <include layout="@layout/init_unit_view"/>
+        <include layout="@layout/init_unit_view" />
 
-        <include layout="@layout/item_view"/>
+        <include layout="@layout/item_view" />
 
     </LinearLayout>
 

@@ -18,17 +18,6 @@ public class UnitUpgradeDataAdapter extends ArrayAdapter<UnitUpgradeDataModel> i
     Context mContext;
 
     /**
-     * Set the view holder
-     */
-    private static class ViewHolder {
-        TextView name;
-        ShapedImageView image;
-        TextView number;
-        TextView delta;
-
-    }
-
-    /**
      * Constructor
      *
      * @param data    the data
@@ -122,6 +111,17 @@ public class UnitUpgradeDataAdapter extends ArrayAdapter<UnitUpgradeDataModel> i
 
         // Return the completed view to render on screen
         return convertView;
+    }
+
+    /**
+     * Set the view holder
+     */
+    private static class ViewHolder {
+        TextView name;
+        ShapedImageView image;
+        TextView number;
+        TextView delta;
+
     }
 
 }

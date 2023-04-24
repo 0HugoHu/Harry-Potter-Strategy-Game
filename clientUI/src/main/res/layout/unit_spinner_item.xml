@@ -24,13 +24,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        app:layout_constraintStart_toEndOf="@id/spinner_img"
-        app:layout_constraintTop_toTopOf="@id/spinner_img"
-        app:layout_constraintBottom_toBottomOf="@id/spinner_img"
         android:fontFamily="@font/gumela"
         android:text="@string/gnome"
         android:textColor="@color/order_text_white"
-        android:textSize="@dimen/order_text_extra_small" />
+        android:textSize="@dimen/order_text_extra_small"
+        app:layout_constraintBottom_toBottomOf="@id/spinner_img"
+        app:layout_constraintStart_toEndOf="@id/spinner_img"
+        app:layout_constraintTop_toTopOf="@id/spinner_img" />
 
     <ImageView
         android:id="@+id/spinner_arrow"

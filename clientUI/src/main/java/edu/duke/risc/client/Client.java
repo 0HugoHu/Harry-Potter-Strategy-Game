@@ -13,24 +13,24 @@ import edu.duke.shared.turn.MoveTurn;
 import edu.duke.shared.unit.Unit;
 
 public class Client {
-    // Host name
-    //private String HOST = "vcm-30577.vm.duke.edu";
-    //
-    private final String HOST;
     // Port number
     private final static int PORT = 5410;
     // Number of units at the beginning
     private final static int numUnits = 24;
+    // Host name
+    //private String HOST = "vcm-30577.vm.duke.edu";
+    //
+    private final String HOST;
+    // Client socket
+    private final Socket clientSocket;
+    // Scanner
+    Scanner scanner = new Scanner(System.in);
     // Player Id on server
     private int playerID;
     // Player name
     private String playerName;
     // Gameplay controller
     private Game game;
-    // Client socket
-    private final Socket clientSocket;
-    // Scanner
-    Scanner scanner = new Scanner(System.in);
 
     /*
      * Initialize Client

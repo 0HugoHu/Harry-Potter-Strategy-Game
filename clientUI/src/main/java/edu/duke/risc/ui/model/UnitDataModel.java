@@ -40,6 +40,15 @@ public class UnitDataModel {
     }
 
     /**
+     * Set max number of units
+     *
+     * @param max max number of units
+     */
+    public void setMax(int max) {
+        this.max_number = max;
+    }
+
+    /**
      * Get number of units
      *
      * @return number of units
@@ -55,15 +64,6 @@ public class UnitDataModel {
      */
     public void setNumber(int number) {
         this.number = number;
-    }
-
-    /**
-     * Set max number of units
-     *
-     * @param max max number of units
-     */
-    public void setMax(int max) {
-        this.max_number = max;
     }
 
     /**

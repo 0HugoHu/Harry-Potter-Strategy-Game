@@ -16,20 +16,18 @@ public class MapUI {
     private final int mapViewHeight;
     // Padding
     private final int paddingTop;
+    // Selection bubble bitmap
+    private final Bitmap selectionBubbleBitmap;
     private int paddingLeft = 64;
-
     // Map movement offset
     private float offsetX = 0.0f;
     private float offsetY = 0.0f;
-
     // Territory mapping
     private GameMap mGameMap = null;
     // Territory selected
     private String territorySelected = null;
     // Second time territory selected
     private String territorySelectedDouble = null;
-    // Selection bubble bitmap
-    private final Bitmap selectionBubbleBitmap;
 
     /**
      * Constructor

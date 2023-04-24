@@ -24,6 +24,7 @@ public class UnitUpgradeDataModel {
 
     /**
      * Get unit name
+     *
      * @return unit name
      */
     public String getName() {
@@ -32,6 +33,7 @@ public class UnitUpgradeDataModel {
 
     /**
      * Get number of units
+     *
      * @return number of units
      */
     public int getNumber() {
@@ -39,15 +41,8 @@ public class UnitUpgradeDataModel {
     }
 
     /**
-     * Get variation
-     * @return variation
-     */
-    public String getDelta() {
-        return delta;
-    }
-
-    /**
      * Set number of units
+     *
      * @param number number of units
      */
     public void setNumber(int number) {
@@ -55,7 +50,17 @@ public class UnitUpgradeDataModel {
     }
 
     /**
+     * Get variation
+     *
+     * @return variation
+     */
+    public String getDelta() {
+        return delta;
+    }
+
+    /**
      * Set variation
+     *
      * @param delta variation
      */
     public void setDelta(String delta) {
@@ -64,6 +69,7 @@ public class UnitUpgradeDataModel {
 
     /**
      * Get unit type
+     *
      * @return unit type
      */
     public UnitType getType() {

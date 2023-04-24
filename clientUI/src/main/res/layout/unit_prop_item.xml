@@ -8,11 +8,11 @@
         android:id="@+id/unit_upgrade_img"
         android:layout_width="20dp"
         android:layout_height="20dp"
+        android:layout_marginStart="16dp"
         android:src="@drawable/gnome"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="16dp"
         app:shape_mode="circle"
         app:stroke_color="@color/text_white"
         app:stroke_width="1dp" />
