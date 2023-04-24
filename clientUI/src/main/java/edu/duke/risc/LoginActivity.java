@@ -70,20 +70,16 @@ public class LoginActivity extends AppCompatActivity {
         Random rand = new Random();
         switch (rand.nextInt(6)) {
             case 0:
+            case 1:
                 background_video.setVideoPath("android.resource://" + getPackageName() + "/" + R.raw.login_audi);
                 break;
-            case 1:
+            case 2:
                 background_video.setVideoPath("android.resource://" + getPackageName() + "/" + R.raw.login_b);
                 break;
-            case 2:
+            case 3:
                 background_video.setVideoPath("android.resource://" + getPackageName() + "/" + R.raw.login_g);
                 break;
-            case 3:
-                background_video.setVideoPath("android.resource://" + getPackageName() + "/" + R.raw.login_r);
-                break;
             case 4:
-                background_video.setVideoPath("android.resource://" + getPackageName() + "/" + R.raw.login_y);
-                break;
             case 5:
                 background_video.setVideoPath("android.resource://" + getPackageName() + "/" + R.raw.login_hogwarts);
                 break;
