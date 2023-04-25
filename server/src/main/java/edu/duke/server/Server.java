@@ -286,32 +286,32 @@ public class Server {
             switch (randomHorcrux) {
                 case 0:
                     this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.LOCKET, 1);
-                    System.out.println(this.game.getPlayerList().get(randomPlayer).getPlayerName()+" get the Locket!");
+                    System.out.println(this.game.getPlayerList().get(randomPlayer).getPlayerName() + " get the Locket!");
                     this.game.setNewHorcrux(Horcrux.LOCKET, randomPlayer);
                     break;
                 case 1:
                     this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.HAT, 1);
-                    System.out.println(this.game.getPlayerList().get(randomPlayer).getPlayerName()+" get the Hat!");
+                    System.out.println(this.game.getPlayerList().get(randomPlayer).getPlayerName() + " get the Hat!");
                     this.game.setNewHorcrux(Horcrux.HAT, randomPlayer);
                     break;
                 case 2:
                     this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.DIARY, 1);
-                    System.out.println(this.game.getPlayerList().get(randomPlayer).getPlayerName()+" get the Diary!");
+                    System.out.println(this.game.getPlayerList().get(randomPlayer).getPlayerName() + " get the Diary!");
                     this.game.setNewHorcrux(Horcrux.DIARY, randomPlayer);
                     break;
                 case 3:
                     this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.RING, 1);
-                    System.out.println(this.game.getPlayerList().get(randomPlayer).getPlayerName()+" get the Ring!");
+                    System.out.println(this.game.getPlayerList().get(randomPlayer).getPlayerName() + " get the Ring!");
                     this.game.setNewHorcrux(Horcrux.RING, randomPlayer);
                     break;
                 case 4:
                     this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.CUP, 1);
-                    System.out.println(this.game.getPlayerList().get(randomPlayer).getPlayerName()+" get the Cup!");
+                    System.out.println(this.game.getPlayerList().get(randomPlayer).getPlayerName() + " get the Cup!");
                     this.game.setNewHorcrux(Horcrux.CUP, randomPlayer);
                     break;
                 case 5:
                     this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.SNAKE, 1);
-                    System.out.println(this.game.getPlayerList().get(randomPlayer).getPlayerName()+" get the Snake!");
+                    System.out.println(this.game.getPlayerList().get(randomPlayer).getPlayerName() + " get the Snake!");
                     this.game.setNewHorcrux(Horcrux.SNAKE, randomPlayer);
                     break;
             }

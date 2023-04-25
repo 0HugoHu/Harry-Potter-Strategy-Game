@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
-import java.util.*;
 
 import edu.duke.shared.helper.Dice;
 import edu.duke.shared.helper.Header;
@@ -18,7 +17,6 @@ import edu.duke.shared.map.MapFactory;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.player.Horcrux;
 import edu.duke.shared.player.House;
-import edu.duke.shared.player.Horcrux;
 import edu.duke.shared.player.Player;
 import edu.duke.shared.player.SkillState;
 import edu.duke.shared.turn.Attack;
@@ -104,17 +102,17 @@ public class Game implements Serializable {
         return dis * num / 2;
     }
 
-    public void useHorcrux(){
-        for(Player p:playerList){
-            for(Map.Entry<Horcrux, Integer> entry: p.getHorcruxesList().entrySet()){
-                for(int i=0;i<entry.getValue();i++){
-                    if(entry.getKey().equals(Horcrux.SNAKE)){
+    public void useHorcrux() {
+        for (Player p : playerList) {
+            for (Map.Entry<Horcrux, Integer> entry : p.getHorcruxesList().entrySet()) {
+                for (int i = 0; i < entry.getValue(); i++) {
+                    if (entry.getKey().equals(Horcrux.SNAKE)) {
                         useSnake(p);
                     }
-                    if(entry.getKey().equals(Horcrux.LOCKET)){
+                    if (entry.getKey().equals(Horcrux.LOCKET)) {
                         useLocket(p);
                     }
-                    if(entry.getKey().equals(Horcrux.RING)){
+                    if (entry.getKey().equals(Horcrux.RING)) {
                         useRing(p);
                     }
                 }
@@ -122,16 +120,16 @@ public class Game implements Serializable {
         }
     }
 
-    public void useSkill(){
-        for(Player p:playerList){
-            if(p.getSkillState().equals(SkillState.IN_EFFECT)){
-                if(p.getHouse().equals(House.GRYFFINDOR)){
+    public void useSkill() {
+        for (Player p : playerList) {
+            if (p.getSkillState().equals(SkillState.IN_EFFECT)) {
+                if (p.getHouse().equals(House.GRYFFINDOR)) {
                     UseSkillGryffindor(p);
                 }
-                if(p.getHouse().equals(House.GRYFFINDOR)){
+                if (p.getHouse().equals(House.GRYFFINDOR)) {
                     UseSkillGryffindor(p);
                 }
-                if(p.getHouse().equals(House.SLYTHERIN)){
+                if (p.getHouse().equals(House.SLYTHERIN)) {
                     UseSkillSytherin(p);
                 }
             }
@@ -145,21 +143,12 @@ public class Game implements Serializable {
      * @param p
      */
     public void useSnake(Player p) {
-        p.removeFromHorcruxStorage(Horcrux.SNAKE, 1);
-        p.addToHorcruxUsage(Horcrux.SNAKE, 1);
         for (Territory t : p.getPlayerTerrs()) {
             if (t.getAdjacents().size() > 0) {
                 for (String nearBy : t.getAdjacents()) {
                     String nearLand = nearBy;
                     Territory terr = gameMap.getTerritory(nearLand);
                     Player formerOwner = terr.getPlayerOwner();
-    public void useSnake(Player p){
-        for(Territory t:p.getPlayerTerrs()){
-            if(t.getAdjacents().size()>0){
-                for(String nearBy:t.getAdjacents()){
-                    String nearLand=nearBy;
-                    Territory terr=gameMap.getTerritory(nearLand);
-                    Player formerOwner=terr.getPlayerOwner();
                     formerOwner.setSnakeTarget();
                     terr.changeOwner(p.getPlayerName());
                     terr.changePlayerOwner(p);
@@ -175,15 +164,16 @@ public class Game implements Serializable {
     /**
      * Allow player to use the Locket, which will randomly
      * clear one of its enemies' Gnomes.
+     *
      * @param p
      */
-    public void useLocket(Player p){
-        for(Territory t:p.getPlayerTerrs()){
-            HashSet<String> nearLand=t.getAdjacents();
-            for(String near: nearLand){
-                Territory desTerr=gameMap.getTerritory(near);
-                ArrayList<Unit> units=desTerr.getUnits();
-                if(convertToMap(units).get(UnitType.DWARF)>0){
+    public void useLocket(Player p) {
+        for (Territory t : p.getPlayerTerrs()) {
+            HashSet<String> nearLand = t.getAdjacents();
+            for (String near : nearLand) {
+                Territory desTerr = gameMap.getTerritory(near);
+                ArrayList<Unit> units = desTerr.getUnits();
+                if (convertToMap(units).get(UnitType.DWARF) > 0) {
                     units.remove(UnitType.DWARF);
                 }
                 return;
