@@ -1387,9 +1387,9 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         // item view
         switch (mPlayer.getHouse()) {
             case RAVENCLAW:
-                buff_name.setText(R.string.buff_r);
+                buff_name.setText(R.string.buff_b);
                 buff_name.setTextColor(getResources().getColor(R.color.ui_ravenclaw));
-                buff_desc.setText(R.string.buff_r_desc);
+                buff_desc.setText(R.string.buff_b_desc);
                 skill_name.setText(R.string.skill_b_p2);
                 skill_name.setTextColor(getResources().getColor(R.color.ui_ravenclaw));
                 skill_desc.setText(R.string.skill_b_desc);
