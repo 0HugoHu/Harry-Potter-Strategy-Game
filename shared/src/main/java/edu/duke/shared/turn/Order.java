@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.duke.shared.player.House;
 import edu.duke.shared.player.Player;
 import edu.duke.shared.unit.Unit;
 import edu.duke.shared.unit.UnitType;
@@ -16,6 +17,8 @@ public abstract class Order implements Serializable {
     protected final String to;
     // Number of units
     protected HashMap<UnitType,Integer> unitList;
+
+    protected House house;
 
     protected int numUnits;
     // Player name
@@ -29,19 +32,21 @@ public abstract class Order implements Serializable {
      * @param numUnits  Number of units
      * @param playerName Player name
      */
-    public Order(String from, String to, int numUnits, String playerName) {
+    public Order(String from, String to, int numUnits, String playerName,House house) {
         this.from = from;
         this.to = to;
         this.numUnits=numUnits;
         this.playerName = playerName;
+        this.house=house;
     }
 
 
-    public Order(String from, String to, HashMap<UnitType,Integer> unitList, String playerName) {
+    public Order(String from, String to, HashMap<UnitType,Integer> unitList, String playerName,House house) {
         this.from = from;
         this.to = to;
         this.unitList = unitList;
         this.playerName = playerName;
+        this.house=house;
     }
 
     /**
@@ -69,6 +74,10 @@ public abstract class Order implements Serializable {
      */
     public int getNumUnits() {
         return numUnits;
+    }
+
+    public House getHouse(){
+        return house;
     }
 
 

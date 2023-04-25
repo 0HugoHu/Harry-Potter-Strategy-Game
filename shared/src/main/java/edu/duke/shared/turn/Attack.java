@@ -1,5 +1,6 @@
 package edu.duke.shared.turn;
 
+import edu.duke.shared.player.House;
 import edu.duke.shared.player.Player;
 import edu.duke.shared.unit.Unit;
 import edu.duke.shared.unit.UnitType;
@@ -18,8 +19,8 @@ public class Attack extends Order {
      * @param numUnits   Number of units
      * @param playerName Player name
      */
-    public Attack(String from, String to, int numUnits, String playerName) {
-        super(from, to, numUnits, playerName);
+    public Attack(String from, String to, int numUnits, String playerName, House house) {
+        super(from, to, numUnits, playerName,house);
     }
 
     /**
@@ -30,8 +31,8 @@ public class Attack extends Order {
      * @param unitList   Unit list
      * @param playerName Player name
      */
-    public Attack(String from, String to, HashMap<UnitType, Integer> unitList, String playerName) {
-        super(from, to, unitList, playerName);
+    public Attack(String from, String to, HashMap<UnitType, Integer> unitList, String playerName,House house) {
+        super(from, to, unitList, playerName,house);
     }
 
     /**
