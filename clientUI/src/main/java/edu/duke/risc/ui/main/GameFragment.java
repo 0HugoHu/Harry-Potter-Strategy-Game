@@ -301,10 +301,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     attackTurn = new AttackTurn(this.mGame.getMap(), this.mGame.getTurn(), this.mGame.getPlayerName());
                     mGameView.updateMap(this.mGame.getMap());
                     mGameView.updateGame(this.mGame);
-                    // If was used the diary
-                    if (this.mPlayer.isDiaryTarget()) {
-                        commit();
-                    }
                     if (isLost) {
                         commit();
                         this.ui_view.findViewById(R.id.ui_side_bar).setVisibility(View.GONE);
@@ -313,6 +309,10 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                         is_watching.setText(text);
                     } else {
                         updatePlayerValues();
+                        // If was used the diary
+                        if (this.mPlayer.isDiaryTarget()) {
+                            commit();
+                        }
                     }
                     ui_view.findViewById(R.id.ui_side_bar_init).setVisibility(View.GONE);
                     ui_view.findViewById(R.id.ui_side_bar).setVisibility(View.VISIBLE);
@@ -1009,6 +1009,11 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
      * Commit all moves and attacks
      */
     private void commit() {
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         // Commit all moves and attacks
         this.mGame.addToTurnMap(this.mGame.getPlayerId(), moveTurn, attackTurn);
         // Send the game object to ClientIntentService

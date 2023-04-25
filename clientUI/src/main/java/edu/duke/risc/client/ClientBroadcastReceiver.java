@@ -10,6 +10,8 @@ import edu.duke.shared.Game;
 import edu.duke.shared.helper.GameObject;
 
 public class ClientBroadcastReceiver extends BroadcastReceiver {
+    // Singleton method of GameObject
+    private final GameObject gameObject = new GameObject(null);
     /**
      * This method is called when the BroadcastReceiver is receiving an Intent broadcast.
      *
@@ -26,10 +28,12 @@ public class ClientBroadcastReceiver extends BroadcastReceiver {
         assert playerid == -1;
 
         Game game = (Game) intent.getSerializableExtra("game");
-        Socket socket = game.getPlayerList().get(playerid).getSocket();
-        assert socket == null;
+        if (gameObject.getSocket() == null) {
+            Socket socket = game.getPlayerList().get(playerid).getSocket();
+            assert socket == null;
+            gameObject.setSocket(socket);
+        }
 
-        GameObject obj = new GameObject(socket);
-        obj.encodeObj(game);
+        gameObject.encodeObj(game);
     }
 }

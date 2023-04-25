@@ -187,18 +187,17 @@ public class GameTest {
         newTurn3.add(attTurn1);
         //newGame.addToTurnMap(2,moveTurn3,attTurn3);
 
-        ArrayList<HashMap<Integer, ArrayList<Turn>>> turnList = newGame.getTurnList();
+        HashMap<Integer, ArrayList<Turn>> turnList = newGame.getTurnList();
         HashMap<Integer, ArrayList<Turn>> turns = new HashMap<>();
         turns.put(0, newTurn1);
         turns.put(1, newTurn2);
         turns.put(2, newTurn3);
-        turnList.add(turns);
 
         newGame.makeAttackList(attTurn1);
         newGame.makeAttackList(attTurn2);
         newGame.makeAttackList(attTurn3);
 
-        ArrayList<HashMap<Integer, ArrayList<Turn>>> turnlist = newGame.getTurnList();
+        HashMap<Integer, ArrayList<Turn>> turnlist = newGame.getTurnList();
         newGame.doAttack();
         newGame.getString();
 

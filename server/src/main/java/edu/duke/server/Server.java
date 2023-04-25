@@ -34,6 +34,8 @@ public class Server {
     private final Map<Integer, House> serverHouseMapping = new HashMap<>();
     // Server socket
     private ServerSocket serverSocket;
+    // Singleton method of GameObject
+    private final GameObject gameObject = new GameObject(null);
 
     /**
      * Initialize Server by number of players
@@ -200,12 +202,12 @@ public class Server {
 
             // Send message to client
             Socket clientSocket = this.game.getPlayerList().get(i).getSocket();
-            GameObject obj = new GameObject(clientSocket);
+            this.gameObject.setSocket(clientSocket);
             // Encode player specific Id to client
             this.game.setPlayerId(i);
-            obj.encodeObj(this.game);
+            this.gameObject.encodeObj(this.game);
             try {
-                Thread.sleep(100);
+                Thread.sleep(300);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -321,7 +323,7 @@ public class Server {
     public void doAttackPhase() {
         // Make Attack List
         int turnIndex = this.game.getTurn();
-        for (Map.Entry<Integer, ArrayList<Turn>> entry : this.game.getTurnList().get(turnIndex).entrySet()) {
+        for (Map.Entry<Integer, ArrayList<Turn>> entry : this.game.getTurnList().entrySet()) {
             this.game.makeAttackList((AttackTurn) entry.getValue().get(1));
         }
         this.game.doAttack();
