@@ -383,7 +383,7 @@ public class Player implements Serializable {
      * If is diary target, return true
      */
     public boolean isDiaryTarget() {
-        return this.horcruxTarget.get(Horcrux.DIARY);
+        return this.horcruxTarget.getOrDefault(Horcrux.DIARY, false);
     }
 
     /**
