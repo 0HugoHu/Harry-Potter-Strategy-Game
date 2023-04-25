@@ -1,29 +1,24 @@
 package edu.duke.shared.helper;
 
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.Socket;
 
 import edu.duke.shared.Game;
 
 public class GameObject {
-    // The client socket
-    public Socket socket;
     // Gson object
     private final Gson gson;
+    // The client socket
+    public Socket socket;
 
     /**
      * Constructor for the GameObject
@@ -39,17 +34,17 @@ public class GameObject {
     }
 
     /**
-     * Set socket
-     */
-    public void setSocket(Socket socket) {
-        this.socket = socket;
-    }
-
-    /**
      * Get socket
      */
     public Socket getSocket() {
         return this.socket;
+    }
+
+    /**
+     * Set socket
+     */
+    public void setSocket(Socket socket) {
+        this.socket = socket;
     }
 
     /**

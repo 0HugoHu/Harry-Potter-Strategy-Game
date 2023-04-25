@@ -9,8 +9,6 @@ import java.util.HashSet;
 import edu.duke.shared.Game;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.unit.Unit;
-import edu.duke.shared.unit.UnitType;
-import jdk.internal.org.jline.reader.Buffer;
 
 public class Player implements Serializable {
     // Abandoned!! Territories owned by this player
@@ -21,6 +19,10 @@ public class Player implements Serializable {
     private final HashMap<Horcrux, Integer> horcruxUsage = new HashMap<>();
     // Horcrux usage target, <name, isTarget>
     private final HashMap<Horcrux, Boolean> horcruxTarget = new HashMap<>();
+    // Previous 10 dead units
+    private final ArrayList<Unit> deadUnits = new ArrayList<>();
+    // Skill's in-effect count down
+    private final int skillCountDown = 3;
     // Player's thread
     public transient PlayerThread playerThread;
     // Player's thread
@@ -39,14 +41,10 @@ public class Player implements Serializable {
     private transient Socket socket;
     // World level
     private int worldLevel;
-    // Previous 10 dead units
-    private final ArrayList<Unit> deadUnits = new ArrayList<>();
     // Player's house
     private House house;
     // Player's skill
     private SkillState skillState = SkillState.NOT_USED;
-    // Skill's in-effect count down
-    private final int skillCountDown = 3;
 
 
     /**
@@ -394,25 +392,6 @@ public class Player implements Serializable {
         return this.horcruxTarget.getOrDefault(Horcrux.LOCKET, false);
     }
 
-    public House getHouse(){
-        return house;
-    }
-
-    public void setHouse(House house){
-        this.house=house;
-    }
-
-    public SkillState getSkillState() {
-        return this.skillState;
-    }
-
-    /**
-     * Set player's skill state
-     */
-    public void setSkillState(SkillState skillState) {
-        this.skillState = skillState;
-    }
-
     /**
      * Get player's skill name
      */
@@ -430,8 +409,6 @@ public class Player implements Serializable {
                 return "Unknown";
         }
     }
-
-
 
     /**
      * If player buff Gryffindor, return true
@@ -494,6 +471,10 @@ public class Player implements Serializable {
      */
     public House getHouse() {
         return this.house;
+    }
+
+    public void setHouse(House house) {
+        this.house = house;
     }
 
     /**

@@ -1,13 +1,9 @@
 package edu.duke.shared.turn;
 
 
-import edu.duke.shared.player.House;
-import edu.duke.shared.unit.Unit;
-import edu.duke.shared.unit.UnitType;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
+import edu.duke.shared.player.House;
 import edu.duke.shared.unit.UnitType;
 
 public class Move extends Order {
@@ -19,7 +15,7 @@ public class Move extends Order {
      * @param playerName Player name
      */
     public Move(String from, String to, HashMap<UnitType, Integer> unitList, String playerName, House house) {
-        super(from, to, unitList, playerName,house);
+        super(from, to, unitList, playerName, house);
     }
 
     /**
@@ -30,8 +26,8 @@ public class Move extends Order {
      * @param numUnits   Number of units
      * @param playerName Player name
      */
-    public Move(String from, String to, int numUnits, String playerName,House house) {
-        super(from, to, numUnits, playerName,house);
+    public Move(String from, String to, int numUnits, String playerName, House house) {
+        super(from, to, numUnits, playerName, house);
     }
 
 }

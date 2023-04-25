@@ -26,6 +26,8 @@ public class PlayerThread implements Runnable, Serializable {
     private final int playerId;
     // Lock for server game
     private final ReentrantLock serverGameLock = new ReentrantLock();
+    // Singleton method of GameObject
+    private final GameObject gameObject = new GameObject(null);
     // Player's socket
     public Socket socket;
     // Player's game
@@ -34,8 +36,6 @@ public class PlayerThread implements Runnable, Serializable {
     public int forTesting;
     // Server's game
     private Game serverGame;
-    // Singleton method of GameObject
-    private final GameObject gameObject = new GameObject(null);
 
     /**
      * Initialize the PlayerThread

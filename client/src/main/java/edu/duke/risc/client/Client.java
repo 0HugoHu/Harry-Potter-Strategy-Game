@@ -29,6 +29,8 @@ public class Client {
     private final static int numUnits = 24;
     // Client socket
     private final Socket clientSocket;
+    // Singleton method of GameObject
+    private final GameObject gameObject = new GameObject(null);
     // Scanner
     Scanner scanner = new Scanner(System.in);
     // Player Id on server
@@ -39,11 +41,8 @@ public class Client {
     private Game game;
     // Flag for mock client
     private boolean isMock = false;
-
     // Flag for client who lost the game
     private boolean isLoser = false;
-    // Singleton method of GameObject
-    private final GameObject gameObject = new GameObject(null);
 
     /*
      * Initialize Client
@@ -384,7 +383,7 @@ public class Client {
         int numUnits = Validation.getValidNumber(scanner);
         try {
             Validation.checkMove(moveTurn, attackTurn, from, to, numUnits);
-            moveTurn.addMove(new Move(from, to, numUnits, this.playerName,this.game.getPlayer(this.playerName).getHouse()));
+            moveTurn.addMove(new Move(from, to, numUnits, this.playerName, this.game.getPlayer(this.playerName).getHouse()));
         } catch (Exception e) {
             System.out.println("Invalid input: " + e.getMessage());
             while (true) {
@@ -446,7 +445,7 @@ public class Client {
         unitList.put(UnitType.GNOME, GnomesNumUnits);
         unitList.put(UnitType.DWARF, DwarfsNumUnits);
         unitList.put(UnitType.HOUSE_ELF, HouseElfNumUnits);
-        attackTurn.addAttack(new Attack(from, to, unitList, this.playerName,this.game.getPlayer(this.playerName).getHouse()));
+        attackTurn.addAttack(new Attack(from, to, unitList, this.playerName, this.game.getPlayer(this.playerName).getHouse()));
 //        try {
 //            //Validation.checkAttack(attackTurn, moveTurn, from, to, numUnits);
 //            attackTurn.addAttack(new Attack(from, to, numUnits, this.playerName));
