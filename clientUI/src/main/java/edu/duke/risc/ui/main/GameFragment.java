@@ -1393,7 +1393,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 skill_name.setText(R.string.skill_b_p2);
                 skill_name.setTextColor(getResources().getColor(R.color.ui_ravenclaw));
                 skill_desc.setText(R.string.skill_b_desc);
-//                skill_img.setImageResource(R.drawable.skill_b);
+                skill_img.setImageResource(R.drawable.skill_b);
                 break;
             case HUFFLEPUFF:
                 buff_name.setText(R.string.buff_y);
@@ -1402,7 +1402,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 skill_name.setText(R.string.skill_y_p2);
                 skill_name.setTextColor(getResources().getColor(R.color.ui_hufflepuff));
                 skill_desc.setText(R.string.skill_y_desc);
-//                skill_img.setImageResource(R.drawable.skill_y);
+                skill_img.setImageResource(R.drawable.skill_y);
                 break;
             case GRYFFINDOR:
                 buff_name.setText(R.string.buff_r);
@@ -1411,7 +1411,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 skill_name.setText(R.string.skill_r_p2);
                 skill_name.setTextColor(getResources().getColor(R.color.ui_gryffindor));
                 skill_desc.setText(R.string.skill_r_desc);
-//                skill_img.setImageResource(R.drawable.skill_r);
+                skill_img.setImageResource(R.drawable.skill_r);
                 break;
             case SLYTHERIN:
                 buff_name.setText(R.string.buff_g);
@@ -1420,7 +1420,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 skill_name.setText(R.string.skill_g_p2);
                 skill_name.setTextColor(getResources().getColor(R.color.ui_slytherin));
                 skill_desc.setText(R.string.skill_g_desc);
-//                skill_img.setImageResource(R.drawable.skill_g);
+                skill_img.setImageResource(R.drawable.skill_g);
                 break;
         }
 

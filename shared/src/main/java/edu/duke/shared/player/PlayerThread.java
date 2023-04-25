@@ -166,6 +166,9 @@ public class PlayerThread implements Runnable, Serializable {
                     if (this.currGame.getPlayerList().get(this.playerId).willUpgradeWorldLevel) {
                         this.serverGame.getPlayerList().get(this.playerId).upgradeWorldLevel();
                     }
+
+                    // Copy the player's skill state
+                    this.serverGame.getPlayerList().get(this.playerId).setSkillState(this.currGame.getPlayerList().get(this.playerId).getSkillState());
                 }
                 break;
             case TURN_END:
