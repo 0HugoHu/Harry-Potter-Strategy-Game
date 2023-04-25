@@ -13,6 +13,7 @@ import edu.duke.shared.player.Horcrux;
 import edu.duke.shared.player.House;
 import edu.duke.shared.player.Horcrux;
 import edu.duke.shared.player.Player;
+import edu.duke.shared.player.SkillState;
 import edu.duke.shared.turn.Attack;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.MoveTurn;
@@ -96,6 +97,40 @@ public class Game implements Serializable {
         return dis * num / 2;
     }
 
+    public void useHorcrux(){
+        for(Player p:playerList){
+            for(Map.Entry<Horcrux, Integer> entry: p.getHorcruxesList().entrySet()){
+                for(int i=0;i<entry.getValue();i++){
+                    if(entry.getKey().equals(Horcrux.SNAKE)){
+                        useSnake(p);
+                    }
+                    if(entry.getKey().equals(Horcrux.LOCKET)){
+                        useLocket(p);
+                    }
+                    if(entry.getKey().equals(Horcrux.RING)){
+                        useRing(p);
+                    }
+                }
+            }
+        }
+    }
+
+    public void useSkill(){
+        for(Player p:playerList){
+            if(p.getSkillState().equals(SkillState.IN_EFFECT)){
+                if(p.getHouse().equals(House.GRYFFINDOR)){
+                    UseSkillGryffindor(p);
+                }
+                if(p.getHouse().equals(House.GRYFFINDOR)){
+                    UseSkillGryffindor(p);
+                }
+                if(p.getHouse().equals(House.SLYTHERIN)){
+                    UseSkillSytherin(p);
+                }
+            }
+        }
+    }
+
     /**
      * Allow player to use the snake Horcrux, and get one random territory from
      * another player
@@ -103,14 +138,13 @@ public class Game implements Serializable {
      * @param p
      */
     public void useSnake(Player p){
-        p.removeFromHorcruxStorage(Horcrux.SNAKE,1);
-        p.addToHorcruxUsage(Horcrux.SNAKE,1);
         for(Territory t:p.getPlayerTerrs()){
             if(t.getAdjacents().size()>0){
                 for(String nearBy:t.getAdjacents()){
                     String nearLand=nearBy;
                     Territory terr=gameMap.getTerritory(nearLand);
                     Player formerOwner=terr.getPlayerOwner();
+                    formerOwner.setSnakeTarget();
                     terr.changeOwner(p.getPlayerName());
                     terr.changePlayerOwner(p);
                     p.getPlayerTerrs().add(terr);
@@ -127,9 +161,7 @@ public class Game implements Serializable {
      * clear one of its enemies' Gnomes.
      * @param p
      */
-    public void UseLocket(Player p){
-        p.removeFromHorcruxStorage(Horcrux.LOCKET,1);
-        p.addToHorcruxUsage(Horcrux.LOCKET,1);
+    public void useLocket(Player p){
         for(Territory t:p.getPlayerTerrs()){
             HashSet<String> nearLand=t.getAdjacents();
             for(String near: nearLand){
