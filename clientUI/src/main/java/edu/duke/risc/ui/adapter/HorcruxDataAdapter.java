@@ -96,22 +96,22 @@ public class HorcruxDataAdapter extends ArrayAdapter<HorcruxDataModel> implement
 
         switch (dataModel.getName()) {
             case HAT:
-                viewHolder.image.setImageResource(R.drawable.gnome);
+                viewHolder.image.setImageResource(R.drawable.hat);
                 break;
             case DIARY:
-                viewHolder.image.setImageResource(R.drawable.dwarf);
+                viewHolder.image.setImageResource(R.drawable.diary);
                 break;
             case LOCKET:
-                viewHolder.image.setImageResource(R.drawable.house_elf);
+                viewHolder.image.setImageResource(R.drawable.locket);
                 break;
             case RING:
-                viewHolder.image.setImageResource(R.drawable.goblin);
+                viewHolder.image.setImageResource(R.drawable.stone);
                 break;
             case CUP:
-                viewHolder.image.setImageResource(R.drawable.vampire);
+                viewHolder.image.setImageResource(R.drawable.cup);
                 break;
             case SNAKE:
-                viewHolder.image.setImageResource(R.drawable.centaur);
+                viewHolder.image.setImageResource(R.drawable.snake);
                 break;
         }
 
