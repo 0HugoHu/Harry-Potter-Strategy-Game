@@ -27,7 +27,8 @@ to visit Excel document.**
 
 ## 2. UML Graph
 
-🔎 **Click [here](https://drive.google.com/file/d/1a_QFIG-tIONUMT96SDqLrqM56fD0q7UY/view?usp=sharing)
+🔎 **
+Click [here](https://drive.google.com/file/d/1a_QFIG-tIONUMT96SDqLrqM56fD0q7UY/view?usp=sharing)
 to see the full picture.**
 
 <img src="assets/UML/UML-final.png" alt="umlgraph" width="75%" />
@@ -133,7 +134,8 @@ using horns, as the following screen shots shown:
 
 <img src="assets/Evo2/upgrade.png" width="600" />
 
-🔱 4.5.6. After all players have finished placing order, this turn will end, and in the next turn all
+🔱 4.5.6. After all players have finished placing order, this turn will end, and in the next turn
+all
 battles results will shown on the map, and the corresponding resources will be added to users based
 on the territories they have.
 
@@ -142,7 +144,8 @@ on the territories they have.
 🔰 4.6.1. If one player has lost all his/her territories, then he/she lost. If he/she hasn't lost,
 they can also click the "player" on the upper left and chose to surrender.
 
-🔰 4.6.2. If then, there is only one player left, he/she is the winner, and the following pis will be
+🔰 4.6.2. If then, there is only one player left, he/she is the winner, and the following pis will
+be
 shown:
 
 <img src="assets/Evo2/win.png" width="600" />

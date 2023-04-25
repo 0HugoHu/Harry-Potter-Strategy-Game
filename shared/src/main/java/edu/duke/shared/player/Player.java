@@ -3,7 +3,6 @@ package edu.duke.shared.player;
 
 import java.io.Serializable;
 import java.net.Socket;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -280,6 +279,7 @@ public class Player implements Serializable {
 
     /**
      * Set coins
+     *
      * @param coins coins
      */
     public void setCoins(int coins) {
@@ -358,7 +358,7 @@ public class Player implements Serializable {
     }
 
 
-    public HashMap<Horcrux, Integer> getHorcruxesList(){
+    public HashMap<Horcrux, Integer> getHorcruxesList() {
         return this.horcruxUsage;
     }
 
@@ -388,14 +388,14 @@ public class Player implements Serializable {
 
     /**
      * If is snake
-     *, return true
+     * , return true
      */
     public boolean isSnakeTarget() {
         return this.horcruxTarget.getOrDefault(Horcrux.SNAKE, false);
     }
 
-    public void setSnakeTarget(){
-        this.horcruxTarget.put(Horcrux.SNAKE,true);
+    public void setSnakeTarget() {
+        this.horcruxTarget.put(Horcrux.SNAKE, true);
     }
 
     /**
