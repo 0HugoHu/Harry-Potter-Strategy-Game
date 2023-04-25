@@ -6,21 +6,17 @@ import edu.duke.shared.player.House;
 import edu.duke.shared.unit.UnitType;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.Socket;
 import java.util.Scanner;
 
 import edu.duke.shared.Game;
 import edu.duke.shared.map.GameMap;
-import edu.duke.shared.map.MapFactory;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.player.Player;
 import edu.duke.shared.turn.Attack;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Move;
 import edu.duke.shared.turn.MoveTurn;
-import edu.duke.shared.unit.Unit;
 
 public class ValidationTest {
 

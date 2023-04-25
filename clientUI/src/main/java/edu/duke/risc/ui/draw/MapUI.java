@@ -1,21 +1,14 @@
 package edu.duke.risc.ui.draw;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.text.method.Touch;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import edu.duke.risc.ui.action.TouchEventMapping;
 import edu.duke.risc.ui.state.TouchEvent;
 import edu.duke.shared.map.GameMap;
 import edu.duke.shared.map.Territory;
-import edu.duke.shared.player.Player;
 
 public class MapUI {
     // Map view width and height

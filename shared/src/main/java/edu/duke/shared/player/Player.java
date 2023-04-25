@@ -12,7 +12,6 @@ import java.util.HashSet;
 import edu.duke.shared.Game;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.unit.Unit;
-import edu.duke.shared.unit.UnitType;
 import jdk.internal.org.jline.reader.Buffer;
 
 public class Player implements Serializable {
@@ -66,7 +65,7 @@ public class Player implements Serializable {
         // Start the thread
         this.playerThread = new PlayerThread(this.socket, this.playerId);
         this.thread = new Thread(this.playerThread);
-        this.coins= 0;
+        this.coins = 0;
         this.horns = 0;
         this.worldLevel = 1;
         this.thread.start();
@@ -83,6 +82,19 @@ public class Player implements Serializable {
         this.horcruxUsage.put(Horcrux.LOCKET, 0);
         this.horcruxUsage.put(Horcrux.DIARY, 0);
     }
+
+    /**
+     * Initialize the Player by id, socket and house
+     *
+     * @param playerId player id
+     * @param socket   player socket
+     * @param house    player house
+     */
+    public Player(int playerId, Socket socket, House house) {
+        this(playerId, socket);
+        this.house = house;
+    }
+
 
     /**
      * Initialize the Player by name
@@ -118,6 +130,7 @@ public class Player implements Serializable {
             e.printStackTrace();
         }
     }
+
 
     /**
      * get player name
@@ -368,7 +381,7 @@ public class Player implements Serializable {
      * If is diary target, return true
      */
     public boolean isDiaryTarget() {
-        return this.horcruxTarget.getOrDefault(Horcrux.DIARY, false);
+        return this.horcruxTarget.get(Horcrux.DIARY);
     }
 
     /**
@@ -480,5 +493,43 @@ public class Player implements Serializable {
         return buffRavenclaw() && this.skillState == SkillState.IN_EFFECT;
     }
 
+    /**
+     * Get player house
+     */
+    public House getHouse() {
+        return this.house;
+    }
+
+    /**
+     * Get player's skill state
+     */
+    public SkillState getSkillState() {
+        return this.skillState;
+    }
+
+    /**
+     * Set player's skill state
+     */
+    public void setSkillState(SkillState skillState) {
+        this.skillState = skillState;
+    }
+
+    /**
+     * Get player's skill name
+     */
+    public String getSkillName() {
+        switch (this.house) {
+            case GRYFFINDOR:
+                return "Lion's Courage";
+            case SLYTHERIN:
+                return "Serpent's Strategy";
+            case HUFFLEPUFF:
+                return "Steadfast Roots";
+            case RAVENCLAW:
+                return "Wings of Wisdom";
+            default:
+                return "Unknown";
+        }
+    }
 
 }

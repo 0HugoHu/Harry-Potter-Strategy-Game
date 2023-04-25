@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/game_ui"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -283,7 +282,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/wrold_level_group"
+                android:id="@+id/world_level_group"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="36dp"
@@ -329,8 +328,8 @@
                 android:textSize="@dimen/ui_text_size"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/wrold_level_group"
-                app:layout_constraintTop_toTopOf="@+id/wrold_level_group" />
+                app:layout_constraintStart_toEndOf="@+id/world_level_group"
+                app:layout_constraintTop_toTopOf="@+id/world_level_group" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -343,7 +342,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/rank_group"
+            android:id="@+id/item_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@id/tech_group"
@@ -352,28 +351,28 @@
             app:layout_constraintTop_toTopOf="@id/ui_side_bar">
 
             <Button
-                android:id="@+id/rank"
+                android:id="@+id/item"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginEnd="8dp"
                 android:background="@drawable/btn_bg_purple_s"
-                android:foreground="@drawable/inset_bg_rank_btn"
-                app:layout_constraintBottom_toTopOf="@+id/rank_text"
+                android:foreground="@drawable/inset_bg_item_btn"
+                app:layout_constraintBottom_toTopOf="@+id/item_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/rank_text"
+                android:id="@+id/item_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:fontFamily="@font/harry_potter"
-                android:text="@string/rank_btn"
+                android:text="@string/item_btn"
                 android:textColor="@color/text_white"
                 android:textSize="@dimen/ui_text_size"
-                app:layout_constraintEnd_toEndOf="@+id/rank"
-                app:layout_constraintStart_toStartOf="@+id/rank"
-                app:layout_constraintTop_toBottomOf="@+id/rank" />
+                app:layout_constraintEnd_toEndOf="@+id/item"
+                app:layout_constraintStart_toStartOf="@+id/item"
+                app:layout_constraintTop_toBottomOf="@+id/item" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -385,7 +384,7 @@
             app:layout_constraintBottom_toTopOf="@id/end_turn_group"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rank_group">
+            app:layout_constraintTop_toBottomOf="@id/item_group">
 
             <Button
                 android:id="@+id/tech"
