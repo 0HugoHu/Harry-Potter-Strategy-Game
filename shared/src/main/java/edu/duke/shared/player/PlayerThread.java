@@ -34,6 +34,8 @@ public class PlayerThread implements Runnable, Serializable {
     public int forTesting;
     // Server's game
     private Game serverGame;
+    // Singleton method of GameObject
+    private final GameObject gameObject = new GameObject(null);
 
     /**
      * Initialize the PlayerThread
@@ -55,6 +57,7 @@ public class PlayerThread implements Runnable, Serializable {
     public PlayerThread(State state, Socket socket, int playerId) {
         this.state = state;
         this.socket = socket;
+        this.gameObject.setSocket(this.socket);
         this.playerId = playerId;
         this.forTesting = 0;
     }
@@ -89,8 +92,7 @@ public class PlayerThread implements Runnable, Serializable {
     @Override
     public void run() {
         if (state != State.WAITING_TO_JOIN && state != State.GAME_OVER && forTesting == 0) {
-            GameObject obj = new GameObject(this.socket);
-            this.currGame = (Game) obj.decodeObj();
+            this.currGame = gameObject.decodeObj();
         }
 
         switch (state) {
@@ -107,7 +109,6 @@ public class PlayerThread implements Runnable, Serializable {
                 System.out.println("Received player " + this.playerId + "'s unit init info.");
                 Player p = this.serverGame.getPlayerList().get(this.playerId);
                 HashSet<Territory> terr_set = p.getPlayerTerrs();
-                int totalUnits = 0;
                 for (Territory t : terr_set) {
                     this.serverGame.getMap().getTerritory(t.getName()).removeAllUnits();
                     for (Map.Entry<UnitType, Integer> entry : convertToMap(this.currGame.getMap().getTerritory(t.getName()).getUnits()).entrySet()) {
@@ -115,14 +116,8 @@ public class PlayerThread implements Runnable, Serializable {
                             this.serverGame.getMap().getTerritory(t.getName()).addUnit(entry.getKey());
                         }
                     }
-//                    for (int j = 0; j < p.getPlayerThread().getCurrGame().getMap().getTerritory(t.getName()).getNumUnits(); j++)
-//                        this.serverGame.getMap().getTerritory(t.getName()).addUnit(UnitType.GNOME);
-                    totalUnits += t.getNumUnits();
                 }
-
                 break;
-
-
             }
             case TURN_BEGIN:
                 System.out.println("Received player " + this.playerId + "'s action list.");
@@ -135,9 +130,8 @@ public class PlayerThread implements Runnable, Serializable {
                     }
                     this.serverGame.addLoserId(this.playerId);
                 } else {
-                    int turnIndex = this.currGame.getTurn();
-                    MoveTurn moveTurn = (MoveTurn) this.currGame.getTurnList().get(turnIndex).get(this.playerId).get(0);
-                    AttackTurn attackTurn = (AttackTurn) this.currGame.getTurnList().get(turnIndex).get(this.playerId).get(1);
+                    MoveTurn moveTurn = (MoveTurn) this.currGame.getTurnList().get(this.playerId).get(0);
+                    AttackTurn attackTurn = (AttackTurn) this.currGame.getTurnList().get(this.playerId).get(1);
                     if (moveTurn == null || attackTurn == null) {
                         System.out.println("The move turn or attack turn from player " + this.playerId + " is null.");
                     }
@@ -161,15 +155,8 @@ public class PlayerThread implements Runnable, Serializable {
                     }
 
                     // Merge all turns from different players
-                    ArrayList<Turn> newTurns = this.currGame.getTurnList().get(turnIndex).get(this.playerId);
-                    // For the first player, add a new turn
-                    if (this.serverGame.getTurnList().size() == turnIndex || forTesting == 2) {
-                        HashMap<Integer, ArrayList<Turn>> newTurnsMap = new HashMap<>();
-                        newTurnsMap.put(this.playerId, newTurns);
-                        this.serverGame.getTurnList().add(newTurnsMap);
-                    } else {
-                        this.serverGame.getTurnList().get(turnIndex).put(this.playerId, newTurns);
-                    }
+                    ArrayList<Turn> newTurns = this.currGame.getTurnList().get(this.playerId);
+                    this.serverGame.getTurnList().put(this.playerId, newTurns);
 
                     // Copy the player's property
                     this.serverGame.getPlayerList().get(this.playerId).coins = this.currGame.getPlayerList().get(this.playerId).coins;

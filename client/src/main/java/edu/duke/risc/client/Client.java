@@ -42,6 +42,8 @@ public class Client {
 
     // Flag for client who lost the game
     private boolean isLoser = false;
+    // Singleton method of GameObject
+    private final GameObject gameObject = new GameObject(null);
 
     /*
      * Initialize Client
@@ -58,6 +60,7 @@ public class Client {
         this.playerName = playerName;
         System.out.println("Created a player.\n");
         this.clientSocket = connectSocket(HOST, PORT);
+        this.gameObject.setSocket(this.clientSocket);
         this.game = new Game(0, 48);
     }
 
@@ -125,8 +128,7 @@ public class Client {
             System.out.println("Client socket is not set up.\n");
             return null;
         }
-        GameObject obj = new GameObject(this.clientSocket);
-        this.game = (Game) obj.decodeObj();
+        this.game = gameObject.decodeObj();
         return this.game;
     }
 
@@ -201,8 +203,7 @@ public class Client {
             }
         }
         System.out.println("Total units placed: " + totalUnits + ". You have placed exactly " + numUnits + " units.");
-        GameObject obj = new GameObject(this.clientSocket);
-        obj.encodeObj(this.game);
+        gameObject.encodeObj(this.game);
     }
 
 //    public void BuiltInSetUpUnits() {
@@ -233,8 +234,7 @@ public class Client {
     private void setupUnitsMock() {
         for (int i = 0; i < numUnits; i++)
             this.game.getMap().getTerritoriesByOwner(this.playerName).get(0).addUnit(new Unit("Normal"));
-        GameObject obj = new GameObject(this.clientSocket);
-        obj.encodeObj(this.game);
+        gameObject.encodeObj(this.game);
     }
 
     /*
@@ -248,8 +248,7 @@ public class Client {
             readPlayerName();
         }
         this.game.setPlayerName(this.playerName);
-        GameObject obj = new GameObject(this.clientSocket);
-        obj.encodeObj(this.game);
+        gameObject.encodeObj(this.game);
     }
 
     /*
@@ -322,8 +321,7 @@ public class Client {
 
         // Done
         this.game.addToTurnMap(this.playerID, moveTurn, attackTurn);
-        GameObject obj = new GameObject(this.clientSocket);
-        obj.encodeObj(this.game);
+        gameObject.encodeObj(this.game);
 
         System.out.println("Waiting for other players...\n");
 
@@ -351,8 +349,7 @@ public class Client {
 
         // Done
         this.game.addToTurnMap(this.playerID, moveTurn, attackTurn);
-        GameObject obj = new GameObject(this.clientSocket);
-        obj.encodeObj(this.game);
+        gameObject.encodeObj(this.game);
 
         // Receive turn result
         receiveTurnResult();
@@ -372,8 +369,7 @@ public class Client {
             isLoser = true;
         }
         // Confirm turn
-        GameObject obj = new GameObject(this.clientSocket);
-        obj.encodeObj(this.game);
+        gameObject.encodeObj(this.game);
     }
 
     /*

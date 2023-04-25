@@ -1,17 +1,29 @@
 package edu.duke.shared.helper;
 
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
+
+import edu.duke.shared.Game;
 
 public class GameObject {
     // The client socket
-    public final Socket socket;
+    public Socket socket;
+    // Gson object
+    private final Gson gson;
 
     /**
      * Constructor for the GameObject
@@ -20,6 +32,24 @@ public class GameObject {
      */
     public GameObject(Socket socket) {
         this.socket = socket;
+        this.gson = new GsonBuilder()
+                .enableComplexMapKeySerialization()
+                .serializeNulls()
+                .create();
+    }
+
+    /**
+     * Set socket
+     */
+    public void setSocket(Socket socket) {
+        this.socket = socket;
+    }
+
+    /**
+     * Get socket
+     */
+    public Socket getSocket() {
+        return this.socket;
     }
 
     /**
@@ -27,7 +57,7 @@ public class GameObject {
      *
      * @return The decoded object from the client
      */
-    public Object decodeObj() {
+    public Game decodeObj() {
         try {
             // Get the input stream from the client
             InputStream socketStream = this.socket.getInputStream();
@@ -36,8 +66,8 @@ public class GameObject {
             // Wrap the buffered stream with an object stream
             ObjectInputStream ObjStream = new ObjectInputStream(socketBufferedStream);
             // Read the object from the object stream
-            return ObjStream.readObject();
-        } catch (ClassNotFoundException | IOException e) {
+            return (Game) ObjStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             return null;
         }
@@ -48,7 +78,7 @@ public class GameObject {
      *
      * @param obj The object to be encoded
      */
-    public void encodeObj(java.lang.Object obj) {
+    public void encodeObj(Object obj) {
         try {
             // Get the output stream from the client
             OutputStream socketStream = this.socket.getOutputStream();

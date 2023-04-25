@@ -25,6 +25,7 @@ dependencies {
     clover 'org.openclover:clover:4.4.1'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.2.0'
+    implementation 'com.google.code.gson:gson:2.10.1'
 }
 
 clover {

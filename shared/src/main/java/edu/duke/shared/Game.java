@@ -37,7 +37,7 @@ public class Game implements Serializable {
     // Map
     private final GameMap gameMap;
     // TurnMap<playerId, ArrayList<Turn>>
-    private final ArrayList<HashMap<Integer, ArrayList<Turn>>> turnList;
+    private final HashMap<Integer, ArrayList<Turn>> turnList;
 
     //AttackList for all attackers aiming at the same destination;
     //String is the destination name, ArrayList is the list for all attackers.
@@ -76,7 +76,7 @@ public class Game implements Serializable {
         // Number of Units for each player
         this.gameMap = gameMap;
         this.playerList = new ArrayList<>();
-        this.turnList = new ArrayList<>();
+        this.turnList = new HashMap<>();
         this.header = new Header();
         this.attackList = new HashMap<>();
         this.unitMinusMap = new HashMap<>();
@@ -281,8 +281,8 @@ public class Game implements Serializable {
      */
     public void setUpDefense(String destination, ArrayList<ArrayList<Attack>> att) {
         Territory desTerr = gameMap.getTerritory(destination);
-        int desPlayerId = gameMap.getTerritory(destination).getPlayerOwner().getPlayerId();
-        ArrayList<Turn> desTurn = turnList.get(getTurn()).get(desPlayerId);
+        int desPlayerId = desTerr.getPlayerOwner().getPlayerId();
+        ArrayList<Turn> desTurn = turnList.get(desPlayerId);
         assert desTurn != null;
         AttackTurn attackTurn = (AttackTurn) (desTurn.get(1));
         ArrayList<Attack> atts = attackTurn.getAttacks();
@@ -678,12 +678,10 @@ public class Game implements Serializable {
      * @param attackTurn attack turn
      */
     public void addToTurnMap(int playerId, MoveTurn moveTurn, AttackTurn attackTurn) {
-        HashMap<Integer, ArrayList<Turn>> turnMap = new HashMap<>();
         ArrayList<Turn> newTurn = new ArrayList<>();
         newTurn.add(moveTurn);
         newTurn.add(attackTurn);
-        turnMap.put(playerId, newTurn);
-        this.turnList.add(turnMap);
+        this.turnList.put(playerId, newTurn);
     }
 
     /**
@@ -691,7 +689,7 @@ public class Game implements Serializable {
      *
      * @return turn list
      */
-    public ArrayList<HashMap<Integer, ArrayList<Turn>>> getTurnList() {
+    public HashMap<Integer, ArrayList<Turn>> getTurnList() {
         return this.turnList;
     }
 
