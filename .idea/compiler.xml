@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="1.8" />
+    <bytecodeTargetLevel target="11" />
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="RISC.client.test" options="--add-modules java.base" />
       <module name="RISC.server.main" options="--add-modules java.base,java.logging" />
-      <module name="RISC.shared.main" options="--add-modules java.base" />
+      <module name="RISC.shared.main" options="--add-modules java.base --add-exports java.xml/com.sun.org.apache.xpath.internal.operations=ALL-UNNAMED --add-exports jdk.internal.le/jdk.internal.org.jline.reader=ALL-UNNAMED" />
       <module name="RISC.shared.test" options="--add-modules java.base" />
     </option>
   </component>

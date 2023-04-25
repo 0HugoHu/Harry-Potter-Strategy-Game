@@ -1,24 +1,24 @@
 package edu.duke.server;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Logger;
+import java.util.Random;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import edu.duke.shared.Game;
 import edu.duke.shared.helper.GameObject;
 import edu.duke.shared.helper.State;
-import edu.duke.shared.map.GameMap;
-import edu.duke.shared.player.Player;
+import edu.duke.shared.player.Horcrux;
+import edu.duke.shared.player.House;
 import edu.duke.shared.map.Territory;
+import edu.duke.shared.player.Player;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Turn;
-import edu.duke.shared.unit.Unit;
 import edu.duke.shared.unit.UnitType;
 
 public class Server {
@@ -32,10 +32,8 @@ public class Server {
     private final Game game;
     // Server socket
     private ServerSocket serverSocket;
-    // Logger
-    private static final Logger logger = Logger.getLogger("serverLog.txt");
-    // Server game lock
-    private final ReentrantLock serverGameLock = new ReentrantLock();
+    // Server house mapping
+    private final Map<Integer, House> serverHouseMapping = new HashMap<>();
 
     /**
      * Main method
@@ -129,6 +127,34 @@ public class Server {
     }
 
     /**
+     * House allocation
+     */
+    private void houseAllocation() {
+        Random random = new Random();
+        while (this.serverHouseMapping.size() < this.getNumOfPlayers()) {
+            int randomHouse = random.nextInt(4);
+            House house = null;
+            switch (randomHouse) {
+                case 0:
+                    house = House.GRYFFINDOR;
+                    break;
+                case 1:
+                    house = House.HUFFLEPUFF;
+                    break;
+                case 2:
+                    house = House.RAVENCLAW;
+                    break;
+                case 3:
+                    house = House.SLYTHERIN;
+                    break;
+            }
+            if (!this.serverHouseMapping.containsValue(house)) {
+                this.serverHouseMapping.put(this.serverHouseMapping.size(), house);
+            }
+        }
+    }
+
+    /**
      * Wait until all threads are finished
      */
     private void waitForThreadJoin() {
@@ -143,6 +169,8 @@ public class Server {
      * @param num number of players
      */
     public void acceptConnection(int num) {
+        // House allocation
+        houseAllocation();
         // Wait until all players have joined the game
         for (int i = 0; i < num; i++) {
             try {
@@ -150,7 +178,8 @@ public class Server {
                 Socket socket = this.serverSocket.accept();
                 // Add player to the game, i means player_id
                 // Create an object, and a thread is started
-                this.game.addPlayer(new Player(i, socket));
+                Player player = new Player(i, socket, this.serverHouseMapping.get(i));
+                this.game.addPlayer(player);
                 System.out.println("Player " + i + " has joined the game.");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -210,6 +239,10 @@ public class Server {
     private void startOneTurn() {
         this.game.setGameState(State.TURN_BEGIN);
         System.out.println("Start turn " + this.game.getTurn() + ".\n");
+
+        // Send random horcrux to players
+        assignHorcrux();
+
         sendToAllPlayers();
 
         // Receive action list from all players
@@ -236,6 +269,42 @@ public class Server {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+        }
+    }
+
+    private void assignHorcrux() {
+        if (this.game.getTurn() % 2 == 0) {
+            Random random = new Random();
+            int randomPlayer = random.nextInt(this.game.getNumPlayers());
+            int randomHorcrux = random.nextInt(6);
+            switch (randomHorcrux) {
+                case 0:
+                    this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.LOCKET, 1);
+                    this.game.setNewHorcrux(Horcrux.LOCKET, randomPlayer);
+                    break;
+                case 1:
+                    this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.HAT, 1);
+                    this.game.setNewHorcrux(Horcrux.HAT, randomPlayer);
+                    break;
+                case 2:
+                    this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.DIARY, 1);
+                    this.game.setNewHorcrux(Horcrux.DIARY, randomPlayer);
+                    break;
+                case 3:
+                    this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.RING, 1);
+                    this.game.setNewHorcrux(Horcrux.RING, randomPlayer);
+                    break;
+                case 4:
+                    this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.CUP, 1);
+                    this.game.setNewHorcrux(Horcrux.CUP, randomPlayer);
+                    break;
+                case 5:
+                    this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.SNAKE, 1);
+                    this.game.setNewHorcrux(Horcrux.SNAKE, randomPlayer);
+                    break;
+            }
+        } else {
+            this.game.setNoHorcrux();
         }
     }
 

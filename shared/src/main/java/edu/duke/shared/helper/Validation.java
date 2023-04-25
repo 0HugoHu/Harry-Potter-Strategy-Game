@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import edu.duke.shared.Game;
 import edu.duke.shared.map.GameMap;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.turn.Attack;
