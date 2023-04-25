@@ -1,6 +1,5 @@
 package edu.duke.shared.player;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.io.Serializable;
 import java.net.Socket;
@@ -12,7 +11,7 @@ import java.util.HashSet;
 import edu.duke.shared.Game;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.unit.Unit;
-import jdk.internal.org.jline.reader.Buffer;
+
 
 public class Player implements Serializable {
     // Player's name
@@ -47,8 +46,6 @@ public class Player implements Serializable {
     private House house;
     // Player's skill
     private SkillState skillState = SkillState.NOT_USED;
-    // Skill's in-effect count down
-    private int skillCountDown = 3;
 
 
     /**
@@ -360,6 +357,11 @@ public class Player implements Serializable {
         return this.horcruxUsage.get(horcrux);
     }
 
+
+    public HashMap<Horcrux, Integer> getHorcruxesList(){
+        return this.horcruxUsage;
+    }
+
     /**
      * Set horcrux usage
      *
@@ -385,10 +387,15 @@ public class Player implements Serializable {
     }
 
     /**
-     * If is snake target, return true
+     * If is snake
+     *, return true
      */
     public boolean isSnakeTarget() {
         return this.horcruxTarget.getOrDefault(Horcrux.SNAKE, false);
+    }
+
+    public void setSnakeTarget(){
+        this.horcruxTarget.put(Horcrux.SNAKE,true);
     }
 
     /**
@@ -491,45 +498,6 @@ public class Player implements Serializable {
      */
     public boolean skillRavenclaw() {
         return buffRavenclaw() && this.skillState == SkillState.IN_EFFECT;
-    }
-
-    /**
-     * Get player house
-     */
-    public House getHouse() {
-        return this.house;
-    }
-
-    /**
-     * Get player's skill state
-     */
-    public SkillState getSkillState() {
-        return this.skillState;
-    }
-
-    /**
-     * Set player's skill state
-     */
-    public void setSkillState(SkillState skillState) {
-        this.skillState = skillState;
-    }
-
-    /**
-     * Get player's skill name
-     */
-    public String getSkillName() {
-        switch (this.house) {
-            case GRYFFINDOR:
-                return "Lion's Courage";
-            case SLYTHERIN:
-                return "Serpent's Strategy";
-            case HUFFLEPUFF:
-                return "Steadfast Roots";
-            case RAVENCLAW:
-                return "Wings of Wisdom";
-            default:
-                return "Unknown";
-        }
     }
 
 }
