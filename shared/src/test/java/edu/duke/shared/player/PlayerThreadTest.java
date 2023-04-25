@@ -138,10 +138,10 @@ public class PlayerThreadTest {
         game.getMap().addTerritory(terr2);
         game.getMap().addTerritory(terr3);
         MoveTurn moveTurn = new MoveTurn(game.getMap(), 1, "terr1");
-        Move m = new Move("terr1", "terr2", 2, "test");
+        Move m = new Move("terr1", "terr2", 2, "test",House.SLYTHERIN);
         moveTurn.addMove(m);
         AttackTurn attackTurn = new AttackTurn(game.getMap(), 1, "terr1");
-        Attack m2 = new Attack("terr1", "terr3", 1, "test");
+        Attack m2 = new Attack("terr1", "terr3", 1, "test",House.SLYTHERIN);
         attackTurn.addAttack(m2);
         game.addToTurnMap(0, moveTurn, attackTurn);
         playerThread.setServerGame(game);
@@ -178,10 +178,10 @@ public class PlayerThreadTest {
         game.getMap().addTerritory(terr2);
         game.getMap().addTerritory(terr3);
         moveTurn = new MoveTurn(game.getMap(), 1, "terr1");
-        m = new Move("terr1", "terr2", 2, "test");
+        m = new Move("terr1", "terr2", 2, "test",House.SLYTHERIN);
         moveTurn.addMove(m);
         attackTurn = new AttackTurn(game.getMap(), 1, "terr1");
-        m2 = new Attack("terr1", "terr3", 1, "test");
+        m2 = new Attack("terr1", "terr3", 1, "test",House.SLYTHERIN);
         attackTurn.addAttack(m2);
         game.addToTurnMap(0, moveTurn, attackTurn);
         playerThread.setServerGame(game);

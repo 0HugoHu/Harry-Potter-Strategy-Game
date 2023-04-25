@@ -9,6 +9,8 @@ import java.util.HashSet;
 import edu.duke.shared.Game;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.unit.Unit;
+import edu.duke.shared.unit.UnitType;
+import jdk.internal.org.jline.reader.Buffer;
 
 public class Player implements Serializable {
     // Abandoned!! Territories owned by this player
@@ -392,6 +394,45 @@ public class Player implements Serializable {
         return this.horcruxTarget.getOrDefault(Horcrux.LOCKET, false);
     }
 
+    public House getHouse(){
+        return house;
+    }
+
+    public void setHouse(House house){
+        this.house=house;
+    }
+
+    public SkillState getSkillState() {
+        return this.skillState;
+    }
+
+    /**
+     * Set player's skill state
+     */
+    public void setSkillState(SkillState skillState) {
+        this.skillState = skillState;
+    }
+
+    /**
+     * Get player's skill name
+     */
+    public String getSkillName() {
+        switch (this.house) {
+            case GRYFFINDOR:
+                return "Lion's Courage";
+            case SLYTHERIN:
+                return "Serpent's Strategy";
+            case HUFFLEPUFF:
+                return "Steadfast Roots";
+            case RAVENCLAW:
+                return "Wings of Wisdom";
+            default:
+                return "Unknown";
+        }
+    }
+
+
+
     /**
      * If player buff Gryffindor, return true
      */
@@ -469,22 +510,5 @@ public class Player implements Serializable {
         this.skillState = skillState;
     }
 
-    /**
-     * Get player's skill name
-     */
-    public String getSkillName() {
-        switch (this.house) {
-            case GRYFFINDOR:
-                return "Lion's Courage";
-            case SLYTHERIN:
-                return "Serpent's Strategy";
-            case HUFFLEPUFF:
-                return "Steadfast Roots";
-            case RAVENCLAW:
-                return "Wings of Wisdom";
-            default:
-                return "Unknown";
-        }
-    }
 
 }

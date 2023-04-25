@@ -836,7 +836,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     HashMap<UnitType, Integer> list = new HashMap<>();
                     list.put(type, number);
                     if (number > 0) {
-                        moveTurn.addMove(new Move(orderTerrFrom, orderTerrTo, list, this.mGame.getPlayerName()));
+                        moveTurn.addMove(new Move(orderTerrFrom, orderTerrTo, list, this.mGame.getPlayerName(),this.mGame.getPlayer(this.mGame.getPlayerName()).getHouse()));
                         updateUnitMoveAttackMap(number, unit);
                         int cost = this.mGame.calculateOrderCost(this.mGame.getMap().getShortestDistance(orderTerrFrom, orderTerrTo), number);
                         // Check if player has slytherin buff
@@ -855,7 +855,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     HashMap<UnitType, Integer> list = new HashMap<>();
                     list.put(type, number);
                     if (number > 0) {
-                        attackTurn.addAttack(new Attack(orderTerrFrom, orderTerrTo, list, this.mGame.getPlayerName()));
+                        attackTurn.addAttack(new Attack(orderTerrFrom, orderTerrTo, list,
+                                this.mGame.getPlayerName(),this.mGame.getPlayer(this.mGame.getPlayerName()).getHouse()));
                         updateUnitMoveAttackMap(number, unit);
                         int cost = this.mGame.calculateOrderCost(this.mGame.getMap().getDistance(orderTerrFrom, orderTerrTo), number);
                         // Check if player has slytherin buff
