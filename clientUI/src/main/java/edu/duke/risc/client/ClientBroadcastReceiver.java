@@ -12,6 +12,7 @@ import edu.duke.shared.helper.GameObject;
 public class ClientBroadcastReceiver extends BroadcastReceiver {
     // Singleton method of GameObject
     private final GameObject gameObject = new GameObject(null);
+
     /**
      * This method is called when the BroadcastReceiver is receiving an Intent broadcast.
      *

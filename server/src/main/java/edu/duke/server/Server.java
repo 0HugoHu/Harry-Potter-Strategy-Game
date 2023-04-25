@@ -32,10 +32,10 @@ public class Server {
     private final Game game;
     // Server house mapping
     private final Map<Integer, House> serverHouseMapping = new HashMap<>();
-    // Server socket
-    private ServerSocket serverSocket;
     // Singleton method of GameObject
     private final GameObject gameObject = new GameObject(null);
+    // Server socket
+    private ServerSocket serverSocket;
 
     /**
      * Initialize Server by number of players

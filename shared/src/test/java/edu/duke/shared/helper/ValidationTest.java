@@ -5,8 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
-import edu.duke.shared.player.House;
-import edu.duke.shared.unit.UnitType;
 import org.junit.Test;
 
 import java.net.Socket;
@@ -15,6 +13,7 @@ import java.util.Scanner;
 import edu.duke.shared.Game;
 import edu.duke.shared.map.GameMap;
 import edu.duke.shared.map.Territory;
+import edu.duke.shared.player.House;
 import edu.duke.shared.player.Player;
 import edu.duke.shared.turn.Attack;
 import edu.duke.shared.turn.AttackTurn;
@@ -78,13 +77,13 @@ public class ValidationTest {
         MoveTurn mt = new MoveTurn(map, 0, p1.getPlayerName());
         String from = map.getTerritoriesByOwner(p1.getPlayerName()).get(0).getName();
         String to = map.getTerritoriesByOwner(p1.getPlayerName()).get(1).getName();
-        mt.addMove(new Move(from, to, 2, p1.getPlayerName(),p1.getHouse()));
+        mt.addMove(new Move(from, to, 2, p1.getPlayerName(), p1.getHouse()));
         from = map.getTerritoriesByOwner(p1.getPlayerName()).get(1).getName();
         to = map.getTerritoriesByOwner(p1.getPlayerName()).get(2).getName();
-        mt.addMove(new Move(from, to, 2, p1.getPlayerName(),p2.getHouse()));
+        mt.addMove(new Move(from, to, 2, p1.getPlayerName(), p2.getHouse()));
         assertTrue(Validation.checkMoves(mt));
         mt.addMove(new Move(map.getTerritoriesByOwner(p1.getPlayerName()).get(1).getName(),
-                map.getTerritoriesByOwner(p1.getPlayerName()).get(3).getName(), 5, p1.getPlayerName(),p1.getHouse()));
+                map.getTerritoriesByOwner(p1.getPlayerName()).get(3).getName(), 5, p1.getPlayerName(), p1.getHouse()));
         assertFalse(Validation.checkMoves(mt));
     }
 
@@ -141,10 +140,10 @@ public class ValidationTest {
         MoveTurn mt = new MoveTurn(map, 0, p1.getPlayerName());
         String from = map.getTerritoriesByOwner(p1.getPlayerName()).get(0).getName();
         String to = map.getTerritoriesByOwner(p1.getPlayerName()).get(1).getName();
-        mt.addMove(new Move(from, to, 2, p1.getPlayerName(),p1.getHouse()));
+        mt.addMove(new Move(from, to, 2, p1.getPlayerName(), p1.getHouse()));
         from = map.getTerritoriesByOwner(p1.getPlayerName()).get(1).getName();
         to = map.getTerritoriesByOwner(p1.getPlayerName()).get(2).getName();
-        mt.addMove(new Move(from, to, 2, p1.getPlayerName(),p1.getHouse()));
+        mt.addMove(new Move(from, to, 2, p1.getPlayerName(), p1.getHouse()));
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> Validation.checkMove(mt, null, map.getTerritoriesByOwner(p1.getPlayerName()).get(1).getName(), map.getTerritoriesByOwner(p1.getPlayerName()).get(3).getName(), 5));
         assertEquals("The usable units in source are only 4 units\n", thrown.getMessage());
 
@@ -194,10 +193,10 @@ public class ValidationTest {
                 }
             }
         }
-        at.addAttack(new Attack(from1, to1, 2, p2.getPlayerName(),p2.getHouse()));
-        at.addAttack(new Attack(from2, to2, 2, p2.getPlayerName(),p2.getHouse()));
+        at.addAttack(new Attack(from1, to1, 2, p2.getPlayerName(), p2.getHouse()));
+        at.addAttack(new Attack(from2, to2, 2, p2.getPlayerName(), p2.getHouse()));
         assertTrue(Validation.checkAttacks(at));
-        at.addAttack(new Attack(from1, to1, 3, p2.getPlayerName(),p2.getHouse()));
+        at.addAttack(new Attack(from1, to1, 3, p2.getPlayerName(), p2.getHouse()));
         assertFalse(Validation.checkAttacks(at));
     }
 
@@ -233,7 +232,7 @@ public class ValidationTest {
                 }
             }
         }
-        at.addAttack(new Attack(from, to, 2, p2.getPlayerName(),p2.getHouse()));
+        at.addAttack(new Attack(from, to, 2, p2.getPlayerName(), p2.getHouse()));
         try {
             Validation.checkAttack(at, null, from, to, 3);
         } catch (IllegalArgumentException e) {

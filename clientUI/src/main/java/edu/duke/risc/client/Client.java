@@ -23,6 +23,8 @@ public class Client {
     private final String HOST;
     // Client socket
     private final Socket clientSocket;
+    // Singleton method of GameObject
+    private final GameObject gameObject = new GameObject(null);
     // Scanner
     Scanner scanner = new Scanner(System.in);
     // Player Id on server
@@ -31,8 +33,6 @@ public class Client {
     private String playerName;
     // Gameplay controller
     private Game game;
-    // Singleton method of GameObject
-    private final GameObject gameObject = new GameObject(null);
 
     /*
      * Initialize Client
