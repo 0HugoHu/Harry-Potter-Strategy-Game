@@ -1,7 +1,9 @@
 package edu.duke.shared.player;
 
+
 import java.io.Serializable;
 import java.net.Socket;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,6 +11,7 @@ import java.util.HashSet;
 import edu.duke.shared.Game;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.unit.Unit;
+
 
 public class Player implements Serializable {
     // Abandoned!! Territories owned by this player
@@ -48,7 +51,7 @@ public class Player implements Serializable {
 
 
     /**
-     * Initialize the Player by id and socket
+     * Initialize the Player by name
      *
      * @param playerId player id
      * @param socket   player socket
@@ -148,6 +151,7 @@ public class Player implements Serializable {
             e.printStackTrace();
         }
     }
+
 
     /**
      * get player name
@@ -276,7 +280,6 @@ public class Player implements Serializable {
 
     /**
      * Set coins
-     *
      * @param coins coins
      */
     public void setCoins(int coins) {
@@ -354,6 +357,11 @@ public class Player implements Serializable {
         return this.horcruxUsage.get(horcrux);
     }
 
+
+    public HashMap<Horcrux, Integer> getHorcruxesList(){
+        return this.horcruxUsage;
+    }
+
     /**
      * Set horcrux usage
      *
@@ -375,14 +383,19 @@ public class Player implements Serializable {
      * If is diary target, return true
      */
     public boolean isDiaryTarget() {
-        return this.horcruxTarget.getOrDefault(Horcrux.DIARY, false);
+        return this.horcruxTarget.get(Horcrux.DIARY);
     }
 
     /**
-     * If is snake target, return true
+     * If is snake
+     *, return true
      */
     public boolean isSnakeTarget() {
         return this.horcruxTarget.getOrDefault(Horcrux.SNAKE, false);
+    }
+
+    public void setSnakeTarget(){
+        this.horcruxTarget.put(Horcrux.SNAKE,true);
     }
 
     /**
