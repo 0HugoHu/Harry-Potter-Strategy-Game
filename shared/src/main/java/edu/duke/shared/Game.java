@@ -14,6 +14,8 @@ import edu.duke.shared.map.GameMap;
 import edu.duke.shared.map.MapFactory;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.player.Horcrux;
+import edu.duke.shared.player.House;
+import edu.duke.shared.player.Horcrux;
 import edu.duke.shared.player.Player;
 import edu.duke.shared.turn.Attack;
 import edu.duke.shared.turn.AttackTurn;
@@ -99,6 +101,116 @@ public class Game implements Serializable {
     }
 
     /**
+     * Allow player to use the snake Horcrux, and get one random territory from
+     * another player
+     *
+     * @param p
+     */
+    public void useSnake(Player p){
+        p.removeFromHorcruxStorage(Horcrux.SNAKE,1);
+        p.addToHorcruxUsage(Horcrux.SNAKE,1);
+        for(Territory t:p.getPlayerTerrs()){
+            if(t.getAdjacents().size()>0){
+                for(String nearBy:t.getAdjacents()){
+                    String nearLand=nearBy;
+                    Territory terr=gameMap.getTerritory(nearLand);
+                    Player formerOwner=terr.getPlayerOwner();
+                    terr.changeOwner(p.getPlayerName());
+                    terr.changePlayerOwner(p);
+                    p.getPlayerTerrs().add(terr);
+                    formerOwner.getPlayerTerrs().remove(terr);
+                    return;
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Allow player to use the Locket, which will randomly
+     * clear one of its enemies' Gnomes.
+     * @param p
+     */
+    public void UseLocket(Player p){
+        p.removeFromHorcruxStorage(Horcrux.LOCKET,1);
+        p.addToHorcruxUsage(Horcrux.LOCKET,1);
+        for(Territory t:p.getPlayerTerrs()){
+            HashSet<String> nearLand=t.getAdjacents();
+            for(String near: nearLand){
+                Territory desTerr=gameMap.getTerritory(near);
+                ArrayList<Unit> units=desTerr.getUnits();
+                if(convertToMap(units).get(UnitType.DWARF)>0){
+                    units.remove(UnitType.DWARF);
+                }
+                return;
+            }
+        }
+    }
+
+
+    /**
+     * Allow player to use the ring, which will add 10 Gnomes to its own land.
+     */
+    public void useRing(Player p){
+        p.removeFromHorcruxStorage(Horcrux.RING,1);
+        p.addToHorcruxUsage(Horcrux.RING,1);
+        int count=0;
+        for(Territory t:p.getPlayerTerrs()){
+            while(count<10){
+                t.addUnit(UnitType.GNOME);
+                count++;
+            }
+            return;
+        }
+
+    }
+
+
+
+    /**
+     * Allow player to use the Skill of SLYTHERIN, which kills all the
+     * WereWolf on other players' territories
+     * @param p
+     */
+    public void UseSkillSytherin(Player p){
+        if(p.skillSlytherin()){
+            for(Territory terr: gameMap.getTerritories()){
+                if(!terr.getPlayerOwner().getHouse().equals(House.SLYTHERIN)){
+                    if(convertToMap(terr.getUnits()).get(UnitType.WEREWOLF)>0){
+                        int k=convertToMap(terr.getUnits()).get(UnitType.WEREWOLF);
+                        for(int i=0;i<k;i++){
+                            terr.getUnits().remove(UnitType.WEREWOLF);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Allow player to use the skill of GRYFFINDOR,
+     *  which is add 30 Gnomes to its own territory
+     * @param p
+     */
+    public void UseSkillGryffindor(Player p){
+        if(p.skillGryffindor()){
+            int count=0;
+            while(count<30){
+                for(Territory t:p.getPlayerTerrs()){
+                    if(count<30) {
+                        t.addUnit(UnitType.GNOME);
+                        count++;
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
+    /**
      * Build the attackList of the structure HashMap<String, ArrayList<ArrayList<Attack>>>
      * String is the same destination, ArrayList collects all attacks aiming at the same destination.
      * If attacks come from the same player, they will be put into the same inner List.
@@ -116,21 +228,24 @@ public class Game implements Serializable {
                 for (ArrayList<Attack> attArr : att) {
                     //If the attack come from the same player, then we should put it into the same inner list
                     if (attArr.get(0).getPlayerName().equals(attacks.get(i).getPlayerName())) {
-                        attArr.add(new Attack(attacks.get(i).getFrom(), attacks.get(i).getTo(), attacks.get(i).getUnitList(), attacks.get(i).getPlayerName()));
+                        attArr.add(new Attack(attacks.get(i).getFrom(), attacks.get(i).getTo(),
+                                attacks.get(i).getUnitList(), attacks.get(i).getPlayerName(),attacks.get(i).getHouse()));
                         flag = true;
                     }
                 }
                 //if there's no other attacks from the same player, then we should put it into a new inner list
                 if (!flag) {
                     ArrayList<Attack> att2 = new ArrayList<>();
-                    att2.add(new Attack(attacks.get(i).getFrom(), attacks.get(i).getTo(), attacks.get(i).getUnitList(), attacks.get(i).getPlayerName()));
+                    att2.add(new Attack(attacks.get(i).getFrom(), attacks.get(i).getTo(),
+                            attacks.get(i).getUnitList(), attacks.get(i).getPlayerName(),attacks.get(i).getHouse()));
                     att.add(att2);
                 }
                 attackList.put(attacks.get(i).getTo(), att);
             } else {
                 //if the attack destination is a new one, put it on the list with different destination key
                 ArrayList<Attack> att = new ArrayList<>();
-                att.add(new Attack(attacks.get(i).getFrom(), attacks.get(i).getTo(), attacks.get(i).getUnitList(), attacks.get(i).getPlayerName()));
+                att.add(new Attack(attacks.get(i).getFrom(), attacks.get(i).getTo(),
+                        attacks.get(i).getUnitList(), attacks.get(i).getPlayerName(),attacks.get(i).getHouse()));
                 ArrayList<ArrayList<Attack>> attArr = new ArrayList<>();
                 attArr.add(att);
                 attackList.put(attacks.get(i).getTo(), attArr);
@@ -193,6 +308,10 @@ public class Game implements Serializable {
             ArrayList<ArrayList<Attack>> att = entry.getValue();
             Territory desTerr = gameMap.getTerritory(destination);
             setUpDefense(destination, att);
+            if(desTerr.getPlayerOwner().getHouse().equals(House.HUFFLEPUFF)&&desTerr.getPlayerOwner().skillHufflepuff()){
+                announceHuffSituation(desTerr);
+                continue;
+            }
 
             int i = 0;
             int j;
@@ -219,6 +338,13 @@ public class Game implements Serializable {
                 System.out.println("The highest unit level for attacker " + attackTerr1.getOwner() + " is " + type1);
                 //This is the defender on the list order
 
+                int count1=20+bonus1;
+
+                Random random = new Random();
+                int chance= random.nextInt(2);
+                if(chance==1&&att.get(j).get(0).getHouse().equals(House.GRYFFINDOR)){
+                    count1=(int)(count1*1.5);
+                }
 
                 UnitType type2 = att.get(j).get(0).getLowestType();
                 int index2 = 0;
@@ -233,9 +359,17 @@ public class Game implements Serializable {
 
                 System.out.println("The lowest unit level for defender " + attackTerr2.getOwner() + " is " + type2);
                 int bonus2 = att.get(j).get(0).getBonus(type2);
+                int count2=bonus2+20;
 
-                int dice1 = new Dice(20 + bonus1).getDice();
-                int dice2 = new Dice(20 + bonus2).getDice();
+                int dice1 = new Dice(count1).getDice();
+                int dice2 = new Dice(count2).getDice();
+
+                Random random2 = new Random();
+                int chance2= random2.nextInt(5);
+                if((dice2<=dice1)&&chance2==1&&att.get(j).get(0).getHouse().equals(House.HUFFLEPUFF)){
+                    dice2=dice1+1;
+                }
+
                 if (dice1 > dice2) {
                     battleStage(att, attackTerr2, i, j, index1, index2, type1, type2);
                 } else {
@@ -311,7 +445,7 @@ public class Game implements Serializable {
         }
         //If defender territory still has units to defend, put it on the attack list
         if (totalRemainForces > 0) {
-            Attack defenderAtt = new Attack(destination, destination, defenseForce, desTerr.getOwner());
+            Attack defenderAtt = new Attack(destination, destination, defenseForce, desTerr.getOwner(),desTerr.getPlayerOwner().getHouse());
             ArrayList<Attack> attTOAdd = new ArrayList<>();
             attTOAdd.add(defenderAtt);
             att.add(attTOAdd);
@@ -421,6 +555,15 @@ public class Game implements Serializable {
         System.out.println("----------------------------------------------------------------------------");
 
     }
+
+    public void announceHuffSituation(Territory desTerr){
+        Player winner=desTerr.getPlayerOwner();
+        String s1="Player "+ winner.getPlayerName()+" has used the HUFFLEPUFF Skill: Steadfast Roots, " +
+                "all attacks will be defended! ";
+        System.out.println(s1);
+
+    }
+
 
 
     /**

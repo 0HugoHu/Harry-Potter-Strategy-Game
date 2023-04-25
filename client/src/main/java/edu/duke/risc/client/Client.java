@@ -384,7 +384,7 @@ public class Client {
         int numUnits = Validation.getValidNumber(scanner);
         try {
             Validation.checkMove(moveTurn, attackTurn, from, to, numUnits);
-            moveTurn.addMove(new Move(from, to, numUnits, this.playerName));
+            moveTurn.addMove(new Move(from, to, numUnits, this.playerName,this.game.getPlayer(this.playerName).getHouse()));
         } catch (Exception e) {
             System.out.println("Invalid input: " + e.getMessage());
             while (true) {
@@ -446,7 +446,7 @@ public class Client {
         unitList.put(UnitType.GNOME, GnomesNumUnits);
         unitList.put(UnitType.DWARF, DwarfsNumUnits);
         unitList.put(UnitType.HOUSE_ELF, HouseElfNumUnits);
-        attackTurn.addAttack(new Attack(from, to, unitList, this.playerName));
+        attackTurn.addAttack(new Attack(from, to, unitList, this.playerName,this.game.getPlayer(this.playerName).getHouse()));
 //        try {
 //            //Validation.checkAttack(attackTurn, moveTurn, from, to, numUnits);
 //            attackTurn.addAttack(new Attack(from, to, numUnits, this.playerName));

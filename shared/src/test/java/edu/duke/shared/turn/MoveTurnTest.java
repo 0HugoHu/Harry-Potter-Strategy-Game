@@ -8,24 +8,25 @@ import java.util.HashMap;
 
 import edu.duke.shared.map.GameMap;
 import edu.duke.shared.map.Territory;
+import edu.duke.shared.player.House;
 import edu.duke.shared.unit.UnitType;
 
 public class MoveTurnTest {
     @Test
-    public void testMove() {
-        HashMap<UnitType, Integer> unitlist = new HashMap<>();
-        unitlist.put(UnitType.CENTAUR, 1);
-        Move move = new Move("a", "b", unitlist, "p");
-        assertEquals(unitlist, move.getUnitList());
+    public void testMove(){
+        HashMap<UnitType,Integer> unitlist=new HashMap<>();
+        unitlist.put(UnitType.CENTAUR,1);
+        Move move=new Move("a","b",unitlist,"p", House.SLYTHERIN);
+        assertEquals(unitlist,move.getUnitList());
     }
 
     @Test
     public void addMove() {
         GameMap gm = new GameMap(20, 30, 6);
         MoveTurn mt = new MoveTurn(gm, 0, "Hello");
-        HashMap<UnitType, Integer> unitlist = new HashMap<>();
-        unitlist.put(UnitType.CENTAUR, 1);
-        Move move = new Move("Terr0", "Terr1", unitlist, "p");
+        HashMap<UnitType,Integer> unitlist=new HashMap<>();
+        unitlist.put(UnitType.CENTAUR,1);
+        Move move=new Move("Terr0","Terr1",unitlist,"p",House.SLYTHERIN);
         mt.addMove(move);
         Territory t = new Territory("Terr0");
         Territory t1 = new Territory("Terr1");

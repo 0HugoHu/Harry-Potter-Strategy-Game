@@ -105,9 +105,19 @@ public class HorcruxDataModel {
 
     /**
      * Set number of horcrux
+     *
      */
     public void addNumber() {
         this.number++;
+    }
+
+    /**
+     * Set max number of horcrux
+     *
+     * @param max max number of horcrux
+     */
+    public void setMax(int max) {
+        this.max_number = max;
     }
 
 }
