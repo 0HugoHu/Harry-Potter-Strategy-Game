@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.net.Socket;
 import java.util.HashSet;
 
+import edu.duke.shared.helper.State;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.player.Player;
 
@@ -141,6 +142,16 @@ public class PlayerTest {
 //
 //        t1.addCoins(20);
 //        assertEquals(120,(int)p1.getAllRes()[0]);
+    }
+
+    @Test
+    public void start(){
+        Player p = new Player(0,new Socket());
+        Game g = new Game(2,24);
+        g.setGameState(State.GAME_OVER);
+        p.start(g);
+        p.threadJoin();
+        p.getPlayerThread();
     }
 
 }

@@ -167,8 +167,12 @@ public class PlayerThread implements Runnable, Serializable {
                         this.serverGame.getPlayerList().get(this.playerId).upgradeWorldLevel();
                     }
 
-                    // Copy the player's skill state
+                    //copy the player's skill state
                     this.serverGame.getPlayerList().get(this.playerId).setSkillState(this.currGame.getPlayerList().get(this.playerId).getSkillState());
+
+                    //copy the player's horcrux state
+                    this.serverGame.getPlayerList().get(this.playerId).setHorcruxesList(this.currGame.getPlayerList().get(this.playerId).getHorcruxesList());
+                    this.serverGame.getPlayerList().get(this.playerId).setHorcruxesStorage(this.currGame.getPlayerList().get(this.playerId).getHorcruxesStorage());
                 }
                 break;
             case TURN_END:

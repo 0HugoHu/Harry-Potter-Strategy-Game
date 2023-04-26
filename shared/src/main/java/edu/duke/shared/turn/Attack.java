@@ -84,8 +84,6 @@ public class Attack extends Order {
      */
     public int getBonus(UnitType type) {
         switch (type) {
-            case GNOME:
-                return 0;
             case DWARF:
                 return 1;
             case HOUSE_ELF:

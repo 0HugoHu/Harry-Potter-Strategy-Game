@@ -44,7 +44,7 @@ public class HorcruxDataModel {
             case LOCKET:
                 return "Slytherin's Locket";
             case RING:
-                return "Resurrection Stone";
+                return "Gaunt's Ring";
             case CUP:
                 return "Hufflepuff's Cup";
             case SNAKE:
@@ -64,9 +64,9 @@ public class HorcruxDataModel {
             case DIARY:
                 return "Randomly disable one opponent's actions for their next turn.";
             case LOCKET:
-                return "Halve the number of Gnome troops for a random opponent in their next turn.";
+                return "Destroy all the Dwarf troops for a random opponent in their next turn.";
             case RING:
-                return "Instantly revive the last 10 fallen creatures.";
+                return "Instantly revive the 10 Gnome units.";
             case CUP:
                 return "Instantly increase the number of gold coins by 300.";
             case SNAKE:
