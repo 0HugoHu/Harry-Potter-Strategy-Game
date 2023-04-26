@@ -247,6 +247,9 @@ public class Player implements Serializable {
         skill.put(house,2);
     }
 
+
+
+
     /**
      * return connection socket of this player
      *

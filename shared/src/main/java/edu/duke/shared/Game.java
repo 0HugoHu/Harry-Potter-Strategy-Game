@@ -113,7 +113,7 @@ public class Game implements Serializable {
                 for (String nearBy : t.getAdjacents()) {
                     String nearLand = nearBy;
                     Territory terr = gameMap.getTerritory(nearLand);
-                    if(!terr.getOwner().equals(p.getPlayerName())) {
+                    if (!terr.getOwner().equals(p.getPlayerName())) {
                         Player formerOwner = terr.getPlayerOwner();
                         formerOwner.setSnakeTarget();
                         terr.changeOwner(p.getPlayerName());
@@ -135,14 +135,14 @@ public class Game implements Serializable {
      * @param p
      */
     public void useLocket(Player p) {
-        for(Player enemy:getPlayerList()){
-            if(!enemy.getPlayerName().equals(p.getPlayerName())){
-                for(Territory t:gameMap.getTerritories()){
-                    if((t.getOwner().equals(enemy.getPlayerName()))&&(t.getUnits()!=null)){
-                        HashMap<UnitType,Integer> map=convertToMap(t.getUnits());
-                        if(map!=null){
-                            int num=map.getOrDefault(UnitType.DWARF,0);
-                            for(int i=0;i<num;i++){
+        for (Player enemy : getPlayerList()) {
+            if (!enemy.getPlayerName().equals(p.getPlayerName())) {
+                for (Territory t : gameMap.getTerritories()) {
+                    if ((t.getOwner().equals(enemy.getPlayerName())) && (t.getUnits() != null)) {
+                        HashMap<UnitType, Integer> map = convertToMap(t.getUnits());
+                        if (map != null) {
+                            int num = map.getOrDefault(UnitType.DWARF, 0);
+                            for (int i = 0; i < num; i++) {
                                 t.removeUnit(UnitType.DWARF);
                             }
                         }
@@ -152,6 +152,7 @@ public class Game implements Serializable {
             }
         }
     }
+
     /**
      * Allow player to use the Skill of SLYTHERIN, which kills all the
      * WereWolf on other players' territories
@@ -161,10 +162,10 @@ public class Game implements Serializable {
     public void UseSkillSytherin(Player p) {
         if (p.skillSlytherin()) {
             for (Territory terr : gameMap.getTerritories()) {
-                if ((!terr.getPlayerOwner().getHouse().equals(House.SLYTHERIN))&&(terr.getUnits()!=null)) {
-                    HashMap<UnitType,Integer> map=convertToMap(terr.getUnits());
-                    if (map!=null) {
-                        int k = map.getOrDefault(UnitType.WEREWOLF,0);
+                if ((!terr.getPlayerOwner().getHouse().equals(House.SLYTHERIN)) && (terr.getUnits() != null)) {
+                    HashMap<UnitType, Integer> map = convertToMap(terr.getUnits());
+                    if (map != null) {
+                        int k = map.getOrDefault(UnitType.WEREWOLF, 0);
                         for (int i = 0; i < k; i++) {
                             terr.removeUnit(UnitType.WEREWOLF);
                         }
@@ -180,7 +181,7 @@ public class Game implements Serializable {
     public void useRing(Player p) {
         int count = 0;
         for (Territory t : gameMap.getTerritories()) {
-            if(t.getOwner().equals(p.getPlayerName())){
+            if (t.getOwner().equals(p.getPlayerName())) {
                 while (count < 10) {
                     t.addUnit(UnitType.GNOME);
                     count++;
@@ -201,14 +202,13 @@ public class Game implements Serializable {
     public void UseSkillGryffindor(Player p) {
         if (p.skillGryffindor()) {
             int count = 0;
-            while (count < 30) {
-                for (Territory t : gameMap.getTerritories()) {
-                    if(t.getOwner().equals(p.getPlayerName())) {
-                        if (count < 30) {
-                            t.addUnit(UnitType.GNOME);
-                            count++;
-                        }
+            for (Territory t : gameMap.getTerritories()) {
+                if (t.getOwner().equals(p.getPlayerName())) {
+                    while (count < 30) {
+                        t.addUnit(UnitType.GNOME);
+                        count++;
                     }
+                    return;
                 }
             }
         }
@@ -312,11 +312,11 @@ public class Game implements Serializable {
             Territory desTerr = gameMap.getTerritory(destination);
             setUpDefense(destination, att);
             System.out.println("------");
-            System.out.println("Owner "+desTerr.getOwner()+" belongs to "+desTerr.getPlayerOwner().getHouse());
-            System.out.println("Skill state "+desTerr.getPlayerOwner().getSkillState());
+            System.out.println("Owner " + desTerr.getOwner() + " belongs to " + desTerr.getPlayerOwner().getHouse());
+            System.out.println("Skill state " + desTerr.getPlayerOwner().getSkillState());
             System.out.println("------");
 
-            if(desTerr.getPlayerOwner().skillHufflepuff()){
+            if (desTerr.getPlayerOwner().skillHufflepuff()) {
                 System.out.println("True");
             }
             if (desTerr.getPlayerOwner().getHouse().equals(House.HUFFLEPUFF) && desTerr.getPlayerOwner().skillHufflepuff()) {
