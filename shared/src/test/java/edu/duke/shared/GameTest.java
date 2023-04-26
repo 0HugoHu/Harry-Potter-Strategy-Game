@@ -131,11 +131,11 @@ public class GameTest {
     public void doAttack() {
         Game newGame = new Game(3, 24);
         GameMap m = newGame.getMap();
-        Player p1 = new Player(0, new Socket());
+        Player p1 = new Player(0, new Socket(),House.GRYFFINDOR);
         p1.setPlayerName("A");
-        Player p2 = new Player(1, new Socket());
+        Player p2 = new Player(1, new Socket(),House.HUFFLEPUFF);
         p2.setPlayerName("B");
-        Player p3 = new Player(2, new Socket());
+        Player p3 = new Player(2, new Socket(),House.RAVENCLAW);
         p3.setPlayerName("C");
         newGame.addPlayer(p1);
         newGame.addPlayer(p2);
@@ -160,7 +160,7 @@ public class GameTest {
         MoveTurn moveTurn1 = new MoveTurn(m, 0, "A");
         HashMap<UnitType, Integer> unitlist1 = new HashMap<>();
         unitlist1.put(UnitType.GNOME, 2);
-        Attack attack3 = new Attack("Hogwarts", "Beauxbatons", unitlist1, "A", House.GRYFFINDOR);
+        Attack attack3 = new Attack("Hogsmeade", "Forbidden Forest", unitlist1, "A", House.GRYFFINDOR);
         attTurn1.addAttack(attack3);
         ArrayList<Turn> newTurn1 = new ArrayList<>();
         newTurn1.add(moveTurn1);
@@ -170,7 +170,7 @@ public class GameTest {
         MoveTurn moveTurn2 = new MoveTurn(m, 0, "B");
         HashMap<UnitType, Integer> unitlist2 = new HashMap<>();
         unitlist2.put(UnitType.GNOME, 2);
-        Attack attack4 = new Attack("Beauxbatons", "Grimmauld Place", unitlist2, "B",House.HUFFLEPUFF);
+        Attack attack4 = new Attack("Forbidden Forest", "Hogsmeade", unitlist2, "B",House.HUFFLEPUFF);
         attTurn2.addAttack(attack4);
         ArrayList<Turn> newTurn2 = new ArrayList<>();
         newTurn2.add(moveTurn2);
@@ -182,8 +182,8 @@ public class GameTest {
         unitlist3.put(UnitType.GNOME, 2);
         HashMap<UnitType, Integer> unitlist4 = new HashMap<>();
         unitlist4.put(UnitType.GNOME, 2);
-        Attack attack1 = new Attack("Little Whinging", "Beauxbatons", unitlist3, "C",House.RAVENCLAW);
-        Attack attack2 = new Attack("Ministry of Magic", "Beauxbatons", unitlist4, "C",House.RAVENCLAW);
+        Attack attack1 = new Attack("Albania", "Forbidden Forest", unitlist3, "C",House.RAVENCLAW);
+        Attack attack2 = new Attack("Albania", "Forbidden Forest", unitlist4, "C",House.RAVENCLAW);
         attTurn3.addAttack(attack1);
         attTurn3.addAttack(attack2);
         ArrayList<Turn> newTurn3 = new ArrayList<>();
@@ -192,17 +192,16 @@ public class GameTest {
         //newGame.addToTurnMap(2,moveTurn3,attTurn3);
 
         HashMap<Integer, ArrayList<Turn>> turnList = newGame.getTurnList();
-        HashMap<Integer, ArrayList<Turn>> turns = new HashMap<>();
-        turns.put(0, newTurn1);
-        turns.put(1, newTurn2);
-        turns.put(2, newTurn3);
-
+        //HashMap<Integer, ArrayList<Turn>> turns = new HashMap<>();
+        turnList.put(0, newTurn1);
+        turnList.put(1, newTurn2);
+        turnList.put(2, newTurn3);
         newGame.makeAttackList(attTurn1);
         newGame.makeAttackList(attTurn2);
         newGame.makeAttackList(attTurn3);
 
-        HashMap<Integer, ArrayList<Turn>> turnlist = newGame.getTurnList();
-//        newGame.doAttack();
+        //HashMap<Integer, ArrayList<Turn>> turnlist = newGame.getTurnList();
+        newGame.doAttack();
         newGame.getString();
 
 
