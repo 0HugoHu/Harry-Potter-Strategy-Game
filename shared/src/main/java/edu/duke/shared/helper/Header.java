@@ -181,20 +181,18 @@ public class Header implements Serializable {
     public String getNewHorcrux() {
         if (!this.NEW_HORCRUX) return null;
         switch (this.HORCRUX_ITEM) {
-            case HAT:
-                return "Ravenclaw's Diadem" + "%" + this.HORCRUX_ASSIGN_TO;
             case DIARY:
                 return "Riddle's Diary" + "%" + this.HORCRUX_ASSIGN_TO;
             case LOCKET:
                 return "Slytherin's Locket" + "%" + this.HORCRUX_ASSIGN_TO;
             case RING:
-                return "Resurrection Stone" + "%" + this.HORCRUX_ASSIGN_TO;
+                return "Gaunt's Ring" + "%" + this.HORCRUX_ASSIGN_TO;
             case CUP:
                 return "Hufflepuff's Cup" + "%" + this.HORCRUX_ASSIGN_TO;
             case SNAKE:
                 return "Nagini" + "%" + this.HORCRUX_ASSIGN_TO;
             default:
-                return null;
+                return "Ravenclaw's Diadem" + "%" + this.HORCRUX_ASSIGN_TO;
         }
     }
 }

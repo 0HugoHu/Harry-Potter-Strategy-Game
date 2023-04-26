@@ -1,6 +1,7 @@
 package edu.duke.shared;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -14,7 +15,10 @@ import java.util.HashMap;
 import edu.duke.shared.helper.State;
 import edu.duke.shared.map.GameMap;
 import edu.duke.shared.map.Territory;
+import edu.duke.shared.player.Horcrux;
+import edu.duke.shared.player.House;
 import edu.duke.shared.player.Player;
+import edu.duke.shared.player.SkillState;
 import edu.duke.shared.turn.Attack;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.MoveTurn;
@@ -156,7 +160,7 @@ public class GameTest {
         MoveTurn moveTurn1 = new MoveTurn(m, 0, "A");
         HashMap<UnitType, Integer> unitlist1 = new HashMap<>();
         unitlist1.put(UnitType.GNOME, 2);
-        Attack attack3 = new Attack("Hogwarts", "Beauxbatons", unitlist1, "A");
+        Attack attack3 = new Attack("Hogwarts", "Beauxbatons", unitlist1, "A", House.GRYFFINDOR);
         attTurn1.addAttack(attack3);
         ArrayList<Turn> newTurn1 = new ArrayList<>();
         newTurn1.add(moveTurn1);
@@ -166,7 +170,7 @@ public class GameTest {
         MoveTurn moveTurn2 = new MoveTurn(m, 0, "B");
         HashMap<UnitType, Integer> unitlist2 = new HashMap<>();
         unitlist2.put(UnitType.GNOME, 2);
-        Attack attack4 = new Attack("Beauxbatons", "Grimmauld Place", unitlist2, "B");
+        Attack attack4 = new Attack("Beauxbatons", "Grimmauld Place", unitlist2, "B",House.HUFFLEPUFF);
         attTurn2.addAttack(attack4);
         ArrayList<Turn> newTurn2 = new ArrayList<>();
         newTurn2.add(moveTurn2);
@@ -178,8 +182,8 @@ public class GameTest {
         unitlist3.put(UnitType.GNOME, 2);
         HashMap<UnitType, Integer> unitlist4 = new HashMap<>();
         unitlist4.put(UnitType.GNOME, 2);
-        Attack attack1 = new Attack("Little Whinging", "Beauxbatons", unitlist3, "C");
-        Attack attack2 = new Attack("Ministry of Magic", "Beauxbatons", unitlist4, "C");
+        Attack attack1 = new Attack("Little Whinging", "Beauxbatons", unitlist3, "C",House.RAVENCLAW);
+        Attack attack2 = new Attack("Ministry of Magic", "Beauxbatons", unitlist4, "C",House.RAVENCLAW);
         attTurn3.addAttack(attack1);
         attTurn3.addAttack(attack2);
         ArrayList<Turn> newTurn3 = new ArrayList<>();
@@ -221,7 +225,7 @@ public class GameTest {
 
         AttackTurn attTurn1 = new AttackTurn(m, 0, "A");
         MoveTurn moveTurn1 = new MoveTurn(m, 0, "A");
-        Attack attack3 = new Attack("B", "G", 2, "A");
+        Attack attack3 = new Attack("B", "G", 2, "A",House.GRYFFINDOR);
         attTurn1.addAttack(attack3);
         ArrayList<Turn> newTurn1 = new ArrayList<>();
         newTurn1.add(moveTurn1);
@@ -246,4 +250,206 @@ public class GameTest {
         assertNull(newGame.getPlayer("C"));
     }
 
+    @Test
+    public void getString() {
+        Game g = new Game(2,24);
+        g.getString();
+    }
+
+    @Test
+    public void useSnake() {
+        Game g = new Game(2,24);
+        Player p1 = new Player(0,new Socket());
+        p1.setPlayerName("a");
+
+        Player p2 = new Player(1,new Socket());
+        p2.setPlayerName("b");
+        g.addPlayer(p1);
+        g.addPlayer(p2);
+        g.allocateTerritories();
+        g.useSnake(p1);
+    }
+
+    @Test
+    public void useLocket() {
+        Game g = new Game(2,24);
+        Player p1 = new Player(0,new Socket());
+        p1.setPlayerName("a");
+
+        Player p2 = new Player(1,new Socket());
+        p2.setPlayerName("b");
+        g.addPlayer(p1);
+        g.addPlayer(p2);
+        g.allocateTerritories();
+        for (Territory t:p1.getPlayerTerrs()){
+            t.addUnit(UnitType.DWARF);
+        }
+        for (Territory t:p2.getPlayerTerrs()){
+            t.addUnit(UnitType.DWARF);
+        }
+        g.useLocket(p1);
+    }
+
+    @Test
+    public void useSkillSytherin() {
+        Game g = new Game(2,24);
+        Player p1 = new Player(0,new Socket(),House.SLYTHERIN);
+        p1.setPlayerName("a");
+        p1.setSkillState(SkillState.IN_EFFECT);
+        Player p2 = new Player(1,new Socket(),House.GRYFFINDOR);
+        p2.setPlayerName("b");
+        g.addPlayer(p1);
+        g.addPlayer(p2);
+        g.allocateTerritories();
+        for (Territory t:p1.getPlayerTerrs()){
+            t.addUnit(UnitType.WEREWOLF);
+        }
+        for (Territory t:p2.getPlayerTerrs()){
+            t.addUnit(UnitType.WEREWOLF);
+        }
+        g.UseSkillSytherin(p1);
+    }
+
+    @Test
+    public void useRing() {
+        Game g = new Game(2,24);
+        Player p1 = new Player(0,new Socket());
+        p1.setPlayerName("a");
+
+        Player p2 = new Player(1,new Socket());
+        p2.setPlayerName("b");
+        g.addPlayer(p1);
+        g.addPlayer(p2);
+        g.allocateTerritories();
+        for (Territory t:p1.getPlayerTerrs()){
+            t.addUnit(UnitType.DWARF);
+        }
+        for (Territory t:p2.getPlayerTerrs()){
+            t.addUnit(UnitType.DWARF);
+        }
+        g.useRing(p1);
+        for (Territory t:p1.getPlayerTerrs()) {
+            t.changeOwner(p2.getPlayerName());
+            p2.expandTerr(t);
+        }
+        p1.getPlayerTerrs().clear();
+        g.useRing(p1);
+    }
+
+    @Test
+    public void useSkillGryffindor() {
+        Game g = new Game(2,24);
+        Player p1 = new Player(0,new Socket(),House.SLYTHERIN);
+        p1.setPlayerName("a");
+        p1.setSkillState(SkillState.IN_EFFECT);
+        Player p2 = new Player(1,new Socket(),House.GRYFFINDOR);
+        p2.setPlayerName("b");
+        p2.setSkillState(SkillState.IN_EFFECT);
+        g.addPlayer(p1);
+        g.addPlayer(p2);
+        g.allocateTerritories();
+        for (Territory t:p1.getPlayerTerrs()){
+            t.addUnit(UnitType.WEREWOLF);
+        }
+        for (Territory t:p2.getPlayerTerrs()){
+            t.addUnit(UnitType.WEREWOLF);
+        }
+        g.UseSkillGryffindor(p2);
+    }
+
+    @Test
+    public void setUpDefense() {
+    }
+
+    @Test
+    public void printList() {
+        Game g = new Game(2,24);
+        ArrayList<ArrayList<Attack>> att = new ArrayList<>();
+        for (int i=0;i<2;i++){
+            ArrayList<Attack> a = new ArrayList<>();
+            for (int j=0;j<5;j++){
+                HashMap<UnitType,Integer> unitlist = new HashMap<>();
+                unitlist.put(UnitType.GNOME,5);
+                Attack at = new Attack(i+"from"+j,i+"to"+j,unitlist,"player"+i,House.GRYFFINDOR);
+                a.add(at);
+            }
+            att.add(a);
+        }
+        g.printList(att,0,1,1,2);
+    }
+
+    @Test
+    public void battleStage() {
+        Game g = new Game(2,24);
+        ArrayList<ArrayList<Attack>> att = new ArrayList<>();
+        for (int i=0;i<2;i++){
+            ArrayList<Attack> a = new ArrayList<>();
+            for (int j=0;j<5;j++){
+                HashMap<UnitType,Integer> unitlist = new HashMap<>();
+                unitlist.put(UnitType.GNOME,5);
+                Attack at = new Attack(i+"from"+j,i+"to"+j,unitlist,"player"+i,House.GRYFFINDOR);
+                a.add(at);
+            }
+            att.add(a);
+        }
+        g.printList(att,0,1,1,2);
+        g.battleStage(att,new Territory("a"),0,1,1,2,UnitType.CENTAUR,UnitType.GNOME);
+        g.battleStage(att,new Territory("a"),0,1,1,2,UnitType.CENTAUR,UnitType.GNOME);
+    }
+
+    @Test
+    public void announceHuffSituation() {
+        Game g =new Game(2,24);
+        Territory t = new Territory("a");
+        Player p = new Player(0,new Socket());
+        p.setPlayerName("a");
+        t.changePlayerOwner(p);
+        g.announceHuffSituation(t);
+    }
+
+
+    @Test
+    public void setNewHorcrux() {
+        Game g = new Game(2,24);
+        g.setNewHorcrux(Horcrux.CUP,0);
+    }
+
+    @Test
+    public void setNoHorcrux() {
+        Game g = new Game(2,24);
+        g.setNoHorcrux();
+    }
+
+    @Test
+    public void getNewHorcrux() {
+        Game g = new Game(2,24);
+        g.getNewHorcrux();
+    }
+
+    @Test
+    public void getHorcruxAffect() {
+        Game g = new Game(2,24);
+        g.getHorcruxAffect();
+    }
+
+    @Test
+    public void compareUnitHigh() {
+        Game g = new Game(2,24);
+        g.compareUnitHigh(UnitType.DWARF,UnitType.WEREWOLF);
+        g.compareUnitHigh(UnitType.WEREWOLF,UnitType.DWARF);
+    }
+
+    @Test
+    public void isForceEndGame() {
+        Game g = new Game(2,24);
+        assertFalse(g.isForceEndGame());
+        g.forceEndGame();
+        assertTrue(g.isForceEndGame());
+    }
+
+    @Test
+    public void getLoserId() {
+        Game g = new Game(2,24);
+        g.getLoserId();
+    }
 }

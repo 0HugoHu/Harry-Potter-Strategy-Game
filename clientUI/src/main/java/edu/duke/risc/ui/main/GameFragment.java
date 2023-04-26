@@ -475,6 +475,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             switch (mPlayer.getSkillState()) {
                 case NOT_USED:
                     mPlayer.setSkillState(IN_EFFECT);
+                    mPlayer.updateSkill();
                     item_use_btn.setText(R.string.activate);
                     item_use_btn.setEnabled(false);
                     showDialog("You have activated the skill: ", mPlayer.getSkillName(), "");

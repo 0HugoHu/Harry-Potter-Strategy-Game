@@ -77,6 +77,8 @@ public class Server {
         }
     }
 
+
+
     /**
      * Print host info
      */
@@ -252,14 +254,15 @@ public class Server {
         waitForThreadJoin();
         System.out.println("Received all action lists.\n");
 
+
         // Do attack
         doAttackPhase();
         if (this.game.getGameState() == State.GAME_OVER) {
             return;
         }
 
-        this.game.useHorcrux();
-        this.game.useSkill();
+        useHorcrux();
+        useSkill();
 
         growUnits();
         growResources();
@@ -278,6 +281,61 @@ public class Server {
             Thread.currentThread().interrupt();
         }
     }
+
+    public void useHorcrux() {
+        for (Player p :this.game.getPlayerList().get(0).playerThread.currGame.getPlayerList()) {
+            for (Map.Entry<Horcrux, Integer> entry : p.getHorcruxesList().entrySet()) {
+                for (int i = 0; i < entry.getValue(); i++) {
+                    if (entry.getKey().equals(Horcrux.SNAKE)) {
+                        this.game.useSnake(p);
+                    }
+                    if (entry.getKey().equals(Horcrux.LOCKET)) {
+                        this.game.useLocket(p);
+                    }
+                    if (entry.getKey().equals(Horcrux.RING)) {
+                        this.game.useRing(p);
+                    }
+                }
+            }
+        }
+    }
+
+    public void useSkill() {
+        for(int i=0;i<this.getNumOfPlayers();i++){
+            Player p=this.game.getPlayerList().get(i).playerThread.currGame.getPlayerList().get(i);
+                if (p.getHouse().equals(House.GRYFFINDOR)) {
+                    if(p.getSkillUsed()==1){
+                        this.game.getPlayerList().get(i).setSkillState(SkillState.IN_EFFECT);
+                        p.setSkillState(SkillState.IN_EFFECT);
+                        this.game.UseSkillGryffindor(p);
+                    }
+                    p.updateSkill();
+                }
+                if (p.getHouse().equals(House.RAVENCLAW)) {
+                    if(p.getSkillUsed()==1){
+                        this.game.getPlayerList().get(i).setSkillState(SkillState.IN_EFFECT);
+                        p.setSkillState(SkillState.IN_EFFECT);
+                    }
+                    p.updateSkill();
+                }
+                if (p.getHouse().equals(House.HUFFLEPUFF)) {
+                    if(p.getSkillUsed()==1){
+                        this.game.getPlayerList().get(i).setSkillState(SkillState.IN_EFFECT);
+                        p.setSkillState(SkillState.IN_EFFECT);
+                    }
+                    p.updateSkill();
+                }
+                if(p.getHouse().equals(House.SLYTHERIN)){
+                    if(p.getSkillUsed()==1){
+                        this.game.getPlayerList().get(i).setSkillState(SkillState.IN_EFFECT);
+                        p.setSkillState(SkillState.IN_EFFECT);
+                        this.game.UseSkillSytherin(p);
+                    }
+                    p.updateSkill();
+                }
+        }
+    }
+
 
     private void assignHorcrux() {
         if (this.game.getTurn() % 2 == 0) {

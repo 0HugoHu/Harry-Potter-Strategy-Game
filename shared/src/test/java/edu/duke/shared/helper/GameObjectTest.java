@@ -1,5 +1,6 @@
 package edu.duke.shared.helper;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -48,5 +49,12 @@ public class GameObjectTest {
 
         when(gameObject.socket.getOutputStream()).thenReturn(baos);
         gameObject.encodeObj(game);
+    }
+
+    @Test
+    public void getSocket(){
+        Socket s =new Socket();
+        GameObject g = new GameObject(s);
+        assertEquals(s,g.getSocket());
     }
 }
