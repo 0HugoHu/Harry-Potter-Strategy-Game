@@ -389,10 +389,10 @@ public class Server {
             Random random = new Random();
             int randomPlayer = random.nextInt(this.game.getNumPlayers());
             int randomHorcrux = random.nextInt(6);
-            switch (5) {
+            switch (randomHorcrux) {
                 case 0:
-                    this.game.getPlayerList().get(0).addToHorcruxStorage(Horcrux.LOCKET, 1);
-                    System.out.println(this.game.getPlayerList().get(0).getPlayerName() + " get the Locket!");
+                    this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.LOCKET, 1);
+                    System.out.println(this.game.getPlayerList().get(randomPlayer).getPlayerName() + " get the Locket!");
                     this.game.setNewHorcrux(Horcrux.LOCKET, randomPlayer);
                     break;
                 case 1:
@@ -406,8 +406,8 @@ public class Server {
                     this.game.setNewHorcrux(Horcrux.DIARY, randomPlayer);
                     break;
                 case 3:
-                    this.game.getPlayerList().get(0).addToHorcruxStorage(Horcrux.RING, 1);
-                    System.out.println(this.game.getPlayerList().get(0).getPlayerName() + " get the Ring!");
+                    this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.RING, 1);
+                    System.out.println(this.game.getPlayerList().get(randomPlayer).getPlayerName() + " get the Ring!");
                     this.game.setNewHorcrux(Horcrux.RING, 0);
                     break;
                 case 4:
@@ -416,8 +416,8 @@ public class Server {
                     this.game.setNewHorcrux(Horcrux.CUP, randomPlayer);
                     break;
                 case 5:
-                    this.game.getPlayerList().get(0).addToHorcruxStorage(Horcrux.SNAKE, 1);
-                    System.out.println(this.game.getPlayerList().get(0).getPlayerName() + " get the Snake!");
+                    this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.SNAKE, 1);
+                    System.out.println(this.game.getPlayerList().get(randomPlayer).getPlayerName() + " get the Snake!");
                     this.game.setNewHorcrux(Horcrux.SNAKE, randomPlayer);
                     break;
             }
