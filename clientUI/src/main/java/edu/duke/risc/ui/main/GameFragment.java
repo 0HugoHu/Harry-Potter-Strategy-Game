@@ -475,6 +475,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             switch (mPlayer.getSkillState()) {
                 case NOT_USED:
                     mPlayer.setSkillState(IN_EFFECT);
+                    mPlayer.updateSkill();
                     item_use_btn.setText(R.string.activate);
                     item_use_btn.setEnabled(false);
                     showDialog("You have activated the skill: ", mPlayer.getSkillName(), "");
@@ -1387,7 +1388,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         // item view
         switch (mPlayer.getHouse()) {
             case RAVENCLAW:
-                buff_name.setText(R.string.buff_r);
+                buff_name.setText(R.string.buff_b);
                 buff_name.setTextColor(getResources().getColor(R.color.ui_ravenclaw));
                 buff_desc.setText(R.string.buff_r_desc);
                 skill_name.setText(R.string.skill_b_p2);

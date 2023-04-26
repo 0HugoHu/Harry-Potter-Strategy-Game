@@ -102,39 +102,6 @@ public class Game implements Serializable {
         return dis * num / 2;
     }
 
-    public void useHorcrux() {
-        for (Player p : playerList) {
-            for (Map.Entry<Horcrux, Integer> entry : p.getHorcruxesList().entrySet()) {
-                for (int i = 0; i < entry.getValue(); i++) {
-                    if (entry.getKey().equals(Horcrux.SNAKE)) {
-                        useSnake(p);
-                    }
-                    if (entry.getKey().equals(Horcrux.LOCKET)) {
-                        useLocket(p);
-                    }
-                    if (entry.getKey().equals(Horcrux.RING)) {
-                        useRing(p);
-                    }
-                }
-            }
-        }
-    }
-
-    public void useSkill() {
-        for (Player p : playerList) {
-            if (p.getSkillState().equals(SkillState.IN_EFFECT)) {
-                if (p.getHouse().equals(House.GRYFFINDOR)) {
-                    UseSkillGryffindor(p);
-                }
-                if (p.getHouse().equals(House.GRYFFINDOR)) {
-                    UseSkillGryffindor(p);
-                }
-                if (p.getHouse().equals(House.SLYTHERIN)) {
-                    UseSkillSytherin(p);
-                }
-            }
-        }
-    }
 
     /**
      * Allow player to use the snake Horcrux, and get one random territory from
@@ -148,13 +115,15 @@ public class Game implements Serializable {
                 for (String nearBy : t.getAdjacents()) {
                     String nearLand = nearBy;
                     Territory terr = gameMap.getTerritory(nearLand);
-                    Player formerOwner = terr.getPlayerOwner();
-                    formerOwner.setSnakeTarget();
-                    terr.changeOwner(p.getPlayerName());
-                    terr.changePlayerOwner(p);
-                    p.getPlayerTerrs().add(terr);
-                    formerOwner.getPlayerTerrs().remove(terr);
-                    return;
+                    if(!terr.getOwner().equals(p.getPlayerName())) {
+                        Player formerOwner = terr.getPlayerOwner();
+                        formerOwner.setSnakeTarget();
+                        terr.changeOwner(p.getPlayerName());
+                        terr.changePlayerOwner(p);
+                        p.getPlayerTerrs().add(terr);
+                        formerOwner.getPlayerTerrs().remove(terr);
+                        return;
+                    }
                 }
             }
         }
@@ -163,43 +132,28 @@ public class Game implements Serializable {
 
     /**
      * Allow player to use the Locket, which will randomly
-     * clear one of its enemies' Gnomes.
+     * clear one of its enemies' Dwarfs.
      *
      * @param p
      */
     public void useLocket(Player p) {
-        for (Territory t : p.getPlayerTerrs()) {
-            HashSet<String> nearLand = t.getAdjacents();
-            for (String near : nearLand) {
-                Territory desTerr = gameMap.getTerritory(near);
-                ArrayList<Unit> units = desTerr.getUnits();
-                if (convertToMap(units).get(UnitType.DWARF) > 0) {
-                    units.remove(UnitType.DWARF);
+        for(Player enemy:getPlayerList()){
+            if(!enemy.getPlayerName().equals(p.getPlayerName())){
+                for(Territory t:gameMap.getTerritories()){
+                    if((t.getOwner().equals(enemy.getPlayerName()))&&(t.getUnits()!=null)){
+                        HashMap<UnitType,Integer> map=convertToMap(t.getUnits());
+                        if(map!=null){
+                            int num=map.getOrDefault(UnitType.DWARF,0);
+                            for(int i=0;i<num;i++){
+                                t.removeUnit(UnitType.DWARF);
+                            }
+                        }
+                    }
                 }
                 return;
             }
         }
     }
-
-
-    /**
-     * Allow player to use the ring, which will add 10 Gnomes to its own land.
-     */
-    public void useRing(Player p) {
-        p.removeFromHorcruxStorage(Horcrux.RING, 1);
-        p.addToHorcruxUsage(Horcrux.RING, 1);
-        int count = 0;
-        for (Territory t : p.getPlayerTerrs()) {
-            while (count < 10) {
-                t.addUnit(UnitType.GNOME);
-                count++;
-            }
-            return;
-        }
-
-    }
-
-
     /**
      * Allow player to use the Skill of SLYTHERIN, which kills all the
      * WereWolf on other players' territories
@@ -209,16 +163,34 @@ public class Game implements Serializable {
     public void UseSkillSytherin(Player p) {
         if (p.skillSlytherin()) {
             for (Territory terr : gameMap.getTerritories()) {
-                if (!terr.getPlayerOwner().getHouse().equals(House.SLYTHERIN)) {
-                    if (convertToMap(terr.getUnits()).get(UnitType.WEREWOLF) > 0) {
-                        int k = convertToMap(terr.getUnits()).get(UnitType.WEREWOLF);
+                if ((!terr.getPlayerOwner().getHouse().equals(House.SLYTHERIN))&&(terr.getUnits()!=null)) {
+                    HashMap<UnitType,Integer> map=convertToMap(terr.getUnits());
+                    if (map!=null) {
+                        int k = map.getOrDefault(UnitType.WEREWOLF,0);
                         for (int i = 0; i < k; i++) {
-                            terr.getUnits().remove(UnitType.WEREWOLF);
+                            terr.removeUnit(UnitType.WEREWOLF);
                         }
                     }
                 }
             }
         }
+    }
+
+    /**
+     * Allow player to use the ring, which will add 10 Gnomes to its own land.
+     */
+    public void useRing(Player p) {
+        int count = 0;
+        for (Territory t : gameMap.getTerritories()) {
+            if(t.getOwner().equals(p.getPlayerName())){
+                while (count < 10) {
+                    t.addUnit(UnitType.GNOME);
+                    count++;
+                }
+                return;
+            }
+        }
+
     }
 
 
@@ -232,10 +204,12 @@ public class Game implements Serializable {
         if (p.skillGryffindor()) {
             int count = 0;
             while (count < 30) {
-                for (Territory t : p.getPlayerTerrs()) {
-                    if (count < 30) {
-                        t.addUnit(UnitType.GNOME);
-                        count++;
+                for (Territory t : gameMap.getTerritories()) {
+                    if(t.getOwner().equals(p.getPlayerName())) {
+                        if (count < 30) {
+                            t.addUnit(UnitType.GNOME);
+                            count++;
+                        }
                     }
                 }
             }
@@ -341,6 +315,14 @@ public class Game implements Serializable {
             ArrayList<ArrayList<Attack>> att = entry.getValue();
             Territory desTerr = gameMap.getTerritory(destination);
             setUpDefense(destination, att);
+            System.out.println("------");
+            System.out.println("Owner "+desTerr.getOwner()+" belongs to "+desTerr.getPlayerOwner().getHouse());
+            System.out.println("Skill state "+desTerr.getPlayerOwner().getSkillState());
+            System.out.println("------");
+
+            if(desTerr.getPlayerOwner().skillHufflepuff()){
+                System.out.println("True");
+            }
             if (desTerr.getPlayerOwner().getHouse().equals(House.HUFFLEPUFF) && desTerr.getPlayerOwner().skillHufflepuff()) {
                 announceHuffSituation(desTerr);
                 continue;

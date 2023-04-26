@@ -188,7 +188,7 @@ public class Header implements Serializable {
             case LOCKET:
                 return "Slytherin's Locket" + "%" + this.HORCRUX_ASSIGN_TO;
             case RING:
-                return "Resurrection Stone" + "%" + this.HORCRUX_ASSIGN_TO;
+                return "Gaunt's Ring" + "%" + this.HORCRUX_ASSIGN_TO;
             case CUP:
                 return "Hufflepuff's Cup" + "%" + this.HORCRUX_ASSIGN_TO;
             case SNAKE:

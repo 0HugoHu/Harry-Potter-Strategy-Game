@@ -16,15 +16,12 @@ public class Player implements Serializable {
     // Abandoned!! Territories owned by this player
     private final HashSet<Territory> playerTerrs;
     // Horcrux storage
-    private final HashMap<Horcrux, Integer> horcruxes = new HashMap<>();
+    private  HashMap<Horcrux, Integer> horcruxes = new HashMap<>();
     // Horcrux usage, <name, num>
-    private final HashMap<Horcrux, Integer> horcruxUsage = new HashMap<>();
+    private  HashMap<Horcrux, Integer> horcruxUsage = new HashMap<>();
     // Horcrux usage target, <name, isTarget>
-    private final HashMap<Horcrux, Boolean> horcruxTarget = new HashMap<>();
-    // Previous 10 dead units
-    private final ArrayList<Unit> deadUnits = new ArrayList<>();
-    // Skill's in-effect count down
-    private final int skillCountDown = 3;
+    private  HashMap<Horcrux, Boolean> horcruxTarget = new HashMap<>();
+    private final HashMap<House,Integer> skill=new HashMap<>();
     // Player's thread
     public transient PlayerThread playerThread;
     // Player's thread
@@ -47,6 +44,7 @@ public class Player implements Serializable {
     private House house;
     // Player's skill
     private SkillState skillState = SkillState.NOT_USED;
+
 
 
     /**
@@ -79,6 +77,10 @@ public class Player implements Serializable {
         this.horcruxUsage.put(Horcrux.SNAKE, 0);
         this.horcruxUsage.put(Horcrux.LOCKET, 0);
         this.horcruxUsage.put(Horcrux.DIARY, 0);
+        this.skill.put(House.GRYFFINDOR,0);
+        this.skill.put(House.RAVENCLAW,0);
+        this.skill.put(House.HUFFLEPUFF,0);
+        this.skill.put(House.SLYTHERIN,0);
     }
 
     /**
@@ -234,6 +236,18 @@ public class Player implements Serializable {
         return worldLevel;
     }
 
+    public void updateSkill(){
+        skill.put(house,1);
+    }
+
+    public int getSkillUsed(){
+        return skill.get(house);
+    }
+
+    public void addSkill(){
+        skill.put(house,2);
+    }
+
     /**
      * return connection socket of this player
      *
@@ -266,6 +280,9 @@ public class Player implements Serializable {
         }
         this.coins += coins;
         this.horns += horns;
+        if(house.equals(House.RAVENCLAW)){
+            this.horns+=15;
+        }
     }
 
     /**
@@ -362,6 +379,18 @@ public class Player implements Serializable {
         return this.horcruxUsage;
     }
 
+    public void setHorcruxesList(HashMap<Horcrux, Integer> HorcruxesList){
+        this.horcruxUsage=HorcruxesList;
+    }
+
+    public HashMap<Horcrux, Integer> getHorcruxesStorage() {return this.horcruxes;}
+
+    public void setHorcruxesStorage(HashMap<Horcrux, Integer> HorcruxesStorage){
+        this.horcruxes=HorcruxesStorage;
+    }
+
+
+
     /**
      * Set horcrux usage
      *
@@ -441,7 +470,7 @@ public class Player implements Serializable {
      * If player buff Hufflepuff, return true
      */
     public boolean buffHufflepuff() {
-        return this.house == House.HUFFLEPUFF;
+        return this.house.equals(House.HUFFLEPUFF);
     }
 
     /**
