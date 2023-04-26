@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 
@@ -18,7 +17,6 @@ import edu.duke.shared.map.Territory;
 import edu.duke.shared.player.Horcrux;
 import edu.duke.shared.player.House;
 import edu.duke.shared.player.Player;
-import edu.duke.shared.player.SkillState;
 import edu.duke.shared.turn.Attack;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.MoveTurn;
@@ -268,8 +266,6 @@ public class Game implements Serializable {
      */
     public int getBonusFromType(UnitType type) {
         switch (type) {
-            case GNOME:
-                return 0;
             case DWARF:
                 return 1;
             case HOUSE_ELF:

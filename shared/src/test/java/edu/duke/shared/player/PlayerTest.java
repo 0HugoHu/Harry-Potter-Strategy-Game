@@ -25,7 +25,7 @@ public class PlayerTest {
 
     @Test
     public void updateResources() {
-        Player p = new Player(0, new Socket());
+        Player p = new Player(0, new Socket(),House.GRYFFINDOR);
         ArrayList<Territory> terrs = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             Territory t = new Territory("terr" + i);
