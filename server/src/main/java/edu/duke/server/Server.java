@@ -408,7 +408,7 @@ public class Server {
                 case 3:
                     this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.RING, 1);
                     System.out.println(this.game.getPlayerList().get(randomPlayer).getPlayerName() + " get the Ring!");
-                    this.game.setNewHorcrux(Horcrux.RING, 0);
+                    this.game.setNewHorcrux(Horcrux.RING, randomPlayer);
                     break;
                 case 4:
                     this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.CUP, 1);
