@@ -62,7 +62,7 @@ public class HorcruxDataModel {
             case HAT:
                 return "Immediately increase the number of unicorn horns by 150.";
             case DIARY:
-                return "Randomly disable one opponent's actions for their next turn.";
+                return "Randomly disable one opponent's actions for his/her next turn.";
             case LOCKET:
                 return "Destroy all the Dwarf troops for a random opponent in their next turn.";
             case RING:

@@ -52,6 +52,7 @@ import edu.duke.shared.Game;
 import edu.duke.shared.map.Territory;
 import edu.duke.shared.player.Horcrux;
 import edu.duke.shared.player.Player;
+import edu.duke.shared.player.SkillState;
 import edu.duke.shared.turn.Attack;
 import edu.duke.shared.turn.AttackTurn;
 import edu.duke.shared.turn.Move;
@@ -481,10 +482,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     showDialog("You have activated the skill: ", mPlayer.getSkillName(), "");
                     break;
                 case IN_EFFECT:
-                    item_use_btn.setText(R.string.used);
-                    item_use_btn.setTextColor(getResources().getColor(R.color.error_prompt));
-                    item_use_btn.setEnabled(false);
-                    break;
                 case USED:
                     break;
             }
@@ -1516,6 +1513,11 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         ui_coin.setText(String.valueOf(shown_coins));
         ui_horn.setText(String.valueOf(shown_horns));
         ui_world_level.setText(String.valueOf(player.getWorldLevel()));
+
+        if (mPlayer.getSkillState() == SkillState.USED) {
+            Button item_use_btn = item_view.findViewById(R.id.item_view_use_btn);
+            item_use_btn.setText(R.string.used);
+        }
     }
 
     /**
