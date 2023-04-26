@@ -181,8 +181,6 @@ public class Header implements Serializable {
     public String getNewHorcrux() {
         if (!this.NEW_HORCRUX) return null;
         switch (this.HORCRUX_ITEM) {
-            case HAT:
-                return "Ravenclaw's Diadem" + "%" + this.HORCRUX_ASSIGN_TO;
             case DIARY:
                 return "Riddle's Diary" + "%" + this.HORCRUX_ASSIGN_TO;
             case LOCKET:
@@ -194,7 +192,7 @@ public class Header implements Serializable {
             case SNAKE:
                 return "Nagini" + "%" + this.HORCRUX_ASSIGN_TO;
             default:
-                return null;
+                return "Ravenclaw's Diadem" + "%" + this.HORCRUX_ASSIGN_TO;
         }
     }
 }
