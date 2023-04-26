@@ -1,8 +1,5 @@
 package edu.duke.shared.helper;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -15,8 +12,6 @@ import java.net.Socket;
 import edu.duke.shared.Game;
 
 public class GameObject {
-    // Gson object
-    private final Gson gson;
     // The client socket
     public Socket socket;
 
@@ -27,10 +22,6 @@ public class GameObject {
      */
     public GameObject(Socket socket) {
         this.socket = socket;
-        this.gson = new GsonBuilder()
-                .enableComplexMapKeySerialization()
-                .serializeNulls()
-                .create();
     }
 
     /**
