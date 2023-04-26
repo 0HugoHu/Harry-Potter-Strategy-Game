@@ -9,7 +9,6 @@ import java.util.HashSet;
 
 import edu.duke.shared.Game;
 import edu.duke.shared.map.Territory;
-import edu.duke.shared.unit.Unit;
 
 
 public class Player implements Serializable {
@@ -438,9 +437,8 @@ public class Player implements Serializable {
      * Get player's skill name
      */
     public String getSkillName() {
+        if (this.house==null) return "Unknown";
         switch (this.house) {
-            case GRYFFINDOR:
-                return "Lion's Courage";
             case SLYTHERIN:
                 return "Serpent's Strategy";
             case HUFFLEPUFF:
@@ -448,7 +446,7 @@ public class Player implements Serializable {
             case RAVENCLAW:
                 return "Wings of Wisdom";
             default:
-                return "Unknown";
+                return "Lion's Courage";
         }
     }
 
