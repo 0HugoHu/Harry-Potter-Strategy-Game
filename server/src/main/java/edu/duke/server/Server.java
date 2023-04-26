@@ -38,6 +38,8 @@ public class Server {
     // Server socket
     private ServerSocket serverSocket;
 
+
+
     /**
      * Initialize Server by number of players
      *
@@ -262,7 +264,11 @@ public class Server {
         }
 
         useHorcrux();
+
+        detectSkill();
         useSkill();
+
+
 
         growUnits();
         growResources();
@@ -282,23 +288,64 @@ public class Server {
         }
     }
 
+
     public void useHorcrux() {
-        for (Player p :this.game.getPlayerList().get(0).playerThread.currGame.getPlayerList()) {
-            for (Map.Entry<Horcrux, Integer> entry : p.getHorcruxesList().entrySet()) {
-                for (int i = 0; i < entry.getValue(); i++) {
-                    if (entry.getKey().equals(Horcrux.SNAKE)) {
-                        this.game.useSnake(p);
-                    }
-                    if (entry.getKey().equals(Horcrux.LOCKET)) {
-                        this.game.useLocket(p);
-                    }
-                    if (entry.getKey().equals(Horcrux.RING)) {
-                        this.game.useRing(p);
+        int ringCount=0;
+        int loketCount=0;
+        int snakeCount=0;
+        for(int i=0;i<this.getNumOfPlayers();i++) {
+            Player p=this.game.getPlayerList().get(i).playerThread.currGame.getPlayerList().get(i);
+                for (Map.Entry<Horcrux, Integer> entry : p.getHorcruxesList().entrySet()) {
+                    for (int k = 0; k < entry.getValue(); k++) {
+                        if (entry.getKey().equals(Horcrux.SNAKE)) {
+                            this.game.useSnake(p);
+                            snakeCount++;
+                        }
+                        if (entry.getKey().equals(Horcrux.LOCKET)) {
+                            this.game.useLocket(p);
+                            loketCount++;
+                        }
+                        if (entry.getKey().equals(Horcrux.RING)) {
+                            this.game.useRing(p);
+                            ringCount++;
+                        }
                     }
                 }
+        }
+
+        for(int i=0;i<this.getNumOfPlayers();i++) {
+            Player p=this.game.getPlayerList().get(i).playerThread.currGame.getPlayerList().get(i);
+            for (Map.Entry<Horcrux, Integer> entry : p.getHorcruxesList().entrySet()) {
+                    if (entry.getKey().equals(Horcrux.SNAKE)) {
+                        p.removeFromHorcruxUsage(Horcrux.SNAKE,snakeCount);
+                    }
+
+                    if (entry.getKey().equals(Horcrux.LOCKET)) {
+                        p.removeFromHorcruxUsage(Horcrux.LOCKET,loketCount);
+                    }
+
+                    if (entry.getKey().equals(Horcrux.RING)) {
+                        p.removeFromHorcruxUsage(Horcrux.RING,ringCount);
+                    }
+
+            }
+        }
+
+
+    }
+
+
+    public void detectSkill(){
+        for(int i=0;i<this.getNumOfPlayers();i++){
+            Player p=this.game.getPlayerList().get(i).playerThread.currGame.getPlayerList().get(i);
+            System.out.println("skill used: "+p.getSkillUsed());
+            if(p.getSkillState().equals(SkillState.IN_EFFECT)){
+                this.game.getPlayerList().get(i).setSkillState(SkillState.USED);
+                p.setSkillState(SkillState.USED);
             }
         }
     }
+
 
     public void useSkill() {
         for(int i=0;i<this.getNumOfPlayers();i++){
@@ -309,21 +356,21 @@ public class Server {
                         p.setSkillState(SkillState.IN_EFFECT);
                         this.game.UseSkillGryffindor(p);
                     }
-                    p.updateSkill();
+                    p.addSkill();
                 }
                 if (p.getHouse().equals(House.RAVENCLAW)) {
                     if(p.getSkillUsed()==1){
                         this.game.getPlayerList().get(i).setSkillState(SkillState.IN_EFFECT);
                         p.setSkillState(SkillState.IN_EFFECT);
                     }
-                    p.updateSkill();
+                    p.addSkill();
                 }
                 if (p.getHouse().equals(House.HUFFLEPUFF)) {
                     if(p.getSkillUsed()==1){
                         this.game.getPlayerList().get(i).setSkillState(SkillState.IN_EFFECT);
                         p.setSkillState(SkillState.IN_EFFECT);
                     }
-                    p.updateSkill();
+                    p.addSkill();
                 }
                 if(p.getHouse().equals(House.SLYTHERIN)){
                     if(p.getSkillUsed()==1){
@@ -331,7 +378,7 @@ public class Server {
                         p.setSkillState(SkillState.IN_EFFECT);
                         this.game.UseSkillSytherin(p);
                     }
-                    p.updateSkill();
+                    p.addSkill();
                 }
         }
     }
@@ -342,10 +389,10 @@ public class Server {
             Random random = new Random();
             int randomPlayer = random.nextInt(this.game.getNumPlayers());
             int randomHorcrux = random.nextInt(6);
-            switch (randomHorcrux) {
+            switch (5) {
                 case 0:
-                    this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.LOCKET, 1);
-                    System.out.println(this.game.getPlayerList().get(randomPlayer).getPlayerName() + " get the Locket!");
+                    this.game.getPlayerList().get(0).addToHorcruxStorage(Horcrux.LOCKET, 1);
+                    System.out.println(this.game.getPlayerList().get(0).getPlayerName() + " get the Locket!");
                     this.game.setNewHorcrux(Horcrux.LOCKET, randomPlayer);
                     break;
                 case 1:
@@ -359,9 +406,9 @@ public class Server {
                     this.game.setNewHorcrux(Horcrux.DIARY, randomPlayer);
                     break;
                 case 3:
-                    this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.RING, 1);
-                    System.out.println(this.game.getPlayerList().get(randomPlayer).getPlayerName() + " get the Ring!");
-                    this.game.setNewHorcrux(Horcrux.RING, randomPlayer);
+                    this.game.getPlayerList().get(0).addToHorcruxStorage(Horcrux.RING, 1);
+                    System.out.println(this.game.getPlayerList().get(0).getPlayerName() + " get the Ring!");
+                    this.game.setNewHorcrux(Horcrux.RING, 0);
                     break;
                 case 4:
                     this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.CUP, 1);
@@ -369,8 +416,8 @@ public class Server {
                     this.game.setNewHorcrux(Horcrux.CUP, randomPlayer);
                     break;
                 case 5:
-                    this.game.getPlayerList().get(randomPlayer).addToHorcruxStorage(Horcrux.SNAKE, 1);
-                    System.out.println(this.game.getPlayerList().get(randomPlayer).getPlayerName() + " get the Snake!");
+                    this.game.getPlayerList().get(0).addToHorcruxStorage(Horcrux.SNAKE, 1);
+                    System.out.println(this.game.getPlayerList().get(0).getPlayerName() + " get the Snake!");
                     this.game.setNewHorcrux(Horcrux.SNAKE, randomPlayer);
                     break;
             }
