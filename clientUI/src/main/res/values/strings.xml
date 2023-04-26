@@ -116,8 +116,8 @@
 
     <string name="skill_r_desc">In the next turn, 30 units of Gnome soldiers will be granted to thee in a random territory.</string>
     <string name="skill_b_desc">In the next turn, the unicorn horns required for upgrading all units will be halved.</string>
-    <string name="skill_y_desc">For the next three turns, thou shalt be immune to attacks (attacking forces will be repelled).</string>
-    <string name="skill_g_desc">In the next turn, all the werewolf units of all enemies will be destroyed.</string>
+    <string name="skill_y_desc">In the next turn, thou shalt be immune to attacks (attacking forces will be repelled).</string>
+    <string name="skill_g_desc">In the next turn, all the werewolf creatures of all enemies will be destroyed.</string>
 
     <string name="skill_r_p2">Lion\'s Courage</string>
 
