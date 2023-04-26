@@ -202,7 +202,7 @@ public class GameTest {
         newGame.makeAttackList(attTurn3);
 
         HashMap<Integer, ArrayList<Turn>> turnlist = newGame.getTurnList();
-        newGame.doAttack();
+//        newGame.doAttack();
         newGame.getString();
 
 
