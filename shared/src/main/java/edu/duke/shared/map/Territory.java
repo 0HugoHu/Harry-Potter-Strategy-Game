@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import edu.duke.shared.player.House;
 import edu.duke.shared.player.Player;
 import edu.duke.shared.unit.Unit;
 import edu.duke.shared.unit.UnitType;

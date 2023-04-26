@@ -109,15 +109,15 @@
     <string name="buff_y">Shield of Loyalty</string>
     <string name="buff_g">Cunning Claw</string>
 
-    <string name="buff_r_desc">50% chance of 1 unit of creature counting as 1.5 units (rounded down) during an attack.</string>
-    <string name="buff_b_desc">An additional 15% or 30 points (whichever is higher) of unicorn horns each turn.</string>
+    <string name="buff_r_desc">50% chance of 1 bonus of creature counting as 1.5 bonus (rounded down) during an attack.</string>
+    <string name="buff_b_desc">An additional 15 of unicorn horns each turn.</string>
     <string name="buff_y_desc">20% chance of turning a failed defense into a success, and eliminating all attacking forces.</string>
     <string name="buff_g_desc">Resource consumption (move and attack) reduced by 20%.</string>
 
     <string name="skill_r_desc">In the next turn, 30 units of Gnome soldiers will be granted to thee in a random territory.</string>
     <string name="skill_b_desc">In the next turn, the unicorn horns required for upgrading all units will be halved.</string>
     <string name="skill_y_desc">For the next three turns, thou shalt be immune to attacks (attacking forces will be repelled).</string>
-    <string name="skill_g_desc">In the next turn, there will be a 20% chance of persuading a territory to switch sides.</string>
+    <string name="skill_g_desc">In the next turn, all the werewolf units of all enemies will be destroyed.</string>
 
     <string name="skill_r_p2">Lion\'s Courage</string>
 
@@ -137,14 +137,14 @@
 
     <string name="locket_effect_p1">Due to the power of&#160;</string>
     <string name="locket_effect_p2">Slytherin\'s Locket</string>
-    <string name="locket_effect_p3">, half of your Gnome were eliminated!</string>
+    <string name="locket_effect_p3">, all of your Dwarfs were eliminated!</string>
 
 
     <string name="use_diary_p1">Thou hast wielded&#160;</string>
     <string name="use_diary_p2">Riddle\'s Diary</string>
     <string name="use_stone_p1">With the&#160;</string>
     <string name="use_stone_p2">Resurrection Stone</string>
-    <string name="use_stone_p3">, 10 fallen creatures have been revived</string>
+    <string name="use_stone_p3">, 10 Gnomes have been revived</string>
     <string name="use_locket_p1">Slytherin\'s Locket</string>
     <string name="use_locket_p2">&#160;has been employed by thee</string>
     <string name="use_cup_p1">Hufflepuff\'s Cup</string>
