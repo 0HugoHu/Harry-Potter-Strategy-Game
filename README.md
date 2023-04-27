@@ -157,7 +157,7 @@ There are six types of Horcuxes:
 
 🌟 Nagini: Immediately randomly capture an adjacent enemy territory (troops on the territory become yours).
 
-<img src="assets/Evo2/upgrade.png" width="600" />
+<img src="assets/Evol3/horcurx.png" width="600" />
 
 🔱 4.6.2. Buff: At the beginning of this game, each player is assigned one Buff according to their House. The Buff will automatically take effect through the whole game process. 
 
@@ -180,7 +180,7 @@ There are six types of Horcuxes:
 
 🔮 Serpent's Strategy(Slytherin): In the next turn, all the werewolf creatures of all enemies will be destroyed.
 
-<img src="assets/Evo2/upgrade.png" width="600" />
+<img src="assets/Evol3/skill.png" width="600" />
 
 ### 4.7. Game Over
 
