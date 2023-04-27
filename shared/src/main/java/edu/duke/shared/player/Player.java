@@ -391,6 +391,13 @@ public class Player implements Serializable {
         this.horcruxes=HorcruxesStorage;
     }
 
+    public void setHorcruxTarget(HashMap<Horcrux, Boolean> horcruxtarget){
+        this.horcruxTarget=horcruxtarget;
+    }
+
+    public HashMap<Horcrux, Boolean> getHorcruxTarget(){
+        return this.horcruxTarget;
+    }
 
 
     /**
@@ -417,6 +424,19 @@ public class Player implements Serializable {
         return this.horcruxTarget.getOrDefault(Horcrux.DIARY, false);
     }
 
+    public void setDiaryTarget(){
+        this.horcruxTarget.put(Horcrux.DIARY, true);
+    }
+
+    public void muteDiaryTarget(){
+        this.horcruxTarget.put(Horcrux.DIARY,false);
+    }
+
+    public void muteTarget(Horcrux horcrux){
+        this.horcruxTarget.put(horcrux,false);
+    }
+
+
     /**
      * If is snake
      * , return true
@@ -429,11 +449,23 @@ public class Player implements Serializable {
         this.horcruxTarget.put(Horcrux.SNAKE, true);
     }
 
+    public void muteSnakeTarget(){
+        this.horcruxTarget.put(Horcrux.SNAKE, false);
+    }
+
     /**
      * If is locket target, return true
      */
     public boolean isLocketTarget() {
         return this.horcruxTarget.getOrDefault(Horcrux.LOCKET, false);
+    }
+
+    public void setLocketTarget(){
+        this.horcruxTarget.put(Horcrux.LOCKET, true);
+    }
+
+    public void muteLocketTarget(){
+        this.horcruxTarget.put(Horcrux.LOCKET, false);
     }
 
     /**

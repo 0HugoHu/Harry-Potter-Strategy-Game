@@ -38,6 +38,8 @@ public class Server {
     // Server socket
     private ServerSocket serverSocket;
 
+    private HashMap<Horcrux,Player> map=new HashMap<>();
+
 
 
     /**
@@ -187,7 +189,7 @@ public class Server {
                 // Create an object, and a thread is started
                 Player player = new Player(i, socket, this.serverHouseMapping.get(i));
                 this.game.addPlayer(player);
-                player.addToHorcruxUsage(Horcrux.SNAKE, 2);
+                player.addToHorcruxStorage(Horcrux.SNAKE, 2);
                 player.addToHorcruxStorage(Horcrux.DIARY, 2);
                 player.addToHorcruxStorage(Horcrux.CUP, 2);
                 player.addToHorcruxStorage(Horcrux.RING, 2);
@@ -269,12 +271,11 @@ public class Server {
             return;
         }
 
+        checkHorcurx();
         useHorcrux();
 
         detectSkill();
         useSkill();
-
-
 
         growUnits();
         growResources();
@@ -295,25 +296,44 @@ public class Server {
     }
 
 
+    public void checkHorcurx(){
+        if(map.size()>0) {
+            for (Map.Entry<Horcrux, Player> entry : map.entrySet()) {
+                Player p = entry.getValue();
+                p.muteTarget(entry.getKey());
+            }
+            map.clear();
+        }
+    }
+
+
     public void useHorcrux() {
         int ringCount=0;
         int loketCount=0;
         int snakeCount=0;
+        int diaryCount=0;
         for(int i=0;i<this.getNumOfPlayers();i++) {
             Player p=this.game.getPlayerList().get(i).playerThread.currGame.getPlayerList().get(i);
                 for (Map.Entry<Horcrux, Integer> entry : p.getHorcruxesList().entrySet()) {
                     for (int k = 0; k < entry.getValue(); k++) {
                         if (entry.getKey().equals(Horcrux.SNAKE)) {
-                            this.game.useSnake(p);
+                            Player p1=this.game.useSnake(p);
+                            map.put(Horcrux.SNAKE,p1);
                             snakeCount++;
                         }
                         if (entry.getKey().equals(Horcrux.LOCKET)) {
-                            this.game.useLocket(p);
+                            Player p2=this.game.useLocket(p);
+                            map.put(Horcrux.LOCKET,p2);
                             loketCount++;
                         }
                         if (entry.getKey().equals(Horcrux.RING)) {
                             this.game.useRing(p);
                             ringCount++;
+                        }
+                        if(entry.getKey().equals(Horcrux.DIARY)){
+                            Player p3=this.game.useDiary(p);
+                            map.put(Horcrux.DIARY,p3);
+                            diaryCount++;
                         }
                     }
                 }
@@ -322,21 +342,23 @@ public class Server {
         for(int i=0;i<this.getNumOfPlayers();i++) {
             Player p=this.game.getPlayerList().get(i).playerThread.currGame.getPlayerList().get(i);
             for (Map.Entry<Horcrux, Integer> entry : p.getHorcruxesList().entrySet()) {
-                    if (entry.getKey().equals(Horcrux.SNAKE)) {
-                        p.removeFromHorcruxUsage(Horcrux.SNAKE,snakeCount);
-                    }
+                if (entry.getKey().equals(Horcrux.SNAKE)) {
+                    p.removeFromHorcruxUsage(Horcrux.SNAKE,snakeCount);
+                }
 
-                    if (entry.getKey().equals(Horcrux.LOCKET)) {
-                        p.removeFromHorcruxUsage(Horcrux.LOCKET,loketCount);
-                    }
+                if (entry.getKey().equals(Horcrux.LOCKET)) {
+                    p.removeFromHorcruxUsage(Horcrux.LOCKET,loketCount);
+                }
 
-                    if (entry.getKey().equals(Horcrux.RING)) {
-                        p.removeFromHorcruxUsage(Horcrux.RING,ringCount);
-                    }
+                if (entry.getKey().equals(Horcrux.RING)) {
+                    p.removeFromHorcruxUsage(Horcrux.RING,ringCount);
+                }
+                if (entry.getKey().equals(Horcrux.DIARY)) {
+                    p.removeFromHorcruxUsage(Horcrux.DIARY,diaryCount);
+                }
 
             }
         }
-
 
     }
 
