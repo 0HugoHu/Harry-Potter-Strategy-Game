@@ -213,6 +213,8 @@ public class Server {
             // Start thread for each player
             this.game.getPlayerList().get(i).start(this.game);
 
+            System.out.println(this.game.getPlayerList().get(i).isDiaryTarget());
+
             // Send message to client
             Socket clientSocket = this.game.getPlayerList().get(i).getSocket();
             this.gameObject.setSocket(clientSocket);
