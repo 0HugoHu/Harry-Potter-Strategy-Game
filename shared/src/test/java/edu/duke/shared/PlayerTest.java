@@ -145,9 +145,9 @@ public class PlayerTest {
     }
 
     @Test
-    public void start(){
-        Player p = new Player(0,new Socket());
-        Game g = new Game(2,24);
+    public void start() {
+        Player p = new Player(0, new Socket());
+        Game g = new Game(2, 24);
         g.setGameState(State.GAME_OVER);
         p.start(g);
         p.threadJoin();
