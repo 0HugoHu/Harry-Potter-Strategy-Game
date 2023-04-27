@@ -702,7 +702,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 String cost_s = "Upgrade: " + cost + " horns";
                 unit_upgrade_btn.setText(cost_s);
                 boolean flag = false;
-                if (mPlayer.getCoins() > cost) {
+                if (mPlayer.getHorns() > cost) {
                     if (mGame.getMap().getTerritory(orderTerrFrom).getOwner().equals(mGame.getPlayerName())) {
                         unit_upgrade_btn.setEnabled(true);
                         unit_num.setEnabled(true);
