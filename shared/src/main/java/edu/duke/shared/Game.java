@@ -107,7 +107,7 @@ public class Game implements Serializable {
      *
      * @param p
      */
-    public void useSnake(Player p) {
+    public Player useSnake(Player p) {
         for (Territory t : p.getPlayerTerrs()) {
             if (t.getAdjacents().size() > 0) {
                 for (String nearBy : t.getAdjacents()) {
@@ -120,11 +120,22 @@ public class Game implements Serializable {
                         terr.changePlayerOwner(p);
                         p.getPlayerTerrs().add(terr);
                         formerOwner.getPlayerTerrs().remove(terr);
-                        return;
+                        return formerOwner;
                     }
                 }
             }
         }
+        return null;
+    }
+
+    public Player useDiary(Player p){
+        for (Player enemy : getPlayerList()){
+            if (!enemy.getPlayerName().equals(p.getPlayerName())){
+                enemy.setDiaryTarget();
+                return enemy;
+            }
+        }
+        return null;
     }
 
 
@@ -134,9 +145,10 @@ public class Game implements Serializable {
      *
      * @param p
      */
-    public void useLocket(Player p) {
+    public Player useLocket(Player p) {
         for (Player enemy : getPlayerList()) {
             if (!enemy.getPlayerName().equals(p.getPlayerName())) {
+                enemy.setLocketTarget();
                 for (Territory t : gameMap.getTerritories()) {
                     if ((t.getOwner().equals(enemy.getPlayerName())) && (t.getUnits() != null)) {
                         HashMap<UnitType, Integer> map = convertToMap(t.getUnits());
@@ -148,9 +160,10 @@ public class Game implements Serializable {
                         }
                     }
                 }
-                return;
+                return enemy;
             }
         }
+        return null;
     }
 
     /**
@@ -191,7 +204,6 @@ public class Game implements Serializable {
         }
 
     }
-
 
     /**
      * Allow player to use the skill of GRYFFINDOR,
