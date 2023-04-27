@@ -139,12 +139,30 @@ all
 battles results will shown on the map, and the corresponding resources will be added to users based
 on the territories they have.
 
-### 4.6. Game Over
+### 4.6. New features
 
-🔰 4.6.1. If one player has lost all his/her territories, then he/she lost. If he/she hasn't lost,
+🔱 4.6.1. Horcrux: Every two turns, one Horcrux will be randomly assigned to one of the players. The Horcrux is obtained at the beginning of the turn, and can be utilized in this current turn or furture turns. 
+
+There are six types of Horcuxes: 
+
+🌟 Riddle's Diary: Randomly disable one opponent's actions for his/her next turn.
+
+🌟 Gaunt's Ring: Instantly revive the 10 Gnome units.
+
+🌟 Slytherin's Locket: Destroy all the Dwarf troops for a random opponent in their next turn.
+
+🌟 Hufflepuff's Cup: Instantly increase the number of gold coins by 300.
+
+🌟 Ravenclaw's Diadem: Immediately increase the number of unicorn horns by 150.
+
+🌟 Nagini: Immediately randomly capture an adjacent enemy territory (troops on the territory become yours).
+
+### 4.7. Game Over
+
+🔰 4.7.1. If one player has lost all his/her territories, then he/she lost. If he/she hasn't lost,
 they can also click the "player" on the upper left and chose to surrender.
 
-🔰 4.6.2. If then, there is only one player left, he/she is the winner, and the following pis will
+🔰 4.7.2. If then, there is only one player left, he/she is the winner, and the following pis will
 be
 shown:
 
