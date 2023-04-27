@@ -293,6 +293,10 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     global_dialog.setVisibility(View.GONE);
                     break;
                 case TURN_BEGIN:
+                    for (Player p : mGame.getPlayerList()) {
+                        System.out.println("Diary Target" + p.getPlayerName() + " " + p.isDiaryTarget());
+                    }
+
                     currentCoinExpense = 0;
                     currentHornExpense = 0;
                     unitMoveAttackMap = new HashMap<>();
@@ -313,6 +317,8 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                         // If was used the diary
                         if (this.mPlayer.isDiaryTarget()) {
                             commit();
+                            showWaitTexts();
+                            break;
                         }
                     }
                     ui_view.findViewById(R.id.ui_side_bar_init).setVisibility(View.GONE);
