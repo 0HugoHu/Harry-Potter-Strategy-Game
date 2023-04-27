@@ -26,8 +26,6 @@
 7. [CopyRight](#7-copyright)
 8. [License](#8-license)
 
----
-
 
 ## 0. Group Members
 
@@ -35,7 +33,6 @@
 - 👦 **Yadong Hu** (yh342)
 - 👦 **Yu Wu** (yw541)
 
----
 
 ## 1. Project Task List
 
@@ -50,7 +47,6 @@ to visit Excel document.**
 - 📜 **Evo.3:
 Document not required!**
 
----
 
 ## 2. UML Graph
 
@@ -62,7 +58,6 @@ to view the full picture.**
 
 - 🔎 **Evo.3: Not required!**
 
----
 
 ## 3. Coverage Report & Statistics
 
@@ -70,7 +65,6 @@ to view the full picture.**
 
 - 📊 **Evo.3: Click ([Project](assets/Images/statistics_whole.png), [Java1](assets/Images/statistics_java1.png), [Java2](assets/Images/statistics_java2.png), [Java3](assets/Images/statistics_java3.png), [Xml](assets/Images/statistics_xml.png)) for the project code statistics.**
 
----
 
 ## 4. Demo
 
@@ -81,7 +75,6 @@ to view the full picture.**
 
 <i>For more login pages, please refer to [here](assets/Evo3/login_more.PNG). </i>
 
-<br/>
 
 | House Page | |
 | :---: | :---: |
@@ -100,7 +93,6 @@ to view the full picture.**
 
 <i>For more world technology pages, please refer to [here](assets/Evo3/wand_more.PNG). </i>
 
-<br/>
 
 | Unit & Move & Attack Page | |
 | :---: | :---: |
@@ -109,7 +101,6 @@ to view the full picture.**
 
 <i>For more unit upgrade pages, please refer to [here](assets/Evo3/unit_upgrade_more.PNG). </i>
 
-<br/>
 
 | Action Page | |
 | :---: | :---: |
@@ -117,7 +108,6 @@ to view the full picture.**
 
 <i>For more territory property pages, please refer to [here](assets/Evo3/terr_property_more.PNG). </i>
 
-<br/>
 
 | Game Over Page | |
 | :---: | :---: |
@@ -131,14 +121,12 @@ to view the full picture.**
 
 <i>For more waiting pages, please refer to [here](assets/Evo3/waiting_more.PNG). </i>
 
-<br/>
 
-| Game Support 2~4 Players | |
+| Game Supports 2~4 Players | |
 | :---: | :---: |
 | <img src="assets/Evo3/player2.png" width="300" />|<img src="assets/Evo3/player3.png" width="300" />|
 | <img src="assets/Evo3/player4.png" width="300" /> | |
 
----
 
 ## 5. Tutorials
 
@@ -155,7 +143,7 @@ Gryffindor, Hufflepuff, Ravenclaw or Slytherin.
 
 Wait for players to connect to the server.
 
-<br/>
+
 
 ### 5.2. Start the Clients
 
@@ -177,11 +165,12 @@ private static final String HOST = "114.514.0.0";
 ✅ Next, you can choose to play with your other friends (let them run the Android application as well), or play with ```AI``` by running the command:
 
 ```bash
-# Change "vcm-xxxxx.vm.duke.edu" in "client_mock.sh" to your own virtual machine host name, and add or delete some clients if you need.
+# Change "vcm-xxxxx.vm.duke.edu" in "client_mock.sh" 
+# to your own virtual machine host name, and add or 
+# delete some clients if you need.
 ./client_mock.sh
 ```
 
-<br/>
 
 ### 5.3. Player login
 
@@ -196,7 +185,6 @@ private static final String HOST = "114.514.0.0";
 
 <img src="assets/Evo3/welcome_b.png" width="600" />
 
-<br/>
 
 ### 5.4. Unit Allocations
 
@@ -204,7 +192,6 @@ private static final String HOST = "114.514.0.0";
 
 <img src="assets/Evo3/unit_placement.png" width="600" />
 
-<br/>
 
 ### 5.5. Game Stage
 
@@ -249,8 +236,6 @@ If you successfully upgrade units, you will see the following prompt:
 🔱 5.5.7. Players can also use ```Horcrux``` as of Evolution 3. This will be covered in the following sections.
 
 After all players have finished commiting orders, this turn ends, and in the next turn all battles results will shown on the map, and the corresponding resources will be added to users based on the territories they have.
-
-<br/>
 
 
 ### 5.6. New features
@@ -300,7 +285,6 @@ There are six types of Horcuxes:
 
 <img src="assets/Evo3/skill_y.png" width="600" />
 
-<br/>
 
 ### 5.7. Game Over
 
@@ -311,8 +295,6 @@ There are six types of Horcuxes:
 <img src="assets/Evo3/win_g.png" width="600" />
 
 
----
-
 ## 6. Moreover
 
 🦋 This game has launched its final version. 
@@ -321,13 +303,11 @@ If you have any suggestions, please feel free to contact us.
 
 This project is open sourced on GitHub to help later Duke students better learn the course.
 
----
 
 ## 7. CopyRight
 
 © Most of the assets used in this project came from the official **Harry Potter: The Wizarding Awakening** website and mobile games. This project is for personal study only, please do not use the materials for commercial purposes.
 
----
 
 ## 8. License
 
