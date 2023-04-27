@@ -26,7 +26,7 @@ public class PlayerTest {
 
     @Test
     public void updateResources() {
-        Player p = new Player(0, new Socket(),House.GRYFFINDOR);
+        Player p = new Player(0, new Socket(), House.GRYFFINDOR);
         ArrayList<Territory> terrs = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             Territory t = new Territory("terr" + i);
@@ -37,7 +37,7 @@ public class PlayerTest {
         assertEquals(30, p.getHorns());
         p.setHouse(House.RAVENCLAW);
         p.updateResources(terrs);
-        assertEquals(75,p.getHorns());
+        assertEquals(75, p.getHorns());
 //        assertEquals(150,p.getCoins());
     }
 
@@ -122,125 +122,125 @@ public class PlayerTest {
 
     @Test
     public void updateSkill() {
-        Player p = new Player(0,new Socket(),House.GRYFFINDOR);
+        Player p = new Player(0, new Socket(), House.GRYFFINDOR);
         p.updateSkill();
-        assertEquals(1,p.getSkillUsed());
+        assertEquals(1, p.getSkillUsed());
     }
 
     @Test
     public void addSkill() {
-        Player p = new Player(0,new Socket(),House.GRYFFINDOR);
+        Player p = new Player(0, new Socket(), House.GRYFFINDOR);
         p.addSkill();
-        assertEquals(2,p.getSkillUsed());
+        assertEquals(2, p.getSkillUsed());
     }
 
 
     @Test
     public void addToHorcruxStorage() {
-        Player p = new Player(0,new Socket(),House.GRYFFINDOR);
-        assertEquals(0,p.getHorcruxStorage(Horcrux.CUP));
-        p.addToHorcruxStorage(Horcrux.CUP,2);
-        assertEquals(2,p.getHorcruxStorage(Horcrux.CUP));
+        Player p = new Player(0, new Socket(), House.GRYFFINDOR);
+        assertEquals(0, p.getHorcruxStorage(Horcrux.CUP));
+        p.addToHorcruxStorage(Horcrux.CUP, 2);
+        assertEquals(2, p.getHorcruxStorage(Horcrux.CUP));
     }
 
     @Test
     public void removeFromHorcruxStorage() {
-        Player p = new Player(0,new Socket(),House.GRYFFINDOR);
-        assertEquals(0,p.getHorcruxStorage(Horcrux.CUP));
-        p.addToHorcruxStorage(Horcrux.CUP,2);
-        assertEquals(2,p.getHorcruxStorage(Horcrux.CUP));
-        p.removeFromHorcruxStorage(Horcrux.CUP,1);
-        assertEquals(1,p.getHorcruxStorage(Horcrux.CUP));
+        Player p = new Player(0, new Socket(), House.GRYFFINDOR);
+        assertEquals(0, p.getHorcruxStorage(Horcrux.CUP));
+        p.addToHorcruxStorage(Horcrux.CUP, 2);
+        assertEquals(2, p.getHorcruxStorage(Horcrux.CUP));
+        p.removeFromHorcruxStorage(Horcrux.CUP, 1);
+        assertEquals(1, p.getHorcruxStorage(Horcrux.CUP));
     }
 
     @Test
     public void getHorcruxUsage() {
-        Player p = new Player(0,new Socket(),House.GRYFFINDOR);
-        assertEquals(0,p.getHorcruxUsage(Horcrux.CUP));
+        Player p = new Player(0, new Socket(), House.GRYFFINDOR);
+        assertEquals(0, p.getHorcruxUsage(Horcrux.CUP));
     }
 
     @Test
     public void getHorcruxesList() {
-        Player p = new Player(0,new Socket(),House.GRYFFINDOR);
-        HashMap<Horcrux,Integer> h = p.getHorcruxesList();
-        assertEquals(0,h.get(Horcrux.CUP).intValue());
+        Player p = new Player(0, new Socket(), House.GRYFFINDOR);
+        HashMap<Horcrux, Integer> h = p.getHorcruxesList();
+        assertEquals(0, h.get(Horcrux.CUP).intValue());
     }
 
     @Test
     public void setHorcruxesList() {
-        Player p = new Player(0,new Socket(),House.GRYFFINDOR);
-        HashMap<Horcrux,Integer> h = new HashMap<>();
+        Player p = new Player(0, new Socket(), House.GRYFFINDOR);
+        HashMap<Horcrux, Integer> h = new HashMap<>();
         p.setHorcruxesList(h);
     }
 
     @Test
     public void getHorcruxesStorage() {
-        Player p = new Player(0,new Socket(),House.GRYFFINDOR);
-        HashMap<Horcrux,Integer> h = p.getHorcruxesStorage();
-        assertEquals(0,h.get(Horcrux.CUP).intValue());
+        Player p = new Player(0, new Socket(), House.GRYFFINDOR);
+        HashMap<Horcrux, Integer> h = p.getHorcruxesStorage();
+        assertEquals(0, h.get(Horcrux.CUP).intValue());
     }
 
     @Test
     public void setHorcruxesStorage() {
-        Player p = new Player(0,new Socket(),House.GRYFFINDOR);
-        HashMap<Horcrux,Integer> h = new HashMap<>();
+        Player p = new Player(0, new Socket(), House.GRYFFINDOR);
+        HashMap<Horcrux, Integer> h = new HashMap<>();
         p.setHorcruxesStorage(h);
     }
 
     @Test
     public void addToHorcruxUsage() {
-        Player p = new Player(0,new Socket(),House.GRYFFINDOR);
-        assertEquals(0,p.getHorcruxUsage(Horcrux.CUP));
-        p.addToHorcruxUsage(Horcrux.CUP,1);
-        assertEquals(1,p.getHorcruxUsage(Horcrux.CUP));
+        Player p = new Player(0, new Socket(), House.GRYFFINDOR);
+        assertEquals(0, p.getHorcruxUsage(Horcrux.CUP));
+        p.addToHorcruxUsage(Horcrux.CUP, 1);
+        assertEquals(1, p.getHorcruxUsage(Horcrux.CUP));
 
     }
 
     @Test
     public void removeFromHorcruxUsage() {
-        Player p = new Player(0,new Socket(),House.GRYFFINDOR);
-        assertEquals(0,p.getHorcruxUsage(Horcrux.CUP));
-        p.addToHorcruxUsage(Horcrux.CUP,1);
-        assertEquals(1,p.getHorcruxUsage(Horcrux.CUP));
-        p.removeFromHorcruxUsage(Horcrux.CUP,1);
-        assertEquals(0,p.getHorcruxUsage(Horcrux.CUP));
+        Player p = new Player(0, new Socket(), House.GRYFFINDOR);
+        assertEquals(0, p.getHorcruxUsage(Horcrux.CUP));
+        p.addToHorcruxUsage(Horcrux.CUP, 1);
+        assertEquals(1, p.getHorcruxUsage(Horcrux.CUP));
+        p.removeFromHorcruxUsage(Horcrux.CUP, 1);
+        assertEquals(0, p.getHorcruxUsage(Horcrux.CUP));
     }
 
     @Test
     public void isDiaryTarget() {
-        Player p = new Player(0,new Socket(),House.GRYFFINDOR);
+        Player p = new Player(0, new Socket(), House.GRYFFINDOR);
         assertFalse(p.isDiaryTarget());
     }
 
     @Test
     public void isSnakeTarget() {
-        Player p = new Player(0,new Socket(),House.GRYFFINDOR);
+        Player p = new Player(0, new Socket(), House.GRYFFINDOR);
         assertFalse(p.isSnakeTarget());
     }
 
     @Test
     public void isLocketTarget() {
-        Player p = new Player(0,new Socket(),House.GRYFFINDOR);
+        Player p = new Player(0, new Socket(), House.GRYFFINDOR);
         assertFalse(p.isLocketTarget());
     }
 
     @Test
     public void getSkillName() {
-        Player p = new Player(0,new Socket());
-        assertEquals("Unknown",p.getSkillName());
+        Player p = new Player(0, new Socket());
+        assertEquals("Unknown", p.getSkillName());
         p.setHouse(House.GRYFFINDOR);
-        assertEquals("Lion's Courage",p.getSkillName());
+        assertEquals("Lion's Courage", p.getSkillName());
         p.setHouse(House.RAVENCLAW);
-        assertEquals("Wings of Wisdom",p.getSkillName());
+        assertEquals("Wings of Wisdom", p.getSkillName());
         p.setHouse(House.HUFFLEPUFF);
-        assertEquals("Steadfast Roots",p.getSkillName());
+        assertEquals("Steadfast Roots", p.getSkillName());
         p.setHouse(House.SLYTHERIN);
-        assertEquals("Serpent's Strategy",p.getSkillName());
+        assertEquals("Serpent's Strategy", p.getSkillName());
     }
 
     @Test
     public void buffHufflepuff() {
-        Player p = new Player(0,new Socket(),House.GRYFFINDOR);
+        Player p = new Player(0, new Socket(), House.GRYFFINDOR);
         assertFalse(p.buffHufflepuff());
         p.setHouse(House.HUFFLEPUFF);
         assertTrue(p.buffHufflepuff());
@@ -248,7 +248,7 @@ public class PlayerTest {
 
     @Test
     public void buffRavenclaw() {
-        Player p = new Player(0,new Socket(),House.GRYFFINDOR);
+        Player p = new Player(0, new Socket(), House.GRYFFINDOR);
         assertFalse(p.buffRavenclaw());
         p.setHouse(House.RAVENCLAW);
         assertTrue(p.buffRavenclaw());
@@ -256,7 +256,7 @@ public class PlayerTest {
 
     @Test
     public void skillHufflepuff() {
-        Player p = new Player(0,new Socket(),House.GRYFFINDOR);
+        Player p = new Player(0, new Socket(), House.GRYFFINDOR);
         assertFalse(p.skillHufflepuff());
         p.setHouse(House.HUFFLEPUFF);
         assertFalse(p.skillHufflepuff());
@@ -269,7 +269,7 @@ public class PlayerTest {
 
     @Test
     public void skillRavenclaw() {
-        Player p = new Player(0,new Socket(),House.GRYFFINDOR);
+        Player p = new Player(0, new Socket(), House.GRYFFINDOR);
         assertFalse(p.skillRavenclaw());
         p.setHouse(House.RAVENCLAW);
         assertFalse(p.skillRavenclaw());
@@ -282,7 +282,7 @@ public class PlayerTest {
 
     @Test
     public void getSkillState() {
-        Player p = new Player(0,new Socket(),House.GRYFFINDOR);
-        assertEquals(SkillState.NOT_USED,p.getSkillState());
+        Player p = new Player(0, new Socket(), House.GRYFFINDOR);
+        assertEquals(SkillState.NOT_USED, p.getSkillState());
     }
 }

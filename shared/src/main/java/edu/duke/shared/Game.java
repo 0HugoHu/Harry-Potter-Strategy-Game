@@ -128,9 +128,9 @@ public class Game implements Serializable {
         return null;
     }
 
-    public Player useDiary(Player p){
+    public Player useDiary(Player p) {
         int targetPlayer = new Random().nextInt(getPlayerList().size());
-        while (getPlayerList().get(targetPlayer).getPlayerName().equals(p.getPlayerName())){
+        while (getPlayerList().get(targetPlayer).getPlayerName().equals(p.getPlayerName())) {
             targetPlayer = new Random().nextInt(getPlayerList().size());
         }
         getPlayerList().get(targetPlayer).setDiaryTarget();

@@ -316,6 +316,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                         updatePlayerValues();
                         // If was used the diary
                         if (this.mPlayer.isDiaryTarget()) {
+                            showDialog(getResources().getString(R.string.turn), String.valueOf(this.mGame.getTurn()), getResources().getString(R.string.begins));
                             commit();
                             showWaitTexts();
                             break;
