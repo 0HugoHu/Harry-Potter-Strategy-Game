@@ -157,6 +157,26 @@ There are six types of Horcuxes:
 
 🌟 Nagini: Immediately randomly capture an adjacent enemy territory (troops on the territory become yours).
 
+🔱 4.6.2. Buff: At the beginning of this game, each player is assigned one Buff according to their House. The Buff will automatically take effect through the whole game process. 
+
+💫 Heart of a Warrior(Gryffindor): 50% chance of 1 bonus of creature counting as 1.5 bonus (rounded down) during an attack.
+
+💫 Crown of Wisdom(Ravenclaw): An additional 15 of unicorn horns each turn.
+
+💫 Shield of Loyalty(Hufflepuff): 20% chance of turning a failed defense into a success, and eliminating all attacking forces.
+
+💫 Cunning Claw(Slytherin): Resource consumption (move and attack) reduced by 20%.
+
+🔱 4.6.2. Skills: At the beginning of the game, each player will also be assigned one special skill according to their House. The special skill can only be used once.
+
+🔮 Lion's Courage(Gryffindor): In the next turn, 30 units of Gnome soldiers will be granted to thee in a random territory.
+
+🔮 Wings of Wisdom(Ravenclaw): In the next turn, the unicorn horns required for upgrading all units will be halved.
+
+🔮 Steadfast Roots(Hufflepuff): In the next turn, thou shalt be immune to attacks (attacking forces will be repelled).
+
+🔮 Serpent's Strategy(Slytherin): In the next turn, all the werewolf creatures of all enemies will be destroyed.
+
 ### 4.7. Game Over
 
 🔰 4.7.1. If one player has lost all his/her territories, then he/she lost. If he/she hasn't lost,
