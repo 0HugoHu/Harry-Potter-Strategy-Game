@@ -17,10 +17,10 @@ public class PlayerTest {
     @Test
     public void upgradeCost() {
         assertEquals(60, Player.upgradeCost(2));
-        assertEquals(100, Player.upgradeCost(3));
-        assertEquals(200, Player.upgradeCost(4));
-        assertEquals(300, Player.upgradeCost(5));
-        assertEquals(400, Player.upgradeCost(6));
+        assertEquals(120, Player.upgradeCost(3));
+        assertEquals(300, Player.upgradeCost(4));
+        assertEquals(500, Player.upgradeCost(5));
+        assertEquals(1000, Player.upgradeCost(6));
         assertEquals(60, Player.upgradeCost(7));
     }
 
