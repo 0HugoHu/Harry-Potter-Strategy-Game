@@ -90,8 +90,8 @@ public class HeaderTest {
     public void setNewHorcrux() {
         Header h = new Header();
         assertNull(h.getNewHorcrux());
-        h.setNewHorcrux(Horcrux.CUP,1);
-        assertEquals("Hufflepuff's Cup%1",h.getNewHorcrux());
+        h.setNewHorcrux(Horcrux.CUP, 1);
+        assertEquals("Hufflepuff's Cup%1", h.getNewHorcrux());
 
     }
 
@@ -99,8 +99,8 @@ public class HeaderTest {
     public void setNoHorcrux() {
         Header h = new Header();
         assertNull(h.getNewHorcrux());
-        h.setNewHorcrux(Horcrux.CUP,1);
-        assertEquals("Hufflepuff's Cup%1",h.getNewHorcrux());
+        h.setNewHorcrux(Horcrux.CUP, 1);
+        assertEquals("Hufflepuff's Cup%1", h.getNewHorcrux());
         h.setNoHorcrux();
         assertNull(h.getNewHorcrux());
     }
@@ -109,23 +109,23 @@ public class HeaderTest {
     public void getNewHorcrux() {
         Header h = new Header();
 
-        h.setNewHorcrux(Horcrux.HAT,1);
-        assertEquals("Ravenclaw's Diadem%1",h.getNewHorcrux());
+        h.setNewHorcrux(Horcrux.HAT, 1);
+        assertEquals("Ravenclaw's Diadem%1", h.getNewHorcrux());
 
-        h.setNewHorcrux(Horcrux.DIARY,1);
-        assertEquals("Riddle's Diary%1",h.getNewHorcrux());
+        h.setNewHorcrux(Horcrux.DIARY, 1);
+        assertEquals("Riddle's Diary%1", h.getNewHorcrux());
 
-        h.setNewHorcrux(Horcrux.LOCKET,1);
-        assertEquals("Slytherin's Locket%1",h.getNewHorcrux());
+        h.setNewHorcrux(Horcrux.LOCKET, 1);
+        assertEquals("Slytherin's Locket%1", h.getNewHorcrux());
 
-        h.setNewHorcrux(Horcrux.RING,1);
-        assertEquals("Gaunt's Ring%1",h.getNewHorcrux());
+        h.setNewHorcrux(Horcrux.RING, 1);
+        assertEquals("Gaunt's Ring%1", h.getNewHorcrux());
 
-        h.setNewHorcrux(Horcrux.CUP,1);
-        assertEquals("Hufflepuff's Cup%1",h.getNewHorcrux());
+        h.setNewHorcrux(Horcrux.CUP, 1);
+        assertEquals("Hufflepuff's Cup%1", h.getNewHorcrux());
 
-        h.setNewHorcrux(Horcrux.SNAKE,1);
-        assertEquals("Nagini%1",h.getNewHorcrux());
+        h.setNewHorcrux(Horcrux.SNAKE, 1);
+        assertEquals("Nagini%1", h.getNewHorcrux());
 
     }
 }
