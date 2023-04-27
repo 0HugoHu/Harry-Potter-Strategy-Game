@@ -14,13 +14,7 @@ import edu.duke.shared.map.Territory;
 public class Player implements Serializable {
     // Abandoned!! Territories owned by this player
     private final HashSet<Territory> playerTerrs;
-    // Horcrux storage
-    private  HashMap<Horcrux, Integer> horcruxes = new HashMap<>();
-    // Horcrux usage, <name, num>
-    private  HashMap<Horcrux, Integer> horcruxUsage = new HashMap<>();
-    // Horcrux usage target, <name, isTarget>
-    private  HashMap<Horcrux, Boolean> horcruxTarget = new HashMap<>();
-    private final HashMap<House,Integer> skill=new HashMap<>();
+    private final HashMap<House, Integer> skill = new HashMap<>();
     // Player's thread
     public transient PlayerThread playerThread;
     // Player's thread
@@ -29,8 +23,13 @@ public class Player implements Serializable {
     public int coins;
     // Horns
     public int horns;
-    // Will upgrade world level
     public boolean willUpgradeWorldLevel = false;
+    // Horcrux storage
+    private HashMap<Horcrux, Integer> horcruxes = new HashMap<>();
+    // Horcrux usage, <name, num>
+    private HashMap<Horcrux, Integer> horcruxUsage = new HashMap<>();
+    // Horcrux usage target, <name, isTarget>
+    private HashMap<Horcrux, Boolean> horcruxTarget = new HashMap<>();
     // Player's name
     private String playerName;
     // Player's id
@@ -43,7 +42,6 @@ public class Player implements Serializable {
     private House house;
     // Player's skill
     private SkillState skillState = SkillState.NOT_USED;
-
 
 
     /**
@@ -76,10 +74,10 @@ public class Player implements Serializable {
         this.horcruxUsage.put(Horcrux.SNAKE, 0);
         this.horcruxUsage.put(Horcrux.LOCKET, 0);
         this.horcruxUsage.put(Horcrux.DIARY, 0);
-        this.skill.put(House.GRYFFINDOR,0);
-        this.skill.put(House.RAVENCLAW,0);
-        this.skill.put(House.HUFFLEPUFF,0);
-        this.skill.put(House.SLYTHERIN,0);
+        this.skill.put(House.GRYFFINDOR, 0);
+        this.skill.put(House.RAVENCLAW, 0);
+        this.skill.put(House.HUFFLEPUFF, 0);
+        this.skill.put(House.SLYTHERIN, 0);
     }
 
     /**
@@ -235,19 +233,17 @@ public class Player implements Serializable {
         return worldLevel;
     }
 
-    public void updateSkill(){
-        skill.put(house,1);
+    public void updateSkill() {
+        skill.put(house, 1);
     }
 
-    public int getSkillUsed(){
+    public int getSkillUsed() {
         return skill.get(house);
     }
 
-    public void addSkill(){
-        skill.put(house,2);
+    public void addSkill() {
+        skill.put(house, 2);
     }
-
-
 
 
     /**
@@ -282,8 +278,8 @@ public class Player implements Serializable {
         }
         this.coins += coins;
         this.horns += horns;
-        if(house.equals(House.RAVENCLAW)){
-            this.horns+=15;
+        if (house.equals(House.RAVENCLAW)) {
+            this.horns += 15;
         }
     }
 
@@ -381,17 +377,25 @@ public class Player implements Serializable {
         return this.horcruxUsage;
     }
 
-    public void setHorcruxesList(HashMap<Horcrux, Integer> HorcruxesList){
-        this.horcruxUsage=HorcruxesList;
+    public void setHorcruxesList(HashMap<Horcrux, Integer> HorcruxesList) {
+        this.horcruxUsage = HorcruxesList;
     }
 
-    public HashMap<Horcrux, Integer> getHorcruxesStorage() {return this.horcruxes;}
-
-    public void setHorcruxesStorage(HashMap<Horcrux, Integer> HorcruxesStorage){
-        this.horcruxes=HorcruxesStorage;
+    public HashMap<Horcrux, Integer> getHorcruxesStorage() {
+        return this.horcruxes;
     }
 
+    public void setHorcruxesStorage(HashMap<Horcrux, Integer> HorcruxesStorage) {
+        this.horcruxes = HorcruxesStorage;
+    }
 
+    public HashMap<Horcrux, Boolean> getHorcruxTarget() {
+        return this.horcruxTarget;
+    }
+
+    public void setHorcruxTarget(HashMap<Horcrux, Boolean> horcruxtarget) {
+        this.horcruxTarget = horcruxtarget;
+    }
 
     /**
      * Set horcrux usage
@@ -417,6 +421,19 @@ public class Player implements Serializable {
         return this.horcruxTarget.getOrDefault(Horcrux.DIARY, false);
     }
 
+    public void setDiaryTarget() {
+        this.horcruxTarget.put(Horcrux.DIARY, true);
+    }
+
+    public void muteDiaryTarget() {
+        this.horcruxTarget.put(Horcrux.DIARY, false);
+    }
+
+    public void muteTarget(Horcrux horcrux) {
+        this.horcruxTarget.put(horcrux, false);
+    }
+
+
     /**
      * If is snake
      * , return true
@@ -429,6 +446,10 @@ public class Player implements Serializable {
         this.horcruxTarget.put(Horcrux.SNAKE, true);
     }
 
+    public void muteSnakeTarget() {
+        this.horcruxTarget.put(Horcrux.SNAKE, false);
+    }
+
     /**
      * If is locket target, return true
      */
@@ -436,11 +457,19 @@ public class Player implements Serializable {
         return this.horcruxTarget.getOrDefault(Horcrux.LOCKET, false);
     }
 
+    public void setLocketTarget() {
+        this.horcruxTarget.put(Horcrux.LOCKET, true);
+    }
+
+    public void muteLocketTarget() {
+        this.horcruxTarget.put(Horcrux.LOCKET, false);
+    }
+
     /**
      * Get player's skill name
      */
     public String getSkillName() {
-        if (this.house==null) return "Unknown";
+        if (this.house == null) return "Unknown";
         switch (this.house) {
             case SLYTHERIN:
                 return "Serpent's Strategy";

@@ -52,9 +52,9 @@ public class GameObjectTest {
     }
 
     @Test
-    public void getSocket(){
-        Socket s =new Socket();
+    public void getSocket() {
+        Socket s = new Socket();
         GameObject g = new GameObject(s);
-        assertEquals(s,g.getSocket());
+        assertEquals(s, g.getSocket());
     }
 }
