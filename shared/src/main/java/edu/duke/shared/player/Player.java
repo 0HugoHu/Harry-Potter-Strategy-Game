@@ -29,7 +29,6 @@ public class Player implements Serializable {
     public int coins;
     // Horns
     public int horns;
-    // Will upgrade world level
     public boolean willUpgradeWorldLevel = false;
     // Player's name
     private String playerName;
