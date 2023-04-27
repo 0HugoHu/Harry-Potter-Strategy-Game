@@ -129,10 +129,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
     String selected_to;
     // If the player has lost
     boolean isLost = false;
-    // Current turn coins expense
-    int currentCoinExpense = 0;
-    // Current turn horns expense
-    int currentHornExpense = 0;
     // GameView
     private GameView mGameView;
     // Game
@@ -293,12 +289,6 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                     global_dialog.setVisibility(View.GONE);
                     break;
                 case TURN_BEGIN:
-                    for (Player p : mGame.getPlayerList()) {
-                        System.out.println("Diary Target" + p.getPlayerName() + " " + p.isDiaryTarget());
-                    }
-
-                    currentCoinExpense = 0;
-                    currentHornExpense = 0;
                     unitMoveAttackMap = new HashMap<>();
                     unitUpgradeMap = new HashMap<>();
                     // Update the game view
@@ -556,7 +546,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 String cost_s = "Upgrade: " + cost + " horns";
                 unit_upgrade_btn.setText(cost_s);
                 boolean flag = false;
-                if (cost <= mPlayer.getHorns() - currentHornExpense) {
+                if (cost <= mPlayer.getHorns()) {
                     if (mGame.getMap().getTerritory(orderTerrFrom).getOwner().equals(mGame.getPlayerName())) {
                         unit_upgrade_btn.setEnabled(true);
                         unit_num.setEnabled(true);
@@ -627,7 +617,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
             int tech_level = mPlayer.getWorldLevel();
             String upgrade = "Upgrade: " + Player.upgradeCost(tech_level + 1) + " horns";
             tech_upgrade_btn.setText(upgrade);
-            if ((Player.upgradeCost(tech_level + 1) > mPlayer.getHorns() - currentHornExpense) || this.isUpgradedWorldLevel) {
+            if ((Player.upgradeCost(tech_level + 1) > mPlayer.getHorns()) || this.isUpgradedWorldLevel) {
                 tech_error_prompt.setVisibility(View.VISIBLE);
                 tech_upgrade_btn.setEnabled(false);
                 tech_upgrade_btn.setTextColor(getResources().getColor(R.color.error_prompt));
@@ -689,7 +679,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         tech_upgrade_btn.setOnClickListener(v -> {
             showDialog(getResources().getString(R.string.tech_upgrade_recorded), "", "");
             this.isUpgradedWorldLevel = true;
-            this.currentHornExpense += Player.upgradeCost(mPlayer.getWorldLevel() + 1);
+            mPlayer.setExpenseHorns(Player.upgradeCost(mPlayer.getWorldLevel() + 1));
             updatePlayerValues();
         });
 
@@ -1116,7 +1106,7 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
                 String cost_s = "Upgrade: " + cost + " horns";
                 unit_upgrade_btn.setText(cost_s);
                 boolean flag = false;
-                if (cost <= mPlayer.getHorns() - currentHornExpense) {
+                if (cost <= mPlayer.getHorns()) {
                     if (mGame.getMap().getTerritory(terrName).getOwner().equals(mGame.getPlayerName())) {
                         unit_upgrade_btn.setEnabled(true);
                         unit_num.setEnabled(true);
@@ -1512,14 +1502,12 @@ public class GameFragment extends Fragment implements ClientResultReceiver.AppRe
         TextView ui_coin = ui_view.findViewById(R.id.ui_coin);
         TextView ui_world_level = ui_view.findViewById(R.id.ui_world_level);
 
-        Player player = this.mGame.getPlayer(this.mGame.getPlayerName());
-
-        int shown_coins = player.getCoins() - this.currentCoinExpense;
-        int shown_horns = player.getHorns() - this.currentHornExpense;
+        int shown_coins = mPlayer.getCoins();
+        int shown_horns = mPlayer.getHorns();
 
         ui_coin.setText(String.valueOf(shown_coins));
         ui_horn.setText(String.valueOf(shown_horns));
-        ui_world_level.setText(String.valueOf(player.getWorldLevel()));
+        ui_world_level.setText(String.valueOf(mPlayer.getWorldLevel()));
 
         if (mPlayer.getSkillState() == SkillState.USED) {
             Button item_use_btn = item_view.findViewById(R.id.item_view_use_btn);
