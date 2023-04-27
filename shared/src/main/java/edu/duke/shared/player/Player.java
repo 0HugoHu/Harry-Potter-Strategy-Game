@@ -103,13 +103,13 @@ public class Player implements Serializable {
             case 2:
                 return 60;
             case 3:
-                return 100;
+                return 120;
             case 4:
-                return 200;
-            case 5:
                 return 300;
+            case 5:
+                return 500;
             case 6:
-                return 400;
+                return 1000;
             default:
                 return 60;
         }
