@@ -159,7 +159,6 @@ There are six types of Horcuxes:
 
 <img src="assets/Evol3/horcurx.png" width="600" />
 
-
 🔱 4.6.2. Buff: At the beginning of this game, each player is assigned one Buff according to their House. The Buff will automatically take effect through the whole game process. 
 
 💫 Heart of a Warrior(Gryffindor): 50% chance of 1 bonus of creature counting as 1.5 bonus (rounded down) during an attack.
