@@ -61,9 +61,9 @@ to view the full picture.**
 
 ## 3. Coverage Report & Statistics
 
-- 📃 **Evo.3: Click [here](assets/Images/cicd.png) for the CI/CD coverage reports.**
+- 📃 **Evo.3: Click [here](assets/images/cicd.png) for the CI/CD coverage reports.**
 
-- 📊 **Evo.3: Click ([Project](assets/Images/statistics_whole.png), [Java1](assets/Images/statistics_java1.png), [Java2](assets/Images/statistics_java2.png), [Java3](assets/Images/statistics_java3.png), [Xml](assets/Images/statistics_xml.png)) for the project code statistics.**
+- 📊 **Evo.3: Click ([Project](assets/images/statistics_whole.png), [Java1](assets/images/statistics_java1.png), [Java2](assets/images/statistics_java2.png), [Java3](assets/images/statistics_java3.png), [Xml](assets/images/statistics_xml.png)) for the project code statistics.**
 
 
 ## 4. Demo
