@@ -187,6 +187,13 @@ public class Server {
                 // Create an object, and a thread is started
                 Player player = new Player(i, socket, this.serverHouseMapping.get(i));
                 this.game.addPlayer(player);
+                player.addToHorcruxStorage(Horcrux.LOCKET, 1);
+                player.addToHorcruxStorage(Horcrux.CUP, 1);
+                player.addToHorcruxStorage(Horcrux.DIARY, 1);
+                player.addToHorcruxStorage(Horcrux.HAT, 1);
+                player.addToHorcruxStorage(Horcrux.SNAKE, 1);
+                player.addToHorcruxStorage(Horcrux.RING, 1);
+
                 System.out.println("Player " + i + " has joined the game.");
             } catch (IOException e) {
                 e.printStackTrace();
