@@ -5,8 +5,8 @@ import edu.duke.shared.Game;
 
 public class ClientAdapter {
     // Host vcm-30577.vm.duke.edu/67.159.94.90
-    private static final String HOST = "67.159.94.90";
-//        private static final String HOST = "10.198.110.177";
+//    private static final String HOST = "127.0.0.1";
+    private static final String HOST = "192.168.1.125";
     // Client
     private final Client client;
 
